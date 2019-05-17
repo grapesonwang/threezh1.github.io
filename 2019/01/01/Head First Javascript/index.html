@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Head First Javascript笔记 | Threezh1&#39;s blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="note,">
+  
+
+  <meta name="description" content="JavaScriptHello World.Go to a new world again. BeginThe first program: 1234setTimeout(wakeUpUser, 5000)function wakeUpUser()&amp;#123;	alert(&quot;Yep! love you!!! honny.&quot;)&amp;#125; 123456789101112131415161718192">
+<meta name="keywords" content="note">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Head First Javascript笔记">
+<meta property="og:url" content="http://yoursite.com/2019/01/01/Head First Javascript/index.html">
+<meta property="og:site_name" content="Threezh1&#39;s blog">
+<meta property="og:description" content="JavaScriptHello World.Go to a new world again. BeginThe first program: 1234setTimeout(wakeUpUser, 5000)function wakeUpUser()&amp;#123;	alert(&quot;Yep! love you!!! honny.&quot;)&amp;#125; 123456789101112131415161718192">
+<meta property="og:locale" content="Chinese">
+<meta property="og:updated_time" content="2019-05-17T02:50:30.871Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Head First Javascript笔记">
+<meta name="twitter:description" content="JavaScriptHello World.Go to a new world again. BeginThe first program: 1234setTimeout(wakeUpUser, 5000)function wakeUpUser()&amp;#123;	alert(&quot;Yep! love you!!! honny.&quot;)&amp;#125; 123456789101112131415161718192">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-38189205-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+</head>
+</html>
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/link/" rel="noopener noreferrer" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/atom.xml" rel="noopener noreferrer" target="_blank">
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JavaScript"><span class="toc-text">JavaScript</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Begin"><span class="toc-text">Begin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Function"><span class="toc-text">Function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Array"><span class="toc-text">Array</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Object"><span class="toc-text">Object</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DOM"><span class="toc-text">DOM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#others"><span class="toc-text">others</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-Head First Javascript" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Head First Javascript笔记</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2019.01.01</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>Threezh1</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h1><p>Hello World.<br>Go to a new world again.</p>
+<h2 id="Begin"><a href="#Begin" class="headerlink" title="Begin"></a>Begin</h2><p>The first program:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(wakeUpUser, <span class="number">5000</span>)</span><br><span class="line"><span class="function">function <span class="title">wakeUpUser</span><span class="params">()</span></span>&#123;</span><br><span class="line">	alert(<span class="string">"Yep! love you!!! honny."</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> skater;</span><br><span class="line"><span class="keyword">var</span> age = <span class="number">20</span>;</span><br><span class="line"><span class="keyword">var</span> name = <span class="string">"threezh1"</span>;</span><br><span class="line"><span class="keyword">var</span> isBoy = ture/<span class="keyword">false</span>;</span><br><span class="line"><span class="comment">//This will not show for others.</span></span><br><span class="line"></span><br><span class="line">document.write(<span class="string">"Hello World."</span>);</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">"Just like history?"</span>);</span><br><span class="line"></span><br><span class="line">&lt;script src="mycode.js"&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">GetUserEnter = prompt(<span class="string">"Please enter whatever you want to say!"</span>);</span><br><span class="line">document.write(GetUserEnter);</span><br><span class="line"></span><br><span class="line"><span class="comment">//Get a random.This will return a number in (0~1)</span></span><br><span class="line"><span class="keyword">var</span> randomLoc = Math.random();</span><br><span class="line"><span class="comment">//If you want get a number in (0~5 haven't 5 like 4.999...)</span></span><br><span class="line"><span class="keyword">var</span> randomLoc = Math.random() * <span class="number">5</span>;</span><br><span class="line"><span class="comment">//Get a complete number:</span></span><br><span class="line"><span class="keyword">var</span> randomLoc = Math.floor(Math.random() * <span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="Function"><a href="#Function" class="headerlink" title="Function"></a>Function</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function">function <span class="title">threezh1</span><span class="params">(varchar, number)</span></span>&#123;</span><br><span class="line">	alert(<span class="string">"What you wanna to say."</span>);</span><br><span class="line">	alert(<span class="string">"This is the first parameter:"</span> + varchar);</span><br><span class="line">	alert(<span class="string">"This is the second parameter:"</span> + varchar);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">threezh1(<span class="string">"Hello World."</span>, <span class="number">33</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// If a variable is created in outside the function, it is a global variable.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// You can use a variable as a function name.</span></span><br><span class="line"><span class="keyword">var</span> func = function(num)&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line">func(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// No name</span></span><br><span class="line">window.onload = function() &#123; alert(<span class="string">"Yeah, that page loaded/1"</span>);&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="Array"><a href="#Array" class="headerlink" title="Array"></a>Array</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> scores = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">33</span>, <span class="number">50</span>, <span class="number">60</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> myscore = scores[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">scores.length</span><br><span class="line"></span><br><span class="line"><span class="comment">// Create a array object</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> emptyArray = <span class="keyword">new</span> Array();</span><br><span class="line">emptyArray[<span class="number">0</span>] = <span class="number">33</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// Create a object and use it.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> threezh1 = &#123;</span><br><span class="line">	name: <span class="string">"threezh1"</span>,</span><br><span class="line">	age: <span class="number">20</span>,</span><br><span class="line">	color: <span class="string">"yellow"</span>,</span><br><span class="line">	speed: <span class="number">20</span></span><br><span class="line">	skate: function()&#123;</span><br><span class="line">		document.write(<span class="string">"I like play skate!"</span>);</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">this</span>.speed &gt; <span class="number">20</span>)&#123;</span><br><span class="line">			alert(<span class="string">"Your speed is too fast!"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> myname = threezh1.name;</span><br><span class="line">document.write(myname);</span><br><span class="line">threezh1.skate();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// Create a object.</span></span><br><span class="line"><span class="function">function <span class="title">Dog</span><span class="params">(name, breed, weight)</span></span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.name = name;</span><br><span class="line">	<span class="keyword">this</span>.breed = bread;</span><br><span class="line">	<span class="keyword">this</span>.weight = weight;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> fido = <span class="keyword">new</span> Dog(<span class="string">"Fido"</span>, <span class="string">"Mixed"</span>, <span class="number">38</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Delete a attribute.</span></span><br><span class="line">delete fido.weight;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Add a attribute.</span></span><br><span class="line">fido.trust = function(person) &#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="DOM"><a href="#DOM" class="headerlink" title="DOM"></a>DOM</h2><p>This is a very important content.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// Get a HtmlElement:</span></span><br><span class="line"><span class="keyword">var</span> access = document.getElementById(<span class="string">"id_name"</span>);</span><br><span class="line"><span class="keyword">var</span> code = access.innerHTML;</span><br><span class="line">alert(code);</span><br><span class="line"><span class="comment">// The "code" is the text of label who id = id_name.</span></span><br><span class="line"><span class="comment">// Ps: This codes should be put after the element.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Change the text of a label:</span></span><br><span class="line">access.innerHTML = <span class="string">"Some other words what you wanna change!"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// If you wanna use a callback function. you can use the window.onload.</span></span><br><span class="line">&lt;script&gt;</span><br><span class="line"><span class="function">function <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> access = document.getElementById(<span class="string">"id_name"</span>);</span><br><span class="line">	<span class="keyword">var</span> code = access.innerHTML;</span><br><span class="line">	alert(code);</span><br><span class="line">&#125;</span><br><span class="line">window.onload = init;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Also, you can us setArribute to change the parameter in the table.</span></span><br><span class="line">access.setArribute(<span class="string">"class"</span>, <span class="string">"redtext"</span>);</span><br><span class="line"><span class="keyword">var</span> ia_name = access.getArribute(<span class="string">"id"</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="others"><a href="#others" class="headerlink" title="others"></a>others</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// Judge a variable's type:</span></span><br><span class="line">type = tyepof(variable);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (something == <span class="keyword">null</span>)&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// NaN, isn't a number.</span></span><br><span class="line"><span class="keyword">if</span> (isNaN(variable) == ture)&#123;</span><br><span class="line">	alert(<span class="string">"This isn't a number."</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">==	equal</span><br><span class="line">===	absolutely equal</span><br><span class="line"></span><br><span class="line"><span class="comment">// String's length</span></span><br><span class="line"><span class="keyword">var</span> length = somewords.length</span><br><span class="line"></span><br><span class="line"><span class="comment">// Split the string:</span></span><br><span class="line">stringarray = somewords.charAt</span><br><span class="line"></span><br><span class="line"><span class="comment">// find a word in a string and return a index of this word.</span></span><br><span class="line"><span class="keyword">var</span> index = somewords.indexOf(<span class="string">"otherword"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Get a word  in two index.</span></span><br><span class="line"><span class="keyword">var</span> val = somewords.substring(<span class="number">5</span>, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Split a string by a word.</span></span><br><span class="line"><span class="keyword">var</span> vals = somewords.split(<span class="string">"|"</span>);</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// Add a act when the element be clicked.</span></span><br><span class="line"></span><br><span class="line">window.onload = init;</span><br><span class="line"><span class="function">function <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> image = document.getElementById(<span class="string">"zero"</span>);</span><br><span class="line">	image.onclick = showAnswer;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">function <span class="title">showAnswer</span><span class="params">()</span></span>&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Add more act when one of  elements be clicked.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> images = document.getElementByTagName(<span class="string">"img"</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; images.length; i++)&#123;</span><br><span class="line">	images[i].onclick = showAnswer;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">function <span class="title">showAnswer</span><span class="params">(eventObj)</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> image = eventObj.target;<span class="comment">//taget can get the name of the element.</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// Time:</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> now = <span class="keyword">new</span> Date();</span><br><span class="line"><span class="keyword">var</span> dateString = now.toString();</span><br><span class="line"><span class="keyword">var</span> theYear = now.getFullYear();</span><br><span class="line"><span class="keyword">var</span> theDayOfWeek = now.getDay();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> birthday = <span class="keyword">new</span> Date(<span class="string">"May 1, 2019 08:03 pm"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Array</span></span><br></pre></td></tr></table></figure>
+    
+  </div>
+
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持forsigner</div>
+        <ul>
+        
+          <li class="item">
+            
+              <span>微信扫一扫</span>
+            
+            <img src="/images/qr-wechat.png" alt>
+          </li>
+        
+          <li class="item">
+            
+              <span>支付宝扫一扫</span>
+            
+            <img src="/images/qr-alipay.png" alt>
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2019/01/01/Linux_basis/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2019/01/01/CRLF/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/link/" rel="noopener noreferrer" target="_self">
+              友链
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/atom.xml" rel="noopener noreferrer" target="_blank">
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    
+
+<!-- Gitalk评论插件通用代码 -->
+<div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '277317290454635afa73',
+  clientSecret: '78223c859304da5e8d71bfce136d436c6ff95c37',
+  repo: 'blog-comment',
+  owner: 'forsigner',
+  // 在这里设置一下截取前50个字符串, 这是因为 github 对 label 的长度有了要求, 如果超过
+  // 50个字符串则会报错.
+  // id: location.pathname.split('/').pop().substring(0, 49),
+  id: location.pathname,
+  admin: ['forsigner'],
+  // facebook-like distraction free mode
+  distractionFreeMode: false
+})
+gitalk.render('gitalk-container')
+</script>
+<!-- Gitalk代码结束 -->
+
+
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
