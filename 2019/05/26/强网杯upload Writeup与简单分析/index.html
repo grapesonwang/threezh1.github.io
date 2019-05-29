@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://i.loli.net/2019/05/26/5cea55c1ec25028053.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/05/26/5cea55c3c204d65669.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/05/26/5cea55c23688270315.jpg">
-<meta property="og:updated_time" content="2019-05-27T03:30:05.380Z">
+<meta property="og:updated_time" content="2019-05-27T03:39:03.451Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="强网杯upload Writeup与简单分析">
 <meta name="twitter:description" content="说在前面第一次打强网杯，没想到这么难，萌新瑟瑟发抖。BY Threezh1 题目有点绕，看了半天都没找到重点。后面还是靠学长给的payload思路理清楚了过程。这里就记录一下，学习学习。 题目分析网站基本功能： 注册登录后，可以上传一张图片作为头像。 无论上传什么格式的文件，文件名都会修改为md5值.png 分析： 使用dirsearch等工具可以直接扫到网站源码地址： http://49.4.6">
@@ -237,7 +237,7 @@ Register.php     //注册
 <li>设置$ext=1，$filename,$filename_tmp</li>
 <li>由2触发call，call调用get，call最终调用upload_img函数</li>
 <li>修改文件名</li>
-<li>菜刀链接</li>
+<li>菜刀连接</li>
 </ol>
 <h2 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h2><p>注册一个账号，上传一个包含php一句话的图片，将脚本中的图片名修改为上传后生成的图片名。</p>
 <p>注册一个新账号，登录。将payload生成出来，在用户主页修改cookies，刷新。</p>
