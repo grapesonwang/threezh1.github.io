@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://i.loli.net/2019/07/11/5d2624b2bdb5223995.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/07/11/5d2624b56050041044.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/07/11/5d2624afa52bf96713.jpg">
-<meta property="og:updated_time" content="2019-07-10T17:49:57.660Z">
+<meta property="og:updated_time" content="2019-07-11T12:49:17.290Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于易语言与Python的一点想法">
 <meta name="twitter:description" content="说在前面最近吃饭的时候总是会想很多关于易语言的事情。易语言是我学会的第一门语言，虽然它被喷的很惨很惨，具体可见：易语言 知乎。但是由于它极高的上手性，还是成为我高中时期最喜欢的编程工具。(当时我还没听说过Python)易语言画界面是非常简单的，用鼠标拖动一下组件，简简单单的几句代码就可以写一个简单的GUI程序。我想，在界面化的程序上，除了Web程序上用Javascript和CSS画界面。对于我这样">
@@ -226,7 +226,6 @@
 <p>一个简单的程序逻辑如下：</p>
 <p><img src="https://i.loli.net/2019/07/11/5d2624afbb1b682030.jpg" alt="e_db_py.jpg"></p>
 <p>易语言提供操作界面，将任务插入到数据库中的任务列表里。Python脚本取数据库内的任务列表逐一执行，将执行的结果插入到结果列表里，易语言读取结果列表，将结果展示。</p>
-<p>这样的一个好处就是不用再考虑易语言如何调用Python，而是各自单独运行，只需要操作数据库就行了。</p>
 <p>就用批量获取网页状态工具作为一个简单的例子：</p>
 <p>用易语言做的界面如下图所示：</p>
 <p><img src="https://i.loli.net/2019/07/11/5d2624b1e799745074.jpg" alt="get_statu.jpg"></p>
@@ -243,6 +242,13 @@
 <li>输入网址添加到数据库的任务序列</li>
 <li>Python脚本读取任务序列并获取网页状态</li>
 <li>刷新获取结果</li>
+</ol>
+<p>那这样做的好处就是：不用再考虑易语言如何调用Python，而是各自单独运行，只需要操作数据库就行了。</p>
+<p>暂时想到的几个缺点：</p>
+<ol>
+<li>无法做到瞬时反应，都需要通过sleep，时钟来控制任务的执行和结果显示</li>
+<li>易语言支持的数据库太少，本想用Mongodb来做例子的，发现易语言的mongodb库实在是…麻烦。</li>
+<li>当程序庞大起来，易语言-数据库-Python的逻辑也会非常复杂</li>
 </ol>
 <p>只是作为一个简单的例子，可以按照这样的逻辑满足更复杂的项目需求。</p>
 <p>写完这个例子之后发现，这种结合应该适用于任何语言。或者说这个不能称作结合，只能叫做各自完成任务罢了。不过这也能算得上易语言与其他语言的一种合作方式了？如果达到这点也就差不多了。</p>
