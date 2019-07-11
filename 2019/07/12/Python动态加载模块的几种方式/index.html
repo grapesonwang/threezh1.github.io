@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Python动态加载模块、类、函数的几种方式 | Threezh1&#39;s blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Python,">
+  
+
+  <meta name="description" content="1. exec()使用exec来执行Python导入模块的命令。 123module_name = &quot;module01&quot;exec(&quot;import &quot; + module_name)module01.echo() 2. __import__()单独使用__import__() 可以直接加载模块，但是当需要动态加载类、函数时，就需要配合getattr来实现。 实现步骤：  获取模块名(module_na">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python动态加载模块、类、函数的几种方式">
+<meta property="og:url" content="http://yoursite.com/2019/07/12/Python动态加载模块的几种方式/index.html">
+<meta property="og:site_name" content="Threezh1&#39;s blog">
+<meta property="og:description" content="1. exec()使用exec来执行Python导入模块的命令。 123module_name = &quot;module01&quot;exec(&quot;import &quot; + module_name)module01.echo() 2. __import__()单独使用__import__() 可以直接加载模块，但是当需要动态加载类、函数时，就需要配合getattr来实现。 实现步骤：  获取模块名(module_na">
+<meta property="og:locale" content="Chinese">
+<meta property="og:updated_time" content="2019-07-11T17:07:05.038Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python动态加载模块、类、函数的几种方式">
+<meta name="twitter:description" content="1. exec()使用exec来执行Python导入模块的命令。 123module_name = &quot;module01&quot;exec(&quot;import &quot; + module_name)module01.echo() 2. __import__()单独使用__import__() 可以直接加载模块，但是当需要动态加载类、函数时，就需要配合getattr来实现。 实现步骤：  获取模块名(module_na">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+</head>
+</html>
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a class="ROUND_RECT" href="/archives/" rel="noopener noreferrer" target="_self">
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="ROUND_RECT" href="/category/" rel="noopener noreferrer" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="ROUND_RECT" href="/tag/" rel="noopener noreferrer" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="ROUND_RECT" href="/link/" rel="noopener noreferrer" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="ROUND_RECT" href="/about/" rel="noopener noreferrer" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="ROUND_RECT" href="http://119.3.219.188/" rel="noopener noreferrer" target="_blank">
+            Threeday
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-exec"><span class="toc-text">1. exec()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-import"><span class="toc-text">2. __import__()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-importlib"><span class="toc-text">3. importlib</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-Python动态加载模块的几种方式" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Python动态加载模块、类、函数的几种方式</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2019.07.12</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>Threezh1</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/Learning/">Learning</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h2 id="1-exec"><a href="#1-exec" class="headerlink" title="1. exec()"></a>1. exec()</h2><p>使用exec来执行Python导入模块的命令。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">module_name = <span class="string">"module01"</span></span><br><span class="line">exec(<span class="string">"import "</span> + module_name)</span><br><span class="line">module01.echo()</span><br></pre></td></tr></table></figure>
+<h2 id="2-import"><a href="#2-import" class="headerlink" title="2. __import__()"></a>2. <code>__import__()</code></h2><p>单独使用<code>__import__()</code> 可以直接加载模块，但是当需要动态加载类、函数时，就需要配合getattr来实现。</p>
+<p>实现步骤：</p>
+<ol>
+<li>获取模块名(module_name)</li>
+<li>使用<code>__import__(module_name)</code>导入Python模块</li>
+<li>使用<code>getattr(module_name, class_name/function_name)</code>获取类、方法的对象</li>
+</ol>
+<p>例子：</p>
+<p>模块(module01.py)中包含一个Index类和一个echo方法。主程序(main.py)使用模块名动态调用其echo方法。</p>
+<p>module01.py:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">echo</span><span class="params">(self, content)</span>:</span></span><br><span class="line">		print(self)</span><br><span class="line">		print(content)</span><br></pre></td></tr></table></figure>
+<p>main.py:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">module_name = <span class="string">"module01"</span></span><br><span class="line">class_name = <span class="string">"Index"</span></span><br><span class="line">function_name = <span class="string">"echo"</span></span><br><span class="line"></span><br><span class="line">module_object = __import__(module_name) <span class="comment">#将模块加载为对象</span></span><br><span class="line">module_class = getattr(module_object, class_name) <span class="comment">#获取模块当中的类对象</span></span><br><span class="line">module_class_object = module_class() <span class="comment">#将类实例化</span></span><br><span class="line">module_class_object.echo(<span class="string">"Hello World"</span>) <span class="comment">#调用echo方法</span></span><br></pre></td></tr></table></figure>
+<p>此外，还可以这样调用类中的函数：</p>
+<p>main.py:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">module_name = <span class="string">"module01"</span></span><br><span class="line">class_name = <span class="string">"Index"</span></span><br><span class="line">function_name = <span class="string">"echo"</span></span><br><span class="line"></span><br><span class="line">module_object = __import__(module_name) <span class="comment">#将模块加载为对象</span></span><br><span class="line">module_class = getattr(module_object, class_name) <span class="comment">#获取模块当中的类对象</span></span><br><span class="line">module_function = getattr(module_class, function_name) <span class="comment">#获取类中方法对象</span></span><br><span class="line">module_function(<span class="string">"Hello World"</span>)</span><br><span class="line"><span class="comment"># 或者直接 module_class.echo()</span></span><br><span class="line"><span class="comment"># 需要注意的是，使用这种方式调用方法，方法的参数值不需要加self。</span></span><br></pre></td></tr></table></figure>
+<p>参考：</p>
+<p><a href="https://www.cnblogs.com/bluefrog/archive/2012/05/11/2496439.html" target="_blank" rel="noopener">python 动态调用模块&amp;类&amp;方法</a></p>
+<h2 id="3-importlib"><a href="#3-importlib" class="headerlink" title="3. importlib"></a>3. importlib</h2><p>这种方式其实是<code>__import__()</code> 方式的扩展。Python官方文档推荐程序式地导入模块时应该使用 import_module() 而不是<code>__import__</code>。</p>
+<p>实现动态加载的方式与第二种类似：</p>
+<p>module01.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">echo</span><span class="params">(self, content)</span>:</span></span><br><span class="line">		print(self)</span><br><span class="line">		print(content)</span><br></pre></td></tr></table></figure>
+<p>main.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> importlib</span><br><span class="line"></span><br><span class="line">module_name = <span class="string">"module01"</span></span><br><span class="line">class_name = <span class="string">"Index"</span></span><br><span class="line"></span><br><span class="line">module_object = importlib.import_module(module_name) <span class="comment">#将模块加载为对象</span></span><br><span class="line">module_class_object = module_object.Index() <span class="comment">#将类实例化</span></span><br><span class="line">module_class_object.echo(<span class="string">"Hello World"</span>) <span class="comment">#调用echo方法</span></span><br></pre></td></tr></table></figure>
+<p>(同样的这里可以配合getattr()使用)</p>
+<p>使用importlib的一个好处就是还可以使用reload方法。在模块已经被导入的情况下，使用importlib.reload导入新的模块。</p>
+<p>详情可见：<a href="https://docs.python.org/zh-cn/3/library/importlib.html" target="_blank" rel="noopener">importlib — import 的实现</a></p>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2019/07/11/关于易语言与Python的一点想法/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a class="ROUND_RECT" href="/archives/" rel="noopener noreferrer" target="_self">
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="ROUND_RECT" href="/category/" rel="noopener noreferrer" target="_self">
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="ROUND_RECT" href="/tag/" rel="noopener noreferrer" target="_self">
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="ROUND_RECT" href="/link/" rel="noopener noreferrer" target="_self">
+              友链
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="ROUND_RECT" href="/about/" rel="noopener noreferrer" target="_self">
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="ROUND_RECT" href="http://119.3.219.188/" rel="noopener noreferrer" target="_blank">
+              Threeday
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
