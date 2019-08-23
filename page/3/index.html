@@ -212,7 +212,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/HPP_Subdomain_takeover/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/XSS_02_XSS备忘录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Threezh1">
@@ -226,7 +226,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
             
-            <a href="/2019/01/01/HPP_Subdomain_takeover/" class="post-title-link" itemprop="url">了解HPP</a>
+            <a href="/2019/01/01/XSS_02_XSS备忘录/" class="post-title-link" itemprop="url">XSS O2 XSS备忘录</a>
           
         </h1>
 
@@ -252,7 +252,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:17:26" itemprop="dateModified" datetime="2019-08-23T14:17:26+08:00">2019-08-23</time>
+                <time title="Geändert am: 2019-08-23 14:18:59" itemprop="dateModified" datetime="2019-08-23T14:18:59+08:00">2019-08-23</time>
               </span>
             
           
@@ -281,26 +281,139 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="HPP"><a href="#HPP" class="headerlink" title="HPP"></a>HPP</h1><h2 id="测试："><a href="#测试：" class="headerlink" title="测试："></a>测试：</h2><p>存在于POST,GET之中。</p>
-<p>步骤：</p>
-<ol>
-<li>page?par1=vall</li>
-<li>page?par1=HPP_TEST1</li>
-<li>page?par1=val1&amp;par1=HPP_TEST1</li>
-</ol>
-<p><img src="https://i.loli.net/2019/03/25/5c982a7096f07.jpg" alt="图片"></p>
-<p>更详细的：<a href="https://www.acunetix.com/blog/whitepaper-http-parameter-pollution/" target="_blank" rel="noopener">https://www.acunetix.com/blog/whitepaper-http-parameter-pollution/</a></p>
-<p>Use to:</p>
-<ol>
-<li>取代现有的编码HTTP参数。</li>
-<li>更改或修改预期/正常应用程序行为。</li>
-<li>访问并利用未正确控制的变量。</li>
-<li>绕过WAF规则或输入验证机制。</li>
-</ol>
+          <h2 id="XSS输出点-简要笔记-："><a href="#XSS输出点-简要笔记-：" class="headerlink" title="XSS输出点(简要笔记)："></a>XSS输出点(简要笔记)：</h2><h3 id="HTML标签之间"><a href="#HTML标签之间" class="headerlink" title="HTML标签之间"></a>HTML标签之间</h3><p>例如： <code>&lt;div&gt;[输出]&lt;/div&gt;</code> 直接提交：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></p>
+<p>当标签是<a href="#HTML无法执行脚本的标签">不能执行脚本的标签</a>时，就得先把那个标签闭合，然后再注入XSS语句。</p>
+<p>例如：<code>&lt;/textarea&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code></p>
+<h3 id="HTML标签之内"><a href="#HTML标签之内" class="headerlink" title="HTML标签之内"></a>HTML标签之内</h3><p>例如：<code>&lt;input type=&quot;text&quot; value=&quot;[输出]&quot;/&gt;</code></p>
+<p>两种常见的情况：</p>
+<pre><code>- 闭合属性，然后用事件来触发脚本： `&quot; onmouseover=alert(1) x=&quot;`
+- 闭合属性后闭合标签，然后直接执行脚本： `&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;`
+</code></pre><p>常见未被过滤事件，更多的事件在附录部分：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ontoggle</span><br><span class="line">onauxclick</span><br><span class="line">ondblclick</span><br><span class="line">oncontextmenu</span><br><span class="line">onmouseleave</span><br><span class="line">ontouchcancel</span><br></pre></td></tr></table></figure>
+<p>当输出点在src/href/action等属性内时： <code>&lt;a href=&quot;[输出]&quot;&gt;click me &lt;/a&gt;</code>,<br>除了闭合属性或标签外还可以使用javascript伪协议：<code>javascript:alert(1)//</code> (//是用于注释后面的js语句)</p>
+<p>此外，还可以使用<a href="http://www.cnblogs.com/hustskyking/p/data-uri.html" target="_blank" rel="noopener">data协议</a>：<code>data:text/html;base64</code> (data:协议的必须作为整个属性值出现，IE不支持)</p>
+<p>data协议例子：(尝试了一下，弹不了)</p>
+<ul>
+<li><code>http://example.com/text.php?t=&quot;&gt;&lt;script src=&quot;data:text/html,JTNDc2NyaXB0JTNFYWxlcnQlMjglMjJYc3MlMjIlMjklM0Mvc2NyaXB0JTNFJTNDJTIxLS0=</code></li>
+<li><code>&lt;a href=data:text/html;base64,PHNjcmlwdD5hbGVydCgzKTwvc2NyaXB0Pg==&gt;test&lt;/a&gt;</code></li>
+</ul>
+<p>还有xlink:href协议：<code>&lt;a xlink:href=&quot;javascript:alert(14)&quot;&gt;</code></p>
+<p>常见利用标签：</p>
+<p>a<br><a href="#img">img</a><br><a href="#input">input</a><br><a href="#svg">svg</a><br><a href="#body">body</a><br>html<br>embed<br>script<br>object<br>details<br>isindex<br><a href="#iframe">iframe</a><br>audio<br>video</p>
+<p><a href="#事件处理程序">标签事件合集</a><br>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/2019/01/01/HPP_Subdomain_takeover/#more" rel="contents">
+              <a class="btn" href="/2019/01/01/XSS_02_XSS备忘录/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/CRLF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/01/01/CRLF/" class="post-title-link" itemprop="url">了解CRLF</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:17:00" itemprop="dateModified" datetime="2019-08-23T14:17:00+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Simple-note"><a href="#Simple-note" class="headerlink" title="Simple note:"></a>Simple note:</h2><p>CRLF: Carriage-Return Line-Feend.</p>
+<p>Use <code>CR, ASCII 13 \r (回车)</code> , <code>LF, ASCII 10, \n</code> and <code>%0d%0a</code> to break the HTTP request.</p>
+<p>In the  penetration test, if we found a request is like this:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET /test/demo.php?url=https://www.threezh1.com</span><br><span class="line">That we can contral.</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+<p>If the HTTP Header of the request return with the response, which means we can control the HTTP Header.(Of course include the Url.)</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Content-Encoding: deflate</span><br><span class="line">...</span><br><span class="line">That we can contral.</span><br><span class="line">...</span><br><span class="line">Locations=https:<span class="comment">//www.threezh1.com</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/01/CRLF/#more" rel="contents">
                 Weiterlesen &raquo;
               </a>
             </div>
@@ -450,129 +563,6 @@
         
       
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-      
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/XSS_02_XSS备忘录/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2019/01/01/XSS_02_XSS备忘录/" class="post-title-link" itemprop="url">XSS O2 XSS备忘录</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
-                
-              
-
-              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:18:59" itemprop="dateModified" datetime="2019-08-23T14:18:59+08:00">2019-08-23</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="XSS输出点-简要笔记-："><a href="#XSS输出点-简要笔记-：" class="headerlink" title="XSS输出点(简要笔记)："></a>XSS输出点(简要笔记)：</h2><h3 id="HTML标签之间"><a href="#HTML标签之间" class="headerlink" title="HTML标签之间"></a>HTML标签之间</h3><p>例如： <code>&lt;div&gt;[输出]&lt;/div&gt;</code> 直接提交：<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></p>
-<p>当标签是<a href="#HTML无法执行脚本的标签">不能执行脚本的标签</a>时，就得先把那个标签闭合，然后再注入XSS语句。</p>
-<p>例如：<code>&lt;/textarea&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code></p>
-<h3 id="HTML标签之内"><a href="#HTML标签之内" class="headerlink" title="HTML标签之内"></a>HTML标签之内</h3><p>例如：<code>&lt;input type=&quot;text&quot; value=&quot;[输出]&quot;/&gt;</code></p>
-<p>两种常见的情况：</p>
-<pre><code>- 闭合属性，然后用事件来触发脚本： `&quot; onmouseover=alert(1) x=&quot;`
-- 闭合属性后闭合标签，然后直接执行脚本： `&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;`
-</code></pre><p>常见未被过滤事件，更多的事件在附录部分：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ontoggle</span><br><span class="line">onauxclick</span><br><span class="line">ondblclick</span><br><span class="line">oncontextmenu</span><br><span class="line">onmouseleave</span><br><span class="line">ontouchcancel</span><br></pre></td></tr></table></figure>
-<p>当输出点在src/href/action等属性内时： <code>&lt;a href=&quot;[输出]&quot;&gt;click me &lt;/a&gt;</code>,<br>除了闭合属性或标签外还可以使用javascript伪协议：<code>javascript:alert(1)//</code> (//是用于注释后面的js语句)</p>
-<p>此外，还可以使用<a href="http://www.cnblogs.com/hustskyking/p/data-uri.html" target="_blank" rel="noopener">data协议</a>：<code>data:text/html;base64</code> (data:协议的必须作为整个属性值出现，IE不支持)</p>
-<p>data协议例子：(尝试了一下，弹不了)</p>
-<ul>
-<li><code>http://example.com/text.php?t=&quot;&gt;&lt;script src=&quot;data:text/html,JTNDc2NyaXB0JTNFYWxlcnQlMjglMjJYc3MlMjIlMjklM0Mvc2NyaXB0JTNFJTNDJTIxLS0=</code></li>
-<li><code>&lt;a href=data:text/html;base64,PHNjcmlwdD5hbGVydCgzKTwvc2NyaXB0Pg==&gt;test&lt;/a&gt;</code></li>
-</ul>
-<p>还有xlink:href协议：<code>&lt;a xlink:href=&quot;javascript:alert(14)&quot;&gt;</code></p>
-<p>常见利用标签：</p>
-<p>a<br><a href="#img">img</a><br><a href="#input">input</a><br><a href="#svg">svg</a><br><a href="#body">body</a><br>html<br>embed<br>script<br>object<br>details<br>isindex<br><a href="#iframe">iframe</a><br>audio<br>video</p>
-<p><a href="#事件处理程序">标签事件合集</a><br>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/01/01/XSS_02_XSS备忘录/#more" rel="contents">
-                Weiterlesen &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
 
     
     
