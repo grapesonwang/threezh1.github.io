@@ -1,19 +1,58 @@
 <!DOCTYPE html>
 
 
-  <html class="light page-home">
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
-  <title>Threezh1&#39;s blog</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<html lang="Chinese">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
+  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
 
-  
-    <meta name="keywords" content="Threezh1">
-  
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Kopieren',
+      copy_success: 'Kopiert',
+      copy_failure: 'Kopieren fehlgeschlagen'
+    }
+  };
+</script>
 
   <meta name="description" content="Share learn &amp; Share life.">
 <meta name="keywords" content="Threezh1">
@@ -26,155 +65,1507 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Threezh1&#39;s blog">
 <meta name="twitter:description" content="Share learn &amp; Share life.">
-
-  
-
-  
-    <link rel="icon" href="/favicon.ico">
-  
-
-  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+  <link rel="canonical" href="http://yoursite.com/page/2/">
 
 
-  
-    <link rel="stylesheet" href="/css/personal-style.css">
-  
-
-  
-
-  
-
-  
-
-
-  
-    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  
-
-</head>
-</html>
-<body>
-
-
-  
-
-  
-  <div class="content-home text-center">
-  <a class="avatar" href="/">
-    <img src="https://i.loli.net/2019/05/17/5cde2a10a5e3675955.jpg" alt>
-  </a>
-  <h1 class="name" style="font-family: Lobster-Regular">
-    Threezh1&#39;s blog
-  </h1>
-  <div class="slogan">
-    Share Learning &amp; Share Life
-  </div>
-
-  <hr>
-
-  <ul class="text-center nav">
-    
-      <li class="item">
-        
-          <a href="/archives">Blog</a>
-        
-        <span>|</span>
-      </li>
-    
-  </ul>
-
-</div>
-
-
-
-
-
-  <div class="modal" id="modal">
-  <span id="cover" class="cover hide"></span>
-  <div id="modal-dialog" class="modal-dialog hide-dialog">
-    <div class="modal-header">
-      <span id="close" class="btn-close">关闭</span>
-    </div>
-    <hr>
-    <div class="modal-body">
-      <ul class="list-toolbox">
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/archives/" rel="noopener noreferrer" target="_self">
-              博客
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/category/" rel="noopener noreferrer" target="_self">
-              分类
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/tag/" rel="noopener noreferrer" target="_self">
-              标签
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/link/" rel="noopener noreferrer" target="_self">
-              友链
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/about/" rel="noopener noreferrer" target="_self">
-              关于
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="http://119.3.219.188/" rel="noopener noreferrer" target="_blank">
-              Threeday
-            </a>
-          </li>
-        
-      </ul>
-
-    </div>
-  </div>
-</div>
-
-
-
-  
-
-  <script type="text/javascript">
-  function loadScript(url, callback) {
-    var script = document.createElement('script')
-    script.type = 'text/javascript';
-
-    if (script.readyState) { //IE
-      script.onreadystatechange = function() {
-        if (script.readyState == 'loaded' ||
-          script.readyState == 'complete') {
-          script.onreadystatechange = null;
-          callback();
-        }
-      };
-    } else { //Others
-      script.onload = function() {
-        callback();
-      };
-    }
-
-    script.src = url;
-    document.getElementsByTagName('head')[0].appendChild(script);
-  }
-
-  window.onload = function() {
-    loadScript('/js/bundle.js?235683', function() {
-      // load success
-    });
-  }
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: true,
+    isPost: false,
+    isPage: false,
+    isArchive: false
+  };
 </script>
 
+  <title>Threezh1's blog</title>
+  <meta name="generator" content="Hexo 3.8.0">
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Threezh1's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">分享学习、分享想法</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Navigationsleiste an/ausschalten">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-threeday">
+      
+    
+
+    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-home">
+            
+  <section id="posts" class="posts-expand">
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/15/川师线下CTF-Web-Writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/05/15/川师线下CTF-Web-Writeup/" class="post-title-link" itemprop="url">川师线下CTF Writeup</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-05-15 12:00:00" itemprop="dateCreated datePublished" datetime="2019-05-15T12:00:00+08:00">2019-05-15</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:19:32" itemprop="dateModified" datetime="2019-08-23T14:19:32+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Writeup/" itemprop="url" rel="index"><span itemprop="name">Writeup</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>这次和队友一起去川师打了一次线下的CTF。虽然比赛中很多题都没做出来，但学到很多东西。赛后出题师傅也给出了源码和Writeup，抓住机会总结学习。</p>
+<p>重新搭建题目的环境有点困难，所以还是有两题无法进行复现。 </p>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="418"><a href="#418" class="headerlink" title="418"></a>418</h3><p>打开网页后是一个418的错误页面。</p>
+<p><img src="https://i.loli.net/2019/05/17/5cde2430300e851524.jpg" alt="pic"></p>
+<p>Google了一下418错误</p>
+<pre><code>“ERR！418 我是茶壶”起源
+“错误 418 我是茶壶”消息不是标准的服务器错误类型，这是 1998 年的一个愚人节恶作剧，距今已有 20 年了。许多开发团队在他们的应用程序中实施了“错误 418 我是茶壶”的消息作为内部笑话，通常使用这个错误来处理未知来源的错误。
+</code></pre><p>又在cookie处发现了一个base64加密的值： 解密后为：coffee</p>
+<p><img src="https://i.loli.net/2019/05/17/5cde24303bb8224199.jpg" alt="pic"></p>
+<p>用Brupsuite抓包后修改了cookie的值，网页提示：</p>
+<pre><code>Tell me what you want ! 
+</code></pre><p>于是我修改为flag的加密值，没用。在修改很多次之后队友解出来了。竟然是tea的base64。</p>
+<p>修改cookie后访问得到flag，这题，真的有点考脑洞。</p>
+<p><img src="https://i.loli.net/2019/05/17/5cde24303009952057.jpg" alt="pic"><br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/05/15/川师线下CTF-Web-Writeup/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/27/2019全国大学生信息安全竞赛WEB1_Writeuo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/04/27/2019全国大学生信息安全竞赛WEB1_Writeuo/" class="post-title-link" itemprop="url">2019全国大学生信息安全竞赛反序列化题目复现</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-04-27 12:00:00" itemprop="dateCreated datePublished" datetime="2019-04-27T12:00:00+08:00">2019-04-27</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:16:43" itemprop="dateModified" datetime="2019-08-23T14:16:43+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Writeup/" itemprop="url" rel="index"><span itemprop="name">Writeup</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Web-Justsoso"><a href="#Web-Justsoso" class="headerlink" title="Web - Justsoso"></a>Web - Justsoso</h2><p>使用php伪协议读到hint和index的源码：</p>
+<p><code>/index.php?file=php://filter/read=convert.base64-encode/resource=hint.php</code></p>
+<ul>
+<li>index.php:</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">$file = $_GET[<span class="string">"file"</span>];</span><br><span class="line">$payload = $_GET[<span class="string">"payload"</span>];</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">isset</span>($file)) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'Missing parameter'</span> . <span class="string">'&lt;br&gt;'</span>;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> (preg_match(<span class="string">"/flag/"</span>, $file)) &#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">'hack attacked!!!'</span>);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">@<span class="keyword">include</span> ($file);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($payload)) &#123;</span><br><span class="line">    $url = parse_url($_SERVER[<span class="string">'REQUEST_URI'</span>]);</span><br><span class="line">    parse_str($url[<span class="string">'query'</span>], $query);</span><br><span class="line">    <span class="keyword">foreach</span> ($query <span class="keyword">as</span> $value) &#123;</span><br><span class="line">        <span class="keyword">if</span> (preg_match(<span class="string">"/flag/"</span>, $value)) &#123;</span><br><span class="line">            <span class="keyword">die</span>(<span class="string">'stop hacking!'</span>);</span><br><span class="line">            <span class="keyword">exit</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    $payload = unserialize($payload);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"Missing parameters"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/04/27/2019全国大学生信息安全竞赛WEB1_Writeuo/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/19/DDCTF 部分Writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/04/19/DDCTF 部分Writeup/" class="post-title-link" itemprop="url">DDCTF 部分题目 Writeup</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-04-19 12:00:00" itemprop="dateCreated datePublished" datetime="2019-04-19T12:00:00+08:00">2019-04-19</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:17:07" itemprop="dateModified" datetime="2019-08-23T14:17:07+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Writeup/" itemprop="url" rel="index"><span itemprop="name">Writeup</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><em>这次DDCTF真的是学到很多东西，希望后面可以多多参加比赛锻炼自己。</em></p>
+<h2 id="Web-滴"><a href="#Web-滴" class="headerlink" title="Web - 滴~"></a>Web - 滴~</h2><p>地址：<a href="http://117.51.150.246/" target="_blank" rel="noopener">http://117.51.150.246/</a></p>
+<p>BASE64解码两次jpg参数的值：666C61672E6A7067</p>
+<p>再经过一次16进制转字符串：flag.jpg</p>
+<p>可知页面读取文件的名称是先经过两次BASE64解码再经过一次进制转换得到的。</p>
+<p>尝试读取index.php:</p>
+<p><code>http://117.51.150.246/index.php?jpg=TmprMlpUWTBOalUzT0RKbE56QTJPRGN3</code></p>
+<p>页面返回得到data协议里的经过BASE64处理后的数据，解码后得到源码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * https://blog.csdn.net/FengBanLiuYun/article/details/80616607</span></span><br><span class="line"><span class="comment"> * Date: July 4,2018</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">error_reporting(E_ALL || ~E_NOTICE);</span><br><span class="line"></span><br><span class="line">header(<span class="string">'content-type:text/html;charset=utf-8'</span>);</span><br><span class="line"><span class="keyword">if</span>(! <span class="keyword">isset</span>($_GET[<span class="string">'jpg'</span>]))</span><br><span class="line">    header(<span class="string">'Refresh:0;url=./index.php?jpg=TmpZMlF6WXhOamN5UlRaQk56QTJOdz09'</span>);</span><br><span class="line">$file = hex2bin(base64_decode(base64_decode($_GET[<span class="string">'jpg'</span>])));</span><br><span class="line"><span class="keyword">echo</span> <span class="string">'&lt;title&gt;'</span>.$_GET[<span class="string">'jpg'</span>].<span class="string">'&lt;/title&gt;'</span>;</span><br><span class="line">$file = preg_replace(<span class="string">"/[^a-zA-Z0-9.]+/"</span>,<span class="string">""</span>, $file);</span><br><span class="line"><span class="keyword">echo</span> $file.<span class="string">'&lt;/br&gt;'</span>;</span><br><span class="line">$file = str_replace(<span class="string">"config"</span>,<span class="string">"!"</span>, $file);</span><br><span class="line"><span class="keyword">echo</span> $file.<span class="string">'&lt;/br&gt;'</span>;</span><br><span class="line">$txt = base64_encode(file_get_contents($file));</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;img src='data:image/gif;base64,"</span>.$txt.<span class="string">"'&gt;&lt;/img&gt;"</span>;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Can you find the flag file?</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/04/19/DDCTF 部分Writeup/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/16/Upload-labs-Writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/04/16/Upload-labs-Writeup/" class="post-title-link" itemprop="url">Upload-labs-Writeup</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-04-16 12:00:00" itemprop="dateCreated datePublished" datetime="2019-04-16T12:00:00+08:00">2019-04-16</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:18:34" itemprop="dateModified" datetime="2019-08-23T14:18:34+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Writeup/" itemprop="url" rel="index"><span itemprop="name">Writeup</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li><a href="https://github.com/c0ny1/upload-labs" target="_blank" rel="noopener">Upload-labs 项目地址</a></li>
+</ul>
+<p>[TOC]</p>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p><strong>靶机包含漏洞类型分类</strong></p>
+<p><img src="https://github.com/c0ny1/upload-labs/raw/master/doc/mind-map.png" alt="漏洞类型"></p>
+<p><strong>如何判断上传漏洞类型</strong></p>
+<p><img src="https://github.com/c0ny1/upload-labs/raw/master/doc/sum_up.png" alt="判断上传漏洞类型"></p>
+<h2 id="Upload"><a href="#Upload" class="headerlink" title="Upload"></a>Upload</h2><h3 id="Pass-01"><a href="#Pass-01" class="headerlink" title="Pass-01"></a>Pass-01</h3><p>尝试上传了一个PHP，反应很快弹出格式要求窗口。再根据网页源码判断，应该是使用了JS判断。</p>
+<ol>
+<li>用Brupsuite抓包</li>
+<li>然后将filename修改为“shell.php”</li>
+<li>在文件内容里添加<code>&lt;?php eval($_POST[three])?&gt;</code></li>
+<li>上传之后用菜刀连接</li>
+</ol>
+<p>这个除了js之外都没有什么检查。<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/04/16/Upload-labs-Writeup/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Head First Javascript/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/01/01/Head First Javascript/" class="post-title-link" itemprop="url">Head First Javascript笔记</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:17:15" itemprop="dateModified" datetime="2019-08-23T14:17:15+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h1><p>Hello World.<br>Go to a new world again.</p>
+<h2 id="Begin"><a href="#Begin" class="headerlink" title="Begin"></a>Begin</h2><p>The first program:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(wakeUpUser, <span class="number">5000</span>)</span><br><span class="line"><span class="function">function <span class="title">wakeUpUser</span><span class="params">()</span></span>&#123;</span><br><span class="line">	alert(<span class="string">"Yep! love you!!! honny."</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> skater;</span><br><span class="line"><span class="keyword">var</span> age = <span class="number">20</span>;</span><br><span class="line"><span class="keyword">var</span> name = <span class="string">"threezh1"</span>;</span><br><span class="line"><span class="keyword">var</span> isBoy = ture/<span class="keyword">false</span>;</span><br><span class="line"><span class="comment">//This will not show for others.</span></span><br><span class="line"></span><br><span class="line">document.write(<span class="string">"Hello World."</span>);</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">"Just like history?"</span>);</span><br><span class="line"></span><br><span class="line">&lt;script src="mycode.js"&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">GetUserEnter = prompt(<span class="string">"Please enter whatever you want to say!"</span>);</span><br><span class="line">document.write(GetUserEnter);</span><br><span class="line"></span><br><span class="line"><span class="comment">//Get a random.This will return a number in (0~1)</span></span><br><span class="line"><span class="keyword">var</span> randomLoc = Math.random();</span><br><span class="line"><span class="comment">//If you want get a number in (0~5 haven't 5 like 4.999...)</span></span><br><span class="line"><span class="keyword">var</span> randomLoc = Math.random() * <span class="number">5</span>;</span><br><span class="line"><span class="comment">//Get a complete number:</span></span><br><span class="line"><span class="keyword">var</span> randomLoc = Math.floor(Math.random() * <span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/01/Head First Javascript/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Linux_basis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/01/01/Linux_basis/" class="post-title-link" itemprop="url">Linux学习笔记</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:17:51" itemprop="dateModified" datetime="2019-08-23T14:17:51+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="第一章-部署虚拟环境安装Linux系统"><a href="#第一章-部署虚拟环境安装Linux系统" class="headerlink" title="第一章,部署虚拟环境安装Linux系统"></a>第一章,部署虚拟环境安装Linux系统</h2><h3 id="RPM-红帽软件包管理器"><a href="#RPM-红帽软件包管理器" class="headerlink" title="RPM(红帽软件包管理器)"></a>RPM(红帽软件包管理器)</h3><p>常用命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">安装软件		rpm -ivh filename.rpm</span><br><span class="line">升级软件		rpm -Uvh filename.rpm</span><br><span class="line">卸载软件		rpm -e filename.rpm</span><br><span class="line">查询软件描述信息	rpm -qpi filename.rpm</span><br><span class="line">列出软件文件信息	rpm -qpi filename.rpm</span><br><span class="line">查询文件属于哪个RPM	rpm -qf filename.rpm</span><br></pre></td></tr></table></figure>
+<h3 id="Yum软件仓库"><a href="#Yum软件仓库" class="headerlink" title="Yum软件仓库"></a>Yum软件仓库</h3><p>常用Yum命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">yum repolist all			列出所有仓库</span><br><span class="line">yum list all				列出仓库中所有软件包</span><br><span class="line">yum info 软件包名称			查看软件包信息</span><br><span class="line">yum install 软件包名称		安装软件包</span><br><span class="line">yum reinstall 软件包名称		重新安装软件包</span><br><span class="line">yum update 软件包名称		升级软件包</span><br><span class="line">yum remove 软件包名称		移除软件包</span><br><span class="line">yum clean all				移除所有仓库缓存</span><br><span class="line">yum check-update			检查可更新的软件包</span><br><span class="line">yum grouplist				查看系统中已经安装的软件包组</span><br><span class="line">yum groupinstall 软件包组	安装指定的软件包组</span><br><span class="line">yum groupremove 软件包组		移除指定的软件包组</span><br><span class="line">yum groupinfo	软件包组		查询指定的软件包组信息</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/01/Linux_basis/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/XSS_01_从浏览器编码开始说起/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/01/01/XSS_01_从浏览器编码开始说起/" class="post-title-link" itemprop="url">XSS_01_从浏览器编码开始说起</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:18:52" itemprop="dateModified" datetime="2019-08-23T14:18:52+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li><a href="http://xuelinf.github.io/2016/05/18/%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81-%E6%B5%8F%E8%A7%88%E5%99%A8%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88/" target="_blank" rel="noopener">编码与解码-浏览器做了什么</a></li>
+<li><a href="http://taligarsiel.com/Projects/howbrowserswork1.htm" target="_blank" rel="noopener">How browsers work</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/41945326" target="_blank" rel="noopener">浏览器的编码与解码-低级解析</a></li>
+<li><a href="https://www.jianshu.com/p/5b72458a5258" target="_blank" rel="noopener">XSS编码绕过之浏览器解析顺序</a></li>
+</ul>
+<p>更多信息可以到文章内细看，这里只做简要记录。</p>
+<h2 id="浏览器如何工作："><a href="#浏览器如何工作：" class="headerlink" title="浏览器如何工作："></a>浏览器如何工作：</h2><p><strong>浏览器的主要功能：</strong></p>
+<p>通过从服务器请求并在浏览器窗口中显示它来显示您选择的Web资源。资源的位置由用户使用URI（统一资源标识符）指定。</p>
+<p><strong>浏览器的主要组件：</strong></p>
+<ol>
+<li>用户界面</li>
+<li>浏览器引擎 - 用于查询和操作渲染引擎的界面。</li>
+<li>渲染引擎 - 负责显示请求的内容。如解析HTML和CSS并在屏幕上显示解析的内容。</li>
+<li>网络 - 用于网络呼叫，如HTTP请求。它具有平台独立接口和每个平台的底层实现。</li>
+<li>UI后端 - 用于绘制组合框和窗口等基本小部件。它公开了一个非平台特定的通用接口。它下面使用操作系统用户界面方法。</li>
+<li>JavaScript解释器。用于解析和执行JavaScript代码。</li>
+<li>数据存储。这是一个持久层。浏览器需要保存硬盘上的各种数据，例如cookie。新的HTML规范（HTML5）定义了“web数据库”，它是浏览器中一个完整的（尽管很轻的）数据库。</li>
+</ol>
+<p><img src="http://taligarsiel.com/Projects/layers.png" alt="例图"></p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/01/XSS_01_从浏览器编码开始说起/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/XXE_Note/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/01/01/XXE_Note/" class="post-title-link" itemprop="url">了解XML</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:19:04" itemprop="dateModified" datetime="2019-08-23T14:19:04+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Learn：<a href="http://www.w3school.com.cn/xml/xml_intro.asp" target="_blank" rel="noopener">http://www.w3school.com.cn/xml/xml_intro.asp</a></p>
+<h2 id="Simple-note："><a href="#Simple-note：" class="headerlink" title="Simple note："></a>Simple note：</h2><h3 id="XML"><a href="#XML" class="headerlink" title="XML"></a>XML</h3><p>A simple example of XML：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1 ?&gt;</span><br><span class="line">&lt;skate&gt;</span><br><span class="line">	&lt;people  grade=&quot;four&quot;&gt;</span><br><span class="line">		&lt;name&gt;azhu&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">	&lt;people  grade=&quot;one&quot;&gt;</span><br><span class="line">		&lt;name&gt;threezhi&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">&lt;/skate&gt;</span><br><span class="line"></span><br><span class="line">`&lt;!-- You should avoid use attribute of XML. --&gt;`</span><br></pre></td></tr></table></figure>
+<p>In XML, there are five predefined entity reference(实体引用):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;	&lt;</span><br><span class="line">&amp;gt;	&gt;</span><br><span class="line">&amp;amp;	&amp;</span><br><span class="line">&amp;apos;	&apos;</span><br><span class="line">&amp;quot;	&quot;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/01/XXE_Note/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/XPath/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/01/01/XPath/" class="post-title-link" itemprop="url">了解Xpath</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:18:39" itemprop="dateModified" datetime="2019-08-23T14:18:39+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Learn : <a href="http://www.w3school.com.cn/xpath/index.asp" target="_blank" rel="noopener">http://www.w3school.com.cn/xpath/index.asp</a></p>
+<h2 id="Simple-note"><a href="#Simple-note" class="headerlink" title="Simple note"></a>Simple note</h2><p>Xpath is a languaga to find information in XML.</p>
+<p>There are knowledge too much, I don’t want to copy.</p>
+<p>Chose node:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">bookstore		chose all children_parameters.</span><br><span class="line">/bookstore		chose root element bookstore.</span><br><span class="line">/bookstore/book	chose all children_paremeters named &quot;root&quot; of bookstore.</span><br><span class="line">//book 			chose all children_parameters no matter where they are.</span><br><span class="line">bookstore//book chose all children_paremeters named &quot;root&quot; of bookstore no matter where they are.</span><br><span class="line">//@lang 		chose all attribute named &quot;lang&quot;.</span><br><span class="line"></span><br><span class="line">/bookstore/book[1]</span><br><span class="line">/bookstore/book[last()]</span><br><span class="line">/bookstore/book[last()-1]</span><br><span class="line">/bookstore/book[position()&lt;3]</span><br><span class="line">//title[@lang]</span><br><span class="line">//title[@lang=&apos;eng&apos;]</span><br><span class="line">/bookstore/book[price&gt;35.00]</span><br><span class="line">/bookstore/book[price&gt;35.00]/title</span><br><span class="line"></span><br><span class="line">*		ALL node.</span><br><span class="line">@*		ALL node which have any attribute.</span><br><span class="line">node()	ALL type of node.</span><br><span class="line"></span><br><span class="line">//book/title | //book/price</span><br><span class="line">//title | //price</span><br><span class="line">/bookstore/book/title | //price</span><br></pre></td></tr></table></figure>
+<p>USE:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var xmlDoc=new XMLHttpRequest()</span><br><span class="line"></span><br><span class="line">Chose nodes:</span><br><span class="line">IE : xmlDoc.selectNodes(xpath);</span><br><span class="line">Other : xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE,null);</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/01/XPath/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/CRLF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/01/01/CRLF/" class="post-title-link" itemprop="url">了解CRLF</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:17:00" itemprop="dateModified" datetime="2019-08-23T14:17:00+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Simple-note"><a href="#Simple-note" class="headerlink" title="Simple note:"></a>Simple note:</h2><p>CRLF: Carriage-Return Line-Feend.</p>
+<p>Use <code>CR, ASCII 13 \r (回车)</code> , <code>LF, ASCII 10, \n</code> and <code>%0d%0a</code> to break the HTTP request.</p>
+<p>In the  penetration test, if we found a request is like this:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET /test/demo.php?url=https://www.threezh1.com</span><br><span class="line">That we can contral.</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+<p>If the HTTP Header of the request return with the response, which means we can control the HTTP Header.(Of course include the Url.)</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Content-Encoding: deflate</span><br><span class="line">...</span><br><span class="line">That we can contral.</span><br><span class="line">...</span><br><span class="line">Locations=https:<span class="comment">//www.threezh1.com</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/01/CRLF/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Vorherige Seite"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Nächste Seite"></i></a>
+  </nav>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
+          Inhaltsverzeichnis
+        </li>
+        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+          Übersicht
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Threezh1</p>
+  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">Artikel</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">Kategorien</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">schlagwörter</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Threezh1</span>
+</div>
+  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
 </body>
 </html>

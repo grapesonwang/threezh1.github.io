@@ -1,19 +1,58 @@
 <!DOCTYPE html>
 
 
-  <html class="light page-post">
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
-  <title>Linux学习笔记 | Threezh1&#39;s blog</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<html lang="Chinese">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
+  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
 
-  
-    <meta name="keywords" content="Linux,">
-  
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Kopieren',
+      copy_success: 'Kopiert',
+      copy_failure: 'Kopieren fehlgeschlagen'
+    }
+  };
+</script>
 
   <meta name="description" content="第一章,部署虚拟环境安装Linux系统RPM(红帽软件包管理器)常用命令： 123456安装软件		rpm -ivh filename.rpm升级软件		rpm -Uvh filename.rpm卸载软件		rpm -e filename.rpm查询软件描述信息	rpm -qpi filename.rpm列出软件文件信息	rpm -qpi filename.rpm查询文件属于哪个RPM	rpm -">
 <meta name="keywords" content="Linux">
@@ -23,150 +62,231 @@
 <meta property="og:site_name" content="Threezh1&#39;s blog">
 <meta property="og:description" content="第一章,部署虚拟环境安装Linux系统RPM(红帽软件包管理器)常用命令： 123456安装软件		rpm -ivh filename.rpm升级软件		rpm -Uvh filename.rpm卸载软件		rpm -e filename.rpm查询软件描述信息	rpm -qpi filename.rpm列出软件文件信息	rpm -qpi filename.rpm查询文件属于哪个RPM	rpm -">
 <meta property="og:locale" content="Chinese">
-<meta property="og:updated_time" content="2019-05-17T04:19:15.556Z">
+<meta property="og:updated_time" content="2019-08-23T06:17:51.140Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux学习笔记">
 <meta name="twitter:description" content="第一章,部署虚拟环境安装Linux系统RPM(红帽软件包管理器)常用命令： 123456安装软件		rpm -ivh filename.rpm升级软件		rpm -Uvh filename.rpm卸载软件		rpm -e filename.rpm查询软件描述信息	rpm -qpi filename.rpm列出软件文件信息	rpm -qpi filename.rpm查询文件属于哪个RPM	rpm -">
-
-  
-
-  
-    <link rel="icon" href="/favicon.ico">
-  
-
-  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+  <link rel="canonical" href="http://yoursite.com/2019/01/01/Linux_basis/">
 
 
-  
-    <link rel="stylesheet" href="/css/personal-style.css">
-  
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
 
-  
-
-  
-
+  <title>Linux学习笔记 | Threezh1's blog</title>
+  <meta name="generator" content="Hexo 3.8.0">
   
 
 
-  
-    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
 
 </head>
-</html>
-<body>
 
+<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
+  <div class="container use-motion">
+    <div class="headband"></div>
 
-  
-    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
-  
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
 
-  <div class="post-header CENTER">
-   
-  <div class="toolbox">
-    <a class="toolbox-entry" href="/">
-      <span class="toolbox-entry-text">盒子</span>
-      <i class="icon-angle-down"></i>
-      <i class="icon-home"></i>
-    </a>
-    <ul class="list-toolbox">
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Threezh1's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">分享学习、分享想法</p>
       
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/archives/" rel="noopener noreferrer" target="_self">
-            博客
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/category/" rel="noopener noreferrer" target="_self">
-            分类
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/tag/" rel="noopener noreferrer" target="_self">
-            标签
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/link/" rel="noopener noreferrer" target="_self">
-            友链
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/about/" rel="noopener noreferrer" target="_self">
-            关于
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="http://119.3.219.188/" rel="noopener noreferrer" target="_blank">
-            Threeday
-          </a>
-        </li>
-      
-    </ul>
   </div>
 
-
+  <div class="site-nav-toggle">
+    <button aria-label="Navigationsleiste an/ausschalten">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
 </div>
 
 
-  <div id="toc" class="toc-article">
-    <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第一章-部署虚拟环境安装Linux系统"><span class="toc-text">第一章,部署虚拟环境安装Linux系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RPM-红帽软件包管理器"><span class="toc-text">RPM(红帽软件包管理器)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Yum软件仓库"><span class="toc-text">Yum软件仓库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第二章-新手必须掌握的Linux命令"><span class="toc-text">第二章,新手必须掌握的Linux命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#常用系统工作命令"><span class="toc-text">常用系统工作命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#系统状态检测命令"><span class="toc-text">系统状态检测命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#工作目录切换命令"><span class="toc-text">工作目录切换命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文本文件编辑命令"><span class="toc-text">文本文件编辑命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件目录管理命令"><span class="toc-text">文件目录管理命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#打包压缩与搜索命令"><span class="toc-text">打包压缩与搜索命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第三章-管道符、重定向与环境变量"><span class="toc-text">第三章,管道符、重定向与环境变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#输入输出重定向"><span class="toc-text">输入输出重定向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#管道命令符"><span class="toc-text">管道命令符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命令行的通配符"><span class="toc-text">命令行的通配符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常用的转义字符"><span class="toc-text">常用的转义字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重要的环境变量"><span class="toc-text">重要的环境变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第四章-Vim编辑器与Shell命令脚本"><span class="toc-text">第四章,Vim编辑器与Shell命令脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Vim文本编辑器"><span class="toc-text">Vim文本编辑器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编写Shell脚本"><span class="toc-text">编写Shell脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#判断用户的参数"><span class="toc-text">判断用户的参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#流程控制语句"><span class="toc-text">流程控制语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#计划任务服务程序"><span class="toc-text">计划任务服务程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第五章-用户身份与文件权限"><span class="toc-text">第五章,用户身份与文件权限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#用户身份与能力"><span class="toc-text">用户身份与能力</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件权限与归属"><span class="toc-text">文件权限与归属</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件的特殊权限"><span class="toc-text">文件的特殊权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件的隐藏属性"><span class="toc-text">文件的隐藏属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件访问控制列表："><span class="toc-text">文件访问控制列表：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#su命令与sudo命令"><span class="toc-text">su命令与sudo命令</span></a></li></ol></li></ol>
-  </div>
-
-
-
-<div class="content content-post CENTER">
-   <article id="post-Linux_basis" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">Linux学习笔记</h1>
-
-    <div class="article-meta">
-      <span>
-        <i class="icon-calendar"></i>
-        <span>2019.01.01</span>
-      </span>
-
-      
-        <span class="article-author">
-          <i class="icon-user"></i>
-          <span>Threezh1</span>
-        </span>
-      
-
-      
-  <span class="article-category">
-    <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/Learning/">Learning</a>
-  </span>
-
-
-
-      
-
-      
-      <i class="fa fa-eye"></i> 
-        <span id="busuanzi_container_page_pv">
-           &nbsp热度 <span id="busuanzi_value_page_pv">
-           <i class="fa fa-spinner fa-spin"></i></span>℃
-        </span>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
       
       
-    </div>
-  </header>
-
-  <div class="article-content">
+      
+        
+        <li class="menu-item menu-item-home">
+      
     
-      <h2 id="第一章-部署虚拟环境安装Linux系统"><a href="#第一章-部署虚拟环境安装Linux系统" class="headerlink" title="第一章,部署虚拟环境安装Linux系统"></a>第一章,部署虚拟环境安装Linux系统</h2><h3 id="RPM-红帽软件包管理器"><a href="#RPM-红帽软件包管理器" class="headerlink" title="RPM(红帽软件包管理器)"></a>RPM(红帽软件包管理器)</h3><p>常用命令：</p>
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-threeday">
+      
+    
+
+    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Linux_basis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Linux学习笔记
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:17:51" itemprop="dateModified" datetime="2019-08-23T14:17:51+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="第一章-部署虚拟环境安装Linux系统"><a href="#第一章-部署虚拟环境安装Linux系统" class="headerlink" title="第一章,部署虚拟环境安装Linux系统"></a>第一章,部署虚拟环境安装Linux系统</h2><h3 id="RPM-红帽软件包管理器"><a href="#RPM-红帽软件包管理器" class="headerlink" title="RPM(红帽软件包管理器)"></a>RPM(红帽软件包管理器)</h3><p>常用命令：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">安装软件		rpm -ivh filename.rpm</span><br><span class="line">升级软件		rpm -Uvh filename.rpm</span><br><span class="line">卸载软件		rpm -e filename.rpm</span><br><span class="line">查询软件描述信息	rpm -qpi filename.rpm</span><br><span class="line">列出软件文件信息	rpm -qpi filename.rpm</span><br><span class="line">查询文件属于哪个RPM	rpm -qf filename.rpm</span><br></pre></td></tr></table></figure>
 <h3 id="Yum软件仓库"><a href="#Yum软件仓库" class="headerlink" title="Yum软件仓库"></a>Yum软件仓库</h3><p>常用Yum命令：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">yum repolist all			列出所有仓库</span><br><span class="line">yum list all				列出仓库中所有软件包</span><br><span class="line">yum info 软件包名称			查看软件包信息</span><br><span class="line">yum install 软件包名称		安装软件包</span><br><span class="line">yum reinstall 软件包名称		重新安装软件包</span><br><span class="line">yum update 软件包名称		升级软件包</span><br><span class="line">yum remove 软件包名称		移除软件包</span><br><span class="line">yum clean all				移除所有仓库缓存</span><br><span class="line">yum check-update			检查可更新的软件包</span><br><span class="line">yum grouplist				查看系统中已经安装的软件包组</span><br><span class="line">yum groupinstall 软件包组	安装指定的软件包组</span><br><span class="line">yum groupremove 软件包组		移除指定的软件包组</span><br><span class="line">yum groupinfo	软件包组		查询指定的软件包组信息</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 <h2 id="第二章-新手必须掌握的Linux命令"><a href="#第二章-新手必须掌握的Linux命令" class="headerlink" title="第二章,新手必须掌握的Linux命令"></a>第二章,新手必须掌握的Linux命令</h2><h3 id="常用系统工作命令"><a href="#常用系统工作命令" class="headerlink" title="常用系统工作命令"></a>常用系统工作命令</h3><ul>
 <li>1, echo 命令</li>
 </ul>
@@ -619,140 +739,302 @@
 <p>也可以使用 exit 来返回root权限</p>
 <p>sudo 命令用于给普通用户提供额外的权限来完成原本 root 管理员才能完成的任务，格式为“sudo [参数] 命令名称”。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">-h 列出帮助信息</span><br><span class="line">-l 列出当前用户可执行的命令</span><br><span class="line">-u 用户名或 UID 值 以指定的用户身份执行命令</span><br><span class="line">-k 清空密码的有效时间，下次执行 sudo 时需要再次进行密码验证</span><br><span class="line">-b 在后台执行指定的命令</span><br><span class="line">-p 更改询问密码的提示语</span><br><span class="line"></span><br><span class="line">限制用户执行指定的命令：</span><br><span class="line">记录用户执行的每一条命令；</span><br><span class="line">配置文件（/etc/sudoers）提供集中的用户管理、权限与主机等参数；</span><br><span class="line">验证密码的后 5 分钟内（默认值）无须再让用户再次验证密码。</span><br><span class="line"></span><br><span class="line">部分权限：</span><br><span class="line"></span><br><span class="line">visudo</span><br><span class="line"></span><br><span class="line">96 ##</span><br><span class="line">97 ## Allow root to run any commands anywhere</span><br><span class="line">98 root ALL=(ALL) ALL</span><br><span class="line">99 linuxprobe ALL=(ALL) /usr/bin/cat</span><br><span class="line"></span><br><span class="line">不用输入一次密码：</span><br><span class="line"></span><br><span class="line">whereis poweroff</span><br><span class="line">poweroff: /usr/sbin/poweroff /usr/share/man/man8/poweroff.8.gz</span><br><span class="line"></span><br><span class="line">visudo</span><br><span class="line"></span><br><span class="line">………………省略部分文件内容………………</span><br><span class="line">96 ##</span><br><span class="line">97 ## Allow root to run any commands anywhere</span><br><span class="line">98 root ALL=(ALL) ALL</span><br><span class="line">99 linuxprobe ALL=NOPASSWD: /usr/sbin/poweroff</span><br><span class="line">………………省略部分文件内容………………</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/01/01/XSS_01_从浏览器编码开始说起/" rel="next" title="XSS_01_从浏览器编码开始说起">
+                  <i class="fa fa-chevron-left"></i> XSS_01_从浏览器编码开始说起
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/01/01/Head First Javascript/" rel="prev" title="Head First Javascript笔记">
+                  Head First Javascript笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
     
   </div>
+  
+  
+  
+  </article>
 
-</article>
-
-
-   
-
-   
-  <div class="box-prev-next clearfix">
-    <a class="show pull-left" href="/2019/01/01/XSS_01_从浏览器编码开始说起/">
-        <i class="icon icon-angle-left"></i>
-    </a>
-    <a class="show pull-right" href="/2019/01/01/Head First Javascript/">
-        <i class="icon icon-angle-right"></i>
-    </a>
   </div>
 
 
+          </div>
+          
 
-
-</div>
-
-
-  <a id="backTop" class="back-top">
-    <i class="icon-angle-up"></i>
-  </a>
-
-
-
-
-  <div class="modal" id="modal">
-  <span id="cover" class="cover hide"></span>
-  <div id="modal-dialog" class="modal-dialog hide-dialog">
-    <div class="modal-header">
-      <span id="close" class="btn-close">关闭</span>
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-    <hr>
-    <div class="modal-body">
-      <ul class="list-toolbox">
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
         
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/archives/" rel="noopener noreferrer" target="_self">
-              博客
-            </a>
-          </li>
         
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/category/" rel="noopener noreferrer" target="_self">
-              分类
-            </a>
-          </li>
         
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/tag/" rel="noopener noreferrer" target="_self">
-              标签
-            </a>
-          </li>
         
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/link/" rel="noopener noreferrer" target="_self">
-              友链
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/about/" rel="noopener noreferrer" target="_self">
-              关于
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="http://119.3.219.188/" rel="noopener noreferrer" target="_blank">
-              Threeday
-            </a>
-          </li>
-        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
+          Inhaltsverzeichnis
+        </li>
+        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+          Übersicht
+        </li>
       </ul>
 
-    </div>
-  </div>
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc">
+            <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一章-部署虚拟环境安装Linux系统"><span class="nav-number">1.</span> <span class="nav-text">第一章,部署虚拟环境安装Linux系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RPM-红帽软件包管理器"><span class="nav-number">1.1.</span> <span class="nav-text">RPM(红帽软件包管理器)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Yum软件仓库"><span class="nav-number">1.2.</span> <span class="nav-text">Yum软件仓库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二章-新手必须掌握的Linux命令"><span class="nav-number">2.</span> <span class="nav-text">第二章,新手必须掌握的Linux命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用系统工作命令"><span class="nav-number">2.1.</span> <span class="nav-text">常用系统工作命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统状态检测命令"><span class="nav-number">2.2.</span> <span class="nav-text">系统状态检测命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工作目录切换命令"><span class="nav-number">2.3.</span> <span class="nav-text">工作目录切换命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文本文件编辑命令"><span class="nav-number">2.4.</span> <span class="nav-text">文本文件编辑命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件目录管理命令"><span class="nav-number">2.5.</span> <span class="nav-text">文件目录管理命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打包压缩与搜索命令"><span class="nav-number">2.6.</span> <span class="nav-text">打包压缩与搜索命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三章-管道符、重定向与环境变量"><span class="nav-number">3.</span> <span class="nav-text">第三章,管道符、重定向与环境变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#输入输出重定向"><span class="nav-number">3.1.</span> <span class="nav-text">输入输出重定向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管道命令符"><span class="nav-number">3.2.</span> <span class="nav-text">管道命令符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令行的通配符"><span class="nav-number">3.3.</span> <span class="nav-text">命令行的通配符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用的转义字符"><span class="nav-number">3.4.</span> <span class="nav-text">常用的转义字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重要的环境变量"><span class="nav-number">3.5.</span> <span class="nav-text">重要的环境变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第四章-Vim编辑器与Shell命令脚本"><span class="nav-number">4.</span> <span class="nav-text">第四章,Vim编辑器与Shell命令脚本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Vim文本编辑器"><span class="nav-number">4.1.</span> <span class="nav-text">Vim文本编辑器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编写Shell脚本"><span class="nav-number">4.2.</span> <span class="nav-text">编写Shell脚本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#判断用户的参数"><span class="nav-number">4.2.1.</span> <span class="nav-text">判断用户的参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流程控制语句"><span class="nav-number">4.3.</span> <span class="nav-text">流程控制语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计划任务服务程序"><span class="nav-number">4.4.</span> <span class="nav-text">计划任务服务程序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第五章-用户身份与文件权限"><span class="nav-number">5.</span> <span class="nav-text">第五章,用户身份与文件权限</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用户身份与能力"><span class="nav-number">5.1.</span> <span class="nav-text">用户身份与能力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件权限与归属"><span class="nav-number">5.2.</span> <span class="nav-text">文件权限与归属</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件的特殊权限"><span class="nav-number">5.3.</span> <span class="nav-text">文件的特殊权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件的隐藏属性"><span class="nav-number">5.4.</span> <span class="nav-text">文件的隐藏属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件访问控制列表："><span class="nav-number">5.5.</span> <span class="nav-text">文件访问控制列表：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#su命令与sudo命令"><span class="nav-number">5.6.</span> <span class="nav-text">su命令与sudo命令</span></a></li></ol></li></ol></div>
+          </div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Threezh1</p>
+  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
 </div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">Artikel</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">Kategorien</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">schlagwörter</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
 
 
 
-  
-      <div class="fexo-comments comments-post">
-    
+        </div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Threezh1</span>
+</div>
+  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
 
     
-
-    
-    
-
-    
-
-    
-    
-
-    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
 
   </div>
 
   
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+<script src="/js/next-boot.js?v=7.3.0"></script>
 
-  <script type="text/javascript">
-  function loadScript(url, callback) {
-    var script = document.createElement('script')
-    script.type = 'text/javascript';
 
-    if (script.readyState) { //IE
-      script.onreadystatechange = function() {
-        if (script.readyState == 'loaded' ||
-          script.readyState == 'complete') {
-          script.onreadystatechange = null;
-          callback();
-        }
-      };
-    } else { //Others
-      script.onload = function() {
-        callback();
-      };
-    }
 
-    script.src = url;
-    document.getElementsByTagName('head')[0].appendChild(script);
-  }
+  
 
-  window.onload = function() {
-    loadScript('/js/bundle.js?235683', function() {
-      // load success
-    });
-  }
-</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/post-details.js?v=7.3.0"></script>
+
 
 </body>
 </html>

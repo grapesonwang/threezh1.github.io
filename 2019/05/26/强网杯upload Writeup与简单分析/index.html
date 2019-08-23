@@ -1,19 +1,58 @@
 <!DOCTYPE html>
 
 
-  <html class="light page-post">
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
-  <title>强网杯upload Writeup与简单分析 | Threezh1&#39;s blog</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<html lang="Chinese">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
+  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
 
-  
-    <meta name="keywords" content="PHP代码审计,">
-  
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Kopieren',
+      copy_success: 'Kopiert',
+      copy_failure: 'Kopieren fehlgeschlagen'
+    }
+  };
+</script>
 
   <meta name="description" content="说在前面第一次打强网杯，没想到这么难，萌新瑟瑟发抖。BY Threezh1 题目有点绕，看了半天都没找到重点。后面还是靠学长给的payload思路理清楚了过程。这里就记录一下，学习学习。 题目分析网站基本功能： 注册登录后，可以上传一张图片作为头像。 无论上传什么格式的文件，文件名都会修改为md5值.png 分析： 使用dirsearch等工具可以直接扫到网站源码地址： http://49.4.6">
 <meta name="keywords" content="PHP代码审计">
@@ -26,148 +65,228 @@
 <meta property="og:image" content="https://i.loli.net/2019/05/26/5cea55c1ec25028053.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/05/26/5cea55c3c204d65669.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/05/26/5cea55c23688270315.jpg">
-<meta property="og:updated_time" content="2019-05-27T03:39:03.451Z">
+<meta property="og:updated_time" content="2019-08-23T06:19:37.219Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="强网杯upload Writeup与简单分析">
 <meta name="twitter:description" content="说在前面第一次打强网杯，没想到这么难，萌新瑟瑟发抖。BY Threezh1 题目有点绕，看了半天都没找到重点。后面还是靠学长给的payload思路理清楚了过程。这里就记录一下，学习学习。 题目分析网站基本功能： 注册登录后，可以上传一张图片作为头像。 无论上传什么格式的文件，文件名都会修改为md5值.png 分析： 使用dirsearch等工具可以直接扫到网站源码地址： http://49.4.6">
 <meta name="twitter:image" content="https://i.loli.net/2019/05/26/5cea55c1ec25028053.jpg">
-
-  
-
-  
-    <link rel="icon" href="/favicon.ico">
-  
-
-  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+  <link rel="canonical" href="http://yoursite.com/2019/05/26/强网杯upload Writeup与简单分析/">
 
 
-  
-    <link rel="stylesheet" href="/css/personal-style.css">
-  
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
 
-  
-
-  
-
+  <title>强网杯upload Writeup与简单分析 | Threezh1's blog</title>
+  <meta name="generator" content="Hexo 3.8.0">
   
 
 
-  
-    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
 
 </head>
-</html>
-<body>
 
+<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
+  <div class="container use-motion">
+    <div class="headband"></div>
 
-  
-    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
-  
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
 
-  <div class="post-header CENTER">
-   
-  <div class="toolbox">
-    <a class="toolbox-entry" href="/">
-      <span class="toolbox-entry-text">盒子</span>
-      <i class="icon-angle-down"></i>
-      <i class="icon-home"></i>
-    </a>
-    <ul class="list-toolbox">
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Threezh1's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">分享学习、分享想法</p>
       
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/archives/" rel="noopener noreferrer" target="_self">
-            博客
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/category/" rel="noopener noreferrer" target="_self">
-            分类
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/tag/" rel="noopener noreferrer" target="_self">
-            标签
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/link/" rel="noopener noreferrer" target="_self">
-            友链
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="/about/" rel="noopener noreferrer" target="_self">
-            关于
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="ROUND_RECT" href="http://119.3.219.188/" rel="noopener noreferrer" target="_blank">
-            Threeday
-          </a>
-        </li>
-      
-    </ul>
   </div>
 
-
+  <div class="site-nav-toggle">
+    <button aria-label="Navigationsleiste an/ausschalten">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
 </div>
 
 
-  <div id="toc" class="toc-article">
-    <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#说在前面"><span class="toc-text">说在前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#题目分析"><span class="toc-text">题目分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#根据payload来看解题的思路"><span class="toc-text">根据payload来看解题的思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#复现"><span class="toc-text">复现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
-  </div>
-
-
-
-<div class="content content-post CENTER">
-   <article id="post-强网杯upload Writeup与简单分析" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">强网杯upload Writeup与简单分析</h1>
-
-    <div class="article-meta">
-      <span>
-        <i class="icon-calendar"></i>
-        <span>2019.05.26</span>
-      </span>
-
-      
-        <span class="article-author">
-          <i class="icon-user"></i>
-          <span>Threezh1</span>
-        </span>
-      
-
-      
-  <span class="article-category">
-    <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/Writeup/">Writeup</a>
-  </span>
-
-
-
-      
-
-      
-      <i class="fa fa-eye"></i> 
-        <span id="busuanzi_container_page_pv">
-           &nbsp热度 <span id="busuanzi_value_page_pv">
-           <i class="fa fa-spinner fa-spin"></i></span>℃
-        </span>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
       
       
-    </div>
-  </header>
-
-  <div class="article-content">
+      
+        
+        <li class="menu-item menu-item-home">
+      
     
-      <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>第一次打强网杯，没想到这么难，萌新瑟瑟发抖。BY Threezh1</p>
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-threeday">
+      
+    
+
+    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/26/强网杯upload Writeup与简单分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">强网杯upload Writeup与简单分析
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-05-26 17:14:26" itemprop="dateCreated datePublished" datetime="2019-05-26T17:14:26+08:00">2019-05-26</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:19:37" itemprop="dateModified" datetime="2019-08-23T14:19:37+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Writeup/" itemprop="url" rel="index"><span itemprop="name">Writeup</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>第一次打强网杯，没想到这么难，萌新瑟瑟发抖。BY Threezh1</p>
 <p>题目有点绕，看了半天都没找到重点。后面还是靠学长给的payload思路理清楚了过程。这里就记录一下，学习学习。</p>
 <h2 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h2><p><strong>网站基本功能：</strong></p>
 <p>注册登录后，可以上传一张图片作为头像。</p>
@@ -180,7 +299,8 @@
 Login.php         //登陆
 Profile.php     //上传
 Register.php     //注册
-</code></pre><p><strong>Index.php</strong></p>
+</code></pre><a id="more"></a>
+<p><strong>Index.php</strong></p>
 <p>它的作用为判断是否登录，根据是否已经上传图片来显示指定的用户主页模板。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">app</span>\<span class="title">web</span>\<span class="title">controller</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span> <span class="keyword">extends</span> <span class="title">Controller</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $profile;</span><br><span class="line">    <span class="keyword">public</span> $profile_db;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;login_check())&#123;   <span class="comment">//判断是否已经登录</span></span><br><span class="line">            $curr_url=<span class="string">"http://"</span>.$_SERVER[<span class="string">'HTTP_HOST'</span>].$_SERVER[<span class="string">'SCRIPT_NAME'</span>].<span class="string">"/home"</span>;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;redirect($curr_url,<span class="number">302</span>);</span><br><span class="line">            <span class="keyword">exit</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;fetch(<span class="string">"index"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">home</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">$this</span>-&gt;login_check())&#123;  <span class="comment">//再判断是否登录</span></span><br><span class="line">            $curr_url=<span class="string">"http://"</span>.$_SERVER[<span class="string">'HTTP_HOST'</span>].$_SERVER[<span class="string">'SCRIPT_NAME'</span>].<span class="string">"/index"</span>;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;redirect($curr_url,<span class="number">302</span>);</span><br><span class="line">            <span class="keyword">exit</span>();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">$this</span>-&gt;check_upload_img())&#123; <span class="comment">//检查是否已经上传图片</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;assign(<span class="string">"username"</span>,<span class="keyword">$this</span>-&gt;profile_db[<span class="string">'username'</span>]);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;fetch(<span class="string">"upload"</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;assign(<span class="string">"img"</span>,<span class="keyword">$this</span>-&gt;profile_db[<span class="string">'img'</span>]);  <span class="comment">//</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;assign(<span class="string">"username"</span>,<span class="keyword">$this</span>-&gt;profile_db[<span class="string">'username'</span>]);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;fetch(<span class="string">"home"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">login_check</span><span class="params">()</span></span>&#123;  <span class="comment">//登录检查  </span></span><br><span class="line">        $profile=cookie(<span class="string">'user'</span>);    <span class="comment">//获取cookie</span></span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">empty</span>($profile))&#123;   <span class="comment">//判断是否为空</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;profile=unserialize(base64_decode($profile));    <span class="comment">//将cookie解码后反序列化</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;profile_db=db(<span class="string">'user'</span>)-&gt;where(<span class="string">"ID"</span>,intval(<span class="keyword">$this</span>-&gt;profile[<span class="string">'ID'</span>]))-&gt;find(); <span class="comment">//根据反序列化出来的id在数据库中查询</span></span><br><span class="line">            <span class="keyword">if</span>(array_diff(<span class="keyword">$this</span>-&gt;profile_db,<span class="keyword">$this</span>-&gt;profile)==<span class="keyword">null</span>)&#123; <span class="comment">//进行差值查询</span></span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">check_upload_img</span><span class="params">()</span></span>&#123; <span class="comment">//检查是否已经上传图片，根据cookie当中和查询出来的数据</span></span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">empty</span>(<span class="keyword">$this</span>-&gt;profile) &amp;&amp; !<span class="keyword">empty</span>(<span class="keyword">$this</span>-&gt;profile_db))&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">empty</span>(<span class="keyword">$this</span>-&gt;profile_db[<span class="string">'img'</span>]))&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">logout</span><span class="params">()</span></span>&#123;</span><br><span class="line">        cookie(<span class="string">"user"</span>,<span class="keyword">null</span>);</span><br><span class="line">        $curr_url=<span class="string">"http://"</span>.$_SERVER[<span class="string">'HTTP_HOST'</span>].$_SERVER[<span class="string">'SCRIPT_NAME'</span>].<span class="string">"/index"</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;redirect($curr_url,<span class="number">302</span>);</span><br><span class="line">        <span class="keyword">exit</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span><span class="params">($name)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>里面与一个题目相关且重要的函数为login_check()：</p>
@@ -254,140 +374,302 @@ Register.php     //注册
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>学长们的思路真的太强了，每个重要的语句，环环相扣达到最终彼岸。</p>
 <p>最TP5这类框架还是不太熟悉，后面还要多总结学习。</p>
 
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/PHP代码审计/" rel="tag"># PHP代码审计</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/05/18/PHP代码审计之重装漏洞/" rel="next" title="PHP代码审计之重装漏洞">
+                  <i class="fa fa-chevron-left"></i> PHP代码审计之重装漏洞
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/05/29/PHP代码审计之SQL注入与审计流程/" rel="prev" title="PHP代码审计之学习SQL注入与审计流程">
+                  PHP代码审计之学习SQL注入与审计流程 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
     
   </div>
+  
+  
+  
+  </article>
 
-</article>
-
-
-   
-
-   
-  <div class="box-prev-next clearfix">
-    <a class="show pull-left" href="/2019/05/18/PHP代码审计之重装漏洞/">
-        <i class="icon icon-angle-left"></i>
-    </a>
-    <a class="show pull-right" href="/2019/05/29/PHP代码审计之SQL注入与审计流程/">
-        <i class="icon icon-angle-right"></i>
-    </a>
   </div>
 
 
+          </div>
+          
 
-
-</div>
-
-
-  <a id="backTop" class="back-top">
-    <i class="icon-angle-up"></i>
-  </a>
-
-
-
-
-  <div class="modal" id="modal">
-  <span id="cover" class="cover hide"></span>
-  <div id="modal-dialog" class="modal-dialog hide-dialog">
-    <div class="modal-header">
-      <span id="close" class="btn-close">关闭</span>
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-    <hr>
-    <div class="modal-body">
-      <ul class="list-toolbox">
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
         
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/archives/" rel="noopener noreferrer" target="_self">
-              博客
-            </a>
-          </li>
         
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/category/" rel="noopener noreferrer" target="_self">
-              分类
-            </a>
-          </li>
         
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/tag/" rel="noopener noreferrer" target="_self">
-              标签
-            </a>
-          </li>
         
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/link/" rel="noopener noreferrer" target="_self">
-              友链
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="/about/" rel="noopener noreferrer" target="_self">
-              关于
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="ROUND_RECT" href="http://119.3.219.188/" rel="noopener noreferrer" target="_blank">
-              Threeday
-            </a>
-          </li>
-        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
+          Inhaltsverzeichnis
+        </li>
+        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+          Übersicht
+        </li>
       </ul>
 
-    </div>
-  </div>
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc">
+            <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#说在前面"><span class="nav-number">1.</span> <span class="nav-text">说在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#题目分析"><span class="nav-number">2.</span> <span class="nav-text">题目分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#根据payload来看解题的思路"><span class="nav-number">3.</span> <span class="nav-text">根据payload来看解题的思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复现"><span class="nav-number">4.</span> <span class="nav-text">复现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+          </div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Threezh1</p>
+  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
 </div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">Artikel</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">Kategorien</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">schlagwörter</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
 
 
 
-  
-      <div class="fexo-comments comments-post">
-    
+        </div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Threezh1</span>
+</div>
+  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
 
     
-
-    
-    
-
-    
-
-    
-    
-
-    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
 
   </div>
 
   
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+<script src="/js/next-boot.js?v=7.3.0"></script>
 
-  <script type="text/javascript">
-  function loadScript(url, callback) {
-    var script = document.createElement('script')
-    script.type = 'text/javascript';
 
-    if (script.readyState) { //IE
-      script.onreadystatechange = function() {
-        if (script.readyState == 'loaded' ||
-          script.readyState == 'complete') {
-          script.onreadystatechange = null;
-          callback();
-        }
-      };
-    } else { //Others
-      script.onload = function() {
-        callback();
-      };
-    }
 
-    script.src = url;
-    document.getElementsByTagName('head')[0].appendChild(script);
-  }
+  
 
-  window.onload = function() {
-    loadScript('/js/bundle.js?235683', function() {
-      // load success
-    });
-  }
-</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/post-details.js?v=7.3.0"></script>
+
 
 </body>
 </html>
