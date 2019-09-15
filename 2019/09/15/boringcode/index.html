@@ -47,9 +47,9 @@
     path: '',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     translation: {
-      copy_button: 'Copiar',
-      copy_success: 'Copiado',
-      copy_failure: 'Copiar falló'
+      copy_button: 'Kopieren',
+      copy_success: 'Kopiert',
+      copy_failure: 'Kopieren fehlgeschlagen'
     }
   };
 </script>
@@ -76,7 +76,7 @@
 <meta property="og:image" content="https://i.loli.net/2019/09/15/QZLUjoBDmVIGw6a.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/09/15/gUfjpJoySZiwHMh.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/09/15/tARoWnCeYXZDVKb.jpg">
-<meta property="og:updated_time" content="2019-09-15T09:12:08.473Z">
+<meta property="og:updated_time" content="2019-09-15T09:16:26.598Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ByteCTF一道题的分析与学习PHP无参数函数的利用">
 <meta name="twitter:description" content="说在前面这次参与了ByteCTF，尝试做了boringcode和EZCMS。虽然都没做出来，但是学到了很多东西。 这次通过ALTM4NZ师傅的wp来分析一下boringcode这道题并学习一下无参数函数的利用。 boringcode看一下代码： 123456789101112131415161718192021222324252627282930313233&amp;lt;?phpfunction is_">
@@ -162,7 +162,7 @@
   </div>
 
   <div class="site-nav-toggle">
-    <button aria-label="Cambiar a barra de navegación">
+    <button aria-label="Navigationsleiste an/ausschalten">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -182,7 +182,7 @@
       
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Inicio</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
 
   </li>
       
@@ -193,7 +193,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archivo</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
 
   </li>
       
@@ -251,13 +251,13 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Publicado el</span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
 
               
                 
               
 
-              <time title="Creado por: 2019-09-15 17:12:31 / Modificado por: 17:12:08" itemprop="dateCreated datePublished" datetime="2019-09-15T17:12:31+08:00">2019-09-15</time>
+              <time title="Erstellt: 2019-09-15 17:12:31 / Geändert am: 17:16:26" itemprop="dateCreated datePublished" datetime="2019-09-15T17:12:31+08:00">2019-09-15</time>
             </span>
           
             
@@ -268,7 +268,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">En</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
 
@@ -293,7 +293,7 @@
 <p>这次通过ALTM4NZ师傅的wp来分析一下boringcode这道题并学习一下无参数函数的利用。</p>
 <h2 id="boringcode"><a href="#boringcode" class="headerlink" title="boringcode"></a>boringcode</h2><p>看一下代码：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">is_valid_url</span><span class="params">($url)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (filter_var($url, FILTER_VALIDATE_URL)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (preg_match(<span class="string">'/data:\/\//i'</span>, $url)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">'url'</span>]))&#123;</span><br><span class="line">    $url = $_POST[<span class="string">'url'</span>];</span><br><span class="line">    <span class="keyword">if</span> (is_valid_url($url)) &#123;</span><br><span class="line">        $r = parse_url($url);</span><br><span class="line">        <span class="keyword">if</span> (preg_match(<span class="string">'/baidu\.com$/'</span>, $r[<span class="string">'host'</span>])) &#123;</span><br><span class="line">            $code = file_get_contents($url);</span><br><span class="line">            <span class="keyword">if</span> (<span class="string">';'</span> === preg_replace(<span class="string">'/[a-z]+\((?R)?\)/'</span>, <span class="keyword">NULL</span>, $code)) &#123;</span><br><span class="line">                <span class="keyword">if</span> (preg_match(<span class="string">'/et|na|nt|strlen|info|path|rand|dec|bin|hex|oct|pi|exp|log/i'</span>, $code)) &#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">'bye~'</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">eval</span>($code);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"error: host not allowed"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"error: invalid url"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这个页面的作用是，接受一个url参数，利用file_get_content远程获取url页面的源码，传递给eval执行。但在url传递和源码传递过程中有各种检测。</p>
+<p>这个页面的作用是，接受一个url参数，利用file_get_content远程获取url页面的源码，传递给eval执行。但在url传递和源码传递过程中有各种检测。<br><a id="more"></a></p>
 <h3 id="第一个点："><a href="#第一个点：" class="headerlink" title="第一个点："></a>第一个点：</h3><ol>
 <li>is_valid_url()函数来检测url的正确性，并禁止使用data协议。</li>
 <li>url的host必须以baidu.com结尾。</li>
@@ -534,10 +534,10 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc" data-target="post-toc-wrap">
-          Tabla de contenidos
+          Inhaltsverzeichnis
         </li>
         <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-          Inicio
+          Übersicht
         </li>
       </ul>
 
@@ -562,7 +562,7 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
           <a href="/archives/">
         
           <span class="site-state-item-count">27</span>
-          <span class="site-state-item-name">entradas</span>
+          <span class="site-state-item-name">Artikel</span>
         </a>
       </div>
     
@@ -583,7 +583,7 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
           
         
         <span class="site-state-item-count">5</span>
-        <span class="site-state-item-name">categorías</span>
+        <span class="site-state-item-name">Kategorien</span>
         
       </div>
     
@@ -632,7 +632,7 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
           
         
         <span class="site-state-item-count">19</span>
-        <span class="site-state-item-name">tags</span>
+        <span class="site-state-item-name">schlagwörter</span>
         
       </div>
     
@@ -683,9 +683,9 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
   </span>
   <span class="author" itemprop="copyrightHolder">Threezh1</span>
 </div>
-  <div class="powered-by">Creado mediante <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Tema – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
+  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
 
         
 

