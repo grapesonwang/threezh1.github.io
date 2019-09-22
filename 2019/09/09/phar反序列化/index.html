@@ -58,7 +58,7 @@
 <meta name="keywords" content="python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Phar反序列化总结">
-<meta property="og:url" content="http://yoursite.com/2019/09/22/phar反序列化/index.html">
+<meta property="og:url" content="http://yoursite.com/2019/09/09/phar反序列化/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
 <meta property="og:description" content="前言除了unserialize()来利用反序列化漏洞之外，还可以利用phar文件以序列化的形式存储用户自定义的meta-data这一特性，扩大php反序列化漏洞的攻击面。该方法在文件系统函数（file_exists()、is_dir()等）参数可控的情况下，配合phar://伪协议，可以不依赖unserialize()直接进行反序列化操作。 这次在比赛当中遇到phar反序列化，却不知道如何下手。社">
 <meta property="og:locale" content="Chinese">
@@ -71,12 +71,12 @@
 <meta property="og:image" content="https://i.loli.net/2019/09/22/zJDn7KP8OqZGob2.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/09/22/FerN63qAib2pR1E.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/09/22/ylbmEeDsXfNSWta.jpg">
-<meta property="og:updated_time" content="2019-09-22T06:42:37.785Z">
+<meta property="og:updated_time" content="2019-09-22T06:45:03.916Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Phar反序列化总结">
 <meta name="twitter:description" content="前言除了unserialize()来利用反序列化漏洞之外，还可以利用phar文件以序列化的形式存储用户自定义的meta-data这一特性，扩大php反序列化漏洞的攻击面。该方法在文件系统函数（file_exists()、is_dir()等）参数可控的情况下，配合phar://伪协议，可以不依赖unserialize()直接进行反序列化操作。 这次在比赛当中遇到phar反序列化，却不知道如何下手。社">
 <meta name="twitter:image" content="https://i.loli.net/2019/09/22/rNQLJtSyTK3CfRB.jpg">
-  <link rel="canonical" href="http://yoursite.com/2019/09/22/phar反序列化/">
+  <link rel="canonical" href="http://yoursite.com/2019/09/09/phar反序列化/">
 
 
 <script id="page-configurations">
@@ -224,7 +224,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/22/phar反序列化/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/09/phar反序列化/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Threezh1">
@@ -252,11 +252,19 @@
                 
               
 
-              <time title="Created: 2019-09-22 00:00:00 / Modified: 14:42:37" itemprop="dateCreated datePublished" datetime="2019-09-22T00:00:00+08:00">2019-09-22</time>
+              <time title="Created: 2019-09-09 00:00:00" itemprop="dateCreated datePublished" datetime="2019-09-09T00:00:00+08:00">2019-09-09</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-09-22 14:45:03" itemprop="dateModified" datetime="2019-09-22T14:45:03+08:00">2019-09-22</time>
+              </span>
             
           
             <span class="post-meta-item">
@@ -455,8 +463,8 @@ secure_file_priv=&quot;&quot;
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2019/09/15/boringcode/" rel="next" title="ByteCTF一道题的分析与学习PHP无参数函数的利用">
-                  <i class="fa fa-chevron-left"></i> ByteCTF一道题的分析与学习PHP无参数函数的利用
+                <a href="/2019/08/22/简单的协程利用框架/" rel="next" title="协程初体验之简单的利用框架">
+                  <i class="fa fa-chevron-left"></i> 协程初体验之简单的利用框架
                 </a>
               
             </div>
@@ -464,6 +472,10 @@ secure_file_priv=&quot;&quot;
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/09/15/boringcode/" rel="prev" title="ByteCTF一道题的分析与学习PHP无参数函数的利用">
+                  ByteCTF一道题的分析与学习PHP无参数函数的利用 <i class="fa fa-chevron-right"></i>
+                </a>
               
             </div>
           </div>
