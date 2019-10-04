@@ -55,9 +55,9 @@
 </script>
 
   <meta name="description" content="说在前面对于PHP反序列化，原来也就只是浅尝而止。最近看到很多题的出现了多种没有了解过的反序列化形式，就此进一步学习一下。其中很多内容都参考了师傅们的博客，部分内容经过自己的修改。如果存在错误，还望师傅们指出。">
-<meta name="keywords" content="Threezh1">
+<meta name="keywords" content="PHP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Threezh1&#39;s blog">
+<meta property="og:title" content="PHP反序列化进阶学习与总结">
 <meta property="og:url" content="http://yoursite.com/2019/10/04/PHP反序列化进阶学习与总结/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
 <meta property="og:description" content="说在前面对于PHP反序列化，原来也就只是浅尝而止。最近看到很多题的出现了多种没有了解过的反序列化形式，就此进一步学习一下。其中很多内容都参考了师傅们的博客，部分内容经过自己的修改。如果存在错误，还望师傅们指出。">
@@ -73,9 +73,9 @@
 <meta property="og:image" content="https://i.loli.net/2019/09/22/FerN63qAib2pR1E.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/09/30/xCcmPFfhlHq9MvK.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/09/30/HohEaKwGU9rtDkX.jpg">
-<meta property="og:updated_time" content="2019-10-04T08:55:05.496Z">
+<meta property="og:updated_time" content="2019-10-04T08:59:23.617Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Threezh1&#39;s blog">
+<meta name="twitter:title" content="PHP反序列化进阶学习与总结">
 <meta name="twitter:description" content="说在前面对于PHP反序列化，原来也就只是浅尝而止。最近看到很多题的出现了多种没有了解过的反序列化形式，就此进一步学习一下。其中很多内容都参考了师傅们的博客，部分内容经过自己的修改。如果存在错误，还望师傅们指出。">
 <meta name="twitter:image" content="https://i.loli.net/2019/09/30/vXkcsHYeVin76rU.jpg">
   <link rel="canonical" href="http://yoursite.com/2019/10/04/PHP反序列化进阶学习与总结/">
@@ -92,7 +92,7 @@
   };
 </script>
 
-  <title> | Threezh1's blog</title>
+  <title>PHP反序列化进阶学习与总结 | Threezh1's blog</title>
   <meta name="generator" content="Hexo 3.8.0">
   
 
@@ -238,7 +238,7 @@
       <meta itemprop="name" content="Threezh1's blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h1 class="post-title" itemprop="name headline">PHP反序列化进阶学习与总结
 
           
         </h1>
@@ -254,12 +254,25 @@
                 
               
 
-              <time title="Erstellt: 2019-10-04 16:55:15 / Geändert am: 16:55:05" itemprop="dateCreated datePublished" datetime="2019-10-04T16:55:15+08:00">2019-10-04</time>
+              <time title="Erstellt: 2019-10-04 16:55:15 / Geändert am: 16:59:23" itemprop="dateCreated datePublished" datetime="2019-10-04T16:55:15+08:00">2019-10-04</time>
             </span>
           
             
 
             
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learn/" itemprop="url" rel="index"><span itemprop="name">Learn</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -275,6 +288,7 @@
       
         <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>对于PHP反序列化，原来也就只是浅尝而止。最近看到很多题的出现了多种没有了解过的反序列化形式，就此进一步学习一下。其中很多内容都参考了师傅们的博客，部分内容经过自己的修改。如果存在错误，还望师傅们指出。</p>
 <a id="more"></a>
+<p>文章首发于先知：<a href="https://xz.aliyun.com/t/6454" target="_blank" rel="noopener">https://xz.aliyun.com/t/6454</a></p>
 <h2 id="pravite和Protected成员的序列化"><a href="#pravite和Protected成员的序列化" class="headerlink" title="pravite和Protected成员的序列化"></a>pravite和Protected成员的序列化</h2><p>以前在做反序列化的题的时候遇到的都是public成员，但在k0rz3n师傅的文章中看到了Private和Protected权限序列化的过程中有着不同的差别。这里做一个小知识点的总结。</p>
 <p>先来复习一下一个简单的序列化例子：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Threezh1</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $text;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">execute</span><span class="params">($payload)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">eval</span>($payload);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span>&#123;</span><br><span class="line">    	<span class="keyword">$this</span>-&gt;execute(<span class="keyword">$this</span>-&gt;text);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$a = <span class="keyword">new</span> Threezh1();</span><br><span class="line">$a-&gt;text = <span class="string">'echo "Threezh1";'</span>;</span><br><span class="line"><span class="keyword">echo</span> serialize($a);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
@@ -556,6 +570,15 @@ php_serialize(php&gt;5.5.4):
       
 
       <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/PHP/" rel="tag"># PHP</a>
+            
+          </div>
+        
 
         
 
@@ -658,7 +681,9 @@ php_serialize(php&gt;5.5.4):
         
           
         
-        <span class="site-state-item-count">5</span>
+          
+        
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">Kategorien</span>
         
       </div>
