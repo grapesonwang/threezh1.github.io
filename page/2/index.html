@@ -212,6 +212,136 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/29/PHP代码审计之SQL注入与审计流程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/05/29/PHP代码审计之SQL注入与审计流程/" class="post-title-link" itemprop="url">PHP代码审计之学习SQL注入与审计流程</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-05-29 00:00:00" itemprop="dateCreated datePublished" datetime="2019-05-29T00:00:00+08:00">2019-05-29</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:18:08" itemprop="dateModified" datetime="2019-08-23T14:18:08+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>本来只想复现一下sql注入的几篇文章，但在先知上找到了几篇非常好的入门审计的文章。于是打算按照他的审计思路，熟悉一下PHP代码审计流程，同时整理一下SQL注入的审计方法。</p>
+<p>文章地址：<a href="https://xz.aliyun.com/t/3532" target="_blank" rel="noopener">https://xz.aliyun.com/t/3532</a></p>
+<h2 id="过程一-了解网站的基本架构"><a href="#过程一-了解网站的基本架构" class="headerlink" title="过程一 了解网站的基本架构"></a>过程一 了解网站的基本架构</h2><p>文章是拿PbootCMS1.2.1来做演示。 安装好系统，配置好数据库信息，阅读一下网站开发手册。</p>
+<p>在审计之前，可以先做以下事情：</p>
+<pre><code>1. 了解网站目录结构
+使用 tree &gt; tree.txt 来生成文件树。快速了解系统。
+
+2. 确定路由走向
+一般是mvc的路由，这个cms还包含自定义路由。
+</code></pre><h2 id="过程二-了解系统参数与底层过滤情况"><a href="#过程二-了解系统参数与底层过滤情况" class="headerlink" title="过程二 了解系统参数与底层过滤情况"></a>过程二 了解系统参数与底层过滤情况</h2><pre><code>1.    了解系统参数过滤的情况
+    a)原生GET,POST,REUQEST最简单的方法就是找一个系统中外部可访问的方法，使用
+    var_dump($_GET);
+    var_dump($_POST);
+    var_dump($_REQUEST);
+    来查看过滤情况
+
+    文章使用了一个留言新增点，添加了上方语句之后。
+    访问:/index.php/Message/add?test=&apos;&quot;;!-=$%^{()}&lt;&gt;
+    用此来检测原始数据的过滤情况
+
+    b)系统外部变量获取函数 get()，post()，request()
+    可以直接使用seay搜索&quot;get(&quot;来寻找到get数据处理的函数。
+
+2.    了解数据库底层运行方式
+    了解数据库增删查改的函数，查看是否有过滤。
+    seay搜索：insert( 等。
+</code></pre>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/05/29/PHP代码审计之SQL注入与审计流程/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/26/强网杯upload Writeup与简单分析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1062,7 +1192,7 @@ RSASHA256(
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Head First Javascript/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/CRLF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Threezh1">
@@ -1076,7 +1206,7 @@ RSASHA256(
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
             
-            <a href="/2019/01/01/Head First Javascript/" class="post-title-link" itemprop="url">Head First Javascript笔记</a>
+            <a href="/2019/01/01/CRLF/" class="post-title-link" itemprop="url">了解CRLF</a>
           
         </h1>
 
@@ -1102,7 +1232,7 @@ RSASHA256(
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:17:15" itemprop="dateModified" datetime="2019-08-23T14:17:15+08:00">2019-08-23</time>
+                <time title="Geändert am: 2019-08-23 14:17:00" itemprop="dateModified" datetime="2019-08-23T14:17:00+08:00">2019-08-23</time>
               </span>
             
           
@@ -1131,121 +1261,16 @@ RSASHA256(
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h1><p>Hello World.<br>Go to a new world again.</p>
-<h2 id="Begin"><a href="#Begin" class="headerlink" title="Begin"></a>Begin</h2><p>The first program:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(wakeUpUser, <span class="number">5000</span>)</span><br><span class="line"><span class="function">function <span class="title">wakeUpUser</span><span class="params">()</span></span>&#123;</span><br><span class="line">	alert(<span class="string">"Yep! love you!!! honny."</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> skater;</span><br><span class="line"><span class="keyword">var</span> age = <span class="number">20</span>;</span><br><span class="line"><span class="keyword">var</span> name = <span class="string">"threezh1"</span>;</span><br><span class="line"><span class="keyword">var</span> isBoy = ture/<span class="keyword">false</span>;</span><br><span class="line"><span class="comment">//This will not show for others.</span></span><br><span class="line"></span><br><span class="line">document.write(<span class="string">"Hello World."</span>);</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">"Just like history?"</span>);</span><br><span class="line"></span><br><span class="line">&lt;script src="mycode.js"&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">GetUserEnter = prompt(<span class="string">"Please enter whatever you want to say!"</span>);</span><br><span class="line">document.write(GetUserEnter);</span><br><span class="line"></span><br><span class="line"><span class="comment">//Get a random.This will return a number in (0~1)</span></span><br><span class="line"><span class="keyword">var</span> randomLoc = Math.random();</span><br><span class="line"><span class="comment">//If you want get a number in (0~5 haven't 5 like 4.999...)</span></span><br><span class="line"><span class="keyword">var</span> randomLoc = Math.random() * <span class="number">5</span>;</span><br><span class="line"><span class="comment">//Get a complete number:</span></span><br><span class="line"><span class="keyword">var</span> randomLoc = Math.floor(Math.random() * <span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+          <h2 id="Simple-note"><a href="#Simple-note" class="headerlink" title="Simple note:"></a>Simple note:</h2><p>CRLF: Carriage-Return Line-Feend.</p>
+<p>Use <code>CR, ASCII 13 \r (回车)</code> , <code>LF, ASCII 10, \n</code> and <code>%0d%0a</code> to break the HTTP request.</p>
+<p>In the  penetration test, if we found a request is like this:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET /test/demo.php?url=https://www.threezh1.com</span><br><span class="line">That we can contral.</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+<p>If the HTTP Header of the request return with the response, which means we can control the HTTP Header.(Of course include the Url.)</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Content-Encoding: deflate</span><br><span class="line">...</span><br><span class="line">That we can contral.</span><br><span class="line">...</span><br><span class="line">Locations=https:<span class="comment">//www.threezh1.com</span></span><br></pre></td></tr></table></figure>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/2019/01/01/Head First Javascript/#more" rel="contents">
-                Weiterlesen &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-      
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Linux_basis/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2019/01/01/Linux_basis/" class="post-title-link" itemprop="url">Linux学习笔记</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
-                
-              
-
-              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:17:51" itemprop="dateModified" datetime="2019-08-23T14:17:51+08:00">2019-08-23</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="第一章-部署虚拟环境安装Linux系统"><a href="#第一章-部署虚拟环境安装Linux系统" class="headerlink" title="第一章,部署虚拟环境安装Linux系统"></a>第一章,部署虚拟环境安装Linux系统</h2><h3 id="RPM-红帽软件包管理器"><a href="#RPM-红帽软件包管理器" class="headerlink" title="RPM(红帽软件包管理器)"></a>RPM(红帽软件包管理器)</h3><p>常用命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">安装软件		rpm -ivh filename.rpm</span><br><span class="line">升级软件		rpm -Uvh filename.rpm</span><br><span class="line">卸载软件		rpm -e filename.rpm</span><br><span class="line">查询软件描述信息	rpm -qpi filename.rpm</span><br><span class="line">列出软件文件信息	rpm -qpi filename.rpm</span><br><span class="line">查询文件属于哪个RPM	rpm -qf filename.rpm</span><br></pre></td></tr></table></figure>
-<h3 id="Yum软件仓库"><a href="#Yum软件仓库" class="headerlink" title="Yum软件仓库"></a>Yum软件仓库</h3><p>常用Yum命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">yum repolist all			列出所有仓库</span><br><span class="line">yum list all				列出仓库中所有软件包</span><br><span class="line">yum info 软件包名称			查看软件包信息</span><br><span class="line">yum install 软件包名称		安装软件包</span><br><span class="line">yum reinstall 软件包名称		重新安装软件包</span><br><span class="line">yum update 软件包名称		升级软件包</span><br><span class="line">yum remove 软件包名称		移除软件包</span><br><span class="line">yum clean all				移除所有仓库缓存</span><br><span class="line">yum check-update			检查可更新的软件包</span><br><span class="line">yum grouplist				查看系统中已经安装的软件包组</span><br><span class="line">yum groupinstall 软件包组	安装指定的软件包组</span><br><span class="line">yum groupremove 软件包组		移除指定的软件包组</span><br><span class="line">yum groupinfo	软件包组		查询指定的软件包组信息</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/01/01/Linux_basis/#more" rel="contents">
+              <a class="btn" href="/2019/01/01/CRLF/#more" rel="contents">
                 Weiterlesen &raquo;
               </a>
             </div>
@@ -1438,7 +1463,7 @@ RSASHA256(
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">Artikel</span>
         </a>
       </div>

@@ -212,6 +212,117 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/07/OKLite 1.2.25 几处getshell审计分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/10/07/OKLite 1.2.25 几处getshell审计分析/" class="post-title-link" itemprop="url">OKLite 1.2.25 几处getshell审计分析</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-10-07 12:00:00" itemprop="dateCreated datePublished" datetime="2019-10-07T12:00:00+08:00">2019-10-07</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-10-18 01:09:24" itemprop="dateModified" datetime="2019-10-18T01:09:24+08:00">2019-10-18</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="OKLite介绍"><a href="#OKLite介绍" class="headerlink" title="OKLite介绍"></a>OKLite介绍</h2><p>OKLite是一套极简企业站系统，主要目标群体是展示型企业网站用户，让传统小企业快速布署网站，加强自身品牌意识，实现对公司形象的宣传。本系统最初是PHPOK程序精简而来。在同等配置下，OKLite速度优于PHPOK达30%以上。 (此版本在2018年已停止维护)</p>
+<p>系统链接：<a href="https://www.phpok.com/oklite.html" target="_blank" rel="noopener">https://www.phpok.com/oklite.html</a></p>
+<h2 id="基本情况"><a href="#基本情况" class="headerlink" title="基本情况"></a>基本情况</h2><h3 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h3><p>网站有三个入口（前端，接口，后台）,都是通过<code>action()</code>方法进行初始化。</p>
+<p><img src="https://i.loli.net/2019/10/09/jZfpwrkIE2OPAq5.jpg" alt="01.jpg"></p>
+<p>不同的入口传入指定的方法中执行动作：</p>
+<p><img src="https://i.loli.net/2019/10/09/Mx4wnFsmuAQo79y.jpg" alt="02.jpg"></p>
+<p>访问：<a href="http://127.0.0.1/admin.php?c=upload&amp;f=save" target="_blank" rel="noopener">http://127.0.0.1/admin.php?c=upload&amp;f=save</a></p>
+<p>会调用<code>framework\admin\upload_control.php</code>中的<code>save_f</code>方法。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/10/07/OKLite 1.2.25 几处getshell审计分析/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/04/PHP反序列化进阶学习与总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -241,7 +352,7 @@
                 
               
 
-              <time title="Erstellt: 2019-10-04 16:55:15 / Geändert am: 16:59:23" itemprop="dateCreated datePublished" datetime="2019-10-04T16:55:15+08:00">2019-10-04</time>
+              <time title="Erstellt: 2019-10-04 17:02:34 / Geändert am: 17:02:36" itemprop="dateCreated datePublished" datetime="2019-10-04T17:02:34+08:00">2019-10-04</time>
             </span>
           
             
@@ -1219,136 +1330,6 @@ sudo chmod +x /usr/local/bin/docker-compose
   </article>
 
     
-      
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/29/PHP代码审计之SQL注入与审计流程/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2019/05/29/PHP代码审计之SQL注入与审计流程/" class="post-title-link" itemprop="url">PHP代码审计之学习SQL注入与审计流程</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
-                
-              
-
-              <time title="Erstellt: 2019-05-29 00:00:00" itemprop="dateCreated datePublished" datetime="2019-05-29T00:00:00+08:00">2019-05-29</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:18:08" itemprop="dateModified" datetime="2019-08-23T14:18:08+08:00">2019-08-23</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>本来只想复现一下sql注入的几篇文章，但在先知上找到了几篇非常好的入门审计的文章。于是打算按照他的审计思路，熟悉一下PHP代码审计流程，同时整理一下SQL注入的审计方法。</p>
-<p>文章地址：<a href="https://xz.aliyun.com/t/3532" target="_blank" rel="noopener">https://xz.aliyun.com/t/3532</a></p>
-<h2 id="过程一-了解网站的基本架构"><a href="#过程一-了解网站的基本架构" class="headerlink" title="过程一 了解网站的基本架构"></a>过程一 了解网站的基本架构</h2><p>文章是拿PbootCMS1.2.1来做演示。 安装好系统，配置好数据库信息，阅读一下网站开发手册。</p>
-<p>在审计之前，可以先做以下事情：</p>
-<pre><code>1. 了解网站目录结构
-使用 tree &gt; tree.txt 来生成文件树。快速了解系统。
-
-2. 确定路由走向
-一般是mvc的路由，这个cms还包含自定义路由。
-</code></pre><h2 id="过程二-了解系统参数与底层过滤情况"><a href="#过程二-了解系统参数与底层过滤情况" class="headerlink" title="过程二 了解系统参数与底层过滤情况"></a>过程二 了解系统参数与底层过滤情况</h2><pre><code>1.    了解系统参数过滤的情况
-    a)原生GET,POST,REUQEST最简单的方法就是找一个系统中外部可访问的方法，使用
-    var_dump($_GET);
-    var_dump($_POST);
-    var_dump($_REQUEST);
-    来查看过滤情况
-
-    文章使用了一个留言新增点，添加了上方语句之后。
-    访问:/index.php/Message/add?test=&apos;&quot;;!-=$%^{()}&lt;&gt;
-    用此来检测原始数据的过滤情况
-
-    b)系统外部变量获取函数 get()，post()，request()
-    可以直接使用seay搜索&quot;get(&quot;来寻找到get数据处理的函数。
-
-2.    了解数据库底层运行方式
-    了解数据库增删查改的函数，查看是否有过滤。
-    seay搜索：insert( 等。
-</code></pre>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/05/29/PHP代码审计之SQL注入与审计流程/#more" rel="contents">
-                Weiterlesen &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
   </section>
 
   
@@ -1399,7 +1380,7 @@ sudo chmod +x /usr/local/bin/docker-compose
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">Artikel</span>
         </a>
       </div>
