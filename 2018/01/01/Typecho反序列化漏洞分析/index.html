@@ -62,7 +62,7 @@
 <meta property="og:site_name" content="Threezh1&#39;s blog">
 <meta property="og:description" content="漏洞分析：思路 在Typecho_Cookie::get()方法中通过POST或者设置COOKIE的方法设置_typecho_config进行反序列化。 在序列化当中把adapter设置为一个类，导致页面执行代码时触发_toString()魔术方法。 在序列化当中设置$item令其没有screenName属性，导致在触发_toString()魔术方法的时候触发_get()魔术方法。 通过反序列化间">
 <meta property="og:locale" content="Chinese">
-<meta property="og:updated_time" content="2019-08-23T06:18:29.189Z">
+<meta property="og:updated_time" content="2020-01-08T16:01:33.605Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Typecho 反序列化漏洞分析">
 <meta name="twitter:description" content="漏洞分析：思路 在Typecho_Cookie::get()方法中通过POST或者设置COOKIE的方法设置_typecho_config进行反序列化。 在序列化当中把adapter设置为一个类，导致页面执行代码时触发_toString()魔术方法。 在序列化当中设置$item令其没有screenName属性，导致在触发_toString()魔术方法的时候触发_get()魔术方法。 通过反序列化间">
@@ -253,7 +253,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:18:29" itemprop="dateModified" datetime="2019-08-23T14:18:29+08:00">2019-08-23</time>
+                <time title="Geändert am: 2020-01-09 00:01:33" itemprop="dateModified" datetime="2020-01-09T00:01:33+08:00">2020-01-09</time>
               </span>
             
           
@@ -309,10 +309,10 @@
 <h3 id="分析过程："><a href="#分析过程：" class="headerlink" title="分析过程："></a>分析过程：</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$config = unserialize(base64_decode(Typecho_Cookie::get(<span class="string">'__typecho_config'</span>)));</span><br><span class="line">Typecho_Cookie::delete(<span class="string">'__typecho_config'</span>);</span><br><span class="line">$db = <span class="keyword">new</span> Typecho_Db($config[<span class="string">'adapter'</span>], $config[<span class="string">'prefix'</span>]);</span><br><span class="line">$db-&gt;addServer($config, Typecho_Db::READ | Typecho_Db::WRITE);</span><br><span class="line">Typecho_Db::set($db);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>这里有个反序列化函数：unserialize()</p>
 <p>其中是通过<em>Typecho_Cookie::get()</em>方法获取的序列化的对象，找到这个方法的网页，为<em>www\var\Typecho\Cookie.php</em></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">get</span><span class="params">($key, $default = NULL)</span></span></span><br><span class="line"><span class="function">   </span>&#123;</span><br><span class="line">       $key = <span class="keyword">self</span>::$_prefix . $key;</span><br><span class="line">       $value = <span class="keyword">isset</span>($_COOKIE[$key]) ? $_COOKIE[$key] : (<span class="keyword">isset</span>($_POST[$key]) ? $_POST[$key] : $default);</span><br><span class="line">       <span class="keyword">return</span> is_array($value) ? $default : $value;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">get</span><span class="params">($key, $default = NULL)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $key = <span class="keyword">self</span>::$_prefix . $key;</span><br><span class="line">    $value = <span class="keyword">isset</span>($_COOKIE[$key]) ? $_COOKIE[$key] : (<span class="keyword">isset</span>($_POST[$key]) ? $_POST[$key] : $default);</span><br><span class="line">    <span class="keyword">return</span> is_array($value) ? $default : $value;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>从第四行命令可知，typecho_config可以通过设置COOKIE的方式或者POST的方式输入！</p>
 <p>再继续看前面的反序列化的代码，第四行定义了一个新的变量！</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	$db = <span class="keyword">new</span> Typecho_Db($config[<span class="string">'adapter'</span>], $config[<span class="string">'prefix'</span>]);</span><br><span class="line">   <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	$db = <span class="keyword">new</span> Typecho_Db($config[<span class="string">'adapter'</span>], $config[<span class="string">'prefix'</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>可知，这里实例化了一个对象 <em>Typecho_Db</em> 找到这个类所在的页面与代码！为<em>www\var\Typecho\Db.php</em></p>
 <p>这里有一个Typecho_Db类的魔术方法：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($adapterName, $prefix = <span class="string">'typecho_'</span>)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">/** 获取适配器名称 */</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;_adapterName = $adapterName;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/** 数据库适配器 */</span></span><br><span class="line">        $adapterName = <span class="string">'Typecho_Db_Adapter_'</span> . $adapterName;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!call_user_func(<span class="keyword">array</span>($adapterName, <span class="string">'isAvailable'</span>))) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Typecho_Db_Exception(<span class="string">"Adapter &#123;$adapterName&#125; is not available"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">$this</span>-&gt;_prefix = $prefix;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/** 初始化内部变量 */</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;_pool = <span class="keyword">array</span>();</span><br><span class="line">        <span class="keyword">$this</span>-&gt;_connectedPool = <span class="keyword">array</span>();</span><br><span class="line">        <span class="keyword">$this</span>-&gt;_config = <span class="keyword">array</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//实例化适配器对象</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;_adapter = <span class="keyword">new</span> $adapterName();</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
@@ -475,8 +475,8 @@ Referrer=http://localhost/install.php
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2018/01/01/phpmyadmin 4.8.1任意文件包含漏洞-CTF/" rel="next" title="phpmyadmin 4.8.1任意文件包含漏洞-CTF">
-                  <i class="fa fa-chevron-left"></i> phpmyadmin 4.8.1任意文件包含漏洞-CTF
+                <a href="/2018/01/01/湖湘杯check_code/" rel="next" title="湖湘杯的一个check code题">
+                  <i class="fa fa-chevron-left"></i> 湖湘杯的一个check code题
                 </a>
               
             </div>
@@ -554,7 +554,7 @@ Referrer=http://localhost/install.php
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-count">34</span>
           <span class="site-state-item-name">Artikel</span>
         </a>
       </div>
@@ -577,7 +577,9 @@ Referrer=http://localhost/install.php
         
           
         
-        <span class="site-state-item-count">6</span>
+          
+        
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">Kategorien</span>
         
       </div>
@@ -628,7 +630,9 @@ Referrer=http://localhost/install.php
         
           
         
-        <span class="site-state-item-count">20</span>
+          
+        
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">schlagwörter</span>
         
       </div>
@@ -674,7 +678,7 @@ Referrer=http://localhost/install.php
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
