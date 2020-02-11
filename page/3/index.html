@@ -443,224 +443,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/XPath/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2019/01/01/XPath/" class="post-title-link" itemprop="url">了解Xpath</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
-                
-              
-
-              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:18:39" itemprop="dateModified" datetime="2019-08-23T14:18:39+08:00">2019-08-23</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Learn : <a href="http://www.w3school.com.cn/xpath/index.asp" target="_blank" rel="noopener">http://www.w3school.com.cn/xpath/index.asp</a></p>
-<h2 id="Simple-note"><a href="#Simple-note" class="headerlink" title="Simple note"></a>Simple note</h2><p>Xpath is a languaga to find information in XML.</p>
-<p>There are knowledge too much, I don’t want to copy.</p>
-<p>Chose node:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">bookstore		chose all children_parameters.</span><br><span class="line">/bookstore		chose root element bookstore.</span><br><span class="line">/bookstore/book	chose all children_paremeters named &quot;root&quot; of bookstore.</span><br><span class="line">//book 			chose all children_parameters no matter where they are.</span><br><span class="line">bookstore//book chose all children_paremeters named &quot;root&quot; of bookstore no matter where they are.</span><br><span class="line">//@lang 		chose all attribute named &quot;lang&quot;.</span><br><span class="line"></span><br><span class="line">/bookstore/book[1]</span><br><span class="line">/bookstore/book[last()]</span><br><span class="line">/bookstore/book[last()-1]</span><br><span class="line">/bookstore/book[position()&lt;3]</span><br><span class="line">//title[@lang]</span><br><span class="line">//title[@lang=&apos;eng&apos;]</span><br><span class="line">/bookstore/book[price&gt;35.00]</span><br><span class="line">/bookstore/book[price&gt;35.00]/title</span><br><span class="line"></span><br><span class="line">*		ALL node.</span><br><span class="line">@*		ALL node which have any attribute.</span><br><span class="line">node()	ALL type of node.</span><br><span class="line"></span><br><span class="line">//book/title | //book/price</span><br><span class="line">//title | //price</span><br><span class="line">/bookstore/book/title | //price</span><br></pre></td></tr></table></figure>
-<p>USE:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var xmlDoc=new XMLHttpRequest()</span><br><span class="line"></span><br><span class="line">Chose nodes:</span><br><span class="line">IE : xmlDoc.selectNodes(xpath);</span><br><span class="line">Other : xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE,null);</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/01/01/XPath/#more" rel="contents">
-                Weiterlesen &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-      
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/XXE_Note/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2019/01/01/XXE_Note/" class="post-title-link" itemprop="url">了解XML</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
-                
-              
-
-              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:19:04" itemprop="dateModified" datetime="2019-08-23T14:19:04+08:00">2019-08-23</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Learn：<a href="http://www.w3school.com.cn/xml/xml_intro.asp" target="_blank" rel="noopener">http://www.w3school.com.cn/xml/xml_intro.asp</a></p>
-<h2 id="Simple-note："><a href="#Simple-note：" class="headerlink" title="Simple note："></a>Simple note：</h2><h3 id="XML"><a href="#XML" class="headerlink" title="XML"></a>XML</h3><p>A simple example of XML：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1 ?&gt;</span><br><span class="line">&lt;skate&gt;</span><br><span class="line">	&lt;people  grade=&quot;four&quot;&gt;</span><br><span class="line">		&lt;name&gt;azhu&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">	&lt;people  grade=&quot;one&quot;&gt;</span><br><span class="line">		&lt;name&gt;threezhi&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">&lt;/skate&gt;</span><br><span class="line"></span><br><span class="line">`&lt;!-- You should avoid use attribute of XML. --&gt;`</span><br></pre></td></tr></table></figure>
-<p>In XML, there are five predefined entity reference(实体引用):</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;	&lt;</span><br><span class="line">&amp;gt;	&gt;</span><br><span class="line">&amp;amp;	&amp;</span><br><span class="line">&amp;apos;	&apos;</span><br><span class="line">&amp;quot;	&quot;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/01/01/XXE_Note/#more" rel="contents">
-                Weiterlesen &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-      
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Linux_basis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -877,6 +659,232 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/HPP_Subdomain_takeover/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/01/01/HPP_Subdomain_takeover/" class="post-title-link" itemprop="url">了解HPP</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:17:26" itemprop="dateModified" datetime="2019-08-23T14:17:26+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="HPP"><a href="#HPP" class="headerlink" title="HPP"></a>HPP</h1><h2 id="测试："><a href="#测试：" class="headerlink" title="测试："></a>测试：</h2><p>存在于POST,GET之中。</p>
+<p>步骤：</p>
+<ol>
+<li>page?par1=vall</li>
+<li>page?par1=HPP_TEST1</li>
+<li>page?par1=val1&amp;par1=HPP_TEST1</li>
+</ol>
+<p><img src="https://i.loli.net/2019/03/25/5c982a7096f07.jpg" alt="图片"></p>
+<p>更详细的：<a href="https://www.acunetix.com/blog/whitepaper-http-parameter-pollution/" target="_blank" rel="noopener">https://www.acunetix.com/blog/whitepaper-http-parameter-pollution/</a></p>
+<p>Use to:</p>
+<ol>
+<li>取代现有的编码HTTP参数。</li>
+<li>更改或修改预期/正常应用程序行为。</li>
+<li>访问并利用未正确控制的变量。</li>
+<li>绕过WAF规则或输入验证机制。</li>
+</ol>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/01/HPP_Subdomain_takeover/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Head First Javascript/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/01/01/Head First Javascript/" class="post-title-link" itemprop="url">Head First Javascript笔记</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:17:15" itemprop="dateModified" datetime="2019-08-23T14:17:15+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h1><p>Hello World.<br>Go to a new world again.</p>
+<h2 id="Begin"><a href="#Begin" class="headerlink" title="Begin"></a>Begin</h2><p>The first program:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(wakeUpUser, <span class="number">5000</span>)</span><br><span class="line"><span class="function">function <span class="title">wakeUpUser</span><span class="params">()</span></span>&#123;</span><br><span class="line">	alert(<span class="string">"Yep! love you!!! honny."</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> skater;</span><br><span class="line"><span class="keyword">var</span> age = <span class="number">20</span>;</span><br><span class="line"><span class="keyword">var</span> name = <span class="string">"threezh1"</span>;</span><br><span class="line"><span class="keyword">var</span> isBoy = ture/<span class="keyword">false</span>;</span><br><span class="line"><span class="comment">//This will not show for others.</span></span><br><span class="line"></span><br><span class="line">document.write(<span class="string">"Hello World."</span>);</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">"Just like history?"</span>);</span><br><span class="line"></span><br><span class="line">&lt;script src="mycode.js"&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">GetUserEnter = prompt(<span class="string">"Please enter whatever you want to say!"</span>);</span><br><span class="line">document.write(GetUserEnter);</span><br><span class="line"></span><br><span class="line"><span class="comment">//Get a random.This will return a number in (0~1)</span></span><br><span class="line"><span class="keyword">var</span> randomLoc = Math.random();</span><br><span class="line"><span class="comment">//If you want get a number in (0~5 haven't 5 like 4.999...)</span></span><br><span class="line"><span class="keyword">var</span> randomLoc = Math.random() * <span class="number">5</span>;</span><br><span class="line"><span class="comment">//Get a complete number:</span></span><br><span class="line"><span class="keyword">var</span> randomLoc = Math.floor(Math.random() * <span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/01/Head First Javascript/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/XSS_01_从浏览器编码开始说起/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1000,7 +1008,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Head First Javascript/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/XPath/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Threezh1">
@@ -1014,7 +1022,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
             
-            <a href="/2019/01/01/Head First Javascript/" class="post-title-link" itemprop="url">Head First Javascript笔记</a>
+            <a href="/2019/01/01/XPath/" class="post-title-link" itemprop="url">了解Xpath</a>
           
         </h1>
 
@@ -1040,7 +1048,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:17:15" itemprop="dateModified" datetime="2019-08-23T14:17:15+08:00">2019-08-23</time>
+                <time title="Geändert am: 2019-08-23 14:18:39" itemprop="dateModified" datetime="2019-08-23T14:18:39+08:00">2019-08-23</time>
               </span>
             
           
@@ -1069,14 +1077,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h1><p>Hello World.<br>Go to a new world again.</p>
-<h2 id="Begin"><a href="#Begin" class="headerlink" title="Begin"></a>Begin</h2><p>The first program:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(wakeUpUser, <span class="number">5000</span>)</span><br><span class="line"><span class="function">function <span class="title">wakeUpUser</span><span class="params">()</span></span>&#123;</span><br><span class="line">	alert(<span class="string">"Yep! love you!!! honny."</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> skater;</span><br><span class="line"><span class="keyword">var</span> age = <span class="number">20</span>;</span><br><span class="line"><span class="keyword">var</span> name = <span class="string">"threezh1"</span>;</span><br><span class="line"><span class="keyword">var</span> isBoy = ture/<span class="keyword">false</span>;</span><br><span class="line"><span class="comment">//This will not show for others.</span></span><br><span class="line"></span><br><span class="line">document.write(<span class="string">"Hello World."</span>);</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">"Just like history?"</span>);</span><br><span class="line"></span><br><span class="line">&lt;script src="mycode.js"&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">GetUserEnter = prompt(<span class="string">"Please enter whatever you want to say!"</span>);</span><br><span class="line">document.write(GetUserEnter);</span><br><span class="line"></span><br><span class="line"><span class="comment">//Get a random.This will return a number in (0~1)</span></span><br><span class="line"><span class="keyword">var</span> randomLoc = Math.random();</span><br><span class="line"><span class="comment">//If you want get a number in (0~5 haven't 5 like 4.999...)</span></span><br><span class="line"><span class="keyword">var</span> randomLoc = Math.random() * <span class="number">5</span>;</span><br><span class="line"><span class="comment">//Get a complete number:</span></span><br><span class="line"><span class="keyword">var</span> randomLoc = Math.floor(Math.random() * <span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+          <p>Learn : <a href="http://www.w3school.com.cn/xpath/index.asp" target="_blank" rel="noopener">http://www.w3school.com.cn/xpath/index.asp</a></p>
+<h2 id="Simple-note"><a href="#Simple-note" class="headerlink" title="Simple note"></a>Simple note</h2><p>Xpath is a languaga to find information in XML.</p>
+<p>There are knowledge too much, I don’t want to copy.</p>
+<p>Chose node:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">bookstore		chose all children_parameters.</span><br><span class="line">/bookstore		chose root element bookstore.</span><br><span class="line">/bookstore/book	chose all children_paremeters named &quot;root&quot; of bookstore.</span><br><span class="line">//book 			chose all children_parameters no matter where they are.</span><br><span class="line">bookstore//book chose all children_paremeters named &quot;root&quot; of bookstore no matter where they are.</span><br><span class="line">//@lang 		chose all attribute named &quot;lang&quot;.</span><br><span class="line"></span><br><span class="line">/bookstore/book[1]</span><br><span class="line">/bookstore/book[last()]</span><br><span class="line">/bookstore/book[last()-1]</span><br><span class="line">/bookstore/book[position()&lt;3]</span><br><span class="line">//title[@lang]</span><br><span class="line">//title[@lang=&apos;eng&apos;]</span><br><span class="line">/bookstore/book[price&gt;35.00]</span><br><span class="line">/bookstore/book[price&gt;35.00]/title</span><br><span class="line"></span><br><span class="line">*		ALL node.</span><br><span class="line">@*		ALL node which have any attribute.</span><br><span class="line">node()	ALL type of node.</span><br><span class="line"></span><br><span class="line">//book/title | //book/price</span><br><span class="line">//title | //price</span><br><span class="line">/bookstore/book/title | //price</span><br></pre></td></tr></table></figure>
+<p>USE:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var xmlDoc=new XMLHttpRequest()</span><br><span class="line"></span><br><span class="line">Chose nodes:</span><br><span class="line">IE : xmlDoc.selectNodes(xpath);</span><br><span class="line">Other : xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE,null);</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/2019/01/01/Head First Javascript/#more" rel="contents">
+              <a class="btn" href="/2019/01/01/XPath/#more" rel="contents">
                 Weiterlesen &raquo;
               </a>
             </div>
@@ -1248,7 +1259,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/HPP_Subdomain_takeover/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/XXE_Note/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Threezh1">
@@ -1262,7 +1273,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
             
-            <a href="/2019/01/01/HPP_Subdomain_takeover/" class="post-title-link" itemprop="url">了解HPP</a>
+            <a href="/2019/01/01/XXE_Note/" class="post-title-link" itemprop="url">了解XML</a>
           
         </h1>
 
@@ -1288,7 +1299,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:17:26" itemprop="dateModified" datetime="2019-08-23T14:17:26+08:00">2019-08-23</time>
+                <time title="Geändert am: 2019-08-23 14:19:04" itemprop="dateModified" datetime="2019-08-23T14:19:04+08:00">2019-08-23</time>
               </span>
             
           
@@ -1317,26 +1328,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="HPP"><a href="#HPP" class="headerlink" title="HPP"></a>HPP</h1><h2 id="测试："><a href="#测试：" class="headerlink" title="测试："></a>测试：</h2><p>存在于POST,GET之中。</p>
-<p>步骤：</p>
-<ol>
-<li>page?par1=vall</li>
-<li>page?par1=HPP_TEST1</li>
-<li>page?par1=val1&amp;par1=HPP_TEST1</li>
-</ol>
-<p><img src="https://i.loli.net/2019/03/25/5c982a7096f07.jpg" alt="图片"></p>
-<p>更详细的：<a href="https://www.acunetix.com/blog/whitepaper-http-parameter-pollution/" target="_blank" rel="noopener">https://www.acunetix.com/blog/whitepaper-http-parameter-pollution/</a></p>
-<p>Use to:</p>
-<ol>
-<li>取代现有的编码HTTP参数。</li>
-<li>更改或修改预期/正常应用程序行为。</li>
-<li>访问并利用未正确控制的变量。</li>
-<li>绕过WAF规则或输入验证机制。</li>
-</ol>
+          <p>Learn：<a href="http://www.w3school.com.cn/xml/xml_intro.asp" target="_blank" rel="noopener">http://www.w3school.com.cn/xml/xml_intro.asp</a></p>
+<h2 id="Simple-note："><a href="#Simple-note：" class="headerlink" title="Simple note："></a>Simple note：</h2><h3 id="XML"><a href="#XML" class="headerlink" title="XML"></a>XML</h3><p>A simple example of XML：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1 ?&gt;</span><br><span class="line">&lt;skate&gt;</span><br><span class="line">	&lt;people  grade=&quot;four&quot;&gt;</span><br><span class="line">		&lt;name&gt;azhu&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">	&lt;people  grade=&quot;one&quot;&gt;</span><br><span class="line">		&lt;name&gt;threezhi&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">&lt;/skate&gt;</span><br><span class="line"></span><br><span class="line">`&lt;!-- You should avoid use attribute of XML. --&gt;`</span><br></pre></td></tr></table></figure>
+<p>In XML, there are five predefined entity reference(实体引用):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;	&lt;</span><br><span class="line">&amp;gt;	&gt;</span><br><span class="line">&amp;amp;	&amp;</span><br><span class="line">&amp;apos;	&apos;</span><br><span class="line">&amp;quot;	&quot;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/2019/01/01/HPP_Subdomain_takeover/#more" rel="contents">
+              <a class="btn" href="/2019/01/01/XXE_Note/#more" rel="contents">
                 Weiterlesen &raquo;
               </a>
             </div>
