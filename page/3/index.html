@@ -443,222 +443,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Linux_basis/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2019/01/01/Linux_basis/" class="post-title-link" itemprop="url">Linux学习笔记</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
-                
-              
-
-              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:17:51" itemprop="dateModified" datetime="2019-08-23T14:17:51+08:00">2019-08-23</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="第一章-部署虚拟环境安装Linux系统"><a href="#第一章-部署虚拟环境安装Linux系统" class="headerlink" title="第一章,部署虚拟环境安装Linux系统"></a>第一章,部署虚拟环境安装Linux系统</h2><h3 id="RPM-红帽软件包管理器"><a href="#RPM-红帽软件包管理器" class="headerlink" title="RPM(红帽软件包管理器)"></a>RPM(红帽软件包管理器)</h3><p>常用命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">安装软件		rpm -ivh filename.rpm</span><br><span class="line">升级软件		rpm -Uvh filename.rpm</span><br><span class="line">卸载软件		rpm -e filename.rpm</span><br><span class="line">查询软件描述信息	rpm -qpi filename.rpm</span><br><span class="line">列出软件文件信息	rpm -qpi filename.rpm</span><br><span class="line">查询文件属于哪个RPM	rpm -qf filename.rpm</span><br></pre></td></tr></table></figure>
-<h3 id="Yum软件仓库"><a href="#Yum软件仓库" class="headerlink" title="Yum软件仓库"></a>Yum软件仓库</h3><p>常用Yum命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">yum repolist all			列出所有仓库</span><br><span class="line">yum list all				列出仓库中所有软件包</span><br><span class="line">yum info 软件包名称			查看软件包信息</span><br><span class="line">yum install 软件包名称		安装软件包</span><br><span class="line">yum reinstall 软件包名称		重新安装软件包</span><br><span class="line">yum update 软件包名称		升级软件包</span><br><span class="line">yum remove 软件包名称		移除软件包</span><br><span class="line">yum clean all				移除所有仓库缓存</span><br><span class="line">yum check-update			检查可更新的软件包</span><br><span class="line">yum grouplist				查看系统中已经安装的软件包组</span><br><span class="line">yum groupinstall 软件包组	安装指定的软件包组</span><br><span class="line">yum groupremove 软件包组		移除指定的软件包组</span><br><span class="line">yum groupinfo	软件包组		查询指定的软件包组信息</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/01/01/Linux_basis/#more" rel="contents">
-                Weiterlesen &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-      
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/CRLF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2019/01/01/CRLF/" class="post-title-link" itemprop="url">了解CRLF</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
-                
-              
-
-              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:17:00" itemprop="dateModified" datetime="2019-08-23T14:17:00+08:00">2019-08-23</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Simple-note"><a href="#Simple-note" class="headerlink" title="Simple note:"></a>Simple note:</h2><p>CRLF: Carriage-Return Line-Feend.</p>
-<p>Use <code>CR, ASCII 13 \r (回车)</code> , <code>LF, ASCII 10, \n</code> and <code>%0d%0a</code> to break the HTTP request.</p>
-<p>In the  penetration test, if we found a request is like this:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET /test/demo.php?url=https://www.threezh1.com</span><br><span class="line">That we can contral.</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
-<p>If the HTTP Header of the request return with the response, which means we can control the HTTP Header.(Of course include the Url.)</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Content-Encoding: deflate</span><br><span class="line">...</span><br><span class="line">That we can contral.</span><br><span class="line">...</span><br><span class="line">Locations=https:<span class="comment">//www.threezh1.com</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/01/01/CRLF/#more" rel="contents">
-                Weiterlesen &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-      
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/HPP_Subdomain_takeover/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -778,6 +562,113 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Linux_basis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/01/01/Linux_basis/" class="post-title-link" itemprop="url">Linux学习笔记</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:17:51" itemprop="dateModified" datetime="2019-08-23T14:17:51+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="第一章-部署虚拟环境安装Linux系统"><a href="#第一章-部署虚拟环境安装Linux系统" class="headerlink" title="第一章,部署虚拟环境安装Linux系统"></a>第一章,部署虚拟环境安装Linux系统</h2><h3 id="RPM-红帽软件包管理器"><a href="#RPM-红帽软件包管理器" class="headerlink" title="RPM(红帽软件包管理器)"></a>RPM(红帽软件包管理器)</h3><p>常用命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">安装软件		rpm -ivh filename.rpm</span><br><span class="line">升级软件		rpm -Uvh filename.rpm</span><br><span class="line">卸载软件		rpm -e filename.rpm</span><br><span class="line">查询软件描述信息	rpm -qpi filename.rpm</span><br><span class="line">列出软件文件信息	rpm -qpi filename.rpm</span><br><span class="line">查询文件属于哪个RPM	rpm -qf filename.rpm</span><br></pre></td></tr></table></figure>
+<h3 id="Yum软件仓库"><a href="#Yum软件仓库" class="headerlink" title="Yum软件仓库"></a>Yum软件仓库</h3><p>常用Yum命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">yum repolist all			列出所有仓库</span><br><span class="line">yum list all				列出仓库中所有软件包</span><br><span class="line">yum info 软件包名称			查看软件包信息</span><br><span class="line">yum install 软件包名称		安装软件包</span><br><span class="line">yum reinstall 软件包名称		重新安装软件包</span><br><span class="line">yum update 软件包名称		升级软件包</span><br><span class="line">yum remove 软件包名称		移除软件包</span><br><span class="line">yum clean all				移除所有仓库缓存</span><br><span class="line">yum check-update			检查可更新的软件包</span><br><span class="line">yum grouplist				查看系统中已经安装的软件包组</span><br><span class="line">yum groupinstall 软件包组	安装指定的软件包组</span><br><span class="line">yum groupremove 软件包组		移除指定的软件包组</span><br><span class="line">yum groupinfo	软件包组		查询指定的软件包组信息</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/01/Linux_basis/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Head First Javascript/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -855,6 +746,333 @@
           
             <div class="post-button text-center">
               <a class="btn" href="/2019/01/01/Head First Javascript/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/XXE_Note/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/01/01/XXE_Note/" class="post-title-link" itemprop="url">了解XML</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:19:04" itemprop="dateModified" datetime="2019-08-23T14:19:04+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Learn：<a href="http://www.w3school.com.cn/xml/xml_intro.asp" target="_blank" rel="noopener">http://www.w3school.com.cn/xml/xml_intro.asp</a></p>
+<h2 id="Simple-note："><a href="#Simple-note：" class="headerlink" title="Simple note："></a>Simple note：</h2><h3 id="XML"><a href="#XML" class="headerlink" title="XML"></a>XML</h3><p>A simple example of XML：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1 ?&gt;</span><br><span class="line">&lt;skate&gt;</span><br><span class="line">	&lt;people  grade=&quot;four&quot;&gt;</span><br><span class="line">		&lt;name&gt;azhu&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">	&lt;people  grade=&quot;one&quot;&gt;</span><br><span class="line">		&lt;name&gt;threezhi&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">&lt;/skate&gt;</span><br><span class="line"></span><br><span class="line">`&lt;!-- You should avoid use attribute of XML. --&gt;`</span><br></pre></td></tr></table></figure>
+<p>In XML, there are five predefined entity reference(实体引用):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;	&lt;</span><br><span class="line">&amp;gt;	&gt;</span><br><span class="line">&amp;amp;	&amp;</span><br><span class="line">&amp;apos;	&apos;</span><br><span class="line">&amp;quot;	&quot;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/01/XXE_Note/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/XPath/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/01/01/XPath/" class="post-title-link" itemprop="url">了解Xpath</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:18:39" itemprop="dateModified" datetime="2019-08-23T14:18:39+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Learn : <a href="http://www.w3school.com.cn/xpath/index.asp" target="_blank" rel="noopener">http://www.w3school.com.cn/xpath/index.asp</a></p>
+<h2 id="Simple-note"><a href="#Simple-note" class="headerlink" title="Simple note"></a>Simple note</h2><p>Xpath is a languaga to find information in XML.</p>
+<p>There are knowledge too much, I don’t want to copy.</p>
+<p>Chose node:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">bookstore		chose all children_parameters.</span><br><span class="line">/bookstore		chose root element bookstore.</span><br><span class="line">/bookstore/book	chose all children_paremeters named &quot;root&quot; of bookstore.</span><br><span class="line">//book 			chose all children_parameters no matter where they are.</span><br><span class="line">bookstore//book chose all children_paremeters named &quot;root&quot; of bookstore no matter where they are.</span><br><span class="line">//@lang 		chose all attribute named &quot;lang&quot;.</span><br><span class="line"></span><br><span class="line">/bookstore/book[1]</span><br><span class="line">/bookstore/book[last()]</span><br><span class="line">/bookstore/book[last()-1]</span><br><span class="line">/bookstore/book[position()&lt;3]</span><br><span class="line">//title[@lang]</span><br><span class="line">//title[@lang=&apos;eng&apos;]</span><br><span class="line">/bookstore/book[price&gt;35.00]</span><br><span class="line">/bookstore/book[price&gt;35.00]/title</span><br><span class="line"></span><br><span class="line">*		ALL node.</span><br><span class="line">@*		ALL node which have any attribute.</span><br><span class="line">node()	ALL type of node.</span><br><span class="line"></span><br><span class="line">//book/title | //book/price</span><br><span class="line">//title | //price</span><br><span class="line">/bookstore/book/title | //price</span><br></pre></td></tr></table></figure>
+<p>USE:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var xmlDoc=new XMLHttpRequest()</span><br><span class="line"></span><br><span class="line">Chose nodes:</span><br><span class="line">IE : xmlDoc.selectNodes(xpath);</span><br><span class="line">Other : xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE,null);</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/01/XPath/#more" rel="contents">
+                Weiterlesen &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/CRLF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Threezh1">
+      <meta itemprop="description" content="Share learn & Share life.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Threezh1's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            
+            <a href="/2019/01/01/CRLF/" class="post-title-link" itemprop="url">了解CRLF</a>
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2019-08-23 14:17:00" itemprop="dateModified" datetime="2019-08-23T14:17:00+08:00">2019-08-23</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Simple-note"><a href="#Simple-note" class="headerlink" title="Simple note:"></a>Simple note:</h2><p>CRLF: Carriage-Return Line-Feend.</p>
+<p>Use <code>CR, ASCII 13 \r (回车)</code> , <code>LF, ASCII 10, \n</code> and <code>%0d%0a</code> to break the HTTP request.</p>
+<p>In the  penetration test, if we found a request is like this:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET /test/demo.php?url=https://www.threezh1.com</span><br><span class="line">That we can contral.</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+<p>If the HTTP Header of the request return with the response, which means we can control the HTTP Header.(Of course include the Url.)</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Content-Encoding: deflate</span><br><span class="line">...</span><br><span class="line">That we can contral.</span><br><span class="line">...</span><br><span class="line">Locations=https:<span class="comment">//www.threezh1.com</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/01/CRLF/#more" rel="contents">
                 Weiterlesen &raquo;
               </a>
             </div>
@@ -1008,116 +1226,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/XPath/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2019/01/01/XPath/" class="post-title-link" itemprop="url">了解Xpath</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
-                
-              
-
-              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:18:39" itemprop="dateModified" datetime="2019-08-23T14:18:39+08:00">2019-08-23</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Learn : <a href="http://www.w3school.com.cn/xpath/index.asp" target="_blank" rel="noopener">http://www.w3school.com.cn/xpath/index.asp</a></p>
-<h2 id="Simple-note"><a href="#Simple-note" class="headerlink" title="Simple note"></a>Simple note</h2><p>Xpath is a languaga to find information in XML.</p>
-<p>There are knowledge too much, I don’t want to copy.</p>
-<p>Chose node:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">bookstore		chose all children_parameters.</span><br><span class="line">/bookstore		chose root element bookstore.</span><br><span class="line">/bookstore/book	chose all children_paremeters named &quot;root&quot; of bookstore.</span><br><span class="line">//book 			chose all children_parameters no matter where they are.</span><br><span class="line">bookstore//book chose all children_paremeters named &quot;root&quot; of bookstore no matter where they are.</span><br><span class="line">//@lang 		chose all attribute named &quot;lang&quot;.</span><br><span class="line"></span><br><span class="line">/bookstore/book[1]</span><br><span class="line">/bookstore/book[last()]</span><br><span class="line">/bookstore/book[last()-1]</span><br><span class="line">/bookstore/book[position()&lt;3]</span><br><span class="line">//title[@lang]</span><br><span class="line">//title[@lang=&apos;eng&apos;]</span><br><span class="line">/bookstore/book[price&gt;35.00]</span><br><span class="line">/bookstore/book[price&gt;35.00]/title</span><br><span class="line"></span><br><span class="line">*		ALL node.</span><br><span class="line">@*		ALL node which have any attribute.</span><br><span class="line">node()	ALL type of node.</span><br><span class="line"></span><br><span class="line">//book/title | //book/price</span><br><span class="line">//title | //price</span><br><span class="line">/bookstore/book/title | //price</span><br></pre></td></tr></table></figure>
-<p>USE:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var xmlDoc=new XMLHttpRequest()</span><br><span class="line"></span><br><span class="line">Chose nodes:</span><br><span class="line">IE : xmlDoc.selectNodes(xpath);</span><br><span class="line">Other : xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE,null);</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/01/01/XPath/#more" rel="contents">
-                Weiterlesen &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-      
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Open_Redirect/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1229,114 +1337,6 @@
           
             <div class="post-button text-center">
               <a class="btn" href="/2019/01/01/Open_Redirect/#more" rel="contents">
-                Weiterlesen &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-      
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/XXE_Note/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2019/01/01/XXE_Note/" class="post-title-link" itemprop="url">了解XML</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
-                
-              
-
-              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:19:04" itemprop="dateModified" datetime="2019-08-23T14:19:04+08:00">2019-08-23</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Learn：<a href="http://www.w3school.com.cn/xml/xml_intro.asp" target="_blank" rel="noopener">http://www.w3school.com.cn/xml/xml_intro.asp</a></p>
-<h2 id="Simple-note："><a href="#Simple-note：" class="headerlink" title="Simple note："></a>Simple note：</h2><h3 id="XML"><a href="#XML" class="headerlink" title="XML"></a>XML</h3><p>A simple example of XML：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1 ?&gt;</span><br><span class="line">&lt;skate&gt;</span><br><span class="line">	&lt;people  grade=&quot;four&quot;&gt;</span><br><span class="line">		&lt;name&gt;azhu&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">	&lt;people  grade=&quot;one&quot;&gt;</span><br><span class="line">		&lt;name&gt;threezhi&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">&lt;/skate&gt;</span><br><span class="line"></span><br><span class="line">`&lt;!-- You should avoid use attribute of XML. --&gt;`</span><br></pre></td></tr></table></figure>
-<p>In XML, there are five predefined entity reference(实体引用):</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;	&lt;</span><br><span class="line">&amp;gt;	&gt;</span><br><span class="line">&amp;amp;	&amp;</span><br><span class="line">&amp;apos;	&apos;</span><br><span class="line">&amp;quot;	&quot;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/01/01/XXE_Note/#more" rel="contents">
                 Weiterlesen &raquo;
               </a>
             </div>
