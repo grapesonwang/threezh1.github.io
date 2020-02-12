@@ -1,425 +1,294 @@
 <!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+<title>XSS_01_从浏览器编码开始说起 - Threezh1&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
 
 
 
 
-
-<html lang="Chinese">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
-  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
-
-<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+<meta name="description" content="Share learn & Share life.">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<meta name="keywords" content="Threezh1">
 
 
-<script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Pisces',
-    version: '7.3.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: 'Kopieren',
-      copy_success: 'Kopiert',
-      copy_failure: 'Kopieren fehlgeschlagen'
-    }
-  };
-</script>
 
-  <meta name="description" content="编码与解码-浏览器做了什么 How browsers work 浏览器的编码与解码-低级解析 XSS编码绕过之浏览器解析顺序  更多信息可以到文章内细看，这里只做简要记录。 浏览器如何工作：浏览器的主要功能： 通过从服务器请求并在浏览器窗口中显示它来显示您选择的Web资源。资源的位置由用户使用URI（统一资源标识符）指定。 浏览器的主要组件：  用户界面 浏览器引擎 - 用于查询和操作渲染引擎的">
+    <meta name="description" content="&amp;#x7F16;&amp;#x7801;&amp;#x4E0E;&amp;#x89E3;&amp;#x7801;-&amp;#x6D4F;&amp;#x89C8;&amp;#x5668;&amp;#x505A;&amp;#x4E86;&amp;#x4EC0;&amp;#x4E48; How browsers work &amp;#x6D4F;&amp;#x89C8;&amp;#x5668;&amp;#x7684;&amp;#x7F16;&amp;#x7801;&amp;#x4E0E;&amp;#x89E3;&amp;#x7801;-&amp;#x4F4E;&amp;#">
 <meta name="keywords" content="XSS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="XSS_01_从浏览器编码开始说起">
 <meta property="og:url" content="http://yoursite.com/2019/01/01/XSS_01_从浏览器编码开始说起/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
-<meta property="og:description" content="编码与解码-浏览器做了什么 How browsers work 浏览器的编码与解码-低级解析 XSS编码绕过之浏览器解析顺序  更多信息可以到文章内细看，这里只做简要记录。 浏览器如何工作：浏览器的主要功能： 通过从服务器请求并在浏览器窗口中显示它来显示您选择的Web资源。资源的位置由用户使用URI（统一资源标识符）指定。 浏览器的主要组件：  用户界面 浏览器引擎 - 用于查询和操作渲染引擎的">
+<meta property="og:description" content="&amp;#x7F16;&amp;#x7801;&amp;#x4E0E;&amp;#x89E3;&amp;#x7801;-&amp;#x6D4F;&amp;#x89C8;&amp;#x5668;&amp;#x505A;&amp;#x4E86;&amp;#x4EC0;&amp;#x4E48; How browsers work &amp;#x6D4F;&amp;#x89C8;&amp;#x5668;&amp;#x7684;&amp;#x7F16;&amp;#x7801;&amp;#x4E0E;&amp;#x89E3;&amp;#x7801;-&amp;#x4F4E;&amp;#">
 <meta property="og:locale" content="Chinese">
 <meta property="og:image" content="http://taligarsiel.com/Projects/layers.png">
 <meta property="og:image" content="http://taligarsiel.com/Projects/flow.png">
 <meta property="og:image" content="http://taligarsiel.com/Projects/webkitflow.png">
 <meta property="og:image" content="http://taligarsiel.com/Projects/image008.jpg">
 <meta property="og:image" content="http://taligarsiel.com/Projects/image017.png">
-<meta property="og:updated_time" content="2019-11-06T08:18:43.000Z">
+<meta property="og:updated_time" content="2020-02-12T14:06:09.482Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XSS_01_从浏览器编码开始说起">
-<meta name="twitter:description" content="编码与解码-浏览器做了什么 How browsers work 浏览器的编码与解码-低级解析 XSS编码绕过之浏览器解析顺序  更多信息可以到文章内细看，这里只做简要记录。 浏览器如何工作：浏览器的主要功能： 通过从服务器请求并在浏览器窗口中显示它来显示您选择的Web资源。资源的位置由用户使用URI（统一资源标识符）指定。 浏览器的主要组件：  用户界面 浏览器引擎 - 用于查询和操作渲染引擎的">
+<meta name="twitter:description" content="&amp;#x7F16;&amp;#x7801;&amp;#x4E0E;&amp;#x89E3;&amp;#x7801;-&amp;#x6D4F;&amp;#x89C8;&amp;#x5668;&amp;#x505A;&amp;#x4E86;&amp;#x4EC0;&amp;#x4E48; How browsers work &amp;#x6D4F;&amp;#x89C8;&amp;#x5668;&amp;#x7684;&amp;#x7F16;&amp;#x7801;&amp;#x4E0E;&amp;#x89E3;&amp;#x7801;-&amp;#x4F4E;&amp;#">
 <meta name="twitter:image" content="http://taligarsiel.com/Projects/layers.png">
-  <link rel="canonical" href="http://yoursite.com/2019/01/01/XSS_01_从浏览器编码开始说起/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true,
-    isPage: false,
-    isArchive: false
-  };
-</script>
-
-  <title>XSS_01_从浏览器编码开始说起 | Threezh1's blog</title>
-  <meta name="generator" content="Hexo 3.8.0">
-  
-
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
 
 
+<link rel="icon" href="/favicon.png">
 
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
 
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 
 </head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Threezh1's blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-        <p class="site-subtitle">分享学习、分享想法</p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="Navigationsleiste an/ausschalten">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-      
-      
-      
-        
-        <li class="menu-item menu-item-home">
-      
+<body>
     
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-archives">
-      
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-threeday">
-      
-    
-
-    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
-
-  </li>
-  </ul>
-
-</nav>
-</div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-            
-
-          <div id="content" class="content page-post-detail">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/XSS_01_从浏览器编码开始说起/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">XSS_01_从浏览器编码开始说起
-
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
                 
-              
-
-              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-11-06 16:18:43" itemprop="dateModified" datetime="2019-11-06T16:18:43+08:00">2019-11-06</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
-
+                <img src="/images/logo.png" alt height="28">
                 
-                
-              
-            </span>
-          
-
-          
-
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-      </header>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item " href="/archives">归档</a>
+            
+            <a class="navbar-item " href="/Projects">项目</a>
+            
+            <a class="navbar-item " href="/Life">生活</a>
+            
+            <a class="navbar-item " href="/Photography">摄影</a>
+            
+            <a class="navbar-item " href="/About">关于</a>
+            
+            <a class="navbar-item " href="http://119.3.219.188/">Threeday</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Buscar" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
 
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            XSS_01_从浏览器编码开始说起
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2019-01-01T04:00:00.000Z" itemprop="datePublished">Jan 1 2019</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            21 minutes de lectura (Alrededor de 3173 palabras)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
         <ul>
-<li><a href="http://xuelinf.github.io/2016/05/18/%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81-%E6%B5%8F%E8%A7%88%E5%99%A8%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88/" target="_blank" rel="noopener">编码与解码-浏览器做了什么</a></li>
+<li><a href="http://xuelinf.github.io/2016/05/18/%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81-%E6%B5%8F%E8%A7%88%E5%99%A8%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88/" target="_blank" rel="noopener">&#x7F16;&#x7801;&#x4E0E;&#x89E3;&#x7801;-&#x6D4F;&#x89C8;&#x5668;&#x505A;&#x4E86;&#x4EC0;&#x4E48;</a></li>
 <li><a href="http://taligarsiel.com/Projects/howbrowserswork1.htm" target="_blank" rel="noopener">How browsers work</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/41945326" target="_blank" rel="noopener">浏览器的编码与解码-低级解析</a></li>
-<li><a href="https://www.jianshu.com/p/5b72458a5258" target="_blank" rel="noopener">XSS编码绕过之浏览器解析顺序</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/41945326" target="_blank" rel="noopener">&#x6D4F;&#x89C8;&#x5668;&#x7684;&#x7F16;&#x7801;&#x4E0E;&#x89E3;&#x7801;-&#x4F4E;&#x7EA7;&#x89E3;&#x6790;</a></li>
+<li><a href="https://www.jianshu.com/p/5b72458a5258" target="_blank" rel="noopener">XSS&#x7F16;&#x7801;&#x7ED5;&#x8FC7;&#x4E4B;&#x6D4F;&#x89C8;&#x5668;&#x89E3;&#x6790;&#x987A;&#x5E8F;</a></li>
 </ul>
-<p>更多信息可以到文章内细看，这里只做简要记录。</p>
-<h2 id="浏览器如何工作："><a href="#浏览器如何工作：" class="headerlink" title="浏览器如何工作："></a>浏览器如何工作：</h2><p><strong>浏览器的主要功能：</strong></p>
-<p>通过从服务器请求并在浏览器窗口中显示它来显示您选择的Web资源。资源的位置由用户使用URI（统一资源标识符）指定。</p>
-<p><strong>浏览器的主要组件：</strong></p>
-<ol>
-<li>用户界面</li>
-<li>浏览器引擎 - 用于查询和操作渲染引擎的界面。</li>
-<li>渲染引擎 - 负责显示请求的内容。如解析HTML和CSS并在屏幕上显示解析的内容。</li>
-<li>网络 - 用于网络呼叫，如HTTP请求。它具有平台独立接口和每个平台的底层实现。</li>
-<li>UI后端 - 用于绘制组合框和窗口等基本小部件。它公开了一个非平台特定的通用接口。它下面使用操作系统用户界面方法。</li>
-<li>JavaScript解释器。用于解析和执行JavaScript代码。</li>
-<li>数据存储。这是一个持久层。浏览器需要保存硬盘上的各种数据，例如cookie。新的HTML规范（HTML5）定义了“web数据库”，它是浏览器中一个完整的（尽管很轻的）数据库。</li>
-</ol>
-<p><img src="http://taligarsiel.com/Projects/layers.png" alt="例图"></p>
+<p>&#x66F4;&#x591A;&#x4FE1;&#x606F;&#x53EF;&#x4EE5;&#x5230;&#x6587;&#x7AE0;&#x5185;&#x7EC6;&#x770B;&#xFF0C;&#x8FD9;&#x91CC;&#x53EA;&#x505A;&#x7B80;&#x8981;&#x8BB0;&#x5F55;&#x3002;</p>
 <a id="more"></a>
-<h3 id="渲染引擎："><a href="#渲染引擎：" class="headerlink" title="渲染引擎："></a>渲染引擎：</h3><p>Firefox使用Gecko–一种“自制”Mozilla渲染引擎。Safari和Chrome都使用Webkit。</p>
-<p>Webkit是一个开源渲染引擎，起初是Linux平台的引擎，并由Apple修改以支持Mac和Windows。<a href="http://webkit.org/" target="_blank" rel="noopener">Webkit详细</a></p>
-<p><strong>主要流程：</strong></p>
-<p>渲染引擎将开始从网络层获取所请求文档的内容。这通常是以8K块的形式完成的。</p>
-<p><img src="http://taligarsiel.com/Projects/flow.png" alt="例图"></p>
+<h2 id="&#x6D4F;&#x89C8;&#x5668;&#x5982;&#x4F55;&#x5DE5;&#x4F5C;&#xFF1A;"><a href="#&#x6D4F;&#x89C8;&#x5668;&#x5982;&#x4F55;&#x5DE5;&#x4F5C;&#xFF1A;" class="headerlink" title="&#x6D4F;&#x89C8;&#x5668;&#x5982;&#x4F55;&#x5DE5;&#x4F5C;&#xFF1A;"></a>&#x6D4F;&#x89C8;&#x5668;&#x5982;&#x4F55;&#x5DE5;&#x4F5C;&#xFF1A;</h2><p><strong>&#x6D4F;&#x89C8;&#x5668;&#x7684;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#xFF1A;</strong></p>
+<p>&#x901A;&#x8FC7;&#x4ECE;&#x670D;&#x52A1;&#x5668;&#x8BF7;&#x6C42;&#x5E76;&#x5728;&#x6D4F;&#x89C8;&#x5668;&#x7A97;&#x53E3;&#x4E2D;&#x663E;&#x793A;&#x5B83;&#x6765;&#x663E;&#x793A;&#x60A8;&#x9009;&#x62E9;&#x7684;Web&#x8D44;&#x6E90;&#x3002;&#x8D44;&#x6E90;&#x7684;&#x4F4D;&#x7F6E;&#x7531;&#x7528;&#x6237;&#x4F7F;&#x7528;URI&#xFF08;&#x7EDF;&#x4E00;&#x8D44;&#x6E90;&#x6807;&#x8BC6;&#x7B26;&#xFF09;&#x6307;&#x5B9A;&#x3002;</p>
+<p><strong>&#x6D4F;&#x89C8;&#x5668;&#x7684;&#x4E3B;&#x8981;&#x7EC4;&#x4EF6;&#xFF1A;</strong></p>
 <ol>
-<li><p>渲染引擎开始解析HTML文档并将标记转换为名为“内容树”的DOM节点。它解析外部CSS文件和样式元素中的样式数据。样式信息与HTML中的可视指令一起用于创建另一个树 - 渲染树。</p>
+<li>&#x7528;&#x6237;&#x754C;&#x9762;</li>
+<li>&#x6D4F;&#x89C8;&#x5668;&#x5F15;&#x64CE; - &#x7528;&#x4E8E;&#x67E5;&#x8BE2;&#x548C;&#x64CD;&#x4F5C;&#x6E32;&#x67D3;&#x5F15;&#x64CE;&#x7684;&#x754C;&#x9762;&#x3002;</li>
+<li>&#x6E32;&#x67D3;&#x5F15;&#x64CE; - &#x8D1F;&#x8D23;&#x663E;&#x793A;&#x8BF7;&#x6C42;&#x7684;&#x5185;&#x5BB9;&#x3002;&#x5982;&#x89E3;&#x6790;HTML&#x548C;CSS&#x5E76;&#x5728;&#x5C4F;&#x5E55;&#x4E0A;&#x663E;&#x793A;&#x89E3;&#x6790;&#x7684;&#x5185;&#x5BB9;&#x3002;</li>
+<li>&#x7F51;&#x7EDC; - &#x7528;&#x4E8E;&#x7F51;&#x7EDC;&#x547C;&#x53EB;&#xFF0C;&#x5982;HTTP&#x8BF7;&#x6C42;&#x3002;&#x5B83;&#x5177;&#x6709;&#x5E73;&#x53F0;&#x72EC;&#x7ACB;&#x63A5;&#x53E3;&#x548C;&#x6BCF;&#x4E2A;&#x5E73;&#x53F0;&#x7684;&#x5E95;&#x5C42;&#x5B9E;&#x73B0;&#x3002;</li>
+<li>UI&#x540E;&#x7AEF; - &#x7528;&#x4E8E;&#x7ED8;&#x5236;&#x7EC4;&#x5408;&#x6846;&#x548C;&#x7A97;&#x53E3;&#x7B49;&#x57FA;&#x672C;&#x5C0F;&#x90E8;&#x4EF6;&#x3002;&#x5B83;&#x516C;&#x5F00;&#x4E86;&#x4E00;&#x4E2A;&#x975E;&#x5E73;&#x53F0;&#x7279;&#x5B9A;&#x7684;&#x901A;&#x7528;&#x63A5;&#x53E3;&#x3002;&#x5B83;&#x4E0B;&#x9762;&#x4F7F;&#x7528;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x7528;&#x6237;&#x754C;&#x9762;&#x65B9;&#x6CD5;&#x3002;</li>
+<li>JavaScript&#x89E3;&#x91CA;&#x5668;&#x3002;&#x7528;&#x4E8E;&#x89E3;&#x6790;&#x548C;&#x6267;&#x884C;JavaScript&#x4EE3;&#x7801;&#x3002;</li>
+<li>&#x6570;&#x636E;&#x5B58;&#x50A8;&#x3002;&#x8FD9;&#x662F;&#x4E00;&#x4E2A;&#x6301;&#x4E45;&#x5C42;&#x3002;&#x6D4F;&#x89C8;&#x5668;&#x9700;&#x8981;&#x4FDD;&#x5B58;&#x786C;&#x76D8;&#x4E0A;&#x7684;&#x5404;&#x79CD;&#x6570;&#x636E;&#xFF0C;&#x4F8B;&#x5982;cookie&#x3002;&#x65B0;&#x7684;HTML&#x89C4;&#x8303;&#xFF08;HTML5&#xFF09;&#x5B9A;&#x4E49;&#x4E86;&#x201C;web&#x6570;&#x636E;&#x5E93;&#x201D;&#xFF0C;&#x5B83;&#x662F;&#x6D4F;&#x89C8;&#x5668;&#x4E2D;&#x4E00;&#x4E2A;&#x5B8C;&#x6574;&#x7684;&#xFF08;&#x5C3D;&#x7BA1;&#x5F88;&#x8F7B;&#x7684;&#xFF09;&#x6570;&#x636E;&#x5E93;&#x3002;</li>
+</ol>
+<p><img src="http://taligarsiel.com/Projects/layers.png" alt="&#x4F8B;&#x56FE;"></p>
+<h3 id="&#x6E32;&#x67D3;&#x5F15;&#x64CE;&#xFF1A;"><a href="#&#x6E32;&#x67D3;&#x5F15;&#x64CE;&#xFF1A;" class="headerlink" title="&#x6E32;&#x67D3;&#x5F15;&#x64CE;&#xFF1A;"></a>&#x6E32;&#x67D3;&#x5F15;&#x64CE;&#xFF1A;</h3><p>Firefox&#x4F7F;&#x7528;Gecko&#x2013;&#x4E00;&#x79CD;&#x201C;&#x81EA;&#x5236;&#x201D;Mozilla&#x6E32;&#x67D3;&#x5F15;&#x64CE;&#x3002;Safari&#x548C;Chrome&#x90FD;&#x4F7F;&#x7528;Webkit&#x3002;</p>
+<p>Webkit&#x662F;&#x4E00;&#x4E2A;&#x5F00;&#x6E90;&#x6E32;&#x67D3;&#x5F15;&#x64CE;&#xFF0C;&#x8D77;&#x521D;&#x662F;Linux&#x5E73;&#x53F0;&#x7684;&#x5F15;&#x64CE;&#xFF0C;&#x5E76;&#x7531;Apple&#x4FEE;&#x6539;&#x4EE5;&#x652F;&#x6301;Mac&#x548C;Windows&#x3002;<a href="http://webkit.org/" target="_blank" rel="noopener">Webkit&#x8BE6;&#x7EC6;</a></p>
+<p><strong>&#x4E3B;&#x8981;&#x6D41;&#x7A0B;&#xFF1A;</strong></p>
+<p>&#x6E32;&#x67D3;&#x5F15;&#x64CE;&#x5C06;&#x5F00;&#x59CB;&#x4ECE;&#x7F51;&#x7EDC;&#x5C42;&#x83B7;&#x53D6;&#x6240;&#x8BF7;&#x6C42;&#x6587;&#x6863;&#x7684;&#x5185;&#x5BB9;&#x3002;&#x8FD9;&#x901A;&#x5E38;&#x662F;&#x4EE5;8K&#x5757;&#x7684;&#x5F62;&#x5F0F;&#x5B8C;&#x6210;&#x7684;&#x3002;</p>
+<p><img src="http://taligarsiel.com/Projects/flow.png" alt="&#x4F8B;&#x56FE;"></p>
+<ol>
+<li><p>&#x6E32;&#x67D3;&#x5F15;&#x64CE;&#x5F00;&#x59CB;&#x89E3;&#x6790;HTML&#x6587;&#x6863;&#x5E76;&#x5C06;&#x6807;&#x8BB0;&#x8F6C;&#x6362;&#x4E3A;&#x540D;&#x4E3A;&#x201C;&#x5185;&#x5BB9;&#x6811;&#x201D;&#x7684;DOM&#x8282;&#x70B9;&#x3002;&#x5B83;&#x89E3;&#x6790;&#x5916;&#x90E8;CSS&#x6587;&#x4EF6;&#x548C;&#x6837;&#x5F0F;&#x5143;&#x7D20;&#x4E2D;&#x7684;&#x6837;&#x5F0F;&#x6570;&#x636E;&#x3002;&#x6837;&#x5F0F;&#x4FE1;&#x606F;&#x4E0E;HTML&#x4E2D;&#x7684;&#x53EF;&#x89C6;&#x6307;&#x4EE4;&#x4E00;&#x8D77;&#x7528;&#x4E8E;&#x521B;&#x5EFA;&#x53E6;&#x4E00;&#x4E2A;&#x6811; - &#x6E32;&#x67D3;&#x6811;&#x3002;</p>
 </li>
-<li><p>渲染树包含具有视觉属性（如颜色和尺寸）的矩形。矩形的顺序正确的在屏幕上显示。</p>
+<li><p>&#x6E32;&#x67D3;&#x6811;&#x5305;&#x542B;&#x5177;&#x6709;&#x89C6;&#x89C9;&#x5C5E;&#x6027;&#xFF08;&#x5982;&#x989C;&#x8272;&#x548C;&#x5C3A;&#x5BF8;&#xFF09;&#x7684;&#x77E9;&#x5F62;&#x3002;&#x77E9;&#x5F62;&#x7684;&#x987A;&#x5E8F;&#x6B63;&#x786E;&#x7684;&#x5728;&#x5C4F;&#x5E55;&#x4E0A;&#x663E;&#x793A;&#x3002;</p>
 </li>
-<li><p>在构建渲染树之后，它将经历“ 布局 ”过程。这意味着为每个节点提供它应该出现在屏幕上的精确坐标。下一个阶段是绘制 - 将遍历渲染树，并使用UI后端层绘制每个节点。</p>
+<li><p>&#x5728;&#x6784;&#x5EFA;&#x6E32;&#x67D3;&#x6811;&#x4E4B;&#x540E;&#xFF0C;&#x5B83;&#x5C06;&#x7ECF;&#x5386;&#x201C; &#x5E03;&#x5C40; &#x201D;&#x8FC7;&#x7A0B;&#x3002;&#x8FD9;&#x610F;&#x5473;&#x7740;&#x4E3A;&#x6BCF;&#x4E2A;&#x8282;&#x70B9;&#x63D0;&#x4F9B;&#x5B83;&#x5E94;&#x8BE5;&#x51FA;&#x73B0;&#x5728;&#x5C4F;&#x5E55;&#x4E0A;&#x7684;&#x7CBE;&#x786E;&#x5750;&#x6807;&#x3002;&#x4E0B;&#x4E00;&#x4E2A;&#x9636;&#x6BB5;&#x662F;&#x7ED8;&#x5236; - &#x5C06;&#x904D;&#x5386;&#x6E32;&#x67D3;&#x6811;&#xFF0C;&#x5E76;&#x4F7F;&#x7528;UI&#x540E;&#x7AEF;&#x5C42;&#x7ED8;&#x5236;&#x6BCF;&#x4E2A;&#x8282;&#x70B9;&#x3002;</p>
 </li>
 </ol>
-<p>在开始构建和布局渲染树之前，它不会等到解析所有HTML。将解析和显示部分内容，同时继续处理来自网络的其余内容。</p>
-<p><img src="http://taligarsiel.com/Projects/webkitflow.png" alt="例图"></p>
-<p><strong>Webkit 流程：</strong></p>
-<p><img src="http://taligarsiel.com/Projects/image008.jpg" alt="例图"></p>
-<p><strong>URL 解析器 &gt; HTML 解析器 &gt; CSS 解析器 &gt; JS解析器</strong></p>
-<h3 id="解析："><a href="#解析：" class="headerlink" title="解析："></a>解析：</h3><p><strong>解析器的类型：</strong></p>
+<p>&#x5728;&#x5F00;&#x59CB;&#x6784;&#x5EFA;&#x548C;&#x5E03;&#x5C40;&#x6E32;&#x67D3;&#x6811;&#x4E4B;&#x524D;&#xFF0C;&#x5B83;&#x4E0D;&#x4F1A;&#x7B49;&#x5230;&#x89E3;&#x6790;&#x6240;&#x6709;HTML&#x3002;&#x5C06;&#x89E3;&#x6790;&#x548C;&#x663E;&#x793A;&#x90E8;&#x5206;&#x5185;&#x5BB9;&#xFF0C;&#x540C;&#x65F6;&#x7EE7;&#x7EED;&#x5904;&#x7406;&#x6765;&#x81EA;&#x7F51;&#x7EDC;&#x7684;&#x5176;&#x4F59;&#x5185;&#x5BB9;&#x3002;</p>
+<p><img src="http://taligarsiel.com/Projects/webkitflow.png" alt="&#x4F8B;&#x56FE;"></p>
+<p><strong>Webkit &#x6D41;&#x7A0B;&#xFF1A;</strong></p>
+<p><img src="http://taligarsiel.com/Projects/image008.jpg" alt="&#x4F8B;&#x56FE;"></p>
+<p><strong>URL &#x89E3;&#x6790;&#x5668; &gt; HTML &#x89E3;&#x6790;&#x5668; &gt; CSS &#x89E3;&#x6790;&#x5668; &gt; JS&#x89E3;&#x6790;&#x5668;</strong></p>
+<h3 id="&#x89E3;&#x6790;&#xFF1A;"><a href="#&#x89E3;&#x6790;&#xFF1A;" class="headerlink" title="&#x89E3;&#x6790;&#xFF1A;"></a>&#x89E3;&#x6790;&#xFF1A;</h3><p><strong>&#x89E3;&#x6790;&#x5668;&#x7684;&#x7C7B;&#x578B;&#xFF1A;</strong></p>
 <ol>
-<li>自上向下解析器：会看到语法的高级结构，并尝试匹配其中一个。</li>
-<li>自下而上解析器：从输入开始，逐渐将其转换为语法规则，从低级规则开始，直到满足高级规则。</li>
+<li>&#x81EA;&#x4E0A;&#x5411;&#x4E0B;&#x89E3;&#x6790;&#x5668;&#xFF1A;&#x4F1A;&#x770B;&#x5230;&#x8BED;&#x6CD5;&#x7684;&#x9AD8;&#x7EA7;&#x7ED3;&#x6784;&#xFF0C;&#x5E76;&#x5C1D;&#x8BD5;&#x5339;&#x914D;&#x5176;&#x4E2D;&#x4E00;&#x4E2A;&#x3002;</li>
+<li>&#x81EA;&#x4E0B;&#x800C;&#x4E0A;&#x89E3;&#x6790;&#x5668;&#xFF1A;&#x4ECE;&#x8F93;&#x5165;&#x5F00;&#x59CB;&#xFF0C;&#x9010;&#x6E10;&#x5C06;&#x5176;&#x8F6C;&#x6362;&#x4E3A;&#x8BED;&#x6CD5;&#x89C4;&#x5219;&#xFF0C;&#x4ECE;&#x4F4E;&#x7EA7;&#x89C4;&#x5219;&#x5F00;&#x59CB;&#xFF0C;&#x76F4;&#x5230;&#x6EE1;&#x8DB3;&#x9AD8;&#x7EA7;&#x89C4;&#x5219;&#x3002;</li>
 </ol>
-<h4 id="HTML解析器："><a href="#HTML解析器：" class="headerlink" title="HTML解析器："></a>HTML解析器：</h4><p>HTML不能轻易解析，不能通过传统解析器解析，因为它的语法不是无上下文语法，也不是XML解析器。</p>
-<p>HTML解析器的工作是将HTML标记解析为解析树。</p>
-<p>HTML定义采用DTD格式。</p>
-<p>HTML5规范详细描述了解析算法。该算法包括两个阶段 - 标记化和树形结构。</p>
+<h4 id="HTML&#x89E3;&#x6790;&#x5668;&#xFF1A;"><a href="#HTML&#x89E3;&#x6790;&#x5668;&#xFF1A;" class="headerlink" title="HTML&#x89E3;&#x6790;&#x5668;&#xFF1A;"></a>HTML&#x89E3;&#x6790;&#x5668;&#xFF1A;</h4><p>HTML&#x4E0D;&#x80FD;&#x8F7B;&#x6613;&#x89E3;&#x6790;&#xFF0C;&#x4E0D;&#x80FD;&#x901A;&#x8FC7;&#x4F20;&#x7EDF;&#x89E3;&#x6790;&#x5668;&#x89E3;&#x6790;&#xFF0C;&#x56E0;&#x4E3A;&#x5B83;&#x7684;&#x8BED;&#x6CD5;&#x4E0D;&#x662F;&#x65E0;&#x4E0A;&#x4E0B;&#x6587;&#x8BED;&#x6CD5;&#xFF0C;&#x4E5F;&#x4E0D;&#x662F;XML&#x89E3;&#x6790;&#x5668;&#x3002;</p>
+<p>HTML&#x89E3;&#x6790;&#x5668;&#x7684;&#x5DE5;&#x4F5C;&#x662F;&#x5C06;HTML&#x6807;&#x8BB0;&#x89E3;&#x6790;&#x4E3A;&#x89E3;&#x6790;&#x6811;&#x3002;</p>
+<p>HTML&#x5B9A;&#x4E49;&#x91C7;&#x7528;DTD&#x683C;&#x5F0F;&#x3002;</p>
+<p>HTML5&#x89C4;&#x8303;&#x8BE6;&#x7EC6;&#x63CF;&#x8FF0;&#x4E86;&#x89E3;&#x6790;&#x7B97;&#x6CD5;&#x3002;&#x8BE5;&#x7B97;&#x6CD5;&#x5305;&#x62EC;&#x4E24;&#x4E2A;&#x9636;&#x6BB5; - &#x6807;&#x8BB0;&#x5316;&#x548C;&#x6811;&#x5F62;&#x7ED3;&#x6784;&#x3002;</p>
 <ul>
-<li>标记化是词法分析，将输入解析为标记。HTML标记包括开始标记，结束标记，属性名称和属性值。</li>
-<li>标记生成器识别标记，将其提供给树构造函数并使用下一个字符来识别下一个标记，依此类推，直到输入结束。</li>
+<li>&#x6807;&#x8BB0;&#x5316;&#x662F;&#x8BCD;&#x6CD5;&#x5206;&#x6790;&#xFF0C;&#x5C06;&#x8F93;&#x5165;&#x89E3;&#x6790;&#x4E3A;&#x6807;&#x8BB0;&#x3002;HTML&#x6807;&#x8BB0;&#x5305;&#x62EC;&#x5F00;&#x59CB;&#x6807;&#x8BB0;&#xFF0C;&#x7ED3;&#x675F;&#x6807;&#x8BB0;&#xFF0C;&#x5C5E;&#x6027;&#x540D;&#x79F0;&#x548C;&#x5C5E;&#x6027;&#x503C;&#x3002;</li>
+<li>&#x6807;&#x8BB0;&#x751F;&#x6210;&#x5668;&#x8BC6;&#x522B;&#x6807;&#x8BB0;&#xFF0C;&#x5C06;&#x5176;&#x63D0;&#x4F9B;&#x7ED9;&#x6811;&#x6784;&#x9020;&#x51FD;&#x6570;&#x5E76;&#x4F7F;&#x7528;&#x4E0B;&#x4E00;&#x4E2A;&#x5B57;&#x7B26;&#x6765;&#x8BC6;&#x522B;&#x4E0B;&#x4E00;&#x4E2A;&#x6807;&#x8BB0;&#xFF0C;&#x4F9D;&#x6B64;&#x7C7B;&#x63A8;&#xFF0C;&#x76F4;&#x5230;&#x8F93;&#x5165;&#x7ED3;&#x675F;&#x3002;</li>
 </ul>
-<p><img src="http://taligarsiel.com/Projects/image017.png" alt="例图"></p>
-<p>两种算法：The tokenization algorithm(标记化算法) AND Tree construction algorithm.(树构造算法)(没有深入了解)</p>
-<p><strong>解析完成后的操作:</strong></p>
-<p>在此阶段，浏览器将文档标记为交互式，并开始解析处于“延迟”模式的脚本 - 在解析文档后应执行的脚本。然后将文档状态设置为“完成”，并将触发“加载”事件。</p>
-<p><strong>其后还包括CSS解析，DOM解析与布局等，这里都不深入了解了。主要了解渲染流程即可。</strong></p>
-<h2 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h2><h3 id="编码方式："><a href="#编码方式：" class="headerlink" title="编码方式："></a>编码方式：</h3><ol>
-<li><p><strong>url编码：</strong></p>
-<p> 标准的url结构是:</p>
+<p><img src="http://taligarsiel.com/Projects/image017.png" alt="&#x4F8B;&#x56FE;"></p>
+<p>&#x4E24;&#x79CD;&#x7B97;&#x6CD5;&#xFF1A;The tokenization algorithm(&#x6807;&#x8BB0;&#x5316;&#x7B97;&#x6CD5;) AND Tree construction algorithm.(&#x6811;&#x6784;&#x9020;&#x7B97;&#x6CD5;)(&#x6CA1;&#x6709;&#x6DF1;&#x5165;&#x4E86;&#x89E3;)</p>
+<p><strong>&#x89E3;&#x6790;&#x5B8C;&#x6210;&#x540E;&#x7684;&#x64CD;&#x4F5C;:</strong></p>
+<p>&#x5728;&#x6B64;&#x9636;&#x6BB5;&#xFF0C;&#x6D4F;&#x89C8;&#x5668;&#x5C06;&#x6587;&#x6863;&#x6807;&#x8BB0;&#x4E3A;&#x4EA4;&#x4E92;&#x5F0F;&#xFF0C;&#x5E76;&#x5F00;&#x59CB;&#x89E3;&#x6790;&#x5904;&#x4E8E;&#x201C;&#x5EF6;&#x8FDF;&#x201D;&#x6A21;&#x5F0F;&#x7684;&#x811A;&#x672C; - &#x5728;&#x89E3;&#x6790;&#x6587;&#x6863;&#x540E;&#x5E94;&#x6267;&#x884C;&#x7684;&#x811A;&#x672C;&#x3002;&#x7136;&#x540E;&#x5C06;&#x6587;&#x6863;&#x72B6;&#x6001;&#x8BBE;&#x7F6E;&#x4E3A;&#x201C;&#x5B8C;&#x6210;&#x201D;&#xFF0C;&#x5E76;&#x5C06;&#x89E6;&#x53D1;&#x201C;&#x52A0;&#x8F7D;&#x201D;&#x4E8B;&#x4EF6;&#x3002;</p>
+<p><strong>&#x5176;&#x540E;&#x8FD8;&#x5305;&#x62EC;CSS&#x89E3;&#x6790;&#xFF0C;DOM&#x89E3;&#x6790;&#x4E0E;&#x5E03;&#x5C40;&#x7B49;&#xFF0C;&#x8FD9;&#x91CC;&#x90FD;&#x4E0D;&#x6DF1;&#x5165;&#x4E86;&#x89E3;&#x4E86;&#x3002;&#x4E3B;&#x8981;&#x4E86;&#x89E3;&#x6E32;&#x67D3;&#x6D41;&#x7A0B;&#x5373;&#x53EF;&#x3002;</strong></p>
+<h2 id="&#x7F16;&#x7801;"><a href="#&#x7F16;&#x7801;" class="headerlink" title="&#x7F16;&#x7801;"></a>&#x7F16;&#x7801;</h2><h3 id="&#x7F16;&#x7801;&#x65B9;&#x5F0F;&#xFF1A;"><a href="#&#x7F16;&#x7801;&#x65B9;&#x5F0F;&#xFF1A;" class="headerlink" title="&#x7F16;&#x7801;&#x65B9;&#x5F0F;&#xFF1A;"></a>&#x7F16;&#x7801;&#x65B9;&#x5F0F;&#xFF1A;</h3><ol>
+<li><p><strong>url&#x7F16;&#x7801;&#xFF1A;</strong></p>
+<p> &#x6807;&#x51C6;&#x7684;url&#x7ED3;&#x6784;&#x662F;:</p>
 <p> <code>scheme://login:password@address:port/path?quesry_string#fragment</code></p>
-<p> 例：<a href="http://example.com/test.php?uid=27&amp;content=on#main" target="_blank" rel="noopener">http://example.com/test.php?uid=27&amp;content=on#main</a></p>
-<p> 平常的URL：像开头的 “ http: “，协议后面跟一个冒号，还有之后的两个正斜杠” // “, 后面再跟域名，再跟地址，再跟参数字符串，再跟片段id…</p>
-<p> 一些符号非常”常规”，比如冒号，正斜杠，问号…这些都是浏览器/服务器用来解析url用于语义分隔的保留字符，如果出现在url里就会破坏语法，影响正常解析，导致一些问题的发生。</p>
-<p> 于是就有了url编码，因为有些保留字符可能确实有必要需要在url里出现，它以一个百分号%和该字符的ASCII对应的2位十六进制数去替换这些字符</p>
-<p> 一些常见的URL字符以及其编码值： 详情 <a href="http://www.w3school.com.cn/tags/html_ref_urlencode.html" target="_blank" rel="noopener">HTML URL 编码</a></p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">字符		URL编码值</span><br><span class="line">空格		%20</span><br><span class="line">&quot;		%22</span><br><span class="line">#		%23</span><br><span class="line">%		%25</span><br><span class="line">&amp;		%26</span><br><span class="line">(		%28</span><br><span class="line">)		%29</span><br><span class="line">+		%2B</span><br><span class="line">,		%2C</span><br><span class="line">/		%2F</span><br><span class="line">:		%3A</span><br><span class="line">;		%3B</span><br><span class="line">&lt;		%3C</span><br><span class="line">=		%3D</span><br><span class="line">&gt;		%3E</span><br><span class="line">?		%3F</span><br><span class="line">@		%4o</span><br><span class="line">\		%5C</span><br><span class="line">|		%7C</span><br></pre></td></tr></table></figure>
+<p> &#x4F8B;&#xFF1A;<a href="http://example.com/test.php?uid=27&amp;content=on#main" target="_blank" rel="noopener">http://example.com/test.php?uid=27&amp;content=on#main</a></p>
+<p> &#x5E73;&#x5E38;&#x7684;URL&#xFF1A;&#x50CF;&#x5F00;&#x5934;&#x7684; &#x201C; http: &#x201C;&#xFF0C;&#x534F;&#x8BAE;&#x540E;&#x9762;&#x8DDF;&#x4E00;&#x4E2A;&#x5192;&#x53F7;&#xFF0C;&#x8FD8;&#x6709;&#x4E4B;&#x540E;&#x7684;&#x4E24;&#x4E2A;&#x6B63;&#x659C;&#x6760;&#x201D; // &#x201C;, &#x540E;&#x9762;&#x518D;&#x8DDF;&#x57DF;&#x540D;&#xFF0C;&#x518D;&#x8DDF;&#x5730;&#x5740;&#xFF0C;&#x518D;&#x8DDF;&#x53C2;&#x6570;&#x5B57;&#x7B26;&#x4E32;&#xFF0C;&#x518D;&#x8DDF;&#x7247;&#x6BB5;id&#x2026;</p>
+<p> &#x4E00;&#x4E9B;&#x7B26;&#x53F7;&#x975E;&#x5E38;&#x201D;&#x5E38;&#x89C4;&#x201D;&#xFF0C;&#x6BD4;&#x5982;&#x5192;&#x53F7;&#xFF0C;&#x6B63;&#x659C;&#x6760;&#xFF0C;&#x95EE;&#x53F7;&#x2026;&#x8FD9;&#x4E9B;&#x90FD;&#x662F;&#x6D4F;&#x89C8;&#x5668;/&#x670D;&#x52A1;&#x5668;&#x7528;&#x6765;&#x89E3;&#x6790;url&#x7528;&#x4E8E;&#x8BED;&#x4E49;&#x5206;&#x9694;&#x7684;&#x4FDD;&#x7559;&#x5B57;&#x7B26;&#xFF0C;&#x5982;&#x679C;&#x51FA;&#x73B0;&#x5728;url&#x91CC;&#x5C31;&#x4F1A;&#x7834;&#x574F;&#x8BED;&#x6CD5;&#xFF0C;&#x5F71;&#x54CD;&#x6B63;&#x5E38;&#x89E3;&#x6790;&#xFF0C;&#x5BFC;&#x81F4;&#x4E00;&#x4E9B;&#x95EE;&#x9898;&#x7684;&#x53D1;&#x751F;&#x3002;</p>
+<p> &#x4E8E;&#x662F;&#x5C31;&#x6709;&#x4E86;url&#x7F16;&#x7801;&#xFF0C;&#x56E0;&#x4E3A;&#x6709;&#x4E9B;&#x4FDD;&#x7559;&#x5B57;&#x7B26;&#x53EF;&#x80FD;&#x786E;&#x5B9E;&#x6709;&#x5FC5;&#x8981;&#x9700;&#x8981;&#x5728;url&#x91CC;&#x51FA;&#x73B0;&#xFF0C;&#x5B83;&#x4EE5;&#x4E00;&#x4E2A;&#x767E;&#x5206;&#x53F7;%&#x548C;&#x8BE5;&#x5B57;&#x7B26;&#x7684;ASCII&#x5BF9;&#x5E94;&#x7684;2&#x4F4D;&#x5341;&#x516D;&#x8FDB;&#x5236;&#x6570;&#x53BB;&#x66FF;&#x6362;&#x8FD9;&#x4E9B;&#x5B57;&#x7B26;</p>
+<p> &#x4E00;&#x4E9B;&#x5E38;&#x89C1;&#x7684;URL&#x5B57;&#x7B26;&#x4EE5;&#x53CA;&#x5176;&#x7F16;&#x7801;&#x503C;&#xFF1A; &#x8BE6;&#x60C5; <a href="http://www.w3school.com.cn/tags/html_ref_urlencode.html" target="_blank" rel="noopener">HTML URL &#x7F16;&#x7801;</a></p>
+ <figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#x5B57;&#x7B26;		URL&#x7F16;&#x7801;&#x503C;</span><br><span class="line">&#x7A7A;&#x683C;		%20</span><br><span class="line">&quot;		%22</span><br><span class="line">#		%23</span><br><span class="line">%		%25</span><br><span class="line">&amp;		%26</span><br><span class="line">(		%28</span><br><span class="line">)		%29</span><br><span class="line">+		%2B</span><br><span class="line">,		%2C</span><br><span class="line">/		%2F</span><br><span class="line">:		%3A</span><br><span class="line">;		%3B</span><br><span class="line">&lt;		%3C</span><br><span class="line">=		%3D</span><br><span class="line">&gt;		%3E</span><br><span class="line">?		%3F</span><br><span class="line">@		%4o</span><br><span class="line">\		%5C</span><br><span class="line">|		%7C</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><strong>html编码：</strong></p>
-<p> url的问题类似，为了避免在标签内容中出现以及应对某些攻击，某些保留字符出现在文本节点和标签值里是不安全的，比如说多重标签，xss…等等。于是就有了html编码。</p>
-<p> 一般以 &amp; 开头，以分号 ; 结尾</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">常用HTML编码：</span><br><span class="line">结果		描述					实体名称		实体编号</span><br><span class="line">&quot;		quotation mark		&amp;quot;		&amp;#34;</span><br><span class="line">&apos;		apostrophe 			&amp;apos;		&amp;#39;</span><br><span class="line">&amp;		ampersand			&amp;amp;		&amp;#38;</span><br><span class="line">&lt;		less-than			&amp;lt;		&amp;#60;</span><br><span class="line">&gt;		greater-than		&amp;gt;		&amp;#62;</span><br></pre></td></tr></table></figure>
-<p> 还可以插入以任意十进制ASCII码或Unicode字符编码，样式为：&amp;#数值;</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">左尖括号 &lt; 写作 &amp;#60</span><br><span class="line">右尖括号 &gt; 写作 &amp;#62;</span><br></pre></td></tr></table></figure>
-<p> <a href="http://www.w3school.com.cn/tags/html_ref_entities.html" target="_blank" rel="noopener">HTML ISO-8859-1 参考手册</a><br> <a href="https://www.jb51.net/onlineread/htmlchar.htm" target="_blank" rel="noopener">HTML特殊字符编码对照表</a></p>
+<li><p><strong>html&#x7F16;&#x7801;&#xFF1A;</strong></p>
+<p> url&#x7684;&#x95EE;&#x9898;&#x7C7B;&#x4F3C;&#xFF0C;&#x4E3A;&#x4E86;&#x907F;&#x514D;&#x5728;&#x6807;&#x7B7E;&#x5185;&#x5BB9;&#x4E2D;&#x51FA;&#x73B0;&#x4EE5;&#x53CA;&#x5E94;&#x5BF9;&#x67D0;&#x4E9B;&#x653B;&#x51FB;&#xFF0C;&#x67D0;&#x4E9B;&#x4FDD;&#x7559;&#x5B57;&#x7B26;&#x51FA;&#x73B0;&#x5728;&#x6587;&#x672C;&#x8282;&#x70B9;&#x548C;&#x6807;&#x7B7E;&#x503C;&#x91CC;&#x662F;&#x4E0D;&#x5B89;&#x5168;&#x7684;&#xFF0C;&#x6BD4;&#x5982;&#x8BF4;&#x591A;&#x91CD;&#x6807;&#x7B7E;&#xFF0C;xss&#x2026;&#x7B49;&#x7B49;&#x3002;&#x4E8E;&#x662F;&#x5C31;&#x6709;&#x4E86;html&#x7F16;&#x7801;&#x3002;</p>
+<p> &#x4E00;&#x822C;&#x4EE5; &amp; &#x5F00;&#x5934;&#xFF0C;&#x4EE5;&#x5206;&#x53F7; ; &#x7ED3;&#x5C3E;</p>
+ <figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x5E38;&#x7528;HTML&#x7F16;&#x7801;&#xFF1A;</span><br><span class="line">&#x7ED3;&#x679C;		&#x63CF;&#x8FF0;					&#x5B9E;&#x4F53;&#x540D;&#x79F0;		&#x5B9E;&#x4F53;&#x7F16;&#x53F7;</span><br><span class="line">&quot;		quotation mark		&amp;quot;		&amp;#34;</span><br><span class="line">&apos;		apostrophe 			&amp;apos;		&amp;#39;</span><br><span class="line">&amp;		ampersand			&amp;amp;		&amp;#38;</span><br><span class="line">&lt;		less-than			&amp;lt;		&amp;#60;</span><br><span class="line">&gt;		greater-than		&amp;gt;		&amp;#62;</span><br></pre></td></tr></table></figure>
+
+<p> &#x8FD8;&#x53EF;&#x4EE5;&#x63D2;&#x5165;&#x4EE5;&#x4EFB;&#x610F;&#x5341;&#x8FDB;&#x5236;ASCII&#x7801;&#x6216;Unicode&#x5B57;&#x7B26;&#x7F16;&#x7801;&#xFF0C;&#x6837;&#x5F0F;&#x4E3A;&#xFF1A;&amp;#&#x6570;&#x503C;;</p>
+ <figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x5DE6;&#x5C16;&#x62EC;&#x53F7; &lt; &#x5199;&#x4F5C; &amp;#60</span><br><span class="line">&#x53F3;&#x5C16;&#x62EC;&#x53F7; &gt; &#x5199;&#x4F5C; &amp;#62;</span><br></pre></td></tr></table></figure>
+
+<p> <a href="http://www.w3school.com.cn/tags/html_ref_entities.html" target="_blank" rel="noopener">HTML ISO-8859-1 &#x53C2;&#x8003;&#x624B;&#x518C;</a><br> <a href="https://www.jb51.net/onlineread/htmlchar.htm" target="_blank" rel="noopener">HTML&#x7279;&#x6B8A;&#x5B57;&#x7B26;&#x7F16;&#x7801;&#x5BF9;&#x7167;&#x8868;</a></p>
 </li>
-<li><p><strong>js编码：</strong></p>
-<p> JS解析（\uxxxx）只支持UNICODE。</p>
-<p> js常见的反斜杠方式编码处理：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">\b退格符，\t制表符，\v垂直制表符等</span><br><span class="line">3位数字，不足位数用0补充，按8位原字符八进制字符编码，如 \145 代表 e</span><br><span class="line">2位数字，不足位数用0补充，按8位原字符16进制字符编码，前缀 x ，如 \x65 代表 e</span><br><span class="line">4位数字，不足为数用0补充，按16位原字符16进制Unicode数值编码，前缀 u ，如 \u0065 代表 e</span><br></pre></td></tr></table></figure>
+<li><p><strong>js&#x7F16;&#x7801;&#xFF1A;</strong></p>
+<p> JS&#x89E3;&#x6790;&#xFF08;\uxxxx&#xFF09;&#x53EA;&#x652F;&#x6301;UNICODE&#x3002;</p>
+<p> js&#x5E38;&#x89C1;&#x7684;&#x53CD;&#x659C;&#x6760;&#x65B9;&#x5F0F;&#x7F16;&#x7801;&#x5904;&#x7406;&#xFF1A;</p>
+ <figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">\b&#x9000;&#x683C;&#x7B26;&#xFF0C;\t&#x5236;&#x8868;&#x7B26;&#xFF0C;\v&#x5782;&#x76F4;&#x5236;&#x8868;&#x7B26;&#x7B49;</span><br><span class="line">3&#x4F4D;&#x6570;&#x5B57;&#xFF0C;&#x4E0D;&#x8DB3;&#x4F4D;&#x6570;&#x7528;0&#x8865;&#x5145;&#xFF0C;&#x6309;8&#x4F4D;&#x539F;&#x5B57;&#x7B26;&#x516B;&#x8FDB;&#x5236;&#x5B57;&#x7B26;&#x7F16;&#x7801;&#xFF0C;&#x5982; \145 &#x4EE3;&#x8868; e</span><br><span class="line">2&#x4F4D;&#x6570;&#x5B57;&#xFF0C;&#x4E0D;&#x8DB3;&#x4F4D;&#x6570;&#x7528;0&#x8865;&#x5145;&#xFF0C;&#x6309;8&#x4F4D;&#x539F;&#x5B57;&#x7B26;16&#x8FDB;&#x5236;&#x5B57;&#x7B26;&#x7F16;&#x7801;&#xFF0C;&#x524D;&#x7F00; x &#xFF0C;&#x5982; \x65 &#x4EE3;&#x8868; e</span><br><span class="line">4&#x4F4D;&#x6570;&#x5B57;&#xFF0C;&#x4E0D;&#x8DB3;&#x4E3A;&#x6570;&#x7528;0&#x8865;&#x5145;&#xFF0C;&#x6309;16&#x4F4D;&#x539F;&#x5B57;&#x7B26;16&#x8FDB;&#x5236;Unicode&#x6570;&#x503C;&#x7F16;&#x7801;&#xFF0C;&#x524D;&#x7F00; u &#xFF0C;&#x5982; \u0065 &#x4EE3;&#x8868; e</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><strong>CSS编码</strong></p>
-<p> CSS的属性和值都可以进行CSS编码和解析，冒号:不可以</p>
-<p> CSS 解析器并不会等到所有的html都解析完成之后再去构建和布局render树。它是解析完一部分内容就显示一部分内容，同时，可能还在通过网络下载其余内容。</p>
-<p> CSS 编码解析是用了一套不太正统的转义策略：用一个反斜杠，后边跟<code>1~6</code>位十六进制数字构成。，所以字母e 可以编码为 \65, \065,\000065。而因为这样，后边就不能直接紧跟数字或字母，否则会被当成转义里的内容处理，所以CSS 选择了空格作为终止标识，在解码的时候，再将空格去除。</p>
+<li><p><strong>CSS&#x7F16;&#x7801;</strong></p>
+<p> CSS&#x7684;&#x5C5E;&#x6027;&#x548C;&#x503C;&#x90FD;&#x53EF;&#x4EE5;&#x8FDB;&#x884C;CSS&#x7F16;&#x7801;&#x548C;&#x89E3;&#x6790;&#xFF0C;&#x5192;&#x53F7;:&#x4E0D;&#x53EF;&#x4EE5;</p>
+<p> CSS &#x89E3;&#x6790;&#x5668;&#x5E76;&#x4E0D;&#x4F1A;&#x7B49;&#x5230;&#x6240;&#x6709;&#x7684;html&#x90FD;&#x89E3;&#x6790;&#x5B8C;&#x6210;&#x4E4B;&#x540E;&#x518D;&#x53BB;&#x6784;&#x5EFA;&#x548C;&#x5E03;&#x5C40;render&#x6811;&#x3002;&#x5B83;&#x662F;&#x89E3;&#x6790;&#x5B8C;&#x4E00;&#x90E8;&#x5206;&#x5185;&#x5BB9;&#x5C31;&#x663E;&#x793A;&#x4E00;&#x90E8;&#x5206;&#x5185;&#x5BB9;&#xFF0C;&#x540C;&#x65F6;&#xFF0C;&#x53EF;&#x80FD;&#x8FD8;&#x5728;&#x901A;&#x8FC7;&#x7F51;&#x7EDC;&#x4E0B;&#x8F7D;&#x5176;&#x4F59;&#x5185;&#x5BB9;&#x3002;</p>
+<p> CSS &#x7F16;&#x7801;&#x89E3;&#x6790;&#x662F;&#x7528;&#x4E86;&#x4E00;&#x5957;&#x4E0D;&#x592A;&#x6B63;&#x7EDF;&#x7684;&#x8F6C;&#x4E49;&#x7B56;&#x7565;&#xFF1A;&#x7528;&#x4E00;&#x4E2A;&#x53CD;&#x659C;&#x6760;&#xFF0C;&#x540E;&#x8FB9;&#x8DDF;<code>1~6</code>&#x4F4D;&#x5341;&#x516D;&#x8FDB;&#x5236;&#x6570;&#x5B57;&#x6784;&#x6210;&#x3002;&#xFF0C;&#x6240;&#x4EE5;&#x5B57;&#x6BCD;e &#x53EF;&#x4EE5;&#x7F16;&#x7801;&#x4E3A; \65, \065,\000065&#x3002;&#x800C;&#x56E0;&#x4E3A;&#x8FD9;&#x6837;&#xFF0C;&#x540E;&#x8FB9;&#x5C31;&#x4E0D;&#x80FD;&#x76F4;&#x63A5;&#x7D27;&#x8DDF;&#x6570;&#x5B57;&#x6216;&#x5B57;&#x6BCD;&#xFF0C;&#x5426;&#x5219;&#x4F1A;&#x88AB;&#x5F53;&#x6210;&#x8F6C;&#x4E49;&#x91CC;&#x7684;&#x5185;&#x5BB9;&#x5904;&#x7406;&#xFF0C;&#x6240;&#x4EE5;CSS &#x9009;&#x62E9;&#x4E86;&#x7A7A;&#x683C;&#x4F5C;&#x4E3A;&#x7EC8;&#x6B62;&#x6807;&#x8BC6;&#xFF0C;&#x5728;&#x89E3;&#x7801;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x518D;&#x5C06;&#x7A7A;&#x683C;&#x53BB;&#x9664;&#x3002;</p>
 </li>
 </ol>
 <p>5 .<strong>DOM</strong></p>
-<pre><code>一个例子。
+<pre><code>&#x4E00;&#x4E2A;&#x4F8B;&#x5B50;&#x3002;
 
 `document.getElementById(&quot;pic1&quot;).innerHTML = &quot;&quot;;`
 
-如果将pic1也编码的话，也会先解码再添加到HTML里。
+&#x5982;&#x679C;&#x5C06;pic1&#x4E5F;&#x7F16;&#x7801;&#x7684;&#x8BDD;&#xFF0C;&#x4E5F;&#x4F1A;&#x5148;&#x89E3;&#x7801;&#x518D;&#x6DFB;&#x52A0;&#x5230;HTML&#x91CC;&#x3002;
 
-DOM 操作实际上是js强势介入HTML和CSS的结果，导致HTML标签的属性和值都可以做JS编码和解析。
-</code></pre><h3 id="浏览器解码处理流"><a href="#浏览器解码处理流" class="headerlink" title="浏览器解码处理流"></a>浏览器解码处理流</h3><p>浏览器接收时一般不需要对url进行解码处理，只有在发送后，服务器才需要对url进行解码来确定接收参数和定位资源。</p>
+DOM &#x64CD;&#x4F5C;&#x5B9E;&#x9645;&#x4E0A;&#x662F;js&#x5F3A;&#x52BF;&#x4ECB;&#x5165;HTML&#x548C;CSS&#x7684;&#x7ED3;&#x679C;&#xFF0C;&#x5BFC;&#x81F4;HTML&#x6807;&#x7B7E;&#x7684;&#x5C5E;&#x6027;&#x548C;&#x503C;&#x90FD;&#x53EF;&#x4EE5;&#x505A;JS&#x7F16;&#x7801;&#x548C;&#x89E3;&#x6790;&#x3002;
+</code></pre><h3 id="&#x6D4F;&#x89C8;&#x5668;&#x89E3;&#x7801;&#x5904;&#x7406;&#x6D41;"><a href="#&#x6D4F;&#x89C8;&#x5668;&#x89E3;&#x7801;&#x5904;&#x7406;&#x6D41;" class="headerlink" title="&#x6D4F;&#x89C8;&#x5668;&#x89E3;&#x7801;&#x5904;&#x7406;&#x6D41;"></a>&#x6D4F;&#x89C8;&#x5668;&#x89E3;&#x7801;&#x5904;&#x7406;&#x6D41;</h3><p>&#x6D4F;&#x89C8;&#x5668;&#x63A5;&#x6536;&#x65F6;&#x4E00;&#x822C;&#x4E0D;&#x9700;&#x8981;&#x5BF9;url&#x8FDB;&#x884C;&#x89E3;&#x7801;&#x5904;&#x7406;&#xFF0C;&#x53EA;&#x6709;&#x5728;&#x53D1;&#x9001;&#x540E;&#xFF0C;&#x670D;&#x52A1;&#x5668;&#x624D;&#x9700;&#x8981;&#x5BF9;url&#x8FDB;&#x884C;&#x89E3;&#x7801;&#x6765;&#x786E;&#x5B9A;&#x63A5;&#x6536;&#x53C2;&#x6570;&#x548C;&#x5B9A;&#x4F4D;&#x8D44;&#x6E90;&#x3002;</p>
 <p><strong>HTML</strong></p>
-<p><strong>HTML解码是在浏览器构建完DOM树以后才进行解码的</strong></p>
-<p>一段HTML例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;h1&gt;Main Title&lt;/h1&gt;</span><br><span class="line">    &lt;div class=&quot;content&quot;&gt;</span><br><span class="line">        &lt;h2&gt;Second Title&lt;/h2&gt;</span><br><span class="line">        &lt;p&gt;Content&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-<p>当我们把<code>&lt;h1&gt;Main Title&lt;/h1&gt;</code>进行编码成：</p>
+<p><strong>HTML&#x89E3;&#x7801;&#x662F;&#x5728;&#x6D4F;&#x89C8;&#x5668;&#x6784;&#x5EFA;&#x5B8C;DOM&#x6811;&#x4EE5;&#x540E;&#x624D;&#x8FDB;&#x884C;&#x89E3;&#x7801;&#x7684;</strong></p>
+<p>&#x4E00;&#x6BB5;HTML&#x4F8B;&#x5B50;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;h1&gt;Main Title&lt;/h1&gt;</span><br><span class="line">    &lt;div class=&quot;content&quot;&gt;</span><br><span class="line">        &lt;h2&gt;Second Title&lt;/h2&gt;</span><br><span class="line">        &lt;p&gt;Content&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>&#x5F53;&#x6211;&#x4EEC;&#x628A;<code>&lt;h1&gt;Main Title&lt;/h1&gt;</code>&#x8FDB;&#x884C;&#x7F16;&#x7801;&#x6210;&#xFF1A;</p>
 <ol>
 <li><code>&lt;&amp;#104;1&gt;Main Title&lt;/h1&gt;</code></li>
 <li><code>&lt;h1&gt;M&amp;#97;in T&amp;#105;tle&lt;/h1&gt;</code></li>
 </ol>
-<p>会发现，第一个没有HTML标签，第二个是正常的。</p>
-<p>当解析器对前者(对标签进行html编码)进行解析时，无法识别为html标签，所以构建不了DOM节点，后者不同，于是成功构建了DOM节点。 而在解析器解析完后，就会进行html解码，于是两者都会解码显示。</p>
-<p><strong>JS编码：</strong></p>
-<p>不管是外部引用还是直接写在script标签里，又或者是在html标签的属性里，对于js编码的解码都是相同的。</p>
-<p>一个例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">alert(&quot;Hello World&quot;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<p>编码为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">\u0061lert(&quot;Hello World&quot;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">或</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">alert(&quot;\u0048ello World&quot;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<p>js的脚本处理模型是按照 源码处理-函数解析-代码执行这个执行流来的。两种代码都会经过解码再显示出来，所以两种效果都是相同的。</p>
-<p>不能用这种方式来替换掉圆括号或引号，会判定为失败。因为对于JavaScript，转义编码应当只出现在标示符部分，不能用于对语法有真正影响的符号。</p>
+<p>&#x4F1A;&#x53D1;&#x73B0;&#xFF0C;&#x7B2C;&#x4E00;&#x4E2A;&#x6CA1;&#x6709;HTML&#x6807;&#x7B7E;&#xFF0C;&#x7B2C;&#x4E8C;&#x4E2A;&#x662F;&#x6B63;&#x5E38;&#x7684;&#x3002;</p>
+<p>&#x5F53;&#x89E3;&#x6790;&#x5668;&#x5BF9;&#x524D;&#x8005;(&#x5BF9;&#x6807;&#x7B7E;&#x8FDB;&#x884C;html&#x7F16;&#x7801;)&#x8FDB;&#x884C;&#x89E3;&#x6790;&#x65F6;&#xFF0C;&#x65E0;&#x6CD5;&#x8BC6;&#x522B;&#x4E3A;html&#x6807;&#x7B7E;&#xFF0C;&#x6240;&#x4EE5;&#x6784;&#x5EFA;&#x4E0D;&#x4E86;DOM&#x8282;&#x70B9;&#xFF0C;&#x540E;&#x8005;&#x4E0D;&#x540C;&#xFF0C;&#x4E8E;&#x662F;&#x6210;&#x529F;&#x6784;&#x5EFA;&#x4E86;DOM&#x8282;&#x70B9;&#x3002; &#x800C;&#x5728;&#x89E3;&#x6790;&#x5668;&#x89E3;&#x6790;&#x5B8C;&#x540E;&#xFF0C;&#x5C31;&#x4F1A;&#x8FDB;&#x884C;html&#x89E3;&#x7801;&#xFF0C;&#x4E8E;&#x662F;&#x4E24;&#x8005;&#x90FD;&#x4F1A;&#x89E3;&#x7801;&#x663E;&#x793A;&#x3002;</p>
+<p><strong>JS&#x7F16;&#x7801;&#xFF1A;</strong></p>
+<p>&#x4E0D;&#x7BA1;&#x662F;&#x5916;&#x90E8;&#x5F15;&#x7528;&#x8FD8;&#x662F;&#x76F4;&#x63A5;&#x5199;&#x5728;script&#x6807;&#x7B7E;&#x91CC;&#xFF0C;&#x53C8;&#x6216;&#x8005;&#x662F;&#x5728;html&#x6807;&#x7B7E;&#x7684;&#x5C5E;&#x6027;&#x91CC;&#xFF0C;&#x5BF9;&#x4E8E;js&#x7F16;&#x7801;&#x7684;&#x89E3;&#x7801;&#x90FD;&#x662F;&#x76F8;&#x540C;&#x7684;&#x3002;</p>
+<p>&#x4E00;&#x4E2A;&#x4F8B;&#x5B50;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">alert(&quot;Hello World&quot;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>&#x7F16;&#x7801;&#x4E3A;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">\u0061lert(&quot;Hello World&quot;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&#x6216;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">alert(&quot;\u0048ello World&quot;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>js&#x7684;&#x811A;&#x672C;&#x5904;&#x7406;&#x6A21;&#x578B;&#x662F;&#x6309;&#x7167; &#x6E90;&#x7801;&#x5904;&#x7406;-&#x51FD;&#x6570;&#x89E3;&#x6790;-&#x4EE3;&#x7801;&#x6267;&#x884C;&#x8FD9;&#x4E2A;&#x6267;&#x884C;&#x6D41;&#x6765;&#x7684;&#x3002;&#x4E24;&#x79CD;&#x4EE3;&#x7801;&#x90FD;&#x4F1A;&#x7ECF;&#x8FC7;&#x89E3;&#x7801;&#x518D;&#x663E;&#x793A;&#x51FA;&#x6765;&#xFF0C;&#x6240;&#x4EE5;&#x4E24;&#x79CD;&#x6548;&#x679C;&#x90FD;&#x662F;&#x76F8;&#x540C;&#x7684;&#x3002;</p>
+<p>&#x4E0D;&#x80FD;&#x7528;&#x8FD9;&#x79CD;&#x65B9;&#x5F0F;&#x6765;&#x66FF;&#x6362;&#x6389;&#x5706;&#x62EC;&#x53F7;&#x6216;&#x5F15;&#x53F7;&#xFF0C;&#x4F1A;&#x5224;&#x5B9A;&#x4E3A;&#x5931;&#x8D25;&#x3002;&#x56E0;&#x4E3A;&#x5BF9;&#x4E8E;JavaScript&#xFF0C;&#x8F6C;&#x4E49;&#x7F16;&#x7801;&#x5E94;&#x5F53;&#x53EA;&#x51FA;&#x73B0;&#x5728;&#x6807;&#x793A;&#x7B26;&#x90E8;&#x5206;&#xFF0C;&#x4E0D;&#x80FD;&#x7528;&#x4E8E;&#x5BF9;&#x8BED;&#x6CD5;&#x6709;&#x771F;&#x6B63;&#x5F71;&#x54CD;&#x7684;&#x7B26;&#x53F7;&#x3002;</p>
 <p><strong>HTML + CSS</strong></p>
-<p>一个例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&quot;content&quot;&gt;&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;img src=&quot;y.com&quot; onerror=&quot;alert(2)&quot;/&gt;</span><br><span class="line">&lt;p&gt;Hello Parser!&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">var content = document.getElementById(&quot;content&quot;);</span><br><span class="line">var img = document.createElement(&quot;img&quot;);</span><br><span class="line">img.src =   &quot;x.com&quot;;</span><br><span class="line">img.setAttribute(&quot;onerror&quot;,&quot;&amp;#97;lert(1)&quot;);</span><br><span class="line"></span><br><span class="line">content.appendChild(img);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<p>script脚本创建了一个属性src=x.com的img标签，并将其作为id=content的div标签的子元素。</p>
-<p>script脚本中改变了DOM节点树，最后按照顺序解析，先响应2后响应1，如果把script标签移到img标签之前，结果相反。</p>
-<p>浏览器是按一种顺序流执行解析的，html解析完生成DOM树，js解析器会对js编码进行解码，然后对DOM树进行修改，最后修改完的DOM树再进行HTML解码。</p>
-<p><strong>可以触发JS解析器的方式：</strong></p>
+<p>&#x4E00;&#x4E2A;&#x4F8B;&#x5B50;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&quot;content&quot;&gt;&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;img src=&quot;y.com&quot; onerror=&quot;alert(2)&quot;/&gt;</span><br><span class="line">&lt;p&gt;Hello Parser!&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">var content = document.getElementById(&quot;content&quot;);</span><br><span class="line">var img = document.createElement(&quot;img&quot;);</span><br><span class="line">img.src =   &quot;x.com&quot;;</span><br><span class="line">img.setAttribute(&quot;onerror&quot;,&quot;&amp;#97;lert(1)&quot;);</span><br><span class="line"></span><br><span class="line">content.appendChild(img);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>script&#x811A;&#x672C;&#x521B;&#x5EFA;&#x4E86;&#x4E00;&#x4E2A;&#x5C5E;&#x6027;src=x.com&#x7684;img&#x6807;&#x7B7E;&#xFF0C;&#x5E76;&#x5C06;&#x5176;&#x4F5C;&#x4E3A;id=content&#x7684;div&#x6807;&#x7B7E;&#x7684;&#x5B50;&#x5143;&#x7D20;&#x3002;</p>
+<p>script&#x811A;&#x672C;&#x4E2D;&#x6539;&#x53D8;&#x4E86;DOM&#x8282;&#x70B9;&#x6811;&#xFF0C;&#x6700;&#x540E;&#x6309;&#x7167;&#x987A;&#x5E8F;&#x89E3;&#x6790;&#xFF0C;&#x5148;&#x54CD;&#x5E94;2&#x540E;&#x54CD;&#x5E94;1&#xFF0C;&#x5982;&#x679C;&#x628A;script&#x6807;&#x7B7E;&#x79FB;&#x5230;img&#x6807;&#x7B7E;&#x4E4B;&#x524D;&#xFF0C;&#x7ED3;&#x679C;&#x76F8;&#x53CD;&#x3002;</p>
+<p>&#x6D4F;&#x89C8;&#x5668;&#x662F;&#x6309;&#x4E00;&#x79CD;&#x987A;&#x5E8F;&#x6D41;&#x6267;&#x884C;&#x89E3;&#x6790;&#x7684;&#xFF0C;html&#x89E3;&#x6790;&#x5B8C;&#x751F;&#x6210;DOM&#x6811;&#xFF0C;js&#x89E3;&#x6790;&#x5668;&#x4F1A;&#x5BF9;js&#x7F16;&#x7801;&#x8FDB;&#x884C;&#x89E3;&#x7801;&#xFF0C;&#x7136;&#x540E;&#x5BF9;DOM&#x6811;&#x8FDB;&#x884C;&#x4FEE;&#x6539;&#xFF0C;&#x6700;&#x540E;&#x4FEE;&#x6539;&#x5B8C;&#x7684;DOM&#x6811;&#x518D;&#x8FDB;&#x884C;HTML&#x89E3;&#x7801;&#x3002;</p>
+<p><strong>&#x53EF;&#x4EE5;&#x89E6;&#x53D1;JS&#x89E3;&#x6790;&#x5668;&#x7684;&#x65B9;&#x5F0F;&#xFF1A;</strong></p>
 <ul>
-<li>直接嵌入&lt; script&gt; 代码块。</li>
-<li>通过&lt; script sr=… &gt; 加载代码。</li>
-<li>各种HTML CSS 参数支持JavaScript：URL 触发调用。</li>
-<li>CSS expression(…) 语法和某些浏览器的XBL 绑定。</li>
-<li>事件处理器(Event handlers),比如 onload, onerror, onclick等等。</li>
-<li>定时器，Timer(setTimeout, setInterval)</li>
-<li>eval(…) 调用。</li>
+<li>&#x76F4;&#x63A5;&#x5D4C;&#x5165;&lt; script&gt; &#x4EE3;&#x7801;&#x5757;&#x3002;</li>
+<li>&#x901A;&#x8FC7;&lt; script sr=&#x2026; &gt; &#x52A0;&#x8F7D;&#x4EE3;&#x7801;&#x3002;</li>
+<li>&#x5404;&#x79CD;HTML CSS &#x53C2;&#x6570;&#x652F;&#x6301;JavaScript&#xFF1A;URL &#x89E6;&#x53D1;&#x8C03;&#x7528;&#x3002;</li>
+<li>CSS expression(&#x2026;) &#x8BED;&#x6CD5;&#x548C;&#x67D0;&#x4E9B;&#x6D4F;&#x89C8;&#x5668;&#x7684;XBL &#x7ED1;&#x5B9A;&#x3002;</li>
+<li>&#x4E8B;&#x4EF6;&#x5904;&#x7406;&#x5668;(Event handlers),&#x6BD4;&#x5982; onload, onerror, onclick&#x7B49;&#x7B49;&#x3002;</li>
+<li>&#x5B9A;&#x65F6;&#x5668;&#xFF0C;Timer(setTimeout, setInterval)</li>
+<li>eval(&#x2026;) &#x8C03;&#x7528;&#x3002;</li>
 </ul>
-<h3 id="常用的编码表-From-s0md3v"><a href="#常用的编码表-From-s0md3v" class="headerlink" title="常用的编码表 (From s0md3v)"></a>常用的编码表 (From s0md3v)</h3><table>
+<h3 id="&#x5E38;&#x7528;&#x7684;&#x7F16;&#x7801;&#x8868;-From-s0md3v"><a href="#&#x5E38;&#x7528;&#x7684;&#x7F16;&#x7801;&#x8868;-From-s0md3v" class="headerlink" title="&#x5E38;&#x7528;&#x7684;&#x7F16;&#x7801;&#x8868; (From s0md3v)"></a>&#x5E38;&#x7528;&#x7684;&#x7F16;&#x7801;&#x8868; (From s0md3v)</h3><table>
 <thead>
 <tr>
 <th>HTML</th>
@@ -435,7 +304,7 @@ DOM 操作实际上是js强势介入HTML和CSS的结果，导致HTML标签的属
 <tbody>
 <tr>
 <td><code>&amp;quot;</code></td>
-<td>“</td>
+<td>&#x201C;</td>
 <td><code>&amp;#34;</code></td>
 <td>quotation mark</td>
 <td>u+0022</td>
@@ -485,7 +354,7 @@ DOM 操作实际上是js强势介入HTML和CSS的结果，导致HTML标签的属
 </tr>
 <tr>
 <td><code>&amp;apos;</code></td>
-<td>‘</td>
+<td>&#x2018;</td>
 <td><code>&amp;#39;</code></td>
 <td>apostrophe</td>
 <td>u+0027</td>
@@ -736,319 +605,254 @@ DOM 操作实际上是js强势介入HTML和CSS的结果，导致HTML标签的属
 </tr>
 </tbody>
 </table>
-<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><p>大多数都是摘抄于其他文章的，自己所写甚少。只作为一个简要笔记用作以后参考。</p>
-<p>编码过程是一直都想整理的，也是学习XSS过程中必不可少的环节，这笔记也就算是打下XSS的一点基础了。</p>
-<p>XSS的绕过主要是在于以下几个方面(目前的一点拙见)：</p>
+<h2 id="&#x603B;&#x7ED3;&#xFF1A;"><a href="#&#x603B;&#x7ED3;&#xFF1A;" class="headerlink" title="&#x603B;&#x7ED3;&#xFF1A;"></a>&#x603B;&#x7ED3;&#xFF1A;</h2><p>&#x5927;&#x591A;&#x6570;&#x90FD;&#x662F;&#x6458;&#x6284;&#x4E8E;&#x5176;&#x4ED6;&#x6587;&#x7AE0;&#x7684;&#xFF0C;&#x81EA;&#x5DF1;&#x6240;&#x5199;&#x751A;&#x5C11;&#x3002;&#x53EA;&#x4F5C;&#x4E3A;&#x4E00;&#x4E2A;&#x7B80;&#x8981;&#x7B14;&#x8BB0;&#x7528;&#x4F5C;&#x4EE5;&#x540E;&#x53C2;&#x8003;&#x3002;</p>
+<p>&#x7F16;&#x7801;&#x8FC7;&#x7A0B;&#x662F;&#x4E00;&#x76F4;&#x90FD;&#x60F3;&#x6574;&#x7406;&#x7684;&#xFF0C;&#x4E5F;&#x662F;&#x5B66;&#x4E60;XSS&#x8FC7;&#x7A0B;&#x4E2D;&#x5FC5;&#x4E0D;&#x53EF;&#x5C11;&#x7684;&#x73AF;&#x8282;&#xFF0C;&#x8FD9;&#x7B14;&#x8BB0;&#x4E5F;&#x5C31;&#x7B97;&#x662F;&#x6253;&#x4E0B;XSS&#x7684;&#x4E00;&#x70B9;&#x57FA;&#x7840;&#x4E86;&#x3002;</p>
+<p>XSS&#x7684;&#x7ED5;&#x8FC7;&#x4E3B;&#x8981;&#x662F;&#x5728;&#x4E8E;&#x4EE5;&#x4E0B;&#x51E0;&#x4E2A;&#x65B9;&#x9762;(&#x76EE;&#x524D;&#x7684;&#x4E00;&#x70B9;&#x62D9;&#x89C1;)&#xFF1A;</p>
 <ol>
-<li>对编码内容的过滤不严格</li>
-<li>对解码，编码的顺序逻辑出错</li>
-<li>待补充</li>
+<li>&#x5BF9;&#x7F16;&#x7801;&#x5185;&#x5BB9;&#x7684;&#x8FC7;&#x6EE4;&#x4E0D;&#x4E25;&#x683C;</li>
+<li>&#x5BF9;&#x89E3;&#x7801;&#xFF0C;&#x7F16;&#x7801;&#x7684;&#x987A;&#x5E8F;&#x903B;&#x8F91;&#x51FA;&#x9519;</li>
+<li>&#x5F85;&#x8865;&#x5145;</li>
 </ol>
 
+    
     </div>
-
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/XSS/">#XSS</a></span>
+    
+    </div>
     
     
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2019/01/01/CRLF/">了解CRLF</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2019/01/01/Open_Redirect/">学习 Open redirect</a>
+            
+        </span>
+    </div>
     
-        
-      
+</article>
 
-      <footer class="post-footer">
-          
-            
-          
-          <div class="post-tags">
-            
-              <a href="/tags/XSS/" rel="tag"># XSS</a>
-            
-          </div>
-        
 
-        
 
-          <div class="post-nav">
-            <div class="post-nav-next post-nav-item">
-              
-                <a href="/2019/01/01/Open_Redirect/" rel="next" title="学习 Open redirect">
-                  <i class="fa fa-chevron-left"></i> 学习 Open redirect
-                </a>
-              
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2020 Threezh1&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
             </div>
+            <div class="column is-hidden-mobile"></div>
 
-            <span class="post-nav-divider"></span>
-
-            <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2019/01/01/CRLF/" rel="prev" title="了解CRLF">
-                  了解CRLF <i class="fa fa-chevron-right"></i>
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Threezh1">
+                    
+                    GitHub
+                    
                 </a>
-              
+                
+                </div>
             </div>
-          </div>
-        
-      </footer>
-    
-  </div>
-  
-  
-  
-  </article>
-
-  </div>
-
-
-          </div>
-          
-
+            
+            
         </div>
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-  </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-        
-        
-        
-        
-      
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
-          Inhaltsverzeichnis
-        </li>
-        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-          Übersicht
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc">
-            <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器如何工作："><span class="nav-number">1.</span> <span class="nav-text">浏览器如何工作：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#渲染引擎："><span class="nav-number">1.1.</span> <span class="nav-text">渲染引擎：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解析："><span class="nav-number">1.2.</span> <span class="nav-text">解析：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTML解析器："><span class="nav-number">1.2.1.</span> <span class="nav-text">HTML解析器：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编码"><span class="nav-number">2.</span> <span class="nav-text">编码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编码方式："><span class="nav-number">2.1.</span> <span class="nav-text">编码方式：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器解码处理流"><span class="nav-number">2.2.</span> <span class="nav-text">浏览器解码处理流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用的编码表-From-s0md3v"><span class="nav-number">2.3.</span> <span class="nav-text">常用的编码表 (From s0md3v)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结："><span class="nav-number">3.</span> <span class="nav-text">总结：</span></a></li></ol></div>
-          </div>
-        
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Threezh1</p>
-  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
 </div>
-  <nav class="site-state motion-element">
-      <div class="site-state-item site-state-posts">
-        
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">34</span>
-          <span class="site-state-item-name">Artikel</span>
-        </a>
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-categories">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">7</span>
-        <span class="site-state-item-name">Kategorien</span>
-        
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-tags">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">21</span>
-        <span class="site-state-item-name">schlagwörter</span>
-        
-      </div>
-    
-  </nav>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-      </span>
-    
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-      </span>
-    
-  </div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("chinese");
+</script>
 
 
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
 
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        // ...options...
+    });
+});
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Escribe algo...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
-      </div>
-
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Threezh1</span>
 </div>
-  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Páginas',
+                CATEGORIES: 'Categorías',
+                TAGS: 'Tags',
+                UNTITLED: '(Sin título)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-  </div>
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
-<script src="/js/schemes/pisces.js?v=7.3.0"></script>
-<script src="/js/next-boot.js?v=7.3.0"></script>
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-  
-
-
-  
-  <script src="/js/post-details.js?v=7.3.0"></script>
-
-
 </body>
 </html>

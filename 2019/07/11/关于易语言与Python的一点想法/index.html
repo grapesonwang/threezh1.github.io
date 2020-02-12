@@ -1,66 +1,30 @@
 <!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+<title>关于易语言与Python的一点想法 - Threezh1&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
 
 
 
 
-
-<html lang="Chinese">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
-  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
-
-<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+<meta name="description" content="Share learn & Share life.">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<meta name="keywords" content="Threezh1">
 
 
-<script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Pisces',
-    version: '7.3.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: 'Kopieren',
-      copy_success: 'Kopiert',
-      copy_failure: 'Kopieren fehlgeschlagen'
-    }
-  };
-</script>
 
-  <meta name="description" content="说在前面最近吃饭的时候总是会想很多关于易语言的事情。易语言是我学会的第一门语言，虽然它被喷的很惨很惨，具体可见：易语言 知乎。但是由于它极高的上手性，还是成为我高中时期最喜欢的编程工具。(当时我还没听说过Python)易语言画界面是非常简单的，用鼠标拖动一下组件，简简单单的几句代码就可以写一个简单的GUI程序。我想，在界面化的程序上，除了Web程序上用Javascript和CSS画界面。对于我这样">
-<meta name="keywords" content="易语言">
+    <meta name="description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x6700;&amp;#x8FD1;&amp;#x5403;&amp;#x996D;&amp;#x7684;&amp;#x65F6;&amp;#x5019;&amp;#x603B;&amp;#x662F;&amp;#x4F1A;&amp;#x60F3;&amp;#x5F88;&amp;#x591A;&amp;#x5173;&amp;#x4E8E;&amp;#x6613;&amp;#x8BED;&amp;#x8A00;&amp;#x7684;&amp;#x4E8B;&amp;#x60C5;">
+<meta name="keywords" content="Python,易语言">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于易语言与Python的一点想法">
 <meta property="og:url" content="http://yoursite.com/2019/07/11/关于易语言与Python的一点想法/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
-<meta property="og:description" content="说在前面最近吃饭的时候总是会想很多关于易语言的事情。易语言是我学会的第一门语言，虽然它被喷的很惨很惨，具体可见：易语言 知乎。但是由于它极高的上手性，还是成为我高中时期最喜欢的编程工具。(当时我还没听说过Python)易语言画界面是非常简单的，用鼠标拖动一下组件，简简单单的几句代码就可以写一个简单的GUI程序。我想，在界面化的程序上，除了Web程序上用Javascript和CSS画界面。对于我这样">
+<meta property="og:description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x6700;&amp;#x8FD1;&amp;#x5403;&amp;#x996D;&amp;#x7684;&amp;#x65F6;&amp;#x5019;&amp;#x603B;&amp;#x662F;&amp;#x4F1A;&amp;#x60F3;&amp;#x5F88;&amp;#x591A;&amp;#x5173;&amp;#x4E8E;&amp;#x6613;&amp;#x8BED;&amp;#x8A00;&amp;#x7684;&amp;#x4E8B;&amp;#x60C5;">
 <meta property="og:locale" content="Chinese">
 <meta property="og:image" content="https://i.loli.net/2019/07/11/5d2624b473b7970443.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/07/11/5d2624b05ea9896024.jpg">
@@ -71,614 +35,450 @@
 <meta property="og:image" content="https://i.loli.net/2019/07/11/5d2624b2bdb5223995.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/07/11/5d2624b56050041044.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/07/11/5d2624afa52bf96713.jpg">
-<meta property="og:updated_time" content="2019-08-23T06:19:20.212Z">
+<meta property="og:updated_time" content="2020-02-12T14:06:48.701Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于易语言与Python的一点想法">
-<meta name="twitter:description" content="说在前面最近吃饭的时候总是会想很多关于易语言的事情。易语言是我学会的第一门语言，虽然它被喷的很惨很惨，具体可见：易语言 知乎。但是由于它极高的上手性，还是成为我高中时期最喜欢的编程工具。(当时我还没听说过Python)易语言画界面是非常简单的，用鼠标拖动一下组件，简简单单的几句代码就可以写一个简单的GUI程序。我想，在界面化的程序上，除了Web程序上用Javascript和CSS画界面。对于我这样">
+<meta name="twitter:description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x6700;&amp;#x8FD1;&amp;#x5403;&amp;#x996D;&amp;#x7684;&amp;#x65F6;&amp;#x5019;&amp;#x603B;&amp;#x662F;&amp;#x4F1A;&amp;#x60F3;&amp;#x5F88;&amp;#x591A;&amp;#x5173;&amp;#x4E8E;&amp;#x6613;&amp;#x8BED;&amp;#x8A00;&amp;#x7684;&amp;#x4E8B;&amp;#x60C5;">
 <meta name="twitter:image" content="https://i.loli.net/2019/07/11/5d2624b473b7970443.jpg">
-  <link rel="canonical" href="http://yoursite.com/2019/07/11/关于易语言与Python的一点想法/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true,
-    isPage: false,
-    isArchive: false
-  };
-</script>
-
-  <title>关于易语言与Python的一点想法 | Threezh1's blog</title>
-  <meta name="generator" content="Hexo 3.8.0">
-  
-
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
 
 
+<link rel="icon" href="/favicon.png">
 
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
 
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 
 </head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Threezh1's blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-        <p class="site-subtitle">分享学习、分享想法</p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="Navigationsleiste an/ausschalten">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-      
-      
-      
-        
-        <li class="menu-item menu-item-home">
-      
+<body>
     
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-archives">
-      
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-threeday">
-      
-    
-
-    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
-
-  </li>
-  </ul>
-
-</nav>
-</div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-            
-
-          <div id="content" class="content page-post-detail">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/11/关于易语言与Python的一点想法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">关于易语言与Python的一点想法
-
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
                 
-              
-
-              <time title="Erstellt: 2019-07-11 01:50:41" itemprop="dateCreated datePublished" datetime="2019-07-11T01:50:41+08:00">2019-07-11</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:19:20" itemprop="dateModified" datetime="2019-08-23T14:19:20+08:00">2019-08-23</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/胡思乱想/" itemprop="url" rel="index"><span itemprop="name">胡思乱想</span></a></span>
-
+                <img src="/images/logo.png" alt height="28">
                 
-                
-              
-            </span>
-          
-
-          
-
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-      </header>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item " href="/archives">归档</a>
+            
+            <a class="navbar-item " href="/Projects">项目</a>
+            
+            <a class="navbar-item " href="/Life">生活</a>
+            
+            <a class="navbar-item " href="/Photography">摄影</a>
+            
+            <a class="navbar-item " href="/About">关于</a>
+            
+            <a class="navbar-item " href="http://119.3.219.188/">Threeday</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Buscar" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
 
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            关于易语言与Python的一点想法
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2019-07-10T17:50:41.662Z" itemprop="datePublished">Jul 11 2019</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            14 minutes de lectura (Alrededor de 2105 palabras)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>最近吃饭的时候总是会想很多关于易语言的事情。易语言是我学会的第一门语言，虽然它被喷的很惨很惨，具体可见：<a href="https://www.zhihu.com/topic/19706107/hot" target="_blank" rel="noopener">易语言 知乎</a>。但是由于它极高的上手性，还是成为我高中时期最喜欢的编程工具。(当时我还没听说过Python)易语言画界面是非常简单的，用鼠标拖动一下组件，简简单单的几句代码就可以写一个简单的GUI程序。我想，在界面化的程序上，除了Web程序上用Javascript和CSS画界面。对于我这样懒惰的人，易语言无非是一个比较好的选择。Python，熟悉易语言的我在刚学Python时极度不适应，但是在学习了一段时间之后，我就改变了我的想法，Python真的太舒服了…</p>
-<p>不说得太远了，先说下我最近的想法(疑问)：</p>
+        <h2 id="&#x8BF4;&#x5728;&#x524D;&#x9762;"><a href="#&#x8BF4;&#x5728;&#x524D;&#x9762;" class="headerlink" title="&#x8BF4;&#x5728;&#x524D;&#x9762;"></a>&#x8BF4;&#x5728;&#x524D;&#x9762;</h2><p>&#x6700;&#x8FD1;&#x5403;&#x996D;&#x7684;&#x65F6;&#x5019;&#x603B;&#x662F;&#x4F1A;&#x60F3;&#x5F88;&#x591A;&#x5173;&#x4E8E;&#x6613;&#x8BED;&#x8A00;&#x7684;&#x4E8B;&#x60C5;&#x3002;&#x6613;&#x8BED;&#x8A00;&#x662F;&#x6211;&#x5B66;&#x4F1A;&#x7684;&#x7B2C;&#x4E00;&#x95E8;&#x8BED;&#x8A00;&#xFF0C;&#x867D;&#x7136;&#x5B83;&#x88AB;&#x55B7;&#x7684;&#x5F88;&#x60E8;&#x5F88;&#x60E8;&#xFF0C;&#x5177;&#x4F53;&#x53EF;&#x89C1;&#xFF1A;<a href="https://www.zhihu.com/topic/19706107/hot" target="_blank" rel="noopener">&#x6613;&#x8BED;&#x8A00; &#x77E5;&#x4E4E;</a>&#x3002;&#x4F46;&#x662F;&#x7531;&#x4E8E;&#x5B83;&#x6781;&#x9AD8;&#x7684;&#x4E0A;&#x624B;&#x6027;&#xFF0C;&#x8FD8;&#x662F;&#x6210;&#x4E3A;&#x6211;&#x9AD8;&#x4E2D;&#x65F6;&#x671F;&#x6700;&#x559C;&#x6B22;&#x7684;&#x7F16;&#x7A0B;&#x5DE5;&#x5177;&#x3002;(&#x5F53;&#x65F6;&#x6211;&#x8FD8;&#x6CA1;&#x542C;&#x8BF4;&#x8FC7;Python)&#x6613;&#x8BED;&#x8A00;&#x753B;&#x754C;&#x9762;&#x662F;&#x975E;&#x5E38;&#x7B80;&#x5355;&#x7684;&#xFF0C;&#x7528;&#x9F20;&#x6807;&#x62D6;&#x52A8;&#x4E00;&#x4E0B;&#x7EC4;&#x4EF6;&#xFF0C;&#x7B80;&#x7B80;&#x5355;&#x5355;&#x7684;&#x51E0;&#x53E5;&#x4EE3;&#x7801;&#x5C31;&#x53EF;&#x4EE5;&#x5199;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;GUI&#x7A0B;&#x5E8F;&#x3002;&#x6211;&#x60F3;&#xFF0C;&#x5728;&#x754C;&#x9762;&#x5316;&#x7684;&#x7A0B;&#x5E8F;&#x4E0A;&#xFF0C;&#x9664;&#x4E86;Web&#x7A0B;&#x5E8F;&#x4E0A;&#x7528;Javascript&#x548C;CSS&#x753B;&#x754C;&#x9762;&#x3002;&#x5BF9;&#x4E8E;&#x6211;&#x8FD9;&#x6837;&#x61D2;&#x60F0;&#x7684;&#x4EBA;&#xFF0C;&#x6613;&#x8BED;&#x8A00;&#x65E0;&#x975E;&#x662F;&#x4E00;&#x4E2A;&#x6BD4;&#x8F83;&#x597D;&#x7684;&#x9009;&#x62E9;&#x3002;Python&#xFF0C;&#x719F;&#x6089;&#x6613;&#x8BED;&#x8A00;&#x7684;&#x6211;&#x5728;&#x521A;&#x5B66;Python&#x65F6;&#x6781;&#x5EA6;&#x4E0D;&#x9002;&#x5E94;&#xFF0C;&#x4F46;&#x662F;&#x5728;&#x5B66;&#x4E60;&#x4E86;&#x4E00;&#x6BB5;&#x65F6;&#x95F4;&#x4E4B;&#x540E;&#xFF0C;&#x6211;&#x5C31;&#x6539;&#x53D8;&#x4E86;&#x6211;&#x7684;&#x60F3;&#x6CD5;&#xFF0C;Python&#x771F;&#x7684;&#x592A;&#x8212;&#x670D;&#x4E86;&#x2026;<br><a id="more"></a><br>&#x4E0D;&#x8BF4;&#x5F97;&#x592A;&#x8FDC;&#x4E86;&#xFF0C;&#x5148;&#x8BF4;&#x4E0B;&#x6211;&#x6700;&#x8FD1;&#x7684;&#x60F3;&#x6CD5;(&#x7591;&#x95EE;)&#xFF1A;</p>
 <ol>
-<li>易语言能和Python结合起来吗？</li>
-<li>结合的方式应该是怎样的？</li>
-<li>结合起来有什么用？</li>
+<li>&#x6613;&#x8BED;&#x8A00;&#x80FD;&#x548C;Python&#x7ED3;&#x5408;&#x8D77;&#x6765;&#x5417;&#xFF1F;</li>
+<li>&#x7ED3;&#x5408;&#x7684;&#x65B9;&#x5F0F;&#x5E94;&#x8BE5;&#x662F;&#x600E;&#x6837;&#x7684;&#xFF1F;</li>
+<li>&#x7ED3;&#x5408;&#x8D77;&#x6765;&#x6709;&#x4EC0;&#x4E48;&#x7528;&#xFF1F;</li>
 </ol>
-<p>在自问自答上面的问题之前，先来看一看易语言与Python有什么不同点：</p>
-<h2 id="易语言与Python的不同"><a href="#易语言与Python的不同" class="headerlink" title="易语言与Python的不同"></a>易语言与Python的不同</h2><p>先来看看易语言与Python编程环境的不同：</p>
+<p>&#x5728;&#x81EA;&#x95EE;&#x81EA;&#x7B54;&#x4E0A;&#x9762;&#x7684;&#x95EE;&#x9898;&#x4E4B;&#x524D;&#xFF0C;&#x5148;&#x6765;&#x770B;&#x4E00;&#x770B;&#x6613;&#x8BED;&#x8A00;&#x4E0E;Python&#x6709;&#x4EC0;&#x4E48;&#x4E0D;&#x540C;&#x70B9;&#xFF1A;</p>
+<h2 id="&#x6613;&#x8BED;&#x8A00;&#x4E0E;Python&#x7684;&#x4E0D;&#x540C;"><a href="#&#x6613;&#x8BED;&#x8A00;&#x4E0E;Python&#x7684;&#x4E0D;&#x540C;" class="headerlink" title="&#x6613;&#x8BED;&#x8A00;&#x4E0E;Python&#x7684;&#x4E0D;&#x540C;"></a>&#x6613;&#x8BED;&#x8A00;&#x4E0E;Python&#x7684;&#x4E0D;&#x540C;</h2><p>&#x5148;&#x6765;&#x770B;&#x770B;&#x6613;&#x8BED;&#x8A00;&#x4E0E;Python&#x7F16;&#x7A0B;&#x73AF;&#x5883;&#x7684;&#x4E0D;&#x540C;&#xFF1A;</p>
 <ul>
-<li>易语言：</li>
+<li>&#x6613;&#x8BED;&#x8A00;&#xFF1A;</li>
 </ul>
 <p><img src="https://i.loli.net/2019/07/11/5d2624b473b7970443.jpg" alt="environment_e.jpg"></p>
 <p><img src="https://i.loli.net/2019/07/11/5d2624b05ea9896024.jpg" alt="environment_e_script.jpg"></p>
-<p>易语言这个弹出输入的内容，我只写了一行代码，其他的只是组件的大小和位置，这些易语言都已经安排好了，只需要添加参数即可。</p>
-<p>那用Python写一个这样的弹出输入框的程序需要多少行代码呢？<br><a id="more"></a></p>
+<p>&#x6613;&#x8BED;&#x8A00;&#x8FD9;&#x4E2A;&#x5F39;&#x51FA;&#x8F93;&#x5165;&#x7684;&#x5185;&#x5BB9;&#xFF0C;&#x6211;&#x53EA;&#x5199;&#x4E86;&#x4E00;&#x884C;&#x4EE3;&#x7801;&#xFF0C;&#x5176;&#x4ED6;&#x7684;&#x53EA;&#x662F;&#x7EC4;&#x4EF6;&#x7684;&#x5927;&#x5C0F;&#x548C;&#x4F4D;&#x7F6E;&#xFF0C;&#x8FD9;&#x4E9B;&#x6613;&#x8BED;&#x8A00;&#x90FD;&#x5DF2;&#x7ECF;&#x5B89;&#x6392;&#x597D;&#x4E86;&#xFF0C;&#x53EA;&#x9700;&#x8981;&#x6DFB;&#x52A0;&#x53C2;&#x6570;&#x5373;&#x53EF;&#x3002;</p>
+<p>&#x90A3;&#x7528;Python&#x5199;&#x4E00;&#x4E2A;&#x8FD9;&#x6837;&#x7684;&#x5F39;&#x51FA;&#x8F93;&#x5165;&#x6846;&#x7684;&#x7A0B;&#x5E8F;&#x9700;&#x8981;&#x591A;&#x5C11;&#x884C;&#x4EE3;&#x7801;&#x5462;&#xFF1F;</p>
 <ul>
-<li>Python：</li>
+<li>Python&#xFF1A;</li>
 </ul>
-<p>GUI编程上手并不容易，可以参考以下两篇：</p>
-<p><a href="https://blog.csdn.net/bailang_zhizun/article/details/79310419" target="_blank" rel="noopener">Python - 编写可视化界面（Python+PyCharm+PyQt）</a></p>
-<p><a href="https://blog.csdn.net/mawei7510/article/details/81450032" target="_blank" rel="noopener">Python GUI: PyCahrm结合Pyqt5开发图形化界面 详细步骤 踩坑!</a></p>
-<p>可见Python直接写界面，比起语言还是要多很多代码量的。(而且环境配置要踩很多坑)我比较烦的也就是这一点，每一个参数都得有一行代码的话，实在太麻烦了。(其实就是懒得学？)</p>
-<p>当然，易语言除了界面以外和Python相比起来有很多的缺点，而Python做界面比较麻烦，却在其他方面比易语言稳定高效。这也是我想总结易语言与Python结合方式的一个原因。那有没有方式把这两部分结合起来，比如用易语言做界面部分，Python做功能部分又会怎么样呢？</p>
-<p>回到上面的问题。</p>
-<h2 id="易语言能和Python结合起来吗？"><a href="#易语言能和Python结合起来吗？" class="headerlink" title="易语言能和Python结合起来吗？"></a>易语言能和Python结合起来吗？</h2><p>可以！</p>
-<h2 id="结合的方式应该是怎样的？"><a href="#结合的方式应该是怎样的？" class="headerlink" title="结合的方式应该是怎样的？"></a>结合的方式应该是怎样的？</h2><h3 id="1-直接用DOS调用取运行结果"><a href="#1-直接用DOS调用取运行结果" class="headerlink" title="1. 直接用DOS调用取运行结果"></a>1. 直接用DOS调用取运行结果</h3><p>需要用到精易模块-&gt;系统_取DOS运行结果()</p>
-<pre><code>系统_取DOS执行结果 (“python ” ＋ 取运行目录 () ＋ “\test.py”)
-</code></pre><p>test.py中的内容：</p>
+<p>GUI&#x7F16;&#x7A0B;&#x4E0A;&#x624B;&#x5E76;&#x4E0D;&#x5BB9;&#x6613;&#xFF0C;&#x53EF;&#x4EE5;&#x53C2;&#x8003;&#x4EE5;&#x4E0B;&#x4E24;&#x7BC7;&#xFF1A;</p>
+<p><a href="https://blog.csdn.net/bailang_zhizun/article/details/79310419" target="_blank" rel="noopener">Python - &#x7F16;&#x5199;&#x53EF;&#x89C6;&#x5316;&#x754C;&#x9762;&#xFF08;Python+PyCharm+PyQt&#xFF09;</a></p>
+<p><a href="https://blog.csdn.net/mawei7510/article/details/81450032" target="_blank" rel="noopener">Python GUI: PyCahrm&#x7ED3;&#x5408;Pyqt5&#x5F00;&#x53D1;&#x56FE;&#x5F62;&#x5316;&#x754C;&#x9762; &#x8BE6;&#x7EC6;&#x6B65;&#x9AA4; &#x8E29;&#x5751;!</a></p>
+<p>&#x53EF;&#x89C1;Python&#x76F4;&#x63A5;&#x5199;&#x754C;&#x9762;&#xFF0C;&#x6BD4;&#x8D77;&#x8BED;&#x8A00;&#x8FD8;&#x662F;&#x8981;&#x591A;&#x5F88;&#x591A;&#x4EE3;&#x7801;&#x91CF;&#x7684;&#x3002;(&#x800C;&#x4E14;&#x73AF;&#x5883;&#x914D;&#x7F6E;&#x8981;&#x8E29;&#x5F88;&#x591A;&#x5751;)&#x6211;&#x6BD4;&#x8F83;&#x70E6;&#x7684;&#x4E5F;&#x5C31;&#x662F;&#x8FD9;&#x4E00;&#x70B9;&#xFF0C;&#x6BCF;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x90FD;&#x5F97;&#x6709;&#x4E00;&#x884C;&#x4EE3;&#x7801;&#x7684;&#x8BDD;&#xFF0C;&#x5B9E;&#x5728;&#x592A;&#x9EBB;&#x70E6;&#x4E86;&#x3002;(&#x5176;&#x5B9E;&#x5C31;&#x662F;&#x61D2;&#x5F97;&#x5B66;&#xFF1F;)</p>
+<p>&#x5F53;&#x7136;&#xFF0C;&#x6613;&#x8BED;&#x8A00;&#x9664;&#x4E86;&#x754C;&#x9762;&#x4EE5;&#x5916;&#x548C;Python&#x76F8;&#x6BD4;&#x8D77;&#x6765;&#x6709;&#x5F88;&#x591A;&#x7684;&#x7F3A;&#x70B9;&#xFF0C;&#x800C;Python&#x505A;&#x754C;&#x9762;&#x6BD4;&#x8F83;&#x9EBB;&#x70E6;&#xFF0C;&#x5374;&#x5728;&#x5176;&#x4ED6;&#x65B9;&#x9762;&#x6BD4;&#x6613;&#x8BED;&#x8A00;&#x7A33;&#x5B9A;&#x9AD8;&#x6548;&#x3002;&#x8FD9;&#x4E5F;&#x662F;&#x6211;&#x60F3;&#x603B;&#x7ED3;&#x6613;&#x8BED;&#x8A00;&#x4E0E;Python&#x7ED3;&#x5408;&#x65B9;&#x5F0F;&#x7684;&#x4E00;&#x4E2A;&#x539F;&#x56E0;&#x3002;&#x90A3;&#x6709;&#x6CA1;&#x6709;&#x65B9;&#x5F0F;&#x628A;&#x8FD9;&#x4E24;&#x90E8;&#x5206;&#x7ED3;&#x5408;&#x8D77;&#x6765;&#xFF0C;&#x6BD4;&#x5982;&#x7528;&#x6613;&#x8BED;&#x8A00;&#x505A;&#x754C;&#x9762;&#x90E8;&#x5206;&#xFF0C;Python&#x505A;&#x529F;&#x80FD;&#x90E8;&#x5206;&#x53C8;&#x4F1A;&#x600E;&#x4E48;&#x6837;&#x5462;&#xFF1F;</p>
+<p>&#x56DE;&#x5230;&#x4E0A;&#x9762;&#x7684;&#x95EE;&#x9898;&#x3002;</p>
+<h2 id="&#x6613;&#x8BED;&#x8A00;&#x80FD;&#x548C;Python&#x7ED3;&#x5408;&#x8D77;&#x6765;&#x5417;&#xFF1F;"><a href="#&#x6613;&#x8BED;&#x8A00;&#x80FD;&#x548C;Python&#x7ED3;&#x5408;&#x8D77;&#x6765;&#x5417;&#xFF1F;" class="headerlink" title="&#x6613;&#x8BED;&#x8A00;&#x80FD;&#x548C;Python&#x7ED3;&#x5408;&#x8D77;&#x6765;&#x5417;&#xFF1F;"></a>&#x6613;&#x8BED;&#x8A00;&#x80FD;&#x548C;Python&#x7ED3;&#x5408;&#x8D77;&#x6765;&#x5417;&#xFF1F;</h2><p>&#x53EF;&#x4EE5;&#xFF01;</p>
+<h2 id="&#x7ED3;&#x5408;&#x7684;&#x65B9;&#x5F0F;&#x5E94;&#x8BE5;&#x662F;&#x600E;&#x6837;&#x7684;&#xFF1F;"><a href="#&#x7ED3;&#x5408;&#x7684;&#x65B9;&#x5F0F;&#x5E94;&#x8BE5;&#x662F;&#x600E;&#x6837;&#x7684;&#xFF1F;" class="headerlink" title="&#x7ED3;&#x5408;&#x7684;&#x65B9;&#x5F0F;&#x5E94;&#x8BE5;&#x662F;&#x600E;&#x6837;&#x7684;&#xFF1F;"></a>&#x7ED3;&#x5408;&#x7684;&#x65B9;&#x5F0F;&#x5E94;&#x8BE5;&#x662F;&#x600E;&#x6837;&#x7684;&#xFF1F;</h2><h3 id="1-&#x76F4;&#x63A5;&#x7528;DOS&#x8C03;&#x7528;&#x53D6;&#x8FD0;&#x884C;&#x7ED3;&#x679C;"><a href="#1-&#x76F4;&#x63A5;&#x7528;DOS&#x8C03;&#x7528;&#x53D6;&#x8FD0;&#x884C;&#x7ED3;&#x679C;" class="headerlink" title="1. &#x76F4;&#x63A5;&#x7528;DOS&#x8C03;&#x7528;&#x53D6;&#x8FD0;&#x884C;&#x7ED3;&#x679C;"></a>1. &#x76F4;&#x63A5;&#x7528;DOS&#x8C03;&#x7528;&#x53D6;&#x8FD0;&#x884C;&#x7ED3;&#x679C;</h3><p>&#x9700;&#x8981;&#x7528;&#x5230;&#x7CBE;&#x6613;&#x6A21;&#x5757;-&gt;&#x7CFB;&#x7EDF;_&#x53D6;DOS&#x8FD0;&#x884C;&#x7ED3;&#x679C;()</p>
+<pre><code>&#x7CFB;&#x7EDF;_&#x53D6;DOS&#x6267;&#x884C;&#x7ED3;&#x679C; (&#x201C;python &#x201D; &#xFF0B; &#x53D6;&#x8FD0;&#x884C;&#x76EE;&#x5F55; () &#xFF0B; &#x201C;\test.py&#x201D;)
+</code></pre><p>test.py&#x4E2D;&#x7684;&#x5185;&#x5BB9;&#xFF1A;</p>
 <pre><code>print(&quot;Hello World.&quot;)
-</code></pre><p>运行会返回执行的结果。之后在易语言当中对结果进行下一步的操作。</p>
-<p>如图：</p>
+</code></pre><p>&#x8FD0;&#x884C;&#x4F1A;&#x8FD4;&#x56DE;&#x6267;&#x884C;&#x7684;&#x7ED3;&#x679C;&#x3002;&#x4E4B;&#x540E;&#x5728;&#x6613;&#x8BED;&#x8A00;&#x5F53;&#x4E2D;&#x5BF9;&#x7ED3;&#x679C;&#x8FDB;&#x884C;&#x4E0B;&#x4E00;&#x6B65;&#x7684;&#x64CD;&#x4F5C;&#x3002;</p>
+<p>&#x5982;&#x56FE;&#xFF1A;</p>
 <p><img src="https://i.loli.net/2019/07/11/5d2624b4da65f97244.jpg" alt="example1_e.jpg"></p>
-<p>这种方式是最直接的也是最简单的，在一些简单的命令输入，单一内容返回的脚本中比较适用。</p>
-<p>参考：</p>
-<p><a href="https://bbs.125.la/forum.php?mod=viewthread&amp;tid=14389045" target="_blank" rel="noopener">如何用易语言调用CMD 运行 python</a></p>
-<h3 id="2-直接在易语言当中执行Python语句"><a href="#2-直接在易语言当中执行Python语句" class="headerlink" title="2. 直接在易语言当中执行Python语句"></a>2. 直接在易语言当中执行Python语句</h3><p>感谢师傅们的分享，前者还直接将功能写成了模块来简化调用。</p>
-<p>我觉得直接调用Python的API这个方式蛮有意思的，但是又比较鸡肋。</p>
-<p>我尝试了简单的python语句，如简单的循环之类的，可以正常执行并返回结果，但我使用稍微复杂一点的命令如requests获取网页源码，就直接不返回内容了。</p>
-<p>简单的命令在易语言当中就能做到，又为何用到python呢。 所以这个也只能作为易语言和Python结合的一种方式吧。个人认为实用性太低了。</p>
-<p>例子：</p>
+<p>&#x8FD9;&#x79CD;&#x65B9;&#x5F0F;&#x662F;&#x6700;&#x76F4;&#x63A5;&#x7684;&#x4E5F;&#x662F;&#x6700;&#x7B80;&#x5355;&#x7684;&#xFF0C;&#x5728;&#x4E00;&#x4E9B;&#x7B80;&#x5355;&#x7684;&#x547D;&#x4EE4;&#x8F93;&#x5165;&#xFF0C;&#x5355;&#x4E00;&#x5185;&#x5BB9;&#x8FD4;&#x56DE;&#x7684;&#x811A;&#x672C;&#x4E2D;&#x6BD4;&#x8F83;&#x9002;&#x7528;&#x3002;</p>
+<p>&#x53C2;&#x8003;&#xFF1A;</p>
+<p><a href="https://bbs.125.la/forum.php?mod=viewthread&amp;tid=14389045" target="_blank" rel="noopener">&#x5982;&#x4F55;&#x7528;&#x6613;&#x8BED;&#x8A00;&#x8C03;&#x7528;CMD &#x8FD0;&#x884C; python</a></p>
+<h3 id="2-&#x76F4;&#x63A5;&#x5728;&#x6613;&#x8BED;&#x8A00;&#x5F53;&#x4E2D;&#x6267;&#x884C;Python&#x8BED;&#x53E5;"><a href="#2-&#x76F4;&#x63A5;&#x5728;&#x6613;&#x8BED;&#x8A00;&#x5F53;&#x4E2D;&#x6267;&#x884C;Python&#x8BED;&#x53E5;" class="headerlink" title="2. &#x76F4;&#x63A5;&#x5728;&#x6613;&#x8BED;&#x8A00;&#x5F53;&#x4E2D;&#x6267;&#x884C;Python&#x8BED;&#x53E5;"></a>2. &#x76F4;&#x63A5;&#x5728;&#x6613;&#x8BED;&#x8A00;&#x5F53;&#x4E2D;&#x6267;&#x884C;Python&#x8BED;&#x53E5;</h3><p>&#x611F;&#x8C22;&#x5E08;&#x5085;&#x4EEC;&#x7684;&#x5206;&#x4EAB;&#xFF0C;&#x524D;&#x8005;&#x8FD8;&#x76F4;&#x63A5;&#x5C06;&#x529F;&#x80FD;&#x5199;&#x6210;&#x4E86;&#x6A21;&#x5757;&#x6765;&#x7B80;&#x5316;&#x8C03;&#x7528;&#x3002;</p>
+<p>&#x6211;&#x89C9;&#x5F97;&#x76F4;&#x63A5;&#x8C03;&#x7528;Python&#x7684;API&#x8FD9;&#x4E2A;&#x65B9;&#x5F0F;&#x86EE;&#x6709;&#x610F;&#x601D;&#x7684;&#xFF0C;&#x4F46;&#x662F;&#x53C8;&#x6BD4;&#x8F83;&#x9E21;&#x808B;&#x3002;</p>
+<p>&#x6211;&#x5C1D;&#x8BD5;&#x4E86;&#x7B80;&#x5355;&#x7684;python&#x8BED;&#x53E5;&#xFF0C;&#x5982;&#x7B80;&#x5355;&#x7684;&#x5FAA;&#x73AF;&#x4E4B;&#x7C7B;&#x7684;&#xFF0C;&#x53EF;&#x4EE5;&#x6B63;&#x5E38;&#x6267;&#x884C;&#x5E76;&#x8FD4;&#x56DE;&#x7ED3;&#x679C;&#xFF0C;&#x4F46;&#x6211;&#x4F7F;&#x7528;&#x7A0D;&#x5FAE;&#x590D;&#x6742;&#x4E00;&#x70B9;&#x7684;&#x547D;&#x4EE4;&#x5982;requests&#x83B7;&#x53D6;&#x7F51;&#x9875;&#x6E90;&#x7801;&#xFF0C;&#x5C31;&#x76F4;&#x63A5;&#x4E0D;&#x8FD4;&#x56DE;&#x5185;&#x5BB9;&#x4E86;&#x3002;</p>
+<p>&#x7B80;&#x5355;&#x7684;&#x547D;&#x4EE4;&#x5728;&#x6613;&#x8BED;&#x8A00;&#x5F53;&#x4E2D;&#x5C31;&#x80FD;&#x505A;&#x5230;&#xFF0C;&#x53C8;&#x4E3A;&#x4F55;&#x7528;&#x5230;python&#x5462;&#x3002; &#x6240;&#x4EE5;&#x8FD9;&#x4E2A;&#x4E5F;&#x53EA;&#x80FD;&#x4F5C;&#x4E3A;&#x6613;&#x8BED;&#x8A00;&#x548C;Python&#x7ED3;&#x5408;&#x7684;&#x4E00;&#x79CD;&#x65B9;&#x5F0F;&#x5427;&#x3002;&#x4E2A;&#x4EBA;&#x8BA4;&#x4E3A;&#x5B9E;&#x7528;&#x6027;&#x592A;&#x4F4E;&#x4E86;&#x3002;</p>
+<p>&#x4F8B;&#x5B50;&#xFF1A;</p>
 <p><img src="https://i.loli.net/2019/07/11/5d2624b56072a57724.jpg" alt="example2_e.jpg"></p>
-<p>参考：</p>
-<p>项目地址：<a href="https://github.com/yingshaoxo/E_Python" target="_blank" rel="noopener">https://github.com/yingshaoxo/E_Python</a></p>
-<p>还有原篇帖子：<a href="https://bbs.125.la/forum.php?mod=viewthread&amp;tid=14359854" target="_blank" rel="noopener">https://bbs.125.la/forum.php?mod=viewthread&amp;tid=14359854</a></p>
-<h3 id="3-Python调用易语言的函数"><a href="#3-Python调用易语言的函数" class="headerlink" title="3. Python调用易语言的函数"></a>3. Python调用易语言的函数</h3><p>参考地址：<a href="https://bbs.125.la/forum.php?mod=viewthread&amp;tid=14140784" target="_blank" rel="noopener">https://bbs.125.la/forum.php?mod=viewthread&amp;tid=14140784</a></p>
-<p>由于这个方法需要32位的Python，环境搭建比较麻烦就不演示了。</p>
-<p>我还没想到什么样的脚本需要用Python调用易语言的dll，暂且留着把。</p>
-<h3 id="4-为什么一定要互相调用呢？"><a href="#4-为什么一定要互相调用呢？" class="headerlink" title="4. 为什么一定要互相调用呢？"></a>4. 为什么一定要互相调用呢？</h3><p>在看了前面几种方式之后，我还是觉得不是很方便。为什么一定要互相调用呢？</p>
-<p>我想到了一种形式，就是用数据库做为“中间件”，易语言和Python都单独运行。</p>
-<p>一个简单的程序逻辑如下：</p>
+<p>&#x53C2;&#x8003;&#xFF1A;</p>
+<p>&#x9879;&#x76EE;&#x5730;&#x5740;&#xFF1A;<a href="https://github.com/yingshaoxo/E_Python" target="_blank" rel="noopener">https://github.com/yingshaoxo/E_Python</a></p>
+<p>&#x8FD8;&#x6709;&#x539F;&#x7BC7;&#x5E16;&#x5B50;&#xFF1A;<a href="https://bbs.125.la/forum.php?mod=viewthread&amp;tid=14359854" target="_blank" rel="noopener">https://bbs.125.la/forum.php?mod=viewthread&amp;tid=14359854</a></p>
+<h3 id="3-Python&#x8C03;&#x7528;&#x6613;&#x8BED;&#x8A00;&#x7684;&#x51FD;&#x6570;"><a href="#3-Python&#x8C03;&#x7528;&#x6613;&#x8BED;&#x8A00;&#x7684;&#x51FD;&#x6570;" class="headerlink" title="3. Python&#x8C03;&#x7528;&#x6613;&#x8BED;&#x8A00;&#x7684;&#x51FD;&#x6570;"></a>3. Python&#x8C03;&#x7528;&#x6613;&#x8BED;&#x8A00;&#x7684;&#x51FD;&#x6570;</h3><p>&#x53C2;&#x8003;&#x5730;&#x5740;&#xFF1A;<a href="https://bbs.125.la/forum.php?mod=viewthread&amp;tid=14140784" target="_blank" rel="noopener">https://bbs.125.la/forum.php?mod=viewthread&amp;tid=14140784</a></p>
+<p>&#x7531;&#x4E8E;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x9700;&#x8981;32&#x4F4D;&#x7684;Python&#xFF0C;&#x73AF;&#x5883;&#x642D;&#x5EFA;&#x6BD4;&#x8F83;&#x9EBB;&#x70E6;&#x5C31;&#x4E0D;&#x6F14;&#x793A;&#x4E86;&#x3002;</p>
+<p>&#x6211;&#x8FD8;&#x6CA1;&#x60F3;&#x5230;&#x4EC0;&#x4E48;&#x6837;&#x7684;&#x811A;&#x672C;&#x9700;&#x8981;&#x7528;Python&#x8C03;&#x7528;&#x6613;&#x8BED;&#x8A00;&#x7684;dll&#xFF0C;&#x6682;&#x4E14;&#x7559;&#x7740;&#x628A;&#x3002;</p>
+<h3 id="4-&#x4E3A;&#x4EC0;&#x4E48;&#x4E00;&#x5B9A;&#x8981;&#x4E92;&#x76F8;&#x8C03;&#x7528;&#x5462;&#xFF1F;"><a href="#4-&#x4E3A;&#x4EC0;&#x4E48;&#x4E00;&#x5B9A;&#x8981;&#x4E92;&#x76F8;&#x8C03;&#x7528;&#x5462;&#xFF1F;" class="headerlink" title="4. &#x4E3A;&#x4EC0;&#x4E48;&#x4E00;&#x5B9A;&#x8981;&#x4E92;&#x76F8;&#x8C03;&#x7528;&#x5462;&#xFF1F;"></a>4. &#x4E3A;&#x4EC0;&#x4E48;&#x4E00;&#x5B9A;&#x8981;&#x4E92;&#x76F8;&#x8C03;&#x7528;&#x5462;&#xFF1F;</h3><p>&#x5728;&#x770B;&#x4E86;&#x524D;&#x9762;&#x51E0;&#x79CD;&#x65B9;&#x5F0F;&#x4E4B;&#x540E;&#xFF0C;&#x6211;&#x8FD8;&#x662F;&#x89C9;&#x5F97;&#x4E0D;&#x662F;&#x5F88;&#x65B9;&#x4FBF;&#x3002;&#x4E3A;&#x4EC0;&#x4E48;&#x4E00;&#x5B9A;&#x8981;&#x4E92;&#x76F8;&#x8C03;&#x7528;&#x5462;&#xFF1F;</p>
+<p>&#x6211;&#x60F3;&#x5230;&#x4E86;&#x4E00;&#x79CD;&#x5F62;&#x5F0F;&#xFF0C;&#x5C31;&#x662F;&#x7528;&#x6570;&#x636E;&#x5E93;&#x505A;&#x4E3A;&#x201C;&#x4E2D;&#x95F4;&#x4EF6;&#x201D;&#xFF0C;&#x6613;&#x8BED;&#x8A00;&#x548C;Python&#x90FD;&#x5355;&#x72EC;&#x8FD0;&#x884C;&#x3002;</p>
+<p>&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x7A0B;&#x5E8F;&#x903B;&#x8F91;&#x5982;&#x4E0B;&#xFF1A;</p>
 <p><img src="https://i.loli.net/2019/07/11/5d2624afbb1b682030.jpg" alt="e_db_py.jpg"></p>
-<p>易语言提供操作界面，将任务插入到数据库中的任务列表里。Python脚本取数据库内的任务列表逐一执行，将执行的结果插入到结果列表里，易语言读取结果列表，将结果展示。</p>
-<p>就用批量获取网页状态工具作为一个简单的例子：</p>
-<p>用易语言做的界面如下图所示：</p>
+<p>&#x6613;&#x8BED;&#x8A00;&#x63D0;&#x4F9B;&#x64CD;&#x4F5C;&#x754C;&#x9762;&#xFF0C;&#x5C06;&#x4EFB;&#x52A1;&#x63D2;&#x5165;&#x5230;&#x6570;&#x636E;&#x5E93;&#x4E2D;&#x7684;&#x4EFB;&#x52A1;&#x5217;&#x8868;&#x91CC;&#x3002;Python&#x811A;&#x672C;&#x53D6;&#x6570;&#x636E;&#x5E93;&#x5185;&#x7684;&#x4EFB;&#x52A1;&#x5217;&#x8868;&#x9010;&#x4E00;&#x6267;&#x884C;&#xFF0C;&#x5C06;&#x6267;&#x884C;&#x7684;&#x7ED3;&#x679C;&#x63D2;&#x5165;&#x5230;&#x7ED3;&#x679C;&#x5217;&#x8868;&#x91CC;&#xFF0C;&#x6613;&#x8BED;&#x8A00;&#x8BFB;&#x53D6;&#x7ED3;&#x679C;&#x5217;&#x8868;&#xFF0C;&#x5C06;&#x7ED3;&#x679C;&#x5C55;&#x793A;&#x3002;</p>
+<p>&#x5C31;&#x7528;&#x6279;&#x91CF;&#x83B7;&#x53D6;&#x7F51;&#x9875;&#x72B6;&#x6001;&#x5DE5;&#x5177;&#x4F5C;&#x4E3A;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x4F8B;&#x5B50;&#xFF1A;</p>
+<p>&#x7528;&#x6613;&#x8BED;&#x8A00;&#x505A;&#x7684;&#x754C;&#x9762;&#x5982;&#x4E0B;&#x56FE;&#x6240;&#x793A;&#xFF1A;</p>
 <p><img src="https://i.loli.net/2019/07/11/5d2624b1e799745074.jpg" alt="get_statu.jpg"></p>
-<p>源码部分：</p>
+<p>&#x6E90;&#x7801;&#x90E8;&#x5206;&#xFF1A;</p>
 <p><img src="https://i.loli.net/2019/07/11/5d2624b2bdb5223995.jpg" alt="get_statu_code1.jpg"></p>
 <p><img src="https://i.loli.net/2019/07/11/5d2624b56050041044.jpg" alt="get_statu_code2.jpg"></p>
-<p>数据库结构：</p>
+<p>&#x6570;&#x636E;&#x5E93;&#x7ED3;&#x6784;&#xFF1A;</p>
 <p><img src="https://i.loli.net/2019/07/11/5d2624afa52bf96713.jpg" alt="database.jpg"></p>
-<p>Python脚本：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> pymysql, requests, base64, time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置数据库</span></span><br><span class="line">mysql_host = <span class="string">"127.0.0.1"</span></span><br><span class="line">mysql_user = <span class="string">"root"</span></span><br><span class="line">mysql_passwd = <span class="string">"*"</span></span><br><span class="line">mysql_db = <span class="string">"html"</span></span><br><span class="line">mysql_table = <span class="string">"task"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_tasks</span><span class="params">()</span>:</span></span><br><span class="line">	conn = pymysql.connect(host=mysql_host, user=mysql_user, passwd=mysql_passwd, db=mysql_db)</span><br><span class="line">	cur = conn.cursor()</span><br><span class="line">	cur.execute(<span class="string">"SELECT id,link,html FROM "</span> + mysql_table)</span><br><span class="line">	links = cur.fetchall()</span><br><span class="line">	<span class="keyword">for</span> link <span class="keyword">in</span> links:</span><br><span class="line">		<span class="keyword">if</span> link[<span class="number">2</span>] == <span class="string">""</span>:</span><br><span class="line">			<span class="keyword">try</span>:</span><br><span class="line">				html_raw = requests.get(link[<span class="number">1</span>])</span><br><span class="line">				html_statu = html_raw.status_code</span><br><span class="line">			<span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">				print(e)</span><br><span class="line">				html_statu = <span class="string">"error"</span></span><br><span class="line">			cur.execute(<span class="string">"UPDATE `html`.`task` SET `html` = '&#123;0&#125;' WHERE `id` = &#123;1&#125;;"</span>.format(html_statu, link[<span class="number">0</span>]))</span><br><span class="line">			print(link[<span class="number">1</span>] + <span class="string">" update success"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">	time.sleep(<span class="number">10</span>)</span><br><span class="line">	run_tasks()</span><br></pre></td></tr></table></figure>
-<p>运行过程：</p>
+<p>Python&#x811A;&#x672C;&#xFF1A;</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="hljs-keyword">import</span> pymysql, requests, base64, time</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># &#x8BBE;&#x7F6E;&#x6570;&#x636E;&#x5E93;</span></span><br><span class="line">mysql_host = <span class="hljs-string">&quot;127.0.0.1&quot;</span></span><br><span class="line">mysql_user = <span class="hljs-string">&quot;root&quot;</span></span><br><span class="line">mysql_passwd = <span class="hljs-string">&quot;*&quot;</span></span><br><span class="line">mysql_db = <span class="hljs-string">&quot;html&quot;</span></span><br><span class="line">mysql_table = <span class="hljs-string">&quot;task&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">run_tasks</span><span class="hljs-params">()</span>:</span></span><br><span class="line">	conn = pymysql.connect(host=mysql_host, user=mysql_user, passwd=mysql_passwd, db=mysql_db)</span><br><span class="line">	cur = conn.cursor()</span><br><span class="line">	cur.execute(<span class="hljs-string">&quot;SELECT id,link,html FROM &quot;</span> + mysql_table)</span><br><span class="line">	links = cur.fetchall()</span><br><span class="line">	<span class="hljs-keyword">for</span> link <span class="hljs-keyword">in</span> links:</span><br><span class="line">		<span class="hljs-keyword">if</span> link[<span class="hljs-number">2</span>] == <span class="hljs-string">&quot;&quot;</span>:</span><br><span class="line">			<span class="hljs-keyword">try</span>:</span><br><span class="line">				html_raw = requests.get(link[<span class="hljs-number">1</span>])</span><br><span class="line">				html_statu = html_raw.status_code</span><br><span class="line">			<span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:</span><br><span class="line">				print(e)</span><br><span class="line">				html_statu = <span class="hljs-string">&quot;error&quot;</span></span><br><span class="line">			cur.execute(<span class="hljs-string">&quot;UPDATE `html`.`task` SET `html` = &apos;{0}&apos; WHERE `id` = {1};&quot;</span>.format(html_statu, link[<span class="hljs-number">0</span>]))</span><br><span class="line">			print(link[<span class="hljs-number">1</span>] + <span class="hljs-string">&quot; update success&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:</span><br><span class="line">	time.sleep(<span class="hljs-number">10</span>)</span><br><span class="line">	run_tasks()</span><br></pre></td></tr></table></figure>
+
+<p>&#x8FD0;&#x884C;&#x8FC7;&#x7A0B;&#xFF1A;</p>
 <ol>
-<li>运行Python脚本，保存脚本运行</li>
-<li>输入网址添加到数据库的任务序列</li>
-<li>Python脚本读取任务序列并获取网页状态</li>
-<li>刷新获取结果</li>
+<li>&#x8FD0;&#x884C;Python&#x811A;&#x672C;&#xFF0C;&#x4FDD;&#x5B58;&#x811A;&#x672C;&#x8FD0;&#x884C;</li>
+<li>&#x8F93;&#x5165;&#x7F51;&#x5740;&#x6DFB;&#x52A0;&#x5230;&#x6570;&#x636E;&#x5E93;&#x7684;&#x4EFB;&#x52A1;&#x5E8F;&#x5217;</li>
+<li>Python&#x811A;&#x672C;&#x8BFB;&#x53D6;&#x4EFB;&#x52A1;&#x5E8F;&#x5217;&#x5E76;&#x83B7;&#x53D6;&#x7F51;&#x9875;&#x72B6;&#x6001;</li>
+<li>&#x5237;&#x65B0;&#x83B7;&#x53D6;&#x7ED3;&#x679C;</li>
 </ol>
-<p>那这样做的好处就是：不用再考虑易语言如何调用Python，而是各自单独运行，只需要操作数据库就行了。</p>
-<p>暂时想到的几个缺点：</p>
+<p>&#x90A3;&#x8FD9;&#x6837;&#x505A;&#x7684;&#x597D;&#x5904;&#x5C31;&#x662F;&#xFF1A;&#x4E0D;&#x7528;&#x518D;&#x8003;&#x8651;&#x6613;&#x8BED;&#x8A00;&#x5982;&#x4F55;&#x8C03;&#x7528;Python&#xFF0C;&#x800C;&#x662F;&#x5404;&#x81EA;&#x5355;&#x72EC;&#x8FD0;&#x884C;&#xFF0C;&#x53EA;&#x9700;&#x8981;&#x64CD;&#x4F5C;&#x6570;&#x636E;&#x5E93;&#x5C31;&#x884C;&#x4E86;&#x3002;</p>
+<p>&#x6682;&#x65F6;&#x60F3;&#x5230;&#x7684;&#x51E0;&#x4E2A;&#x7F3A;&#x70B9;&#xFF1A;</p>
 <ol>
-<li>无法做到瞬时反应，都需要通过sleep，时钟来控制任务的执行和结果显示</li>
-<li>易语言支持的数据库太少，本想用Mongodb来做例子的，发现易语言的mongodb库实在是…麻烦。</li>
-<li>当程序庞大起来，易语言-数据库-Python的逻辑也会非常复杂</li>
+<li>&#x65E0;&#x6CD5;&#x505A;&#x5230;&#x77AC;&#x65F6;&#x53CD;&#x5E94;&#xFF0C;&#x90FD;&#x9700;&#x8981;&#x901A;&#x8FC7;sleep&#xFF0C;&#x65F6;&#x949F;&#x6765;&#x63A7;&#x5236;&#x4EFB;&#x52A1;&#x7684;&#x6267;&#x884C;&#x548C;&#x7ED3;&#x679C;&#x663E;&#x793A;</li>
+<li>&#x6613;&#x8BED;&#x8A00;&#x652F;&#x6301;&#x7684;&#x6570;&#x636E;&#x5E93;&#x592A;&#x5C11;&#xFF0C;&#x672C;&#x60F3;&#x7528;Mongodb&#x6765;&#x505A;&#x4F8B;&#x5B50;&#x7684;&#xFF0C;&#x53D1;&#x73B0;&#x6613;&#x8BED;&#x8A00;&#x7684;mongodb&#x5E93;&#x5B9E;&#x5728;&#x662F;&#x2026;&#x9EBB;&#x70E6;&#x3002;</li>
+<li>&#x5F53;&#x7A0B;&#x5E8F;&#x5E9E;&#x5927;&#x8D77;&#x6765;&#xFF0C;&#x6613;&#x8BED;&#x8A00;-&#x6570;&#x636E;&#x5E93;-Python&#x7684;&#x903B;&#x8F91;&#x4E5F;&#x4F1A;&#x975E;&#x5E38;&#x590D;&#x6742;</li>
 </ol>
-<p>只是作为一个简单的例子，可以按照这样的逻辑满足更复杂的项目需求。</p>
-<p>写完这个例子之后发现，这种结合应该适用于任何语言。或者说这个不能称作结合，只能叫做各自完成任务罢了。不过这也能算得上易语言与其他语言的一种合作方式了？如果达到这点也就差不多了。</p>
-<h2 id="结合起来有什么用？"><a href="#结合起来有什么用？" class="headerlink" title="结合起来有什么用？"></a>结合起来有什么用？</h2><p>就如前面所说，易语言开发界面简单方便，Python实现功能点更加高效稳定。两者结合起来，岂不美哉？</p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>写的不是很好，很多内容都没有往深里探究，没这么多的心思，也没那个水平。暂且把其看作是我胡思乱想的出来的结论吧。</p>
-<p>另外，如果师傅们有更好的方式能够使易语言的优势发挥出来，还请师傅不吝赐教。 我的邮箱 <a href="mailto:makefoxm@qq.com" target="_blank" rel="noopener">makefoxm@qq.com</a></p>
+<p>&#x53EA;&#x662F;&#x4F5C;&#x4E3A;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x4F8B;&#x5B50;&#xFF0C;&#x53EF;&#x4EE5;&#x6309;&#x7167;&#x8FD9;&#x6837;&#x7684;&#x903B;&#x8F91;&#x6EE1;&#x8DB3;&#x66F4;&#x590D;&#x6742;&#x7684;&#x9879;&#x76EE;&#x9700;&#x6C42;&#x3002;</p>
+<p>&#x5199;&#x5B8C;&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x4E4B;&#x540E;&#x53D1;&#x73B0;&#xFF0C;&#x8FD9;&#x79CD;&#x7ED3;&#x5408;&#x5E94;&#x8BE5;&#x9002;&#x7528;&#x4E8E;&#x4EFB;&#x4F55;&#x8BED;&#x8A00;&#x3002;&#x6216;&#x8005;&#x8BF4;&#x8FD9;&#x4E2A;&#x4E0D;&#x80FD;&#x79F0;&#x4F5C;&#x7ED3;&#x5408;&#xFF0C;&#x53EA;&#x80FD;&#x53EB;&#x505A;&#x5404;&#x81EA;&#x5B8C;&#x6210;&#x4EFB;&#x52A1;&#x7F62;&#x4E86;&#x3002;&#x4E0D;&#x8FC7;&#x8FD9;&#x4E5F;&#x80FD;&#x7B97;&#x5F97;&#x4E0A;&#x6613;&#x8BED;&#x8A00;&#x4E0E;&#x5176;&#x4ED6;&#x8BED;&#x8A00;&#x7684;&#x4E00;&#x79CD;&#x5408;&#x4F5C;&#x65B9;&#x5F0F;&#x4E86;&#xFF1F;&#x5982;&#x679C;&#x8FBE;&#x5230;&#x8FD9;&#x70B9;&#x4E5F;&#x5C31;&#x5DEE;&#x4E0D;&#x591A;&#x4E86;&#x3002;</p>
+<h2 id="&#x7ED3;&#x5408;&#x8D77;&#x6765;&#x6709;&#x4EC0;&#x4E48;&#x7528;&#xFF1F;"><a href="#&#x7ED3;&#x5408;&#x8D77;&#x6765;&#x6709;&#x4EC0;&#x4E48;&#x7528;&#xFF1F;" class="headerlink" title="&#x7ED3;&#x5408;&#x8D77;&#x6765;&#x6709;&#x4EC0;&#x4E48;&#x7528;&#xFF1F;"></a>&#x7ED3;&#x5408;&#x8D77;&#x6765;&#x6709;&#x4EC0;&#x4E48;&#x7528;&#xFF1F;</h2><p>&#x5C31;&#x5982;&#x524D;&#x9762;&#x6240;&#x8BF4;&#xFF0C;&#x6613;&#x8BED;&#x8A00;&#x5F00;&#x53D1;&#x754C;&#x9762;&#x7B80;&#x5355;&#x65B9;&#x4FBF;&#xFF0C;Python&#x5B9E;&#x73B0;&#x529F;&#x80FD;&#x70B9;&#x66F4;&#x52A0;&#x9AD8;&#x6548;&#x7A33;&#x5B9A;&#x3002;&#x4E24;&#x8005;&#x7ED3;&#x5408;&#x8D77;&#x6765;&#xFF0C;&#x5C82;&#x4E0D;&#x7F8E;&#x54C9;&#xFF1F;</p>
+<h2 id="&#x6700;&#x540E;"><a href="#&#x6700;&#x540E;" class="headerlink" title="&#x6700;&#x540E;"></a>&#x6700;&#x540E;</h2><p>&#x5199;&#x7684;&#x4E0D;&#x662F;&#x5F88;&#x597D;&#xFF0C;&#x5F88;&#x591A;&#x5185;&#x5BB9;&#x90FD;&#x6CA1;&#x6709;&#x5F80;&#x6DF1;&#x91CC;&#x63A2;&#x7A76;&#xFF0C;&#x6CA1;&#x8FD9;&#x4E48;&#x591A;&#x7684;&#x5FC3;&#x601D;&#xFF0C;&#x4E5F;&#x6CA1;&#x90A3;&#x4E2A;&#x6C34;&#x5E73;&#x3002;&#x6682;&#x4E14;&#x628A;&#x5176;&#x770B;&#x4F5C;&#x662F;&#x6211;&#x80E1;&#x601D;&#x4E71;&#x60F3;&#x7684;&#x51FA;&#x6765;&#x7684;&#x7ED3;&#x8BBA;&#x5427;&#x3002;</p>
+<p>&#x53E6;&#x5916;&#xFF0C;&#x5982;&#x679C;&#x5E08;&#x5085;&#x4EEC;&#x6709;&#x66F4;&#x597D;&#x7684;&#x65B9;&#x5F0F;&#x80FD;&#x591F;&#x4F7F;&#x6613;&#x8BED;&#x8A00;&#x7684;&#x4F18;&#x52BF;&#x53D1;&#x6325;&#x51FA;&#x6765;&#xFF0C;&#x8FD8;&#x8BF7;&#x5E08;&#x5085;&#x4E0D;&#x541D;&#x8D50;&#x6559;&#x3002; &#x6211;&#x7684;&#x90AE;&#x7BB1; <a href="mailto:makefoxm@qq.com" target="_blank" rel="noopener">makefoxm@qq.com</a></p>
+
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Python/">#Python</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/易语言/">#易语言</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2019/07/12/Python动态加载模块的几种方式/">Python动态加载模块、类、函数的几种方式</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2019/06/10/JSFinder/">JSFinder 一个从JS文件中获取url和子域名的工具</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
 
     </div>
-
-    
-    
-    
-        
-      
-
-      <footer class="post-footer">
-          
-            
-          
-          <div class="post-tags">
-            
-              <a href="/tags/易语言/" rel="tag"># 易语言</a>
-            
-          </div>
-        
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-next post-nav-item">
-              
-                <a href="/2019/06/10/JSFinder/" rel="next" title="JSFinder 一个从JS文件中获取url和子域名的工具">
-                  <i class="fa fa-chevron-left"></i> JSFinder 一个从JS文件中获取url和子域名的工具
-                </a>
-              
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2020 Threezh1&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
             </div>
+            <div class="column is-hidden-mobile"></div>
 
-            <span class="post-nav-divider"></span>
-
-            <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2019/07/12/Python动态加载模块的几种方式/" rel="prev" title="Python动态加载模块、类、函数的几种方式">
-                  Python动态加载模块、类、函数的几种方式 <i class="fa fa-chevron-right"></i>
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Threezh1">
+                    
+                    GitHub
+                    
                 </a>
-              
+                
+                </div>
             </div>
-          </div>
-        
-      </footer>
-    
-  </div>
-  
-  
-  
-  </article>
-
-  </div>
-
-
-          </div>
-          
-
+            
+            
         </div>
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-  </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-        
-        
-        
-        
-      
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
-          Inhaltsverzeichnis
-        </li>
-        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-          Übersicht
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc">
-            <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#说在前面"><span class="nav-number">1.</span> <span class="nav-text">说在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#易语言与Python的不同"><span class="nav-number">2.</span> <span class="nav-text">易语言与Python的不同</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#易语言能和Python结合起来吗？"><span class="nav-number">3.</span> <span class="nav-text">易语言能和Python结合起来吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结合的方式应该是怎样的？"><span class="nav-number">4.</span> <span class="nav-text">结合的方式应该是怎样的？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-直接用DOS调用取运行结果"><span class="nav-number">4.1.</span> <span class="nav-text">1. 直接用DOS调用取运行结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-直接在易语言当中执行Python语句"><span class="nav-number">4.2.</span> <span class="nav-text">2. 直接在易语言当中执行Python语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Python调用易语言的函数"><span class="nav-number">4.3.</span> <span class="nav-text">3. Python调用易语言的函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-为什么一定要互相调用呢？"><span class="nav-number">4.4.</span> <span class="nav-text">4. 为什么一定要互相调用呢？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结合起来有什么用？"><span class="nav-number">5.</span> <span class="nav-text">结合起来有什么用？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">6.</span> <span class="nav-text">最后</span></a></li></ol></div>
-          </div>
-        
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Threezh1</p>
-  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
 </div>
-  <nav class="site-state motion-element">
-      <div class="site-state-item site-state-posts">
-        
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">34</span>
-          <span class="site-state-item-name">Artikel</span>
-        </a>
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-categories">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">7</span>
-        <span class="site-state-item-name">Kategorien</span>
-        
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-tags">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">21</span>
-        <span class="site-state-item-name">schlagwörter</span>
-        
-      </div>
-    
-  </nav>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-      </span>
-    
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-      </span>
-    
-  </div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("chinese");
+</script>
 
 
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
 
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        // ...options...
+    });
+});
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Escribe algo...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
-      </div>
-
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Threezh1</span>
 </div>
-  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Páginas',
+                CATEGORIES: 'Categorías',
+                TAGS: 'Tags',
+                UNTITLED: '(Sin título)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-  </div>
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
-<script src="/js/schemes/pisces.js?v=7.3.0"></script>
-<script src="/js/next-boot.js?v=7.3.0"></script>
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-  
-
-
-  
-  <script src="/js/post-details.js?v=7.3.0"></script>
-
-
 </body>
 </html>

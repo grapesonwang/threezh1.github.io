@@ -1,669 +1,477 @@
 <!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+<title>协程初体验之简单的利用框架 - Threezh1&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
 
 
 
 
-
-<html lang="Chinese">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
-  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
-
-<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+<meta name="description" content="Share learn & Share life.">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<meta name="keywords" content="Threezh1">
 
 
-<script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Pisces',
-    version: '7.3.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: 'Kopieren',
-      copy_success: 'Kopiert',
-      copy_failure: 'Kopieren fehlgeschlagen'
-    }
-  };
-</script>
 
-  <meta name="description" content="Threezh1 2019年8月22日 最近在接触一下协程，上手不易，拖了很长时间才把这个小框架完成。有些地方很简陋，后面慢慢完善吧。 做这个的想法是方便自己后面编写需要用到协程的脚本。(还有忘记协程的知识点了就过来复习) 先看框架123456789101112131415161718192021222324252627282930313233343536373839404142434445464">
-<meta name="keywords" content="Python">
+    <meta name="description" content="Threezh1 2019&amp;#x5E74;8&amp;#x6708;22&amp;#x65E5; &amp;#x6700;&amp;#x8FD1;&amp;#x5728;&amp;#x63A5;&amp;#x89E6;&amp;#x4E00;&amp;#x4E0B;&amp;#x534F;&amp;#x7A0B;&amp;#xFF0C;&amp;#x4E0A;&amp;#x624B;&amp;#x4E0D;&amp;#x6613;&amp;#xFF0C;&amp;#x62D6;&amp;#x4E86;&amp;#x5F88;&amp;#x957F;&amp;#x65F6">
+<meta name="keywords" content="Python,协程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="协程初体验之简单的利用框架">
 <meta property="og:url" content="http://yoursite.com/2019/08/22/简单的协程利用框架/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
-<meta property="og:description" content="Threezh1 2019年8月22日 最近在接触一下协程，上手不易，拖了很长时间才把这个小框架完成。有些地方很简陋，后面慢慢完善吧。 做这个的想法是方便自己后面编写需要用到协程的脚本。(还有忘记协程的知识点了就过来复习) 先看框架123456789101112131415161718192021222324252627282930313233343536373839404142434445464">
+<meta property="og:description" content="Threezh1 2019&amp;#x5E74;8&amp;#x6708;22&amp;#x65E5; &amp;#x6700;&amp;#x8FD1;&amp;#x5728;&amp;#x63A5;&amp;#x89E6;&amp;#x4E00;&amp;#x4E0B;&amp;#x534F;&amp;#x7A0B;&amp;#xFF0C;&amp;#x4E0A;&amp;#x624B;&amp;#x4E0D;&amp;#x6613;&amp;#xFF0C;&amp;#x62D6;&amp;#x4E86;&amp;#x5F88;&amp;#x957F;&amp;#x65F6">
 <meta property="og:locale" content="Chinese">
 <meta property="og:image" content="https://i.loli.net/2019/08/22/1fUmqKRNigF89DV.png">
-<meta property="og:updated_time" content="2019-11-06T06:24:04.359Z">
+<meta property="og:updated_time" content="2020-02-12T14:07:34.043Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="协程初体验之简单的利用框架">
-<meta name="twitter:description" content="Threezh1 2019年8月22日 最近在接触一下协程，上手不易，拖了很长时间才把这个小框架完成。有些地方很简陋，后面慢慢完善吧。 做这个的想法是方便自己后面编写需要用到协程的脚本。(还有忘记协程的知识点了就过来复习) 先看框架123456789101112131415161718192021222324252627282930313233343536373839404142434445464">
+<meta name="twitter:description" content="Threezh1 2019&amp;#x5E74;8&amp;#x6708;22&amp;#x65E5; &amp;#x6700;&amp;#x8FD1;&amp;#x5728;&amp;#x63A5;&amp;#x89E6;&amp;#x4E00;&amp;#x4E0B;&amp;#x534F;&amp;#x7A0B;&amp;#xFF0C;&amp;#x4E0A;&amp;#x624B;&amp;#x4E0D;&amp;#x6613;&amp;#xFF0C;&amp;#x62D6;&amp;#x4E86;&amp;#x5F88;&amp;#x957F;&amp;#x65F6">
 <meta name="twitter:image" content="https://i.loli.net/2019/08/22/1fUmqKRNigF89DV.png">
-  <link rel="canonical" href="http://yoursite.com/2019/08/22/简单的协程利用框架/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true,
-    isPage: false,
-    isArchive: false
-  };
-</script>
-
-  <title>协程初体验之简单的利用框架 | Threezh1's blog</title>
-  <meta name="generator" content="Hexo 3.8.0">
-  
-
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
 
 
+<link rel="icon" href="/favicon.png">
 
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
 
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 
 </head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Threezh1's blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-        <p class="site-subtitle">分享学习、分享想法</p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="Navigationsleiste an/ausschalten">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-      
-      
-      
-        
-        <li class="menu-item menu-item-home">
-      
+<body>
     
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-archives">
-      
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-threeday">
-      
-    
-
-    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
-
-  </li>
-  </ul>
-
-</nav>
-</div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-            
-
-          <div id="content" class="content page-post-detail">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/22/简单的协程利用框架/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">协程初体验之简单的利用框架
-
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
                 
-              
-
-              <time title="Erstellt: 2019-08-22 21:26:14" itemprop="dateCreated datePublished" datetime="2019-08-22T21:26:14+08:00">2019-08-22</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-11-06 14:24:04" itemprop="dateModified" datetime="2019-11-06T14:24:04+08:00">2019-11-06</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
-
+                <img src="/images/logo.png" alt height="28">
                 
-                
-              
-            </span>
-          
-
-          
-
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-      </header>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item " href="/archives">归档</a>
+            
+            <a class="navbar-item " href="/Projects">项目</a>
+            
+            <a class="navbar-item " href="/Life">生活</a>
+            
+            <a class="navbar-item " href="/Photography">摄影</a>
+            
+            <a class="navbar-item " href="/About">关于</a>
+            
+            <a class="navbar-item " href="http://119.3.219.188/">Threeday</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Buscar" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
 
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            协程初体验之简单的利用框架
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2019-08-22T13:26:14.132Z" itemprop="datePublished">Aug 22 2019</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            11 minutes de lectura (Alrededor de 1668 palabras)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
+        <p><em>Threezh1 2019&#x5E74;8&#x6708;22&#x65E5;</em></p>
+<p>&#x6700;&#x8FD1;&#x5728;&#x63A5;&#x89E6;&#x4E00;&#x4E0B;&#x534F;&#x7A0B;&#xFF0C;&#x4E0A;&#x624B;&#x4E0D;&#x6613;&#xFF0C;&#x62D6;&#x4E86;&#x5F88;&#x957F;&#x65F6;&#x95F4;&#x624D;&#x628A;&#x8FD9;&#x4E2A;&#x5C0F;&#x6846;&#x67B6;&#x5B8C;&#x6210;&#x3002;&#x6709;&#x4E9B;&#x5730;&#x65B9;&#x5F88;&#x7B80;&#x964B;&#xFF0C;&#x540E;&#x9762;&#x6162;&#x6162;&#x5B8C;&#x5584;&#x5427;&#x3002;</p>
+<p>&#x505A;&#x8FD9;&#x4E2A;&#x7684;&#x60F3;&#x6CD5;&#x662F;&#x65B9;&#x4FBF;&#x81EA;&#x5DF1;&#x540E;&#x9762;&#x7F16;&#x5199;&#x9700;&#x8981;&#x7528;&#x5230;&#x534F;&#x7A0B;&#x7684;&#x811A;&#x672C;&#x3002;(&#x8FD8;&#x6709;&#x5FD8;&#x8BB0;&#x534F;&#x7A0B;&#x7684;&#x77E5;&#x8BC6;&#x70B9;&#x4E86;&#x5C31;&#x8FC7;&#x6765;&#x590D;&#x4E60;)<br><a id="more"></a></p>
+<h2 id="&#x5148;&#x770B;&#x6846;&#x67B6;"><a href="#&#x5148;&#x770B;&#x6846;&#x67B6;" class="headerlink" title="&#x5148;&#x770B;&#x6846;&#x67B6;"></a>&#x5148;&#x770B;&#x6846;&#x67B6;</h2><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> asyncio, functools</span><br><span class="line"><span class="hljs-keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">SomeFunction</span><span class="hljs-params">(parameter)</span>:</span></span><br><span class="line">	<span class="hljs-string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="hljs-string">	&#x8FD9;&#x91CC;&#x662F;&#x76EE;&#x6807;&#x51FD;&#x6570;&#xFF0C;&#x811A;&#x672C;&#x7684;&#x529F;&#x80FD;&#x90FD;&#x5E94;&#x5728;&#x6B64;&#x51FD;&#x6570;&#x5F53;&#x4E2D;&#x3002;</span></span><br><span class="line"><span class="hljs-string">	&#x53C2;&#x6570;&#x4E2A;&#x6570;&#x90FD;&#x7531;&#x81EA;&#x5DF1;&#x786E;&#x5B9A;&#xFF0C;&#x9700;&#x8981;&#x4E0E;functools.partial&#x8C03;&#x7528;&#x7684;&#x53C2;&#x6570;&#x4E00;&#x81F4;&#x3002;</span></span><br><span class="line"><span class="hljs-string">	&quot;&quot;&quot;</span></span><br><span class="line">	time.sleep(<span class="hljs-number">1</span>)</span><br><span class="line">	<span class="hljs-keyword">return</span> parameter</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">coroutine_execution</span><span class="hljs-params">(function, param1)</span>:</span></span><br><span class="line">	<span class="hljs-string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="hljs-string">	&#x901A;&#x8FC7;run_in_executor&#x65B9;&#x6CD5;&#x6765;&#x65B0;&#x5EFA;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#x6765;&#x6267;&#x884C;&#x8017;&#x65F6;&#x51FD;&#x6570;&#x3002;</span></span><br><span class="line"><span class="hljs-string">	&#x6CE8;&#x610F;&#xFF1A;functools.partial&#x8C03;&#x7528;&#x7684;&#x53C2;&#x6570;&#x5E94;&#x4E0E;&#x76EE;&#x6807;&#x51FD;&#x6570;&#x4E00;&#x81F4;</span></span><br><span class="line"><span class="hljs-string">	&quot;&quot;&quot;</span></span><br><span class="line">	loop = asyncio.get_event_loop()</span><br><span class="line">	result = <span class="hljs-keyword">await</span> loop.run_in_executor(<span class="hljs-literal">None</span>,functools.partial(function, parameter=param1)) </span><br><span class="line">	<span class="hljs-comment"># result&#x4E3A;&#x76EE;&#x6807;&#x51FD;&#x6570;&#x8FD4;&#x56DE;&#x7684;&#x503C;</span></span><br><span class="line">	print(result)</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">coroutine_init</span><span class="hljs-params">(function, parameters, threads)</span>:</span></span><br><span class="line">	<span class="hljs-string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="hljs-string">	&#x5904;&#x7406;&#x7EBF;&#x7A0B;</span></span><br><span class="line"><span class="hljs-string">	coroutine_execution()&#x8C03;&#x7528;&#x534F;&#x7A0B;&#x51FD;&#x6570;&#xFF0C;&#x53EF;&#x81EA;&#x884C;&#x4FEE;&#x6539;&#x53C2;&#x6570;&#x4E2A;&#x6570;&#x5185;&#x5BB9;&#x7B49;&#x3002; </span></span><br><span class="line"><span class="hljs-string">	&quot;&quot;&quot;</span></span><br><span class="line">	times = int(len(parameters) / threads) + <span class="hljs-number">1</span></span><br><span class="line">	<span class="hljs-keyword">if</span> len(parameters) == threads <span class="hljs-keyword">or</span> int(len(parameters) % threads) == <span class="hljs-number">0</span>: times -= <span class="hljs-number">1</span></span><br><span class="line">	<span class="hljs-keyword">for</span> num <span class="hljs-keyword">in</span> range(times):</span><br><span class="line">		tasks = []</span><br><span class="line">		Minimum = threads * num</span><br><span class="line">		Maximum = threads * (num + <span class="hljs-number">1</span>)</span><br><span class="line">		<span class="hljs-keyword">if</span> num == times - <span class="hljs-number">1</span> <span class="hljs-keyword">and</span> len(parameters) % threads != <span class="hljs-number">0</span>:</span><br><span class="line">			Minimum = (times - <span class="hljs-number">1</span>) * threads</span><br><span class="line">			Maximum = len(parameters)</span><br><span class="line">		<span class="hljs-keyword">if</span> len(parameters) &lt;= threads:</span><br><span class="line">			Minimum = <span class="hljs-number">0</span></span><br><span class="line">			Maximum = len(parameters)</span><br><span class="line">		<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(Minimum, Maximum):</span><br><span class="line">			<span class="hljs-comment"># &#x6B64;&#x5904;&#x7684;parameters[i]&#x5C31;&#x662F;&#x53D6;&#x76EE;&#x6807;&#x53C2;&#x6570;&#x7684;&#x5355;&#x4E2A;&#x503C;&#xFF0C;&#x53EF;&#x81EA;&#x884C;&#x8C03;&#x6574;</span></span><br><span class="line">			future = asyncio.ensure_future(coroutine_execution(function, param1=parameters[i]))</span><br><span class="line">			tasks.append(future)</span><br><span class="line">		loop = asyncio.get_event_loop()</span><br><span class="line">		loop.run_until_complete(asyncio.wait(tasks))</span><br><span class="line">		print(<span class="hljs-string">&quot;[*] The {}th thread ends&quot;</span>.format(str(num + <span class="hljs-number">1</span>)))</span><br><span class="line">	<span class="hljs-keyword">return</span> <span class="hljs-literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:</span><br><span class="line">	words = [<span class="hljs-string">&quot;Hello World.&quot;</span>, <span class="hljs-string">&quot;I&apos;m Threezh1.&quot;</span>, <span class="hljs-string">&quot;Welcome to my blog.&quot;</span>, <span class="hljs-string">&quot;One&quot;</span>, <span class="hljs-string">&quot;Tow&quot;</span>, <span class="hljs-string">&quot;Three&quot;</span>, <span class="hljs-string">&quot;Four&quot;</span>]</span><br><span class="line">	coroutine_init(SomeFunction, parameters=words, threads=<span class="hljs-number">3</span>)</span><br></pre></td></tr></table></figure>
 
-      
-        <p><em>Threezh1 2019年8月22日</em></p>
-<p>最近在接触一下协程，上手不易，拖了很长时间才把这个小框架完成。有些地方很简陋，后面慢慢完善吧。</p>
-<p>做这个的想法是方便自己后面编写需要用到协程的脚本。(还有忘记协程的知识点了就过来复习)</p>
-<h2 id="先看框架"><a href="#先看框架" class="headerlink" title="先看框架"></a>先看框架</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio, functools</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">SomeFunction</span><span class="params">(parameter)</span>:</span></span><br><span class="line">	<span class="string">"""</span></span><br><span class="line"><span class="string">	这里是目标函数，脚本的功能都应在此函数当中。</span></span><br><span class="line"><span class="string">	参数个数都由自己确定，需要与functools.partial调用的参数一致。</span></span><br><span class="line"><span class="string">	"""</span></span><br><span class="line">	time.sleep(<span class="number">1</span>)</span><br><span class="line">	<span class="keyword">return</span> parameter</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">coroutine_execution</span><span class="params">(function, param1)</span>:</span></span><br><span class="line">	<span class="string">"""</span></span><br><span class="line"><span class="string">	通过run_in_executor方法来新建一个线程来执行耗时函数。</span></span><br><span class="line"><span class="string">	注意：functools.partial调用的参数应与目标函数一致</span></span><br><span class="line"><span class="string">	"""</span></span><br><span class="line">	loop = asyncio.get_event_loop()</span><br><span class="line">	result = <span class="keyword">await</span> loop.run_in_executor(<span class="literal">None</span>,functools.partial(function, parameter=param1)) </span><br><span class="line">	<span class="comment"># result为目标函数返回的值</span></span><br><span class="line">	print(result)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">coroutine_init</span><span class="params">(function, parameters, threads)</span>:</span></span><br><span class="line">	<span class="string">"""</span></span><br><span class="line"><span class="string">	处理线程</span></span><br><span class="line"><span class="string">	coroutine_execution()调用协程函数，可自行修改参数个数内容等。 </span></span><br><span class="line"><span class="string">	"""</span></span><br><span class="line">	times = int(len(parameters) / threads) + <span class="number">1</span></span><br><span class="line">	<span class="keyword">if</span> len(parameters) == threads <span class="keyword">or</span> int(len(parameters) % threads) == <span class="number">0</span>: times -= <span class="number">1</span></span><br><span class="line">	<span class="keyword">for</span> num <span class="keyword">in</span> range(times):</span><br><span class="line">		tasks = []</span><br><span class="line">		Minimum = threads * num</span><br><span class="line">		Maximum = threads * (num + <span class="number">1</span>)</span><br><span class="line">		<span class="keyword">if</span> num == times - <span class="number">1</span> <span class="keyword">and</span> len(parameters) % threads != <span class="number">0</span>:</span><br><span class="line">			Minimum = (times - <span class="number">1</span>) * threads</span><br><span class="line">			Maximum = len(parameters)</span><br><span class="line">		<span class="keyword">if</span> len(parameters) &lt;= threads:</span><br><span class="line">			Minimum = <span class="number">0</span></span><br><span class="line">			Maximum = len(parameters)</span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> range(Minimum, Maximum):</span><br><span class="line">			<span class="comment"># 此处的parameters[i]就是取目标参数的单个值，可自行调整</span></span><br><span class="line">			future = asyncio.ensure_future(coroutine_execution(function, param1=parameters[i]))</span><br><span class="line">			tasks.append(future)</span><br><span class="line">		loop = asyncio.get_event_loop()</span><br><span class="line">		loop.run_until_complete(asyncio.wait(tasks))</span><br><span class="line">		print(<span class="string">"[*] The &#123;&#125;th thread ends"</span>.format(str(num + <span class="number">1</span>)))</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">	words = [<span class="string">"Hello World."</span>, <span class="string">"I'm Threezh1."</span>, <span class="string">"Welcome to my blog."</span>, <span class="string">"One"</span>, <span class="string">"Tow"</span>, <span class="string">"Three"</span>, <span class="string">"Four"</span>]</span><br><span class="line">	coroutine_init(SomeFunction, parameters=words, threads=<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
-<a id="more"></a>
-<p>脚本运行的结果为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">I&apos;m Threezh1.</span><br><span class="line">Hello World.</span><br><span class="line">Welcome to my blog.</span><br><span class="line">[*] The 1th thread ends</span><br><span class="line">One</span><br><span class="line">Three</span><br><span class="line">Tow</span><br><span class="line">[*] The 2th thread ends</span><br><span class="line">Four</span><br><span class="line">[*] The 3th thread ends</span><br><span class="line">[Finished in 3.2s]</span><br></pre></td></tr></table></figure>
-<p>一共只花费3秒</p>
-<h2 id="框架的使用"><a href="#框架的使用" class="headerlink" title="框架的使用"></a>框架的使用</h2><ul>
-<li>SomeFunction()         需要实现并发的函数</li>
-<li>coroutine_execution() 新建一个线程来执行并发函数</li>
-<li>coroutine_init()        处理线程与调配任务</li>
+<p>&#x811A;&#x672C;&#x8FD0;&#x884C;&#x7684;&#x7ED3;&#x679C;&#x4E3A;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">I&apos;m Threezh1.</span><br><span class="line">Hello World.</span><br><span class="line">Welcome to my blog.</span><br><span class="line">[*] The 1th thread ends</span><br><span class="line">One</span><br><span class="line">Three</span><br><span class="line">Tow</span><br><span class="line">[*] The 2th thread ends</span><br><span class="line">Four</span><br><span class="line">[*] The 3th thread ends</span><br><span class="line">[Finished in 3.2s]</span><br></pre></td></tr></table></figure>
+
+<p>&#x4E00;&#x5171;&#x53EA;&#x82B1;&#x8D39;3&#x79D2;</p>
+<h2 id="&#x6846;&#x67B6;&#x7684;&#x4F7F;&#x7528;"><a href="#&#x6846;&#x67B6;&#x7684;&#x4F7F;&#x7528;" class="headerlink" title="&#x6846;&#x67B6;&#x7684;&#x4F7F;&#x7528;"></a>&#x6846;&#x67B6;&#x7684;&#x4F7F;&#x7528;</h2><ul>
+<li>SomeFunction()         &#x9700;&#x8981;&#x5B9E;&#x73B0;&#x5E76;&#x53D1;&#x7684;&#x51FD;&#x6570;</li>
+<li>coroutine_execution() &#x65B0;&#x5EFA;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#x6765;&#x6267;&#x884C;&#x5E76;&#x53D1;&#x51FD;&#x6570;</li>
+<li>coroutine_init()        &#x5904;&#x7406;&#x7EBF;&#x7A0B;&#x4E0E;&#x8C03;&#x914D;&#x4EFB;&#x52A1;</li>
 </ul>
-<p>流程图：</p>
+<p>&#x6D41;&#x7A0B;&#x56FE;&#xFF1A;</p>
 <p><img src="https://i.loli.net/2019/08/22/1fUmqKRNigF89DV.png" alt="process.png"></p>
-<p>需要调整的内容：</p>
-<p>一. 传递的参数列表</p>
-<pre><code>列表中单个成员最后都会被赋值到目标函数。
-比如：批量获取网站标题，这里的成员就为单个url。
-</code></pre><p>二. 目标函数的参数</p>
-<pre><code>通过调整目标函数的参数个数，可以使框架适用于更加复杂的场景。
-需要注意的是各个函数互相调用，其中的参数要尽量保持一致。
-</code></pre><p>三. 返回结果的获取</p>
-<pre><code>在单个线程当中无法对全局变量进行修改，对结果的处理可以放在coroutine_execution()当中。
-coroutine_execution()中也可以直接return结果，则会返回到coroutine_init()中。
-</code></pre><h2 id="协程笔记"><a href="#协程笔记" class="headerlink" title="协程笔记"></a>协程笔记</h2><ul>
-<li><p>一些概念和方法</p>
+<p>&#x9700;&#x8981;&#x8C03;&#x6574;&#x7684;&#x5185;&#x5BB9;&#xFF1A;</p>
+<p>&#x4E00;. &#x4F20;&#x9012;&#x7684;&#x53C2;&#x6570;&#x5217;&#x8868;</p>
+<pre><code>&#x5217;&#x8868;&#x4E2D;&#x5355;&#x4E2A;&#x6210;&#x5458;&#x6700;&#x540E;&#x90FD;&#x4F1A;&#x88AB;&#x8D4B;&#x503C;&#x5230;&#x76EE;&#x6807;&#x51FD;&#x6570;&#x3002;
+&#x6BD4;&#x5982;&#xFF1A;&#x6279;&#x91CF;&#x83B7;&#x53D6;&#x7F51;&#x7AD9;&#x6807;&#x9898;&#xFF0C;&#x8FD9;&#x91CC;&#x7684;&#x6210;&#x5458;&#x5C31;&#x4E3A;&#x5355;&#x4E2A;url&#x3002;
+</code></pre><p>&#x4E8C;. &#x76EE;&#x6807;&#x51FD;&#x6570;&#x7684;&#x53C2;&#x6570;</p>
+<pre><code>&#x901A;&#x8FC7;&#x8C03;&#x6574;&#x76EE;&#x6807;&#x51FD;&#x6570;&#x7684;&#x53C2;&#x6570;&#x4E2A;&#x6570;&#xFF0C;&#x53EF;&#x4EE5;&#x4F7F;&#x6846;&#x67B6;&#x9002;&#x7528;&#x4E8E;&#x66F4;&#x52A0;&#x590D;&#x6742;&#x7684;&#x573A;&#x666F;&#x3002;
+&#x9700;&#x8981;&#x6CE8;&#x610F;&#x7684;&#x662F;&#x5404;&#x4E2A;&#x51FD;&#x6570;&#x4E92;&#x76F8;&#x8C03;&#x7528;&#xFF0C;&#x5176;&#x4E2D;&#x7684;&#x53C2;&#x6570;&#x8981;&#x5C3D;&#x91CF;&#x4FDD;&#x6301;&#x4E00;&#x81F4;&#x3002;
+</code></pre><p>&#x4E09;. &#x8FD4;&#x56DE;&#x7ED3;&#x679C;&#x7684;&#x83B7;&#x53D6;</p>
+<pre><code>&#x5728;&#x5355;&#x4E2A;&#x7EBF;&#x7A0B;&#x5F53;&#x4E2D;&#x65E0;&#x6CD5;&#x5BF9;&#x5168;&#x5C40;&#x53D8;&#x91CF;&#x8FDB;&#x884C;&#x4FEE;&#x6539;&#xFF0C;&#x5BF9;&#x7ED3;&#x679C;&#x7684;&#x5904;&#x7406;&#x53EF;&#x4EE5;&#x653E;&#x5728;coroutine_execution()&#x5F53;&#x4E2D;&#x3002;
+coroutine_execution()&#x4E2D;&#x4E5F;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;return&#x7ED3;&#x679C;&#xFF0C;&#x5219;&#x4F1A;&#x8FD4;&#x56DE;&#x5230;coroutine_init()&#x4E2D;&#x3002;
+</code></pre><h2 id="&#x534F;&#x7A0B;&#x7B14;&#x8BB0;"><a href="#&#x534F;&#x7A0B;&#x7B14;&#x8BB0;" class="headerlink" title="&#x534F;&#x7A0B;&#x7B14;&#x8BB0;"></a>&#x534F;&#x7A0B;&#x7B14;&#x8BB0;</h2><ul>
+<li><p>&#x4E00;&#x4E9B;&#x6982;&#x5FF5;&#x548C;&#x65B9;&#x6CD5;</p>
 <ul>
-<li>event_loop事件循环：程序开启一个无限的循环，当把一些函数注册到事件循环上时，满足事件发生条件即调用相应的函数。</li>
-<li>coroutine协程对象：指一个使用async关键字定义的函数，它的调用不会立即执行函数，而是会返回一个协程对象，协程对象需要注册到事件循环，由事件循环调用。</li>
-<li>task任务：一个协程对象就是一个原生可以挂起的函数，任务则是对协程进一步封装，其中包含任务的各种状态。</li>
-<li>future：代表将来执行或没有执行的任务的结果，它和task上没有本质的区别</li>
-<li>async/await关键字：python3.5用于定义协程的关键字，async定义一个协程，await用于挂起阻塞的异步调用接口。</li>
+<li>event_loop&#x4E8B;&#x4EF6;&#x5FAA;&#x73AF;&#xFF1A;&#x7A0B;&#x5E8F;&#x5F00;&#x542F;&#x4E00;&#x4E2A;&#x65E0;&#x9650;&#x7684;&#x5FAA;&#x73AF;&#xFF0C;&#x5F53;&#x628A;&#x4E00;&#x4E9B;&#x51FD;&#x6570;&#x6CE8;&#x518C;&#x5230;&#x4E8B;&#x4EF6;&#x5FAA;&#x73AF;&#x4E0A;&#x65F6;&#xFF0C;&#x6EE1;&#x8DB3;&#x4E8B;&#x4EF6;&#x53D1;&#x751F;&#x6761;&#x4EF6;&#x5373;&#x8C03;&#x7528;&#x76F8;&#x5E94;&#x7684;&#x51FD;&#x6570;&#x3002;</li>
+<li>coroutine&#x534F;&#x7A0B;&#x5BF9;&#x8C61;&#xFF1A;&#x6307;&#x4E00;&#x4E2A;&#x4F7F;&#x7528;async&#x5173;&#x952E;&#x5B57;&#x5B9A;&#x4E49;&#x7684;&#x51FD;&#x6570;&#xFF0C;&#x5B83;&#x7684;&#x8C03;&#x7528;&#x4E0D;&#x4F1A;&#x7ACB;&#x5373;&#x6267;&#x884C;&#x51FD;&#x6570;&#xFF0C;&#x800C;&#x662F;&#x4F1A;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;&#x534F;&#x7A0B;&#x5BF9;&#x8C61;&#xFF0C;&#x534F;&#x7A0B;&#x5BF9;&#x8C61;&#x9700;&#x8981;&#x6CE8;&#x518C;&#x5230;&#x4E8B;&#x4EF6;&#x5FAA;&#x73AF;&#xFF0C;&#x7531;&#x4E8B;&#x4EF6;&#x5FAA;&#x73AF;&#x8C03;&#x7528;&#x3002;</li>
+<li>task&#x4EFB;&#x52A1;&#xFF1A;&#x4E00;&#x4E2A;&#x534F;&#x7A0B;&#x5BF9;&#x8C61;&#x5C31;&#x662F;&#x4E00;&#x4E2A;&#x539F;&#x751F;&#x53EF;&#x4EE5;&#x6302;&#x8D77;&#x7684;&#x51FD;&#x6570;&#xFF0C;&#x4EFB;&#x52A1;&#x5219;&#x662F;&#x5BF9;&#x534F;&#x7A0B;&#x8FDB;&#x4E00;&#x6B65;&#x5C01;&#x88C5;&#xFF0C;&#x5176;&#x4E2D;&#x5305;&#x542B;&#x4EFB;&#x52A1;&#x7684;&#x5404;&#x79CD;&#x72B6;&#x6001;&#x3002;</li>
+<li>future&#xFF1A;&#x4EE3;&#x8868;&#x5C06;&#x6765;&#x6267;&#x884C;&#x6216;&#x6CA1;&#x6709;&#x6267;&#x884C;&#x7684;&#x4EFB;&#x52A1;&#x7684;&#x7ED3;&#x679C;&#xFF0C;&#x5B83;&#x548C;task&#x4E0A;&#x6CA1;&#x6709;&#x672C;&#x8D28;&#x7684;&#x533A;&#x522B;</li>
+<li>async/await&#x5173;&#x952E;&#x5B57;&#xFF1A;python3.5&#x7528;&#x4E8E;&#x5B9A;&#x4E49;&#x534F;&#x7A0B;&#x7684;&#x5173;&#x952E;&#x5B57;&#xFF0C;async&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x534F;&#x7A0B;&#xFF0C;await&#x7528;&#x4E8E;&#x6302;&#x8D77;&#x963B;&#x585E;&#x7684;&#x5F02;&#x6B65;&#x8C03;&#x7528;&#x63A5;&#x53E3;&#x3002;</li>
 </ul>
 </li>
-<li><p>事件循环</p>
+<li><p>&#x4E8B;&#x4EF6;&#x5FAA;&#x73AF;</p>
 </li>
 </ul>
-<p>asyncio.get_event_loop方法可以创建一个事件循环，然后使用run_until_complete将协程注册到事件循环，并启动事件循环。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">loop.run_until_complete(test1())</span><br></pre></td></tr></table></figure>
+<p>asyncio.get_event_loop&#x65B9;&#x6CD5;&#x53EF;&#x4EE5;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x4E8B;&#x4EF6;&#x5FAA;&#x73AF;&#xFF0C;&#x7136;&#x540E;&#x4F7F;&#x7528;run_until_complete&#x5C06;&#x534F;&#x7A0B;&#x6CE8;&#x518C;&#x5230;&#x4E8B;&#x4EF6;&#x5FAA;&#x73AF;&#xFF0C;&#x5E76;&#x542F;&#x52A8;&#x4E8B;&#x4EF6;&#x5FAA;&#x73AF;&#x3002;</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">loop.run_until_complete(test1())</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>任务</li>
+<li>&#x4EFB;&#x52A1;</li>
 </ul>
-<p>所谓task对象是Future类的子类，保存了协程运行后的状态，用于未来获取协程的结果。</p>
-<p>第一种方式就是等到task状态为finish时，调用task的result方法获取返回值。</p>
-<pre><code>asyncio.ensure_future() 等同于asyncio.create_task(coro)
-将 coro 协程 打包为一个 Task 排入日程准备执行。返回 Task 对象。
-</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">task = asyncio.ensure_future(test1())</span><br><span class="line">loop.run_until_complete(task)</span><br><span class="line">print(task.result())</span><br></pre></td></tr></table></figure>
-<p>第二种是创建回调函数。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">callback</span><span class="params">(future)</span>:</span></span><br><span class="line">    print(<span class="string">'Callback:'</span>,future.result()) <span class="comment"># 通过future对象的result方法可以获取协程函数的返回值</span></span><br><span class="line"></span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">task = asyncio.ensure_future(test1()) <span class="comment"># 创建task，test1()是一个协程对象</span></span><br><span class="line">task.add_done_callback(callback) <span class="comment"># 绑定回调函数</span></span><br><span class="line">loop.run_until_complete(task)</span><br></pre></td></tr></table></figure>
-<p>同样可以使用functools.partial偏导数添加多个参数</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">callback</span><span class="params">(param1,param2,future)</span>:</span></span><br><span class="line">    print(param1,param2)</span><br><span class="line">    print(<span class="string">'Callback:'</span>,future.result())</span><br><span class="line"></span><br><span class="line">task.add_done_callback(functools.partial(callback,<span class="string">"param1"</span>,<span class="string">"param2"</span>))</span><br></pre></td></tr></table></figure>
+<p>&#x6240;&#x8C13;task&#x5BF9;&#x8C61;&#x662F;Future&#x7C7B;&#x7684;&#x5B50;&#x7C7B;&#xFF0C;&#x4FDD;&#x5B58;&#x4E86;&#x534F;&#x7A0B;&#x8FD0;&#x884C;&#x540E;&#x7684;&#x72B6;&#x6001;&#xFF0C;&#x7528;&#x4E8E;&#x672A;&#x6765;&#x83B7;&#x53D6;&#x534F;&#x7A0B;&#x7684;&#x7ED3;&#x679C;&#x3002;</p>
+<p>&#x7B2C;&#x4E00;&#x79CD;&#x65B9;&#x5F0F;&#x5C31;&#x662F;&#x7B49;&#x5230;task&#x72B6;&#x6001;&#x4E3A;finish&#x65F6;&#xFF0C;&#x8C03;&#x7528;task&#x7684;result&#x65B9;&#x6CD5;&#x83B7;&#x53D6;&#x8FD4;&#x56DE;&#x503C;&#x3002;</p>
+<pre><code>asyncio.ensure_future() &#x7B49;&#x540C;&#x4E8E;asyncio.create_task(coro)
+&#x5C06; coro &#x534F;&#x7A0B; &#x6253;&#x5305;&#x4E3A;&#x4E00;&#x4E2A; Task &#x6392;&#x5165;&#x65E5;&#x7A0B;&#x51C6;&#x5907;&#x6267;&#x884C;&#x3002;&#x8FD4;&#x56DE; Task &#x5BF9;&#x8C61;&#x3002;
+</code></pre><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">task = asyncio.ensure_future(test1())</span><br><span class="line">loop.run_until_complete(task)</span><br><span class="line">print(task.result())</span><br></pre></td></tr></table></figure>
+
+<p>&#x7B2C;&#x4E8C;&#x79CD;&#x662F;&#x521B;&#x5EFA;&#x56DE;&#x8C03;&#x51FD;&#x6570;&#x3002;</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">callback</span><span class="hljs-params">(future)</span>:</span></span><br><span class="line">    print(<span class="hljs-string">&apos;Callback:&apos;</span>,future.result()) <span class="hljs-comment"># &#x901A;&#x8FC7;future&#x5BF9;&#x8C61;&#x7684;result&#x65B9;&#x6CD5;&#x53EF;&#x4EE5;&#x83B7;&#x53D6;&#x534F;&#x7A0B;&#x51FD;&#x6570;&#x7684;&#x8FD4;&#x56DE;&#x503C;</span></span><br><span class="line"></span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">task = asyncio.ensure_future(test1()) <span class="hljs-comment"># &#x521B;&#x5EFA;task&#xFF0C;test1()&#x662F;&#x4E00;&#x4E2A;&#x534F;&#x7A0B;&#x5BF9;&#x8C61;</span></span><br><span class="line">task.add_done_callback(callback) <span class="hljs-comment"># &#x7ED1;&#x5B9A;&#x56DE;&#x8C03;&#x51FD;&#x6570;</span></span><br><span class="line">loop.run_until_complete(task)</span><br></pre></td></tr></table></figure>
+
+<p>&#x540C;&#x6837;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;functools.partial&#x504F;&#x5BFC;&#x6570;&#x6DFB;&#x52A0;&#x591A;&#x4E2A;&#x53C2;&#x6570;</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">callback</span><span class="hljs-params">(param1,param2,future)</span>:</span></span><br><span class="line">    print(param1,param2)</span><br><span class="line">    print(<span class="hljs-string">&apos;Callback:&apos;</span>,future.result())</span><br><span class="line"></span><br><span class="line">task.add_done_callback(functools.partial(callback,<span class="hljs-string">&quot;param1&quot;</span>,<span class="hljs-string">&quot;param2&quot;</span>))</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>协程停止</li>
+<li>&#x534F;&#x7A0B;&#x505C;&#x6B62;</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    loop.run_until_complete(asyncio.wait(tasks))</span><br><span class="line"><span class="keyword">except</span> KeyboardInterrupt <span class="keyword">as</span> e:</span><br><span class="line">    <span class="keyword">for</span> task <span class="keyword">in</span> asyncio.Task.all_tasks():</span><br><span class="line">        task.cancel()</span><br><span class="line">    loop.stop()</span><br><span class="line">    loop.run_forever()</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    loop.close()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line"><span class="hljs-keyword">try</span>:</span><br><span class="line">    loop.run_until_complete(asyncio.wait(tasks))</span><br><span class="line"><span class="hljs-keyword">except</span> KeyboardInterrupt <span class="hljs-keyword">as</span> e:</span><br><span class="line">    <span class="hljs-keyword">for</span> task <span class="hljs-keyword">in</span> asyncio.Task.all_tasks():</span><br><span class="line">        task.cancel()</span><br><span class="line">    loop.stop()</span><br><span class="line">    loop.run_forever()</span><br><span class="line"><span class="hljs-keyword">finally</span>:</span><br><span class="line">    loop.close()</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>协程并发</li>
+<li>&#x534F;&#x7A0B;&#x5E76;&#x53D1;</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tasks = [</span><br><span class="line">    asyncio.ensure_future(test1()),</span><br><span class="line">    asyncio.ensure_future(test1()),</span><br><span class="line">    asyncio.ensure_future(test1()),</span><br><span class="line">]</span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">loop.run_until_complete(asyncio.wait(tasks)) <span class="comment"># 注意asyncio.wait方法</span></span><br></pre></td></tr></table></figure>
-<p>重点在asyncio.wait。当任务ALL_COMPLETED的时候才会结束。</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tasks = [</span><br><span class="line">    asyncio.ensure_future(test1()),</span><br><span class="line">    asyncio.ensure_future(test1()),</span><br><span class="line">    asyncio.ensure_future(test1()),</span><br><span class="line">]</span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">loop.run_until_complete(asyncio.wait(tasks)) <span class="hljs-comment"># &#x6CE8;&#x610F;asyncio.wait&#x65B9;&#x6CD5;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x91CD;&#x70B9;&#x5728;asyncio.wait&#x3002;&#x5F53;&#x4EFB;&#x52A1;ALL_COMPLETED&#x7684;&#x65F6;&#x5019;&#x624D;&#x4F1A;&#x7ED3;&#x675F;&#x3002;</p>
 <pre><code>coroutine asyncio.wait(aws, *, loop=None, timeout=None, return_when=ALL_COMPLETED)
-并发运行 aws 指定的 可等待对象 并阻塞线程直到满足 return_when 指定的条件。
+&#x5E76;&#x53D1;&#x8FD0;&#x884C; aws &#x6307;&#x5B9A;&#x7684; &#x53EF;&#x7B49;&#x5F85;&#x5BF9;&#x8C61; &#x5E76;&#x963B;&#x585E;&#x7EBF;&#x7A0B;&#x76F4;&#x5230;&#x6EE1;&#x8DB3; return_when &#x6307;&#x5B9A;&#x7684;&#x6761;&#x4EF6;&#x3002;
 </code></pre><ul>
-<li>对一些情况的处理</li>
+<li>&#x5BF9;&#x4E00;&#x4E9B;&#x60C5;&#x51B5;&#x7684;&#x5904;&#x7406;</li>
 </ul>
-<p>阻塞函数(例如io读写，requests网络请求)阻塞了客户代码与asycio事件循环的唯一线程，因此在执行调用时，整个应用程序都会冻结。</p>
-<p>解决方法是使用事件循环对象的run_in_executor方法。asyncio的事件循环在背后维护着一个ThreadPoolExecutor对象，我们可以调用run_in_executor方法，把可调用对象发给它执行，即可以通过run_in_executor方法来新建一个线程来执行耗时函数。<br>(羡慕大佬的总结总是这么简单明了…)</p>
-<p>大佬的这个例子也是这个小框架的灵魂。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(url)</span>:</span></span><br><span class="line">    print(<span class="string">"start "</span>,url)</span><br><span class="line">    loop = asyncio.get_event_loop()</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">await</span> loop.run_in_executor(<span class="literal">None</span>,time.sleep,<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        print(e)</span><br><span class="line">    print(<span class="string">"stop "</span>,url)</span><br><span class="line">url_list = [<span class="string">"https://thief.one"</span>,<span class="string">"https://home.nmask.cn"</span>,<span class="string">"https://movie.nmask.cn"</span>,<span class="string">"https://tool.nmask.cn"</span>]</span><br><span class="line">tasks = [asyncio.ensure_future(run(url)) <span class="keyword">for</span> url <span class="keyword">in</span> url_list]</span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">loop.run_until_complete(asyncio.wait(tasks))</span><br></pre></td></tr></table></figure>
-<h2 id="参考学习"><a href="#参考学习" class="headerlink" title="参考学习"></a>参考学习</h2><ul>
-<li><a href="https://thief.one/2018/06/21/1/" target="_blank" rel="noopener">Python3.5协程学习研究</a></li>
-<li><a href="https://docs.python.org/zh-cn/3/library/asyncio-task.html#asyncio-awaitables" target="_blank" rel="noopener">协程与任务</a></li>
+<p>&#x963B;&#x585E;&#x51FD;&#x6570;(&#x4F8B;&#x5982;io&#x8BFB;&#x5199;&#xFF0C;requests&#x7F51;&#x7EDC;&#x8BF7;&#x6C42;)&#x963B;&#x585E;&#x4E86;&#x5BA2;&#x6237;&#x4EE3;&#x7801;&#x4E0E;asycio&#x4E8B;&#x4EF6;&#x5FAA;&#x73AF;&#x7684;&#x552F;&#x4E00;&#x7EBF;&#x7A0B;&#xFF0C;&#x56E0;&#x6B64;&#x5728;&#x6267;&#x884C;&#x8C03;&#x7528;&#x65F6;&#xFF0C;&#x6574;&#x4E2A;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x90FD;&#x4F1A;&#x51BB;&#x7ED3;&#x3002;</p>
+<p>&#x89E3;&#x51B3;&#x65B9;&#x6CD5;&#x662F;&#x4F7F;&#x7528;&#x4E8B;&#x4EF6;&#x5FAA;&#x73AF;&#x5BF9;&#x8C61;&#x7684;run_in_executor&#x65B9;&#x6CD5;&#x3002;asyncio&#x7684;&#x4E8B;&#x4EF6;&#x5FAA;&#x73AF;&#x5728;&#x80CC;&#x540E;&#x7EF4;&#x62A4;&#x7740;&#x4E00;&#x4E2A;ThreadPoolExecutor&#x5BF9;&#x8C61;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x8C03;&#x7528;run_in_executor&#x65B9;&#x6CD5;&#xFF0C;&#x628A;&#x53EF;&#x8C03;&#x7528;&#x5BF9;&#x8C61;&#x53D1;&#x7ED9;&#x5B83;&#x6267;&#x884C;&#xFF0C;&#x5373;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;run_in_executor&#x65B9;&#x6CD5;&#x6765;&#x65B0;&#x5EFA;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#x6765;&#x6267;&#x884C;&#x8017;&#x65F6;&#x51FD;&#x6570;&#x3002;<br>(&#x7FA1;&#x6155;&#x5927;&#x4F6C;&#x7684;&#x603B;&#x7ED3;&#x603B;&#x662F;&#x8FD9;&#x4E48;&#x7B80;&#x5355;&#x660E;&#x4E86;&#x2026;)</p>
+<p>&#x5927;&#x4F6C;&#x7684;&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x4E5F;&#x662F;&#x8FD9;&#x4E2A;&#x5C0F;&#x6846;&#x67B6;&#x7684;&#x7075;&#x9B42;&#x3002;</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> asyncio</span><br><span class="line"><span class="hljs-keyword">import</span> time</span><br><span class="line"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">run</span><span class="hljs-params">(url)</span>:</span></span><br><span class="line">    print(<span class="hljs-string">&quot;start &quot;</span>,url)</span><br><span class="line">    loop = asyncio.get_event_loop()</span><br><span class="line">    <span class="hljs-keyword">try</span>:</span><br><span class="line">        <span class="hljs-keyword">await</span> loop.run_in_executor(<span class="hljs-literal">None</span>,time.sleep,<span class="hljs-number">1</span>)</span><br><span class="line">    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:</span><br><span class="line">        print(e)</span><br><span class="line">    print(<span class="hljs-string">&quot;stop &quot;</span>,url)</span><br><span class="line">url_list = [<span class="hljs-string">&quot;https://thief.one&quot;</span>,<span class="hljs-string">&quot;https://home.nmask.cn&quot;</span>,<span class="hljs-string">&quot;https://movie.nmask.cn&quot;</span>,<span class="hljs-string">&quot;https://tool.nmask.cn&quot;</span>]</span><br><span class="line">tasks = [asyncio.ensure_future(run(url)) <span class="hljs-keyword">for</span> url <span class="hljs-keyword">in</span> url_list]</span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">loop.run_until_complete(asyncio.wait(tasks))</span><br></pre></td></tr></table></figure>
+
+<h2 id="&#x53C2;&#x8003;&#x5B66;&#x4E60;"><a href="#&#x53C2;&#x8003;&#x5B66;&#x4E60;" class="headerlink" title="&#x53C2;&#x8003;&#x5B66;&#x4E60;"></a>&#x53C2;&#x8003;&#x5B66;&#x4E60;</h2><ul>
+<li><a href="https://thief.one/2018/06/21/1/" target="_blank" rel="noopener">Python3.5&#x534F;&#x7A0B;&#x5B66;&#x4E60;&#x7814;&#x7A76;</a></li>
+<li><a href="https://docs.python.org/zh-cn/3/library/asyncio-task.html#asyncio-awaitables" target="_blank" rel="noopener">&#x534F;&#x7A0B;&#x4E0E;&#x4EFB;&#x52A1;</a></li>
 <li><a href="https://stackoverflow.com/questions/42231161/asyncio-gather-vs-asyncio-wait" target="_blank" rel="noopener">Asyncio.gather vs asyncio.wait</a></li>
 </ul>
 
+    
     </div>
-
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Python/">#Python</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/协程/">#协程</a></span>
+    
+    </div>
     
     
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2019/09/09/phar反序列化/">Phar反序列化总结</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2019/07/12/Python动态加载模块的几种方式/">Python动态加载模块、类、函数的几种方式</a>
+            
+        </span>
+    </div>
     
-        
-      
+</article>
 
-      <footer class="post-footer">
-          
-            
-          
-          <div class="post-tags">
-            
-              <a href="/tags/Python/" rel="tag"># Python</a>
-            
-          </div>
-        
 
-        
 
-          <div class="post-nav">
-            <div class="post-nav-next post-nav-item">
-              
-                <a href="/2019/07/12/Python动态加载模块的几种方式/" rel="next" title="Python动态加载模块、类、函数的几种方式">
-                  <i class="fa fa-chevron-left"></i> Python动态加载模块、类、函数的几种方式
-                </a>
-              
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2020 Threezh1&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
             </div>
+            <div class="column is-hidden-mobile"></div>
 
-            <span class="post-nav-divider"></span>
-
-            <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2019/09/09/phar反序列化/" rel="prev" title="Phar反序列化总结">
-                  Phar反序列化总结 <i class="fa fa-chevron-right"></i>
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Threezh1">
+                    
+                    GitHub
+                    
                 </a>
-              
+                
+                </div>
             </div>
-          </div>
-        
-      </footer>
-    
-  </div>
-  
-  
-  
-  </article>
-
-  </div>
-
-
-          </div>
-          
-
+            
+            
         </div>
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-  </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-        
-        
-        
-        
-      
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
-          Inhaltsverzeichnis
-        </li>
-        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-          Übersicht
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc">
-            <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#先看框架"><span class="nav-number">1.</span> <span class="nav-text">先看框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#框架的使用"><span class="nav-number">2.</span> <span class="nav-text">框架的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#协程笔记"><span class="nav-number">3.</span> <span class="nav-text">协程笔记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考学习"><span class="nav-number">4.</span> <span class="nav-text">参考学习</span></a></li></ol></div>
-          </div>
-        
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Threezh1</p>
-  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
 </div>
-  <nav class="site-state motion-element">
-      <div class="site-state-item site-state-posts">
-        
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">34</span>
-          <span class="site-state-item-name">Artikel</span>
-        </a>
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-categories">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">7</span>
-        <span class="site-state-item-name">Kategorien</span>
-        
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-tags">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">21</span>
-        <span class="site-state-item-name">schlagwörter</span>
-        
-      </div>
-    
-  </nav>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-      </span>
-    
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-      </span>
-    
-  </div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("chinese");
+</script>
 
 
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
 
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        // ...options...
+    });
+});
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Escribe algo...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
-      </div>
-
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Threezh1</span>
 </div>
-  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Páginas',
+                CATEGORIES: 'Categorías',
+                TAGS: 'Tags',
+                UNTITLED: '(Sin título)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-  </div>
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
-<script src="/js/schemes/pisces.js?v=7.3.0"></script>
-<script src="/js/next-boot.js?v=7.3.0"></script>
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-  
-
-
-  
-  <script src="/js/post-details.js?v=7.3.0"></script>
-
-
 </body>
 </html>

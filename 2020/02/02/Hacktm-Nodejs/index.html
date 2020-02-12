@@ -1,66 +1,30 @@
 <!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+<title>Hacktm中一道Node.js题分析(Draw with us) - Threezh1&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
 
 
 
 
-
-<html lang="Chinese">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
-  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
-
-<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+<meta name="description" content="Share learn & Share life.">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<meta name="keywords" content="Threezh1">
 
 
-<script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Pisces',
-    version: '7.3.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: 'Kopieren',
-      copy_success: 'Kopiert',
-      copy_failure: 'Kopieren fehlgeschlagen'
-    }
-  };
-</script>
 
-  <meta name="description" content="说在前面请教Hpdoger师傅Node.js的问题时，他给了我一道HackTM CTF 2020的Node.js题。花了几个小时看也没有很好的解决。最后还是他给了思路才把想整个过程理清楚。由于才刚刚学习node.js，文章中如果出现问题还希望师傅们指出来，十分感谢。 解题思路题目界面：">
-<meta name="keywords" content="CTF">
+    <meta name="description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x8BF7;&amp;#x6559;Hpdoger&amp;#x5E08;&amp;#x5085;Node.js&amp;#x7684;&amp;#x95EE;&amp;#x9898;&amp;#x65F6;&amp;#xFF0C;&amp;#x4ED6;&amp;#x7ED9;&amp;#x4E86;&amp;#x6211;&amp;#x4E00;&amp;#x9053;HackTM CTF 2020&amp;#x7684;Node.js&amp;#x9">
+<meta name="keywords" content="CTF,Writeup,Node.js">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hacktm中一道Node.js题分析(Draw with us)">
 <meta property="og:url" content="http://yoursite.com/2020/02/02/Hacktm-Nodejs/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
-<meta property="og:description" content="说在前面请教Hpdoger师傅Node.js的问题时，他给了我一道HackTM CTF 2020的Node.js题。花了几个小时看也没有很好的解决。最后还是他给了思路才把想整个过程理清楚。由于才刚刚学习node.js，文章中如果出现问题还希望师傅们指出来，十分感谢。 解题思路题目界面：">
+<meta property="og:description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x8BF7;&amp;#x6559;Hpdoger&amp;#x5E08;&amp;#x5085;Node.js&amp;#x7684;&amp;#x95EE;&amp;#x9898;&amp;#x65F6;&amp;#xFF0C;&amp;#x4ED6;&amp;#x7ED9;&amp;#x4E86;&amp;#x6211;&amp;#x4E00;&amp;#x9053;HackTM CTF 2020&amp;#x7684;Node.js&amp;#x9">
 <meta property="og:locale" content="Chinese">
 <meta property="og:image" content="https://i.loli.net/2020/02/11/QtYxnKybMk3oIl5.png">
 <meta property="og:image" content="https://i.loli.net/2020/02/11/r6PEAHZRoh89Vjs.png">
@@ -69,603 +33,452 @@
 <meta property="og:image" content="https://i.loli.net/2020/02/11/AuER7M3Ywg86eZK.png">
 <meta property="og:image" content="https://i.loli.net/2020/02/11/YDQNIyWcvXoJFEs.png">
 <meta property="og:image" content="https://i.loli.net/2020/02/11/uEp3HdzKocv8JjD.png">
-<meta property="og:updated_time" content="2020-02-11T02:12:29.838Z">
+<meta property="og:updated_time" content="2020-02-12T14:03:35.767Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hacktm中一道Node.js题分析(Draw with us)">
-<meta name="twitter:description" content="说在前面请教Hpdoger师傅Node.js的问题时，他给了我一道HackTM CTF 2020的Node.js题。花了几个小时看也没有很好的解决。最后还是他给了思路才把想整个过程理清楚。由于才刚刚学习node.js，文章中如果出现问题还希望师傅们指出来，十分感谢。 解题思路题目界面：">
+<meta name="twitter:description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x8BF7;&amp;#x6559;Hpdoger&amp;#x5E08;&amp;#x5085;Node.js&amp;#x7684;&amp;#x95EE;&amp;#x9898;&amp;#x65F6;&amp;#xFF0C;&amp;#x4ED6;&amp;#x7ED9;&amp;#x4E86;&amp;#x6211;&amp;#x4E00;&amp;#x9053;HackTM CTF 2020&amp;#x7684;Node.js&amp;#x9">
 <meta name="twitter:image" content="https://i.loli.net/2020/02/11/QtYxnKybMk3oIl5.png">
-  <link rel="canonical" href="http://yoursite.com/2020/02/02/Hacktm-Nodejs/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true,
-    isPage: false,
-    isArchive: false
-  };
-</script>
-
-  <title>Hacktm中一道Node.js题分析(Draw with us) | Threezh1's blog</title>
-  <meta name="generator" content="Hexo 3.8.0">
-  
-
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
 
 
+<link rel="icon" href="/favicon.png">
 
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
 
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 
 </head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Threezh1's blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-        <p class="site-subtitle">分享学习、分享想法</p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="Navigationsleiste an/ausschalten">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-      
-      
-      
-        
-        <li class="menu-item menu-item-home">
-      
+<body>
     
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-archives">
-      
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-threeday">
-      
-    
-
-    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
-
-  </li>
-  </ul>
-
-</nav>
-</div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-            
-
-          <div id="content" class="content page-post-detail">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/Hacktm-Nodejs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">Hacktm中一道Node.js题分析(Draw with us)
-
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
                 
-              
-
-              <time title="Erstellt: 2020-02-02 12:00:00" itemprop="dateCreated datePublished" datetime="2020-02-02T12:00:00+08:00">2020-02-02</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2020-02-11 10:12:29" itemprop="dateModified" datetime="2020-02-11T10:12:29+08:00">2020-02-11</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Node-js/" itemprop="url" rel="index"><span itemprop="name">Node.js</span></a></span>
-
+                <img src="/images/logo.png" alt height="28">
                 
-                
-              
-            </span>
-          
-
-          
-
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-      </header>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item " href="/archives">归档</a>
+            
+            <a class="navbar-item " href="/Projects">项目</a>
+            
+            <a class="navbar-item " href="/Life">生活</a>
+            
+            <a class="navbar-item " href="/Photography">摄影</a>
+            
+            <a class="navbar-item " href="/About">关于</a>
+            
+            <a class="navbar-item " href="http://119.3.219.188/">Threeday</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Buscar" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
 
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            Hacktm中一道Node.js题分析(Draw with us)
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2020-02-02T04:00:00.000Z" itemprop="datePublished">Feb 2 2020</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            17 minutes de lectura (Alrededor de 2541 palabras)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
+        <h2 id="&#x8BF4;&#x5728;&#x524D;&#x9762;"><a href="#&#x8BF4;&#x5728;&#x524D;&#x9762;" class="headerlink" title="&#x8BF4;&#x5728;&#x524D;&#x9762;"></a>&#x8BF4;&#x5728;&#x524D;&#x9762;</h2><p>&#x8BF7;&#x6559;Hpdoger&#x5E08;&#x5085;Node.js&#x7684;&#x95EE;&#x9898;&#x65F6;&#xFF0C;&#x4ED6;&#x7ED9;&#x4E86;&#x6211;&#x4E00;&#x9053;HackTM CTF 2020&#x7684;Node.js&#x9898;&#x3002;&#x82B1;&#x4E86;&#x51E0;&#x4E2A;&#x5C0F;&#x65F6;&#x770B;&#x4E5F;&#x6CA1;&#x6709;&#x5F88;&#x597D;&#x7684;&#x89E3;&#x51B3;&#x3002;&#x6700;&#x540E;&#x8FD8;&#x662F;&#x4ED6;&#x7ED9;&#x4E86;&#x601D;&#x8DEF;&#x624D;&#x628A;&#x60F3;&#x6574;&#x4E2A;&#x8FC7;&#x7A0B;&#x7406;&#x6E05;&#x695A;&#x3002;&#x7531;&#x4E8E;&#x624D;&#x521A;&#x521A;&#x5B66;&#x4E60;node.js&#xFF0C;&#x6587;&#x7AE0;&#x4E2D;&#x5982;&#x679C;&#x51FA;&#x73B0;&#x95EE;&#x9898;&#x8FD8;&#x5E0C;&#x671B;&#x5E08;&#x5085;&#x4EEC;&#x6307;&#x51FA;&#x6765;&#xFF0C;&#x5341;&#x5206;&#x611F;&#x8C22;&#x3002;<br><a id="more"></a></p>
+<h2 id="&#x89E3;&#x9898;&#x601D;&#x8DEF;"><a href="#&#x89E3;&#x9898;&#x601D;&#x8DEF;" class="headerlink" title="&#x89E3;&#x9898;&#x601D;&#x8DEF;"></a>&#x89E3;&#x9898;&#x601D;&#x8DEF;</h2><p>&#x9898;&#x76EE;&#x754C;&#x9762;&#xFF1A;</p>
+<p><img src="https://i.loli.net/2020/02/11/QtYxnKybMk3oIl5.png" alt="ctf_web.png"></p>
+<p>&#x9898;&#x76EE;&#x90E8;&#x5206;&#x6E90;&#x7801;&#xFF1A;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;express&quot;</span>);</span><br><span class="line"><span class="hljs-keyword">const</span> cors = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;cors&quot;</span>);</span><br><span class="line"><span class="hljs-keyword">const</span> app = express();</span><br><span class="line"><span class="hljs-keyword">const</span> uuidv4 = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;uuid/v4&quot;</span>);</span><br><span class="line"><span class="hljs-keyword">const</span> md5 = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;md5&quot;</span>);</span><br><span class="line"><span class="hljs-keyword">const</span> jwt = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;express-jwt&quot;</span>);</span><br><span class="line"><span class="hljs-keyword">const</span> jsonwebtoken = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;jsonwebtoken&quot;</span>);</span><br><span class="line"><span class="hljs-keyword">const</span> server = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;http&quot;</span>).createServer(app);</span><br><span class="line"><span class="hljs-keyword">const</span> io = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;socket.io&quot;</span>)(server);</span><br><span class="line"><span class="hljs-keyword">const</span> bigInt = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;big-integer&quot;</span>);</span><br><span class="line"><span class="hljs-keyword">const</span> { flag, p, n, _clearPIN, jwtSecret } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;./flag&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> config = {</span><br><span class="line">  port: process.env.PORT || <span class="hljs-number">8081</span>,</span><br><span class="line">  width: <span class="hljs-number">120</span>,</span><br><span class="line">  height: <span class="hljs-number">80</span>,</span><br><span class="line">  usersOnline: <span class="hljs-number">0</span>,</span><br><span class="line">  message: <span class="hljs-string">&quot;Hello there!&quot;</span>,</span><br><span class="line">  p: p,</span><br><span class="line">  n: n,</span><br><span class="line">  adminUsername: <span class="hljs-string">&quot;hacktm&quot;</span>,</span><br><span class="line">  whitelist: [<span class="hljs-string">&quot;/&quot;</span>, <span class="hljs-string">&quot;/login&quot;</span>, <span class="hljs-string">&quot;/init&quot;</span>],</span><br><span class="line">  backgroundColor: <span class="hljs-number">0x888888</span>,</span><br><span class="line">  version: <span class="hljs-built_in">Number</span>.MIN_VALUE</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line">io.sockets.on(<span class="hljs-string">&quot;connection&quot;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">socket</span>) </span>{</span><br><span class="line">  config.usersOnline++;</span><br><span class="line">  socket.on(<span class="hljs-string">&quot;disconnect&quot;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{</span><br><span class="line">    config.usersOnline--;</span><br><span class="line">  });</span><br><span class="line">});</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">let</span> users = {</span><br><span class="line">  <span class="hljs-number">0</span>: {</span><br><span class="line">    username: config.adminUsername,</span><br><span class="line">    rights: <span class="hljs-built_in">Object</span>.keys(config)</span><br><span class="line">  }</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">let</span> board = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(config.height)</span><br><span class="line">  .fill(<span class="hljs-number">0</span>)</span><br><span class="line">  .map(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(config.width).fill(config.backgroundColor));</span><br><span class="line"><span class="hljs-keyword">let</span> boardString = boardToStrings();</span><br><span class="line"></span><br><span class="line">app.use(express.json());</span><br><span class="line">app.use(cors());</span><br><span class="line">app.use(</span><br><span class="line">  jwt({ <span class="hljs-attr">secret</span>: jwtSecret }).unless({</span><br><span class="line">    path: config.whitelist</span><br><span class="line">  })</span><br><span class="line">);</span><br><span class="line">app.use(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">error, req, res, next</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">if</span> (error.name === <span class="hljs-string">&quot;UnauthorizedError&quot;</span>) {</span><br><span class="line">    res.json(err(<span class="hljs-string">&quot;Invalid token or not logged in.&quot;</span>));</span><br><span class="line">  }</span><br><span class="line">});</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sign</span>(<span class="hljs-params">o</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> jsonwebtoken.sign(o, jwtSecret);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isAdmin</span>(<span class="hljs-params">u</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> u.username.toLowerCase() == config.adminUsername.toLowerCase();</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ok</span>(<span class="hljs-params">data = {}</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> { <span class="hljs-attr">status</span>: <span class="hljs-string">&quot;ok&quot;</span>, <span class="hljs-attr">data</span>: data };</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">err</span>(<span class="hljs-params">msg = <span class="hljs-string">&quot;Something went wrong.&quot;</span></span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> { <span class="hljs-attr">status</span>: <span class="hljs-string">&quot;error&quot;</span>, <span class="hljs-attr">message</span>: msg };</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onlyUnique</span>(<span class="hljs-params">value, index, self</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> self.indexOf(value) === index;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">app.get(<span class="hljs-string">&quot;/&quot;</span>, (req, res) =&gt; {</span><br><span class="line">  <span class="hljs-comment">// Get current board</span></span><br><span class="line">  res.json(ok({ <span class="hljs-attr">board</span>: boardString }));</span><br><span class="line">});</span><br><span class="line"></span><br><span class="line">app.post(<span class="hljs-string">&quot;/init&quot;</span>, (req, res) =&gt; {</span><br><span class="line">  <span class="hljs-comment">// Initialize new round and sign admin token</span></span><br><span class="line">  <span class="hljs-comment">// RSA protected!</span></span><br><span class="line">  <span class="hljs-comment">// POST</span></span><br><span class="line">  <span class="hljs-comment">// {</span></span><br><span class="line">  <span class="hljs-comment">//   p:&quot;0&quot;,</span></span><br><span class="line">  <span class="hljs-comment">//   q:&quot;0&quot;</span></span><br><span class="line">  <span class="hljs-comment">// }</span></span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">let</span> { p = <span class="hljs-string">&quot;0&quot;</span>, q = <span class="hljs-string">&quot;0&quot;</span>, clearPIN } = req.body;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">let</span> target = md5(config.n.toString());</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">let</span> pwHash = md5(</span><br><span class="line">    bigInt(<span class="hljs-built_in">String</span>(p))</span><br><span class="line">      .multiply(<span class="hljs-built_in">String</span>(q))</span><br><span class="line">      .toString()</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">if</span> (pwHash == target &amp;&amp; clearPIN === _clearPIN) {</span><br><span class="line">    <span class="hljs-comment">// Clear the board</span></span><br><span class="line">    board = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(config.height)</span><br><span class="line">      .fill(<span class="hljs-number">0</span>)</span><br><span class="line">      .map(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(config.width).fill(config.backgroundColor));</span><br><span class="line">    boardString = boardToStrings();</span><br><span class="line"></span><br><span class="line">    io.emit(<span class="hljs-string">&quot;board&quot;</span>, { <span class="hljs-attr">board</span>: boardString });</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="hljs-comment">//Sign the admin ID</span></span><br><span class="line">  <span class="hljs-keyword">let</span> adminId = pwHash</span><br><span class="line">    .split(<span class="hljs-string">&quot;&quot;</span>)</span><br><span class="line">    .map(<span class="hljs-function">(<span class="hljs-params">c, i</span>) =&gt;</span> c.charCodeAt(<span class="hljs-number">0</span>) ^ target.charCodeAt(i))</span><br><span class="line">    .reduce(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a + b);</span><br><span class="line"></span><br><span class="line">  <span class="hljs-built_in">console</span>.log(adminId);</span><br><span class="line"></span><br><span class="line">  res.json(ok({ <span class="hljs-attr">token</span>: sign({ <span class="hljs-attr">id</span>: adminId }) }));</span><br><span class="line">});</span><br><span class="line"></span><br><span class="line">app.get(<span class="hljs-string">&quot;/flag&quot;</span>, (req, res) =&gt; {</span><br><span class="line">  <span class="hljs-comment">// Get the flag</span></span><br><span class="line">  <span class="hljs-comment">// Only for root</span></span><br><span class="line">  <span class="hljs-keyword">if</span> (req.user.id == <span class="hljs-number">0</span>) {</span><br><span class="line">    res.send(ok({ <span class="hljs-attr">flag</span>: flag }));</span><br><span class="line">  } <span class="hljs-keyword">else</span> {</span><br><span class="line">    res.send(err(<span class="hljs-string">&quot;Unauthorized&quot;</span>));</span><br><span class="line">  }</span><br><span class="line">});</span><br><span class="line"></span><br><span class="line">app.get(<span class="hljs-string">&quot;/serverInfo&quot;</span>, (req, res) =&gt; {</span><br><span class="line">  <span class="hljs-comment">// Get server info</span></span><br><span class="line">  <span class="hljs-comment">// Only for logged in users</span></span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">let</span> user = users[req.user.id] || { <span class="hljs-attr">rights</span>: [] };</span><br><span class="line">  <span class="hljs-keyword">let</span> info = user.rights.map(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> ({ <span class="hljs-attr">name</span>: i, <span class="hljs-attr">value</span>: config[i] }));</span><br><span class="line">  res.json(ok({ <span class="hljs-attr">info</span>: info }));</span><br><span class="line">});</span><br><span class="line"></span><br><span class="line">app.post(<span class="hljs-string">&quot;/paint&quot;</span>, (req, res) =&gt; {</span><br><span class="line">  <span class="hljs-comment">// Paint on the canvas</span></span><br><span class="line">  <span class="hljs-comment">// Only for logged in users</span></span><br><span class="line">  <span class="hljs-comment">// POST</span></span><br><span class="line">  <span class="hljs-comment">// {</span></span><br><span class="line">  <span class="hljs-comment">//   x:0,</span></span><br><span class="line">  <span class="hljs-comment">//   y:0</span></span><br><span class="line">  <span class="hljs-comment">// }</span></span><br><span class="line">  <span class="hljs-keyword">let</span> user = users[req.user.id] || {};</span><br><span class="line"></span><br><span class="line">  x = req.body.x;</span><br><span class="line">  y = req.body.y;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">let</span> color = user.color || <span class="hljs-number">0x0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">if</span> (board[y] &amp;&amp; board[y][x] &gt;= <span class="hljs-number">0</span>) {</span><br><span class="line">    board[y][x] = color;</span><br><span class="line">    boardString = boardToStrings();</span><br><span class="line">    io.emit(<span class="hljs-string">&quot;change&quot;</span>, { <span class="hljs-attr">change</span>: { <span class="hljs-attr">pos</span>: [x, y], <span class="hljs-attr">color</span>: color } });</span><br><span class="line">    res.send(ok());</span><br><span class="line">  } <span class="hljs-keyword">else</span> {</span><br><span class="line">    res.send(err(<span class="hljs-string">&quot;Invalid painting&quot;</span>));</span><br><span class="line">  }</span><br><span class="line">});</span><br><span class="line"></span><br><span class="line">app.post(<span class="hljs-string">&quot;/updateUser&quot;</span>, (req, res) =&gt; {</span><br><span class="line">  <span class="hljs-comment">// Update user color and rights</span></span><br><span class="line">  <span class="hljs-comment">// Only for admin</span></span><br><span class="line">  <span class="hljs-comment">// POST</span></span><br><span class="line">  <span class="hljs-comment">// {</span></span><br><span class="line">  <span class="hljs-comment">//   color: 0xDEDBEE,</span></span><br><span class="line">  <span class="hljs-comment">//   rights: [&quot;height&quot;, &quot;width&quot;, &quot;usersOnline&quot;]</span></span><br><span class="line">  <span class="hljs-comment">// }</span></span><br><span class="line">  <span class="hljs-keyword">let</span> uid = req.user.id;</span><br><span class="line">  <span class="hljs-keyword">let</span> user = users[uid];</span><br><span class="line">  <span class="hljs-keyword">if</span> (!user || !isAdmin(user)) {</span><br><span class="line">    res.json(err(<span class="hljs-string">&quot;You&apos;re not an admin!&quot;</span>));</span><br><span class="line">    <span class="hljs-keyword">return</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="hljs-keyword">let</span> color = <span class="hljs-built_in">parseInt</span>(req.body.color);</span><br><span class="line">  users[uid].color = (color || <span class="hljs-number">0x0</span>) &amp; <span class="hljs-number">0xffffff</span>;</span><br><span class="line">  <span class="hljs-keyword">let</span> rights = req.body.rights || [];</span><br><span class="line">  <span class="hljs-keyword">if</span> (rights.length &gt; <span class="hljs-number">0</span> &amp;&amp; checkRights(rights)) {</span><br><span class="line">    users[uid].rights = user.rights.concat(rights).filter(onlyUnique);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  res.json(ok({ <span class="hljs-attr">user</span>: users[uid] }));</span><br><span class="line">});</span><br><span class="line"></span><br><span class="line">app.post(<span class="hljs-string">&quot;/login&quot;</span>, (req, res) =&gt; {</span><br><span class="line">  <span class="hljs-comment">// Login</span></span><br><span class="line">  <span class="hljs-comment">// POST</span></span><br><span class="line">  <span class="hljs-comment">// {</span></span><br><span class="line">  <span class="hljs-comment">//   username: &quot;dumbo&quot;,</span></span><br><span class="line">  <span class="hljs-comment">// }</span></span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">let</span> u = {</span><br><span class="line">    username: req.body.username,</span><br><span class="line">    id: uuidv4(),</span><br><span class="line">    color: <span class="hljs-built_in">Math</span>.random() &lt; <span class="hljs-number">0.5</span> ? <span class="hljs-number">0xffffff</span> : <span class="hljs-number">0x0</span>,</span><br><span class="line">    rights: [</span><br><span class="line">      <span class="hljs-string">&quot;message&quot;</span>,</span><br><span class="line">      <span class="hljs-string">&quot;height&quot;</span>,</span><br><span class="line">      <span class="hljs-string">&quot;width&quot;</span>,</span><br><span class="line">      <span class="hljs-string">&quot;version&quot;</span>,</span><br><span class="line">      <span class="hljs-string">&quot;usersOnline&quot;</span>,</span><br><span class="line">      <span class="hljs-string">&quot;adminUsername&quot;</span>,</span><br><span class="line">      <span class="hljs-string">&quot;backgroundColor&quot;</span></span><br><span class="line">    ]</span><br><span class="line">  };</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">if</span> (isValidUser(u)) {</span><br><span class="line">    users[u.id] = u;</span><br><span class="line">    res.send(ok({ <span class="hljs-attr">token</span>: sign({ <span class="hljs-attr">id</span>: u.id }) }));</span><br><span class="line">  } <span class="hljs-keyword">else</span> {</span><br><span class="line">    res.json(err(<span class="hljs-string">&quot;Invalid creds&quot;</span>));</span><br><span class="line">  }</span><br><span class="line">});</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isValidUser</span>(<span class="hljs-params">u</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> (</span><br><span class="line">    u.username.length &gt;= <span class="hljs-number">3</span> &amp;&amp;</span><br><span class="line">    u.username.toUpperCase() !== config.adminUsername.toUpperCase()</span><br><span class="line">  );</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">boardToStrings</span>(<span class="hljs-params"></span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> board.map(<span class="hljs-function"><span class="hljs-params">b</span> =&gt;</span> b.join(<span class="hljs-string">&quot;,&quot;</span>));</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkRights</span>(<span class="hljs-params">arr</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">let</span> blacklist = [<span class="hljs-string">&quot;p&quot;</span>, <span class="hljs-string">&quot;n&quot;</span>, <span class="hljs-string">&quot;port&quot;</span>];</span><br><span class="line">  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; arr.length; i++) {</span><br><span class="line">    <span class="hljs-keyword">const</span> element = arr[i];</span><br><span class="line">    <span class="hljs-keyword">if</span> (blacklist.includes(element)) {</span><br><span class="line">      <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">server.listen(config.port, () =&gt;</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Server listening on port <span class="hljs-subst">${config.port}</span>!`</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 
-      
-        <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>请教Hpdoger师傅Node.js的问题时，他给了我一道HackTM CTF 2020的Node.js题。花了几个小时看也没有很好的解决。最后还是他给了思路才把想整个过程理清楚。由于才刚刚学习node.js，文章中如果出现问题还希望师傅们指出来，十分感谢。</p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>题目界面：</p>
-<p><img src="https://i.loli.net/2020/02/11/QtYxnKybMk3oIl5.png" alt="ctf_web.png"><br><a id="more"></a><br>题目部分源码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">"express"</span>);</span><br><span class="line"><span class="keyword">const</span> cors = <span class="built_in">require</span>(<span class="string">"cors"</span>);</span><br><span class="line"><span class="keyword">const</span> app = express();</span><br><span class="line"><span class="keyword">const</span> uuidv4 = <span class="built_in">require</span>(<span class="string">"uuid/v4"</span>);</span><br><span class="line"><span class="keyword">const</span> md5 = <span class="built_in">require</span>(<span class="string">"md5"</span>);</span><br><span class="line"><span class="keyword">const</span> jwt = <span class="built_in">require</span>(<span class="string">"express-jwt"</span>);</span><br><span class="line"><span class="keyword">const</span> jsonwebtoken = <span class="built_in">require</span>(<span class="string">"jsonwebtoken"</span>);</span><br><span class="line"><span class="keyword">const</span> server = <span class="built_in">require</span>(<span class="string">"http"</span>).createServer(app);</span><br><span class="line"><span class="keyword">const</span> io = <span class="built_in">require</span>(<span class="string">"socket.io"</span>)(server);</span><br><span class="line"><span class="keyword">const</span> bigInt = <span class="built_in">require</span>(<span class="string">"big-integer"</span>);</span><br><span class="line"><span class="keyword">const</span> &#123; flag, p, n, _clearPIN, jwtSecret &#125; = <span class="built_in">require</span>(<span class="string">"./flag"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> config = &#123;</span><br><span class="line">  port: process.env.PORT || <span class="number">8081</span>,</span><br><span class="line">  width: <span class="number">120</span>,</span><br><span class="line">  height: <span class="number">80</span>,</span><br><span class="line">  usersOnline: <span class="number">0</span>,</span><br><span class="line">  message: <span class="string">"Hello there!"</span>,</span><br><span class="line">  p: p,</span><br><span class="line">  n: n,</span><br><span class="line">  adminUsername: <span class="string">"hacktm"</span>,</span><br><span class="line">  whitelist: [<span class="string">"/"</span>, <span class="string">"/login"</span>, <span class="string">"/init"</span>],</span><br><span class="line">  backgroundColor: <span class="number">0x888888</span>,</span><br><span class="line">  version: <span class="built_in">Number</span>.MIN_VALUE</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">io.sockets.on(<span class="string">"connection"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">socket</span>) </span>&#123;</span><br><span class="line">  config.usersOnline++;</span><br><span class="line">  socket.on(<span class="string">"disconnect"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    config.usersOnline--;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> users = &#123;</span><br><span class="line">  <span class="number">0</span>: &#123;</span><br><span class="line">    username: config.adminUsername,</span><br><span class="line">    rights: <span class="built_in">Object</span>.keys(config)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> board = <span class="keyword">new</span> <span class="built_in">Array</span>(config.height)</span><br><span class="line">  .fill(<span class="number">0</span>)</span><br><span class="line">  .map(<span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">new</span> <span class="built_in">Array</span>(config.width).fill(config.backgroundColor));</span><br><span class="line"><span class="keyword">let</span> boardString = boardToStrings();</span><br><span class="line"></span><br><span class="line">app.use(express.json());</span><br><span class="line">app.use(cors());</span><br><span class="line">app.use(</span><br><span class="line">  jwt(&#123; <span class="attr">secret</span>: jwtSecret &#125;).unless(&#123;</span><br><span class="line">    path: config.whitelist</span><br><span class="line">  &#125;)</span><br><span class="line">);</span><br><span class="line">app.use(<span class="function"><span class="keyword">function</span>(<span class="params">error, req, res, next</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (error.name === <span class="string">"UnauthorizedError"</span>) &#123;</span><br><span class="line">    res.json(err(<span class="string">"Invalid token or not logged in."</span>));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sign</span>(<span class="params">o</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> jsonwebtoken.sign(o, jwtSecret);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isAdmin</span>(<span class="params">u</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> u.username.toLowerCase() == config.adminUsername.toLowerCase();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ok</span>(<span class="params">data = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">status</span>: <span class="string">"ok"</span>, <span class="attr">data</span>: data &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">err</span>(<span class="params">msg = <span class="string">"Something went wrong."</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">status</span>: <span class="string">"error"</span>, <span class="attr">message</span>: msg &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onlyUnique</span>(<span class="params">value, index, self</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> self.indexOf(value) === index;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">"/"</span>, (req, res) =&gt; &#123;</span><br><span class="line">  <span class="comment">// Get current board</span></span><br><span class="line">  res.json(ok(&#123; <span class="attr">board</span>: boardString &#125;));</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.post(<span class="string">"/init"</span>, (req, res) =&gt; &#123;</span><br><span class="line">  <span class="comment">// Initialize new round and sign admin token</span></span><br><span class="line">  <span class="comment">// RSA protected!</span></span><br><span class="line">  <span class="comment">// POST</span></span><br><span class="line">  <span class="comment">// &#123;</span></span><br><span class="line">  <span class="comment">//   p:"0",</span></span><br><span class="line">  <span class="comment">//   q:"0"</span></span><br><span class="line">  <span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> &#123; p = <span class="string">"0"</span>, q = <span class="string">"0"</span>, clearPIN &#125; = req.body;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> target = md5(config.n.toString());</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> pwHash = md5(</span><br><span class="line">    bigInt(<span class="built_in">String</span>(p))</span><br><span class="line">      .multiply(<span class="built_in">String</span>(q))</span><br><span class="line">      .toString()</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (pwHash == target &amp;&amp; clearPIN === _clearPIN) &#123;</span><br><span class="line">    <span class="comment">// Clear the board</span></span><br><span class="line">    board = <span class="keyword">new</span> <span class="built_in">Array</span>(config.height)</span><br><span class="line">      .fill(<span class="number">0</span>)</span><br><span class="line">      .map(<span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">new</span> <span class="built_in">Array</span>(config.width).fill(config.backgroundColor));</span><br><span class="line">    boardString = boardToStrings();</span><br><span class="line"></span><br><span class="line">    io.emit(<span class="string">"board"</span>, &#123; <span class="attr">board</span>: boardString &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//Sign the admin ID</span></span><br><span class="line">  <span class="keyword">let</span> adminId = pwHash</span><br><span class="line">    .split(<span class="string">""</span>)</span><br><span class="line">    .map(<span class="function">(<span class="params">c, i</span>) =&gt;</span> c.charCodeAt(<span class="number">0</span>) ^ target.charCodeAt(i))</span><br><span class="line">    .reduce(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a + b);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">console</span>.log(adminId);</span><br><span class="line"></span><br><span class="line">  res.json(ok(&#123; <span class="attr">token</span>: sign(&#123; <span class="attr">id</span>: adminId &#125;) &#125;));</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">"/flag"</span>, (req, res) =&gt; &#123;</span><br><span class="line">  <span class="comment">// Get the flag</span></span><br><span class="line">  <span class="comment">// Only for root</span></span><br><span class="line">  <span class="keyword">if</span> (req.user.id == <span class="number">0</span>) &#123;</span><br><span class="line">    res.send(ok(&#123; <span class="attr">flag</span>: flag &#125;));</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    res.send(err(<span class="string">"Unauthorized"</span>));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">"/serverInfo"</span>, (req, res) =&gt; &#123;</span><br><span class="line">  <span class="comment">// Get server info</span></span><br><span class="line">  <span class="comment">// Only for logged in users</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> user = users[req.user.id] || &#123; <span class="attr">rights</span>: [] &#125;;</span><br><span class="line">  <span class="keyword">let</span> info = user.rights.map(<span class="function"><span class="params">i</span> =&gt;</span> (&#123; <span class="attr">name</span>: i, <span class="attr">value</span>: config[i] &#125;));</span><br><span class="line">  res.json(ok(&#123; <span class="attr">info</span>: info &#125;));</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.post(<span class="string">"/paint"</span>, (req, res) =&gt; &#123;</span><br><span class="line">  <span class="comment">// Paint on the canvas</span></span><br><span class="line">  <span class="comment">// Only for logged in users</span></span><br><span class="line">  <span class="comment">// POST</span></span><br><span class="line">  <span class="comment">// &#123;</span></span><br><span class="line">  <span class="comment">//   x:0,</span></span><br><span class="line">  <span class="comment">//   y:0</span></span><br><span class="line">  <span class="comment">// &#125;</span></span><br><span class="line">  <span class="keyword">let</span> user = users[req.user.id] || &#123;&#125;;</span><br><span class="line"></span><br><span class="line">  x = req.body.x;</span><br><span class="line">  y = req.body.y;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> color = user.color || <span class="number">0x0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (board[y] &amp;&amp; board[y][x] &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">    board[y][x] = color;</span><br><span class="line">    boardString = boardToStrings();</span><br><span class="line">    io.emit(<span class="string">"change"</span>, &#123; <span class="attr">change</span>: &#123; <span class="attr">pos</span>: [x, y], <span class="attr">color</span>: color &#125; &#125;);</span><br><span class="line">    res.send(ok());</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    res.send(err(<span class="string">"Invalid painting"</span>));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.post(<span class="string">"/updateUser"</span>, (req, res) =&gt; &#123;</span><br><span class="line">  <span class="comment">// Update user color and rights</span></span><br><span class="line">  <span class="comment">// Only for admin</span></span><br><span class="line">  <span class="comment">// POST</span></span><br><span class="line">  <span class="comment">// &#123;</span></span><br><span class="line">  <span class="comment">//   color: 0xDEDBEE,</span></span><br><span class="line">  <span class="comment">//   rights: ["height", "width", "usersOnline"]</span></span><br><span class="line">  <span class="comment">// &#125;</span></span><br><span class="line">  <span class="keyword">let</span> uid = req.user.id;</span><br><span class="line">  <span class="keyword">let</span> user = users[uid];</span><br><span class="line">  <span class="keyword">if</span> (!user || !isAdmin(user)) &#123;</span><br><span class="line">    res.json(err(<span class="string">"You're not an admin!"</span>));</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> color = <span class="built_in">parseInt</span>(req.body.color);</span><br><span class="line">  users[uid].color = (color || <span class="number">0x0</span>) &amp; <span class="number">0xffffff</span>;</span><br><span class="line">  <span class="keyword">let</span> rights = req.body.rights || [];</span><br><span class="line">  <span class="keyword">if</span> (rights.length &gt; <span class="number">0</span> &amp;&amp; checkRights(rights)) &#123;</span><br><span class="line">    users[uid].rights = user.rights.concat(rights).filter(onlyUnique);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  res.json(ok(&#123; <span class="attr">user</span>: users[uid] &#125;));</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.post(<span class="string">"/login"</span>, (req, res) =&gt; &#123;</span><br><span class="line">  <span class="comment">// Login</span></span><br><span class="line">  <span class="comment">// POST</span></span><br><span class="line">  <span class="comment">// &#123;</span></span><br><span class="line">  <span class="comment">//   username: "dumbo",</span></span><br><span class="line">  <span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> u = &#123;</span><br><span class="line">    username: req.body.username,</span><br><span class="line">    id: uuidv4(),</span><br><span class="line">    color: <span class="built_in">Math</span>.random() &lt; <span class="number">0.5</span> ? <span class="number">0xffffff</span> : <span class="number">0x0</span>,</span><br><span class="line">    rights: [</span><br><span class="line">      <span class="string">"message"</span>,</span><br><span class="line">      <span class="string">"height"</span>,</span><br><span class="line">      <span class="string">"width"</span>,</span><br><span class="line">      <span class="string">"version"</span>,</span><br><span class="line">      <span class="string">"usersOnline"</span>,</span><br><span class="line">      <span class="string">"adminUsername"</span>,</span><br><span class="line">      <span class="string">"backgroundColor"</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (isValidUser(u)) &#123;</span><br><span class="line">    users[u.id] = u;</span><br><span class="line">    res.send(ok(&#123; <span class="attr">token</span>: sign(&#123; <span class="attr">id</span>: u.id &#125;) &#125;));</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    res.json(err(<span class="string">"Invalid creds"</span>));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isValidUser</span>(<span class="params">u</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    u.username.length &gt;= <span class="number">3</span> &amp;&amp;</span><br><span class="line">    u.username.toUpperCase() !== config.adminUsername.toUpperCase()</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">boardToStrings</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> board.map(<span class="function"><span class="params">b</span> =&gt;</span> b.join(<span class="string">","</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">checkRights</span>(<span class="params">arr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> blacklist = [<span class="string">"p"</span>, <span class="string">"n"</span>, <span class="string">"port"</span>];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> element = arr[i];</span><br><span class="line">    <span class="keyword">if</span> (blacklist.includes(element)) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server.listen(config.port, () =&gt;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`Server listening on port <span class="subst">$&#123;config.port&#125;</span>!`</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-<p>整个题目就是一个在线画图的程序，当输入用户名登录之后就可以对网页上的颜色格子进行操作。(这不是重点)服务端使用了<code>express</code>框架，并使用<code>express-jwt</code>来进行用户验证。</p>
-<p>比较重要的页面分别是：</p>
+<p>&#x6574;&#x4E2A;&#x9898;&#x76EE;&#x5C31;&#x662F;&#x4E00;&#x4E2A;&#x5728;&#x7EBF;&#x753B;&#x56FE;&#x7684;&#x7A0B;&#x5E8F;&#xFF0C;&#x5F53;&#x8F93;&#x5165;&#x7528;&#x6237;&#x540D;&#x767B;&#x5F55;&#x4E4B;&#x540E;&#x5C31;&#x53EF;&#x4EE5;&#x5BF9;&#x7F51;&#x9875;&#x4E0A;&#x7684;&#x989C;&#x8272;&#x683C;&#x5B50;&#x8FDB;&#x884C;&#x64CD;&#x4F5C;&#x3002;(&#x8FD9;&#x4E0D;&#x662F;&#x91CD;&#x70B9;)&#x670D;&#x52A1;&#x7AEF;&#x4F7F;&#x7528;&#x4E86;<code>express</code>&#x6846;&#x67B6;&#xFF0C;&#x5E76;&#x4F7F;&#x7528;<code>express-jwt</code>&#x6765;&#x8FDB;&#x884C;&#x7528;&#x6237;&#x9A8C;&#x8BC1;&#x3002;</p>
+<p>&#x6BD4;&#x8F83;&#x91CD;&#x8981;&#x7684;&#x9875;&#x9762;&#x5206;&#x522B;&#x662F;&#xFF1A;</p>
 <ol>
-<li><code>/init</code> 获取POST数据中的p和q参数，最终生成一个adminId，返回一个id=adminId的用户token</li>
-<li><code>/serverInfo</code> 根据用户的权限返回config内的信息</li>
-<li><code>/updateUser</code> 更新用户信息，设置用户权限</li>
-<li><code>/login</code> 登录账户</li>
-<li><code>/flag</code> 获取Flag </li>
+<li><code>/init</code> &#x83B7;&#x53D6;POST&#x6570;&#x636E;&#x4E2D;&#x7684;p&#x548C;q&#x53C2;&#x6570;&#xFF0C;&#x6700;&#x7EC8;&#x751F;&#x6210;&#x4E00;&#x4E2A;adminId&#xFF0C;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;id=adminId&#x7684;&#x7528;&#x6237;token</li>
+<li><code>/serverInfo</code> &#x6839;&#x636E;&#x7528;&#x6237;&#x7684;&#x6743;&#x9650;&#x8FD4;&#x56DE;config&#x5185;&#x7684;&#x4FE1;&#x606F;</li>
+<li><code>/updateUser</code> &#x66F4;&#x65B0;&#x7528;&#x6237;&#x4FE1;&#x606F;&#xFF0C;&#x8BBE;&#x7F6E;&#x7528;&#x6237;&#x6743;&#x9650;</li>
+<li><code>/login</code> &#x767B;&#x5F55;&#x8D26;&#x6237;</li>
+<li><code>/flag</code> &#x83B7;&#x53D6;Flag </li>
 </ol>
-<p>逆推整个过程的话，大概是这样的思路：</p>
-<h3 id="怎么获取Flag？"><a href="#怎么获取Flag？" class="headerlink" title="怎么获取Flag？"></a>怎么获取Flag？</h3><p>访问Flag页面需要对adminId进行判断，adminId需要为0才能获取得到Flag。而adminId是可以通过/init传递p和q参数进行设置的。怎么将adminId设置为0呢？</p>
-<h3 id="怎么将adminId设置为0？"><a href="#怎么将adminId设置为0？" class="headerlink" title="怎么将adminId设置为0？"></a>怎么将adminId设置为0？</h3><p>来具体看一下<code>/init</code>页面，它会获取POST数据中的p和q参数，并最终生成一个adminId：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">app.post(<span class="string">"/init"</span>, (req, res) =&gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> &#123; p = <span class="string">"0"</span>, q = <span class="string">"0"</span>, clearPIN &#125; = req.body; <span class="comment">// 从POST数据当中获取得到p和q</span></span><br><span class="line">  <span class="keyword">let</span> target = md5(config.n.toString()); <span class="comment">// target是config中n的md5加密</span></span><br><span class="line">  <span class="keyword">let</span> pwHash = md5(</span><br><span class="line">    bigInt(<span class="built_in">String</span>(p))</span><br><span class="line">      .multiply(<span class="built_in">String</span>(q))</span><br><span class="line">      .toString()</span><br><span class="line">  ); <span class="comment">// 将p与p相乘</span></span><br><span class="line">  <span class="keyword">if</span> (pwHash == target &amp;&amp; clearPIN === _clearPIN) &#123;</span><br><span class="line">    <span class="comment">// 清理面板</span></span><br><span class="line">    board = <span class="keyword">new</span> <span class="built_in">Array</span>(config.height)</span><br><span class="line">      .fill(<span class="number">0</span>)</span><br><span class="line">      .map(<span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">new</span> <span class="built_in">Array</span>(config.width).fill(config.backgroundColor));</span><br><span class="line">    boardString = boardToStrings();</span><br><span class="line">    io.emit(<span class="string">"board"</span>, &#123; <span class="attr">board</span>: boardString &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//Sign the admin ID</span></span><br><span class="line">  <span class="keyword">let</span> adminId = pwHash</span><br><span class="line">    .split(<span class="string">""</span>)</span><br><span class="line">    .map(<span class="function">(<span class="params">c, i</span>) =&gt;</span> c.charCodeAt(<span class="number">0</span>) ^ target.charCodeAt(i))</span><br><span class="line">    .reduce(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a + b); <span class="comment">// 取合值</span></span><br><span class="line">  <span class="built_in">console</span>.log(adminId);</span><br><span class="line">  res.json(ok(&#123; <span class="attr">token</span>: sign(&#123; <span class="attr">id</span>: adminId &#125;) &#125;));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>&#x9006;&#x63A8;&#x6574;&#x4E2A;&#x8FC7;&#x7A0B;&#x7684;&#x8BDD;&#xFF0C;&#x5927;&#x6982;&#x662F;&#x8FD9;&#x6837;&#x7684;&#x601D;&#x8DEF;&#xFF1A;</p>
+<h3 id="&#x600E;&#x4E48;&#x83B7;&#x53D6;Flag&#xFF1F;"><a href="#&#x600E;&#x4E48;&#x83B7;&#x53D6;Flag&#xFF1F;" class="headerlink" title="&#x600E;&#x4E48;&#x83B7;&#x53D6;Flag&#xFF1F;"></a>&#x600E;&#x4E48;&#x83B7;&#x53D6;Flag&#xFF1F;</h3><p>&#x8BBF;&#x95EE;Flag&#x9875;&#x9762;&#x9700;&#x8981;&#x5BF9;adminId&#x8FDB;&#x884C;&#x5224;&#x65AD;&#xFF0C;adminId&#x9700;&#x8981;&#x4E3A;0&#x624D;&#x80FD;&#x83B7;&#x53D6;&#x5F97;&#x5230;Flag&#x3002;&#x800C;adminId&#x662F;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;/init&#x4F20;&#x9012;p&#x548C;q&#x53C2;&#x6570;&#x8FDB;&#x884C;&#x8BBE;&#x7F6E;&#x7684;&#x3002;&#x600E;&#x4E48;&#x5C06;adminId&#x8BBE;&#x7F6E;&#x4E3A;0&#x5462;&#xFF1F;</p>
+<h3 id="&#x600E;&#x4E48;&#x5C06;adminId&#x8BBE;&#x7F6E;&#x4E3A;0&#xFF1F;"><a href="#&#x600E;&#x4E48;&#x5C06;adminId&#x8BBE;&#x7F6E;&#x4E3A;0&#xFF1F;" class="headerlink" title="&#x600E;&#x4E48;&#x5C06;adminId&#x8BBE;&#x7F6E;&#x4E3A;0&#xFF1F;"></a>&#x600E;&#x4E48;&#x5C06;adminId&#x8BBE;&#x7F6E;&#x4E3A;0&#xFF1F;</h3><p>&#x6765;&#x5177;&#x4F53;&#x770B;&#x4E00;&#x4E0B;<code>/init</code>&#x9875;&#x9762;&#xFF0C;&#x5B83;&#x4F1A;&#x83B7;&#x53D6;POST&#x6570;&#x636E;&#x4E2D;&#x7684;p&#x548C;q&#x53C2;&#x6570;&#xFF0C;&#x5E76;&#x6700;&#x7EC8;&#x751F;&#x6210;&#x4E00;&#x4E2A;adminId&#xFF1A;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">app.post(<span class="hljs-string">&quot;/init&quot;</span>, (req, res) =&gt; {</span><br><span class="line">  <span class="hljs-keyword">let</span> { p = <span class="hljs-string">&quot;0&quot;</span>, q = <span class="hljs-string">&quot;0&quot;</span>, clearPIN } = req.body; <span class="hljs-comment">// &#x4ECE;POST&#x6570;&#x636E;&#x5F53;&#x4E2D;&#x83B7;&#x53D6;&#x5F97;&#x5230;p&#x548C;q</span></span><br><span class="line">  <span class="hljs-keyword">let</span> target = md5(config.n.toString()); <span class="hljs-comment">// target&#x662F;config&#x4E2D;n&#x7684;md5&#x52A0;&#x5BC6;</span></span><br><span class="line">  <span class="hljs-keyword">let</span> pwHash = md5(</span><br><span class="line">    bigInt(<span class="hljs-built_in">String</span>(p))</span><br><span class="line">      .multiply(<span class="hljs-built_in">String</span>(q))</span><br><span class="line">      .toString()</span><br><span class="line">  ); <span class="hljs-comment">// &#x5C06;p&#x4E0E;p&#x76F8;&#x4E58;</span></span><br><span class="line">  <span class="hljs-keyword">if</span> (pwHash == target &amp;&amp; clearPIN === _clearPIN) {</span><br><span class="line">    <span class="hljs-comment">// &#x6E05;&#x7406;&#x9762;&#x677F;</span></span><br><span class="line">    board = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(config.height)</span><br><span class="line">      .fill(<span class="hljs-number">0</span>)</span><br><span class="line">      .map(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(config.width).fill(config.backgroundColor));</span><br><span class="line">    boardString = boardToStrings();</span><br><span class="line">    io.emit(<span class="hljs-string">&quot;board&quot;</span>, { <span class="hljs-attr">board</span>: boardString });</span><br><span class="line">  }</span><br><span class="line">  <span class="hljs-comment">//Sign the admin ID</span></span><br><span class="line">  <span class="hljs-keyword">let</span> adminId = pwHash</span><br><span class="line">    .split(<span class="hljs-string">&quot;&quot;</span>)</span><br><span class="line">    .map(<span class="hljs-function">(<span class="hljs-params">c, i</span>) =&gt;</span> c.charCodeAt(<span class="hljs-number">0</span>) ^ target.charCodeAt(i))</span><br><span class="line">    .reduce(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a + b); <span class="hljs-comment">// &#x53D6;&#x5408;&#x503C;</span></span><br><span class="line">  <span class="hljs-built_in">console</span>.log(adminId);</span><br><span class="line">  res.json(ok({ <span class="hljs-attr">token</span>: sign({ <span class="hljs-attr">id</span>: adminId }) }));</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>node.js中map可以参考：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/map" target="_blank" rel="noopener">Array.prototype.map()</a></li>
-<li>reduce可以参考：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/map" target="_blank" rel="noopener">Array.prototype.reduce()</a></li>
+<li>node.js&#x4E2D;map&#x53EF;&#x4EE5;&#x53C2;&#x8003;&#xFF1A;<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/map" target="_blank" rel="noopener">Array.prototype.map()</a></li>
+<li>reduce&#x53EF;&#x4EE5;&#x53C2;&#x8003;&#xFF1A;<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/map" target="_blank" rel="noopener">Array.prototype.reduce()</a></li>
 </ul>
-<p>一些语句已经作了注释，最重要的在后面的<code>map((c, i) =&gt; c.charCodeAt(0) ^ target.charCodeAt(i))</code>，这个语句的作用就是将pwHash中的每一位与target中的相同位置的字符进行异或。最后reduce将异或后的值进行取和。</p>
-<p>pwnHash的来源是<code>md5(p*q)</code>，target的来源是<code>md5(n)</code>，如果想要它们异或后再取和的值为0的话，我们该怎么做呢？</p>
-<p>我们首先得知道n的值是多少。在知道n的情况下，将p设置为n的值，q设置为1。(qp互换也可以)这样pwnHash和target的值就会相同。相同的值进行异或就会为0，取和之后也为0。这样就可以使adminId为0了。页面最终还会返回id为0的token，利用token就可以获取flag了。</p>
-<p>那现在的问题就是怎么得到n的值。</p>
-<h3 id="怎么获取n的值？"><a href="#怎么获取n的值？" class="headerlink" title="怎么获取n的值？"></a>怎么获取n的值？</h3><p>在源码中可以知道，<code>/serverInfo</code>会根据用户的权限(right)返回config内的信息。默认获取得到的值中是没有n的，所以我们需要通过<code>/updateUser</code>页面来设置当前用户查看config信息的权限。</p>
-<p>先来看下<code>/updateUser</code>页面的源码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">app.post(<span class="string">"/updateUser"</span>, (req, res) =&gt; &#123;</span><br><span class="line">  <span class="comment">// Update user color and rights</span></span><br><span class="line">  <span class="comment">// Only for admin</span></span><br><span class="line">  <span class="comment">// POST</span></span><br><span class="line">  <span class="comment">// &#123;</span></span><br><span class="line">  <span class="comment">//   color: 0xDEDBEE,</span></span><br><span class="line">  <span class="comment">//   rights: ["height", "width", "usersOnline"]</span></span><br><span class="line">  <span class="comment">// &#125;</span></span><br><span class="line">  <span class="keyword">let</span> uid = req.user.id;</span><br><span class="line">  <span class="keyword">let</span> user = users[uid];</span><br><span class="line">  <span class="keyword">if</span> (!user || !isAdmin(user)) &#123;</span><br><span class="line">    res.json(err(<span class="string">"You're not an admin!"</span>));</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> color = <span class="built_in">parseInt</span>(req.body.color);</span><br><span class="line">  users[uid].color = (color || <span class="number">0x0</span>) &amp; <span class="number">0xffffff</span>;</span><br><span class="line">  <span class="keyword">let</span> rights = req.body.rights || [];</span><br><span class="line">  <span class="keyword">if</span> (rights.length &gt; <span class="number">0</span> &amp;&amp; checkRights(rights)) &#123; <span class="comment">//检查rights</span></span><br><span class="line">    users[uid].rights = user.rights.concat(rights).filter(onlyUnique); <span class="comment">//去重操作</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  res.json(ok(&#123; <span class="attr">user</span>: users[uid] &#125;));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>数据包格式为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	color: 0xDEDBEE,</span><br><span class="line">	rights: [&quot;height&quot;, &quot;width&quot;, &quot;usersOnline&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>rights部分就是要添加查看的权限。</p>
-<p>先不看前面是否为管理员的判断，直接看后面添加权限时的判断。这里调用了<code>checkRights()</code>来进行权限检查。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">checkRights</span>(<span class="params">arr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> blacklist = [<span class="string">"p"</span>, <span class="string">"n"</span>, <span class="string">"port"</span>];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> element = arr[i];</span><br><span class="line">    <span class="keyword">if</span> (blacklist.includes(element)) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>函数中设置了一个黑名单，不允许<code>p、n、port</code>被添加进用户的查看权限中。验证方式是用for循环获取每一个权限，查看其是否在blacklist中。如果存在就返回false，不存在就返回true。所以传递rights的不能直接传递”n”。</p>
-<p>先来看<code>/serverInfo</code>页面是怎么获取config的值的，</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">app.get(<span class="string">"/serverInfo"</span>, (req, res) =&gt; &#123;</span><br><span class="line">  <span class="comment">// Get server info</span></span><br><span class="line">  <span class="comment">// Only for logged in users</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> user = users[req.user.id] || &#123; <span class="attr">rights</span>: [] &#125;;</span><br><span class="line">  <span class="keyword">let</span> info = user.rights.map(<span class="function"><span class="params">i</span> =&gt;</span> (&#123; <span class="attr">name</span>: i, <span class="attr">value</span>: config[i] &#125;));</span><br><span class="line">  res.json(ok(&#123; <span class="attr">info</span>: info &#125;));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>这里获取config的值就是通过config[i]获取的(i是键名)。那如何不直接传递”n”而得到n的值呢？</p>
-<p>这里要了解javascript中数组取值的方式。定义一个array1数组如图，注意赋值时的参数值：</p>
+<p>&#x4E00;&#x4E9B;&#x8BED;&#x53E5;&#x5DF2;&#x7ECF;&#x4F5C;&#x4E86;&#x6CE8;&#x91CA;&#xFF0C;&#x6700;&#x91CD;&#x8981;&#x7684;&#x5728;&#x540E;&#x9762;&#x7684;<code>map((c, i) =&gt; c.charCodeAt(0) ^ target.charCodeAt(i))</code>&#xFF0C;&#x8FD9;&#x4E2A;&#x8BED;&#x53E5;&#x7684;&#x4F5C;&#x7528;&#x5C31;&#x662F;&#x5C06;pwHash&#x4E2D;&#x7684;&#x6BCF;&#x4E00;&#x4F4D;&#x4E0E;target&#x4E2D;&#x7684;&#x76F8;&#x540C;&#x4F4D;&#x7F6E;&#x7684;&#x5B57;&#x7B26;&#x8FDB;&#x884C;&#x5F02;&#x6216;&#x3002;&#x6700;&#x540E;reduce&#x5C06;&#x5F02;&#x6216;&#x540E;&#x7684;&#x503C;&#x8FDB;&#x884C;&#x53D6;&#x548C;&#x3002;</p>
+<p>pwnHash&#x7684;&#x6765;&#x6E90;&#x662F;<code>md5(p*q)</code>&#xFF0C;target&#x7684;&#x6765;&#x6E90;&#x662F;<code>md5(n)</code>&#xFF0C;&#x5982;&#x679C;&#x60F3;&#x8981;&#x5B83;&#x4EEC;&#x5F02;&#x6216;&#x540E;&#x518D;&#x53D6;&#x548C;&#x7684;&#x503C;&#x4E3A;0&#x7684;&#x8BDD;&#xFF0C;&#x6211;&#x4EEC;&#x8BE5;&#x600E;&#x4E48;&#x505A;&#x5462;&#xFF1F;</p>
+<p>&#x6211;&#x4EEC;&#x9996;&#x5148;&#x5F97;&#x77E5;&#x9053;n&#x7684;&#x503C;&#x662F;&#x591A;&#x5C11;&#x3002;&#x5728;&#x77E5;&#x9053;n&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x5C06;p&#x8BBE;&#x7F6E;&#x4E3A;n&#x7684;&#x503C;&#xFF0C;q&#x8BBE;&#x7F6E;&#x4E3A;1&#x3002;(qp&#x4E92;&#x6362;&#x4E5F;&#x53EF;&#x4EE5;)&#x8FD9;&#x6837;pwnHash&#x548C;target&#x7684;&#x503C;&#x5C31;&#x4F1A;&#x76F8;&#x540C;&#x3002;&#x76F8;&#x540C;&#x7684;&#x503C;&#x8FDB;&#x884C;&#x5F02;&#x6216;&#x5C31;&#x4F1A;&#x4E3A;0&#xFF0C;&#x53D6;&#x548C;&#x4E4B;&#x540E;&#x4E5F;&#x4E3A;0&#x3002;&#x8FD9;&#x6837;&#x5C31;&#x53EF;&#x4EE5;&#x4F7F;adminId&#x4E3A;0&#x4E86;&#x3002;&#x9875;&#x9762;&#x6700;&#x7EC8;&#x8FD8;&#x4F1A;&#x8FD4;&#x56DE;id&#x4E3A;0&#x7684;token&#xFF0C;&#x5229;&#x7528;token&#x5C31;&#x53EF;&#x4EE5;&#x83B7;&#x53D6;flag&#x4E86;&#x3002;</p>
+<p>&#x90A3;&#x73B0;&#x5728;&#x7684;&#x95EE;&#x9898;&#x5C31;&#x662F;&#x600E;&#x4E48;&#x5F97;&#x5230;n&#x7684;&#x503C;&#x3002;</p>
+<h3 id="&#x600E;&#x4E48;&#x83B7;&#x53D6;n&#x7684;&#x503C;&#xFF1F;"><a href="#&#x600E;&#x4E48;&#x83B7;&#x53D6;n&#x7684;&#x503C;&#xFF1F;" class="headerlink" title="&#x600E;&#x4E48;&#x83B7;&#x53D6;n&#x7684;&#x503C;&#xFF1F;"></a>&#x600E;&#x4E48;&#x83B7;&#x53D6;n&#x7684;&#x503C;&#xFF1F;</h3><p>&#x5728;&#x6E90;&#x7801;&#x4E2D;&#x53EF;&#x4EE5;&#x77E5;&#x9053;&#xFF0C;<code>/serverInfo</code>&#x4F1A;&#x6839;&#x636E;&#x7528;&#x6237;&#x7684;&#x6743;&#x9650;(right)&#x8FD4;&#x56DE;config&#x5185;&#x7684;&#x4FE1;&#x606F;&#x3002;&#x9ED8;&#x8BA4;&#x83B7;&#x53D6;&#x5F97;&#x5230;&#x7684;&#x503C;&#x4E2D;&#x662F;&#x6CA1;&#x6709;n&#x7684;&#xFF0C;&#x6240;&#x4EE5;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x901A;&#x8FC7;<code>/updateUser</code>&#x9875;&#x9762;&#x6765;&#x8BBE;&#x7F6E;&#x5F53;&#x524D;&#x7528;&#x6237;&#x67E5;&#x770B;config&#x4FE1;&#x606F;&#x7684;&#x6743;&#x9650;&#x3002;</p>
+<p>&#x5148;&#x6765;&#x770B;&#x4E0B;<code>/updateUser</code>&#x9875;&#x9762;&#x7684;&#x6E90;&#x7801;&#xFF1A;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">app.post(<span class="hljs-string">&quot;/updateUser&quot;</span>, (req, res) =&gt; {</span><br><span class="line">  <span class="hljs-comment">// Update user color and rights</span></span><br><span class="line">  <span class="hljs-comment">// Only for admin</span></span><br><span class="line">  <span class="hljs-comment">// POST</span></span><br><span class="line">  <span class="hljs-comment">// {</span></span><br><span class="line">  <span class="hljs-comment">//   color: 0xDEDBEE,</span></span><br><span class="line">  <span class="hljs-comment">//   rights: [&quot;height&quot;, &quot;width&quot;, &quot;usersOnline&quot;]</span></span><br><span class="line">  <span class="hljs-comment">// }</span></span><br><span class="line">  <span class="hljs-keyword">let</span> uid = req.user.id;</span><br><span class="line">  <span class="hljs-keyword">let</span> user = users[uid];</span><br><span class="line">  <span class="hljs-keyword">if</span> (!user || !isAdmin(user)) {</span><br><span class="line">    res.json(err(<span class="hljs-string">&quot;You&apos;re not an admin!&quot;</span>));</span><br><span class="line">    <span class="hljs-keyword">return</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="hljs-keyword">let</span> color = <span class="hljs-built_in">parseInt</span>(req.body.color);</span><br><span class="line">  users[uid].color = (color || <span class="hljs-number">0x0</span>) &amp; <span class="hljs-number">0xffffff</span>;</span><br><span class="line">  <span class="hljs-keyword">let</span> rights = req.body.rights || [];</span><br><span class="line">  <span class="hljs-keyword">if</span> (rights.length &gt; <span class="hljs-number">0</span> &amp;&amp; checkRights(rights)) { <span class="hljs-comment">//&#x68C0;&#x67E5;rights</span></span><br><span class="line">    users[uid].rights = user.rights.concat(rights).filter(onlyUnique); <span class="hljs-comment">//&#x53BB;&#x91CD;&#x64CD;&#x4F5C;</span></span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  res.json(ok({ <span class="hljs-attr">user</span>: users[uid] }));</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+
+<p>&#x6570;&#x636E;&#x5305;&#x683C;&#x5F0F;&#x4E3A;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">{</span><br><span class="line">	color: 0xDEDBEE,</span><br><span class="line">	rights: [&quot;height&quot;, &quot;width&quot;, &quot;usersOnline&quot;]</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>rights&#x90E8;&#x5206;&#x5C31;&#x662F;&#x8981;&#x6DFB;&#x52A0;&#x67E5;&#x770B;&#x7684;&#x6743;&#x9650;&#x3002;</p>
+<p>&#x5148;&#x4E0D;&#x770B;&#x524D;&#x9762;&#x662F;&#x5426;&#x4E3A;&#x7BA1;&#x7406;&#x5458;&#x7684;&#x5224;&#x65AD;&#xFF0C;&#x76F4;&#x63A5;&#x770B;&#x540E;&#x9762;&#x6DFB;&#x52A0;&#x6743;&#x9650;&#x65F6;&#x7684;&#x5224;&#x65AD;&#x3002;&#x8FD9;&#x91CC;&#x8C03;&#x7528;&#x4E86;<code>checkRights()</code>&#x6765;&#x8FDB;&#x884C;&#x6743;&#x9650;&#x68C0;&#x67E5;&#x3002;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkRights</span>(<span class="hljs-params">arr</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">let</span> blacklist = [<span class="hljs-string">&quot;p&quot;</span>, <span class="hljs-string">&quot;n&quot;</span>, <span class="hljs-string">&quot;port&quot;</span>];</span><br><span class="line">  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; arr.length; i++) {</span><br><span class="line">    <span class="hljs-keyword">const</span> element = arr[i];</span><br><span class="line">    <span class="hljs-keyword">if</span> (blacklist.includes(element)) {</span><br><span class="line">      <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x51FD;&#x6570;&#x4E2D;&#x8BBE;&#x7F6E;&#x4E86;&#x4E00;&#x4E2A;&#x9ED1;&#x540D;&#x5355;&#xFF0C;&#x4E0D;&#x5141;&#x8BB8;<code>p&#x3001;n&#x3001;port</code>&#x88AB;&#x6DFB;&#x52A0;&#x8FDB;&#x7528;&#x6237;&#x7684;&#x67E5;&#x770B;&#x6743;&#x9650;&#x4E2D;&#x3002;&#x9A8C;&#x8BC1;&#x65B9;&#x5F0F;&#x662F;&#x7528;for&#x5FAA;&#x73AF;&#x83B7;&#x53D6;&#x6BCF;&#x4E00;&#x4E2A;&#x6743;&#x9650;&#xFF0C;&#x67E5;&#x770B;&#x5176;&#x662F;&#x5426;&#x5728;blacklist&#x4E2D;&#x3002;&#x5982;&#x679C;&#x5B58;&#x5728;&#x5C31;&#x8FD4;&#x56DE;false&#xFF0C;&#x4E0D;&#x5B58;&#x5728;&#x5C31;&#x8FD4;&#x56DE;true&#x3002;&#x6240;&#x4EE5;&#x4F20;&#x9012;rights&#x7684;&#x4E0D;&#x80FD;&#x76F4;&#x63A5;&#x4F20;&#x9012;&#x201D;n&#x201D;&#x3002;</p>
+<p>&#x5148;&#x6765;&#x770B;<code>/serverInfo</code>&#x9875;&#x9762;&#x662F;&#x600E;&#x4E48;&#x83B7;&#x53D6;config&#x7684;&#x503C;&#x7684;&#xFF0C;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">app.get(<span class="hljs-string">&quot;/serverInfo&quot;</span>, (req, res) =&gt; {</span><br><span class="line">  <span class="hljs-comment">// Get server info</span></span><br><span class="line">  <span class="hljs-comment">// Only for logged in users</span></span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">let</span> user = users[req.user.id] || { <span class="hljs-attr">rights</span>: [] };</span><br><span class="line">  <span class="hljs-keyword">let</span> info = user.rights.map(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> ({ <span class="hljs-attr">name</span>: i, <span class="hljs-attr">value</span>: config[i] }));</span><br><span class="line">  res.json(ok({ <span class="hljs-attr">info</span>: info }));</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+
+<p>&#x8FD9;&#x91CC;&#x83B7;&#x53D6;config&#x7684;&#x503C;&#x5C31;&#x662F;&#x901A;&#x8FC7;config[i]&#x83B7;&#x53D6;&#x7684;(i&#x662F;&#x952E;&#x540D;)&#x3002;&#x90A3;&#x5982;&#x4F55;&#x4E0D;&#x76F4;&#x63A5;&#x4F20;&#x9012;&#x201D;n&#x201D;&#x800C;&#x5F97;&#x5230;n&#x7684;&#x503C;&#x5462;&#xFF1F;</p>
+<p>&#x8FD9;&#x91CC;&#x8981;&#x4E86;&#x89E3;javascript&#x4E2D;&#x6570;&#x7EC4;&#x53D6;&#x503C;&#x7684;&#x65B9;&#x5F0F;&#x3002;&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;array1&#x6570;&#x7EC4;&#x5982;&#x56FE;&#xFF0C;&#x6CE8;&#x610F;&#x8D4B;&#x503C;&#x65F6;&#x7684;&#x53C2;&#x6570;&#x503C;&#xFF1A;</p>
 <p><img src="https://i.loli.net/2020/02/11/r6PEAHZRoh89Vjs.png" alt="node_array.png"></p>
-<p>可以看到，我这里传递给array1的键值是一个多维数组，但是同样可以获取得到数组中键名为”port”的值。(这种取值的方式在python、php中不行)</p>
-<p>由于这样的取值方式是可行的，所以我们只需要给right赋值一个<code>[&quot;n&quot;]</code>就可以绕过前面的黑名单了。</p>
-<p>好，现在可以取到n了，再来看看怎么登陆管理员用户名。</p>
-<h3 id="怎么使用管理员用户名登陆？"><a href="#怎么使用管理员用户名登陆？" class="headerlink" title="怎么使用管理员用户名登陆？"></a>怎么使用管理员用户名登陆？</h3><p>登陆页面<code>/login</code>中有一个函数用于判断用户名是否为合理的用户名：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isValidUser</span>(<span class="params">u</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    u.username.length &gt;= <span class="number">3</span> &amp;&amp;</span><br><span class="line">    u.username.toUpperCase() !== config.adminUsername.toUpperCase()</span><br><span class="line">    <span class="comment">// 长度大于3并且不能为adminUsername</span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在<code>/updateUser</code>页面中有一个函数用于判断用户是否为管理员：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isAdmin</span>(<span class="params">u</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> u.username.toLowerCase() == config.adminUsername.toLowerCase();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在登录时，<code>isValidUser</code>函数会对用户输入的用户名进行<code>toUpperCase</code>处理，再与管理员用户名进行对比。如果输入的用户名与管理员用户名相同，就不允许登录。</p>
-<p>但是我们可以看到，在之后的一个判断用户是否为管理员的函数中，对用户名进行处理的是<code>toLowerCase</code>。所以这两个差异，就可以使用大小写特性来进行绕过。</p>
-<p>大小写差异可以参考p神的这篇文章：<a href="https://www.leavesongs.com/HTML/javascript-up-low-ercase-tip.html" target="_blank" rel="noopener">Fuzz中的javascript大小写特性</a></p>
-<p>题目中默认的管理员用户名为：hacktm</p>
-<p>所以，我们指定登录时的用户名为：hacKtm 即可绕过<code>isValidUser</code>和<code>isAdmin</code>的验证。</p>
-<h3 id="思路总结"><a href="#思路总结" class="headerlink" title="思路总结"></a>思路总结</h3><ul>
-<li>利用javascript大小写特性使用管理员的用户名登录</li>
-<li>给用户添加查看n的权限并查看n的值</li>
-<li>通过赋值p、q将adminId设置为0</li>
-<li>获取Flag</li>
+<p>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x6211;&#x8FD9;&#x91CC;&#x4F20;&#x9012;&#x7ED9;array1&#x7684;&#x952E;&#x503C;&#x662F;&#x4E00;&#x4E2A;&#x591A;&#x7EF4;&#x6570;&#x7EC4;&#xFF0C;&#x4F46;&#x662F;&#x540C;&#x6837;&#x53EF;&#x4EE5;&#x83B7;&#x53D6;&#x5F97;&#x5230;&#x6570;&#x7EC4;&#x4E2D;&#x952E;&#x540D;&#x4E3A;&#x201D;port&#x201D;&#x7684;&#x503C;&#x3002;(&#x8FD9;&#x79CD;&#x53D6;&#x503C;&#x7684;&#x65B9;&#x5F0F;&#x5728;python&#x3001;php&#x4E2D;&#x4E0D;&#x884C;)</p>
+<p>&#x7531;&#x4E8E;&#x8FD9;&#x6837;&#x7684;&#x53D6;&#x503C;&#x65B9;&#x5F0F;&#x662F;&#x53EF;&#x884C;&#x7684;&#xFF0C;&#x6240;&#x4EE5;&#x6211;&#x4EEC;&#x53EA;&#x9700;&#x8981;&#x7ED9;right&#x8D4B;&#x503C;&#x4E00;&#x4E2A;<code>[&quot;n&quot;]</code>&#x5C31;&#x53EF;&#x4EE5;&#x7ED5;&#x8FC7;&#x524D;&#x9762;&#x7684;&#x9ED1;&#x540D;&#x5355;&#x4E86;&#x3002;</p>
+<p>&#x597D;&#xFF0C;&#x73B0;&#x5728;&#x53EF;&#x4EE5;&#x53D6;&#x5230;n&#x4E86;&#xFF0C;&#x518D;&#x6765;&#x770B;&#x770B;&#x600E;&#x4E48;&#x767B;&#x9646;&#x7BA1;&#x7406;&#x5458;&#x7528;&#x6237;&#x540D;&#x3002;</p>
+<h3 id="&#x600E;&#x4E48;&#x4F7F;&#x7528;&#x7BA1;&#x7406;&#x5458;&#x7528;&#x6237;&#x540D;&#x767B;&#x9646;&#xFF1F;"><a href="#&#x600E;&#x4E48;&#x4F7F;&#x7528;&#x7BA1;&#x7406;&#x5458;&#x7528;&#x6237;&#x540D;&#x767B;&#x9646;&#xFF1F;" class="headerlink" title="&#x600E;&#x4E48;&#x4F7F;&#x7528;&#x7BA1;&#x7406;&#x5458;&#x7528;&#x6237;&#x540D;&#x767B;&#x9646;&#xFF1F;"></a>&#x600E;&#x4E48;&#x4F7F;&#x7528;&#x7BA1;&#x7406;&#x5458;&#x7528;&#x6237;&#x540D;&#x767B;&#x9646;&#xFF1F;</h3><p>&#x767B;&#x9646;&#x9875;&#x9762;<code>/login</code>&#x4E2D;&#x6709;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x7528;&#x4E8E;&#x5224;&#x65AD;&#x7528;&#x6237;&#x540D;&#x662F;&#x5426;&#x4E3A;&#x5408;&#x7406;&#x7684;&#x7528;&#x6237;&#x540D;&#xFF1A;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isValidUser</span>(<span class="hljs-params">u</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> (</span><br><span class="line">    u.username.length &gt;= <span class="hljs-number">3</span> &amp;&amp;</span><br><span class="line">    u.username.toUpperCase() !== config.adminUsername.toUpperCase()</span><br><span class="line">    <span class="hljs-comment">// &#x957F;&#x5EA6;&#x5927;&#x4E8E;3&#x5E76;&#x4E14;&#x4E0D;&#x80FD;&#x4E3A;adminUsername</span></span><br><span class="line">  );</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x5728;<code>/updateUser</code>&#x9875;&#x9762;&#x4E2D;&#x6709;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x7528;&#x4E8E;&#x5224;&#x65AD;&#x7528;&#x6237;&#x662F;&#x5426;&#x4E3A;&#x7BA1;&#x7406;&#x5458;&#xFF1A;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isAdmin</span>(<span class="hljs-params">u</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> u.username.toLowerCase() == config.adminUsername.toLowerCase();</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x5728;&#x767B;&#x5F55;&#x65F6;&#xFF0C;<code>isValidUser</code>&#x51FD;&#x6570;&#x4F1A;&#x5BF9;&#x7528;&#x6237;&#x8F93;&#x5165;&#x7684;&#x7528;&#x6237;&#x540D;&#x8FDB;&#x884C;<code>toUpperCase</code>&#x5904;&#x7406;&#xFF0C;&#x518D;&#x4E0E;&#x7BA1;&#x7406;&#x5458;&#x7528;&#x6237;&#x540D;&#x8FDB;&#x884C;&#x5BF9;&#x6BD4;&#x3002;&#x5982;&#x679C;&#x8F93;&#x5165;&#x7684;&#x7528;&#x6237;&#x540D;&#x4E0E;&#x7BA1;&#x7406;&#x5458;&#x7528;&#x6237;&#x540D;&#x76F8;&#x540C;&#xFF0C;&#x5C31;&#x4E0D;&#x5141;&#x8BB8;&#x767B;&#x5F55;&#x3002;</p>
+<p>&#x4F46;&#x662F;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x5728;&#x4E4B;&#x540E;&#x7684;&#x4E00;&#x4E2A;&#x5224;&#x65AD;&#x7528;&#x6237;&#x662F;&#x5426;&#x4E3A;&#x7BA1;&#x7406;&#x5458;&#x7684;&#x51FD;&#x6570;&#x4E2D;&#xFF0C;&#x5BF9;&#x7528;&#x6237;&#x540D;&#x8FDB;&#x884C;&#x5904;&#x7406;&#x7684;&#x662F;<code>toLowerCase</code>&#x3002;&#x6240;&#x4EE5;&#x8FD9;&#x4E24;&#x4E2A;&#x5DEE;&#x5F02;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x5927;&#x5C0F;&#x5199;&#x7279;&#x6027;&#x6765;&#x8FDB;&#x884C;&#x7ED5;&#x8FC7;&#x3002;</p>
+<p>&#x5927;&#x5C0F;&#x5199;&#x5DEE;&#x5F02;&#x53EF;&#x4EE5;&#x53C2;&#x8003;p&#x795E;&#x7684;&#x8FD9;&#x7BC7;&#x6587;&#x7AE0;&#xFF1A;<a href="https://www.leavesongs.com/HTML/javascript-up-low-ercase-tip.html" target="_blank" rel="noopener">Fuzz&#x4E2D;&#x7684;javascript&#x5927;&#x5C0F;&#x5199;&#x7279;&#x6027;</a></p>
+<p>&#x9898;&#x76EE;&#x4E2D;&#x9ED8;&#x8BA4;&#x7684;&#x7BA1;&#x7406;&#x5458;&#x7528;&#x6237;&#x540D;&#x4E3A;&#xFF1A;hacktm</p>
+<p>&#x6240;&#x4EE5;&#xFF0C;&#x6211;&#x4EEC;&#x6307;&#x5B9A;&#x767B;&#x5F55;&#x65F6;&#x7684;&#x7528;&#x6237;&#x540D;&#x4E3A;&#xFF1A;hac&#x212A;tm &#x5373;&#x53EF;&#x7ED5;&#x8FC7;<code>isValidUser</code>&#x548C;<code>isAdmin</code>&#x7684;&#x9A8C;&#x8BC1;&#x3002;</p>
+<h3 id="&#x601D;&#x8DEF;&#x603B;&#x7ED3;"><a href="#&#x601D;&#x8DEF;&#x603B;&#x7ED3;" class="headerlink" title="&#x601D;&#x8DEF;&#x603B;&#x7ED3;"></a>&#x601D;&#x8DEF;&#x603B;&#x7ED3;</h3><ul>
+<li>&#x5229;&#x7528;javascript&#x5927;&#x5C0F;&#x5199;&#x7279;&#x6027;&#x4F7F;&#x7528;&#x7BA1;&#x7406;&#x5458;&#x7684;&#x7528;&#x6237;&#x540D;&#x767B;&#x5F55;</li>
+<li>&#x7ED9;&#x7528;&#x6237;&#x6DFB;&#x52A0;&#x67E5;&#x770B;n&#x7684;&#x6743;&#x9650;&#x5E76;&#x67E5;&#x770B;n&#x7684;&#x503C;</li>
+<li>&#x901A;&#x8FC7;&#x8D4B;&#x503C;p&#x3001;q&#x5C06;adminId&#x8BBE;&#x7F6E;&#x4E3A;0</li>
+<li>&#x83B7;&#x53D6;Flag</li>
 </ul>
-<h2 id="过程复现"><a href="#过程复现" class="headerlink" title="过程复现"></a>过程复现</h2><ul>
-<li>利用javascript大小写特性使用管理员的用户名登录</li>
+<h2 id="&#x8FC7;&#x7A0B;&#x590D;&#x73B0;"><a href="#&#x8FC7;&#x7A0B;&#x590D;&#x73B0;" class="headerlink" title="&#x8FC7;&#x7A0B;&#x590D;&#x73B0;"></a>&#x8FC7;&#x7A0B;&#x590D;&#x73B0;</h2><ul>
+<li>&#x5229;&#x7528;javascript&#x5927;&#x5C0F;&#x5199;&#x7279;&#x6027;&#x4F7F;&#x7528;&#x7BA1;&#x7406;&#x5458;&#x7684;&#x7528;&#x6237;&#x540D;&#x767B;&#x5F55;</li>
 </ul>
 <p><img src="https://i.loli.net/2020/02/11/DWk8mzRydb6Q5Ls.png" alt="ctf_01.png"></p>
 <ul>
-<li>给用户添加查看n的权限并查看n的值</li>
+<li>&#x7ED9;&#x7528;&#x6237;&#x6DFB;&#x52A0;&#x67E5;&#x770B;n&#x7684;&#x6743;&#x9650;&#x5E76;&#x67E5;&#x770B;n&#x7684;&#x503C;</li>
 </ul>
 <p><img src="https://i.loli.net/2020/02/11/FDihNnWXYVHCfug.png" alt="ctf_02.png"></p>
-<p>查看n的值：</p>
+<p>&#x67E5;&#x770B;n&#x7684;&#x503C;&#xFF1A;</p>
 <p><img src="https://i.loli.net/2020/02/11/AuER7M3Ywg86eZK.png" alt="ctf_03.png"></p>
 <ul>
-<li>通过赋值p、q将adminId设置为0</li>
+<li>&#x901A;&#x8FC7;&#x8D4B;&#x503C;p&#x3001;q&#x5C06;adminId&#x8BBE;&#x7F6E;&#x4E3A;0</li>
 </ul>
 <p><img src="https://i.loli.net/2020/02/11/YDQNIyWcvXoJFEs.png" alt="ctf_04.png"></p>
 <ul>
-<li>获取Flag</li>
+<li>&#x83B7;&#x53D6;Flag</li>
 </ul>
 <p><img src="https://i.loli.net/2020/02/11/uEp3HdzKocv8JjD.png" alt="ctf_05.png"></p>
 
+    
     </div>
-
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/CTF/">#CTF</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Writeup/">#Writeup</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Node-js/">#Node.js</a></span>
+    
+    </div>
     
     
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2020/01/30/NodeJsVulns/">Node.js 常见漏洞学习与总结</a>
+            
+        </span>
+    </div>
     
-        
-      
+</article>
 
-      <footer class="post-footer">
-          
-            
-          
-          <div class="post-tags">
-            
-              <a href="/tags/CTF/" rel="tag"># CTF</a>
-            
-          </div>
-        
 
-        
 
-          <div class="post-nav">
-            <div class="post-nav-next post-nav-item">
-              
-                <a href="/2020/01/30/NodeJsVulns/" rel="next" title="Node.js 常见漏洞学习与总结">
-                  <i class="fa fa-chevron-left"></i> Node.js 常见漏洞学习与总结
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2020 Threezh1&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Threezh1">
+                    
+                    GitHub
+                    
                 </a>
-              
+                
+                </div>
             </div>
-
-            <span class="post-nav-divider"></span>
-
-            <div class="post-nav-prev post-nav-item">
-              
-            </div>
-          </div>
-        
-      </footer>
-    
-  </div>
-  
-  
-  
-  </article>
-
-  </div>
-
-
-          </div>
-          
-
+            
+            
         </div>
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-  </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-        
-        
-        
-        
-      
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
-          Inhaltsverzeichnis
-        </li>
-        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-          Übersicht
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc">
-            <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#说在前面"><span class="nav-number">1.</span> <span class="nav-text">说在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解题思路"><span class="nav-number">2.</span> <span class="nav-text">解题思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#怎么获取Flag？"><span class="nav-number">2.1.</span> <span class="nav-text">怎么获取Flag？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#怎么将adminId设置为0？"><span class="nav-number">2.2.</span> <span class="nav-text">怎么将adminId设置为0？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#怎么获取n的值？"><span class="nav-number">2.3.</span> <span class="nav-text">怎么获取n的值？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#怎么使用管理员用户名登陆？"><span class="nav-number">2.4.</span> <span class="nav-text">怎么使用管理员用户名登陆？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#思路总结"><span class="nav-number">2.5.</span> <span class="nav-text">思路总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过程复现"><span class="nav-number">3.</span> <span class="nav-text">过程复现</span></a></li></ol></div>
-          </div>
-        
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Threezh1</p>
-  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
 </div>
-  <nav class="site-state motion-element">
-      <div class="site-state-item site-state-posts">
-        
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">34</span>
-          <span class="site-state-item-name">Artikel</span>
-        </a>
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-categories">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">7</span>
-        <span class="site-state-item-name">Kategorien</span>
-        
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-tags">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">21</span>
-        <span class="site-state-item-name">schlagwörter</span>
-        
-      </div>
-    
-  </nav>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-      </span>
-    
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-      </span>
-    
-  </div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("chinese");
+</script>
 
 
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
 
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        // ...options...
+    });
+});
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Escribe algo...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
-      </div>
-
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Threezh1</span>
 </div>
-  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Páginas',
+                CATEGORIES: 'Categorías',
+                TAGS: 'Tags',
+                UNTITLED: '(Sin título)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-  </div>
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
-<script src="/js/schemes/pisces.js?v=7.3.0"></script>
-<script src="/js/next-boot.js?v=7.3.0"></script>
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-  
-
-
-  
-  <script src="/js/post-details.js?v=7.3.0"></script>
-
-
 </body>
 </html>

