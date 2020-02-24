@@ -2,7 +2,7 @@
 <html class="has-navbar-fixed-top">
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-<title>Tag: 重装漏洞 - Threezh1&#39;s blog</title>
+<title>Tag: CORS - Threezh1&#39;s blog</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
@@ -22,7 +22,7 @@
 <meta name="keywords" content="Threezh1">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Threezh1&#39;s blog">
-<meta property="og:url" content="http://yoursite.com/tags/重装漏洞/index.html">
+<meta property="og:url" content="http://yoursite.com/tags/CORS/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
 <meta property="og:description" content="Share learn &amp; Share life.">
 <meta property="og:locale" content="Chinese">
@@ -119,7 +119,7 @@
     <section class="section section-heading">
     <div class="container">
         <div class="content">
-            <h5>#重装漏洞</h5>
+            <h5>#CORS</h5>
         </div>
     </div>
 </section>
@@ -129,12 +129,12 @@
         <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
-            <a href="/2019/05/18/PHP代码审计之重装漏洞/" itemprop="url">PHP代码审计之重装漏洞</a>
+            <a href="/2020/02/19/CORS原理及利用整理/" itemprop="url">CORS原理及利用整理</a>
         
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2019-05-17T16:00:00.000Z" itemprop="datePublished">May 18 2019</time>
+            <time datetime="2020-02-19T04:00:00.000Z" itemprop="datePublished">Feb 19 2020</time>
         </span>
         
         <span class="column is-narrow article-category">
@@ -146,21 +146,18 @@
         <span class="column is-narrow">
             
             
-            15 minutes de lectura (Alrededor de 2182 palabras)
+            19 minutes de lectura (Alrededor de 2868 palabras)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <h2 id="&#x91CD;&#x88C5;&#x6F0F;&#x6D1E;"><a href="#&#x91CD;&#x88C5;&#x6F0F;&#x6D1E;" class="headerlink" title="&#x91CD;&#x88C5;&#x6F0F;&#x6D1E;"></a>&#x91CD;&#x88C5;&#x6F0F;&#x6D1E;</h2><p>&#x6839;&#x636E;&#x5927;&#x4F6C;&#x4EEC;&#x7684;&#x603B;&#x7ED3;&#xFF0C;&#x91CD;&#x88C5;&#x6F0F;&#x6D1E;&#x53EF;&#x4EE5;&#x4EE5;&#x4E0B;&#x51E0;&#x79CD;&#x7C7B;&#x578B;&#xFF1A;</p>
-<ol>
-<li><p>&#x81EA;&#x52A8;&#x5220;&#x9664;&#x8FD9;&#x4E2A;&#x5B89;&#x88C5;&#x6587;&#x4EF6;</p>
-<p> &#x901A;&#x8FC7;&#x751F;&#x6210;&#x4E00;&#x4E2A;lock&#x6587;&#x4EF6;&#x6765;&#x5224;&#x65AD;&#x7A0B;&#x5E8F;&#x662F;&#x5426;&#x5B89;&#x88C5;&#x8FC7;</p>
-</li>
-<li><p>&#x6839;&#x672C;&#x65E0;&#x9A8C;&#x8BC1;</p>
-<p> &#x5B89;&#x88C5;&#x5B8C;&#x6210;&#x540E;&#x4E0D;&#x4F1A;&#x81EA;&#x52A8;&#x5220;&#x9664;&#x6587;&#x4EF6;&#xFF0C;&#x53C8;&#x4E0D;&#x4F1A;&#x751F;&#x6210;lock&#x5224;&#x65AD;&#x662F;&#x5426;&#x5B89;&#x88C5;&#x8FC7;</p></li></ol>
+        <h2 id="&#x8BF4;&#x5728;&#x524D;&#x9762;"><a href="#&#x8BF4;&#x5728;&#x524D;&#x9762;" class="headerlink" title="&#x8BF4;&#x5728;&#x524D;&#x9762;"></a>&#x8BF4;&#x5728;&#x524D;&#x9762;</h2><p>&#x521A;&#x5165;&#x95E8;&#x7684;&#x65F6;&#x5019;&#x4E5F;&#x5B66;&#x4E60;&#x8FC7;CORS&#xFF0C;&#x90A3;&#x4E2A;&#x65F6;&#x5019;&#x7684;&#x5BF9;&#x5BFB;&#x627E;&#x6F0F;&#x6D1E;&#x7684;&#x6807;&#x51C6;&#x662F;&#xFF1A;</p>
+<epacse hidden>7</epacse>
+
+<p>&#x539F;&#x7406;&#x3001;&#x5229;&#x7528;&#x3001;&#x7ED5;&#x8FC7;&#x90FD;&#x6CA1;&#x6709;&#x8FDB;&#x4E00;&#x6B65;&#x4E86;&#x89E3;&#x3002;&#x8FD9;&#x6B21;&#x8D81;&#x7740;&#x5B9E;&#x4E60;&#x7684;&#x673A;&#x4F1A;&#xFF0C;&#x597D;&#x597D;&#x7684;&#x5C06;CORS&#x76F8;&#x5173;&#x77E5;&#x8BC6;&#x603B;&#x7ED3;&#x4E00;&#x4E0B;&#xFF0C;&#x5E76;&#x5BF9;&#x4E00;&#x4E9B;&#x57FA;&#x672C;&#x539F;&#x7406;&#x8FDB;&#x884C;&#x4E00;&#x4E2A;&#x68B3;&#x7406;&#x3002;</p>
         <p class="article-more-link">
-            <a href="/2019/05/18/PHP代码审计之重装漏洞/#more">Leer más</a>
+            <a href="/2020/02/19/CORS原理及利用整理/#more">Leer más</a>
         </p>
     
     </div>
