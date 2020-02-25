@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+<title>文章标题 - Threezh1&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="Share learn & Share life.">
+
+
+
+<meta name="keywords" content="Threezh1">
+
+
+
+    <meta name="description" content="&amp;#x5B66;&amp;#x957F;&amp;#x5728;&amp;#x4E4B;&amp;#x524D;&amp;#x5206;&amp;#x4EAB;&amp;#x8FC7;&amp;#x4E00;&amp;#x4E2A;&amp;#x96C6;&amp;#x8DE8;&amp;#x7A97;&amp;#x53E3;&amp;#x901A;&amp;#x4FE1;&amp;#x4E0E;localstorage&amp;#x4E00;&amp;#x8EAB;&amp;#x7684;XSS&amp;#x6F0F;&amp;#x6D1E;&amp;#xFF0C;&amp;">
+<meta name="keywords" content="XSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文章标题">
+<meta property="og:url" content="http://yoursite.com/2020/02/25/XSS_postMessage_localstorage_xss/index.html">
+<meta property="og:site_name" content="Threezh1&#39;s blog">
+<meta property="og:description" content="&amp;#x5B66;&amp;#x957F;&amp;#x5728;&amp;#x4E4B;&amp;#x524D;&amp;#x5206;&amp;#x4EAB;&amp;#x8FC7;&amp;#x4E00;&amp;#x4E2A;&amp;#x96C6;&amp;#x8DE8;&amp;#x7A97;&amp;#x53E3;&amp;#x901A;&amp;#x4FE1;&amp;#x4E0E;localstorage&amp;#x4E00;&amp;#x8EAB;&amp;#x7684;XSS&amp;#x6F0F;&amp;#x6D1E;&amp;#xFF0C;&amp;">
+<meta property="og:locale" content="Chinese">
+<meta property="og:updated_time" content="2020-02-25T15:15:57.646Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="文章标题">
+<meta name="twitter:description" content="&amp;#x5B66;&amp;#x957F;&amp;#x5728;&amp;#x4E4B;&amp;#x524D;&amp;#x5206;&amp;#x4EAB;&amp;#x8FC7;&amp;#x4E00;&amp;#x4E2A;&amp;#x96C6;&amp;#x8DE8;&amp;#x7A97;&amp;#x53E3;&amp;#x901A;&amp;#x4FE1;&amp;#x4E0E;localstorage&amp;#x4E00;&amp;#x8EAB;&amp;#x7684;XSS&amp;#x6F0F;&amp;#x6D1E;&amp;#xFF0C;&amp;">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+</head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                <img src="/images/logo.png" alt height="28">
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item " href="/archives">归档</a>
+            
+            <a class="navbar-item " href="/Projects">项目</a>
+            
+            <a class="navbar-item " href="/Life">生活</a>
+            
+            <a class="navbar-item " href="/Photography">摄影</a>
+            
+            <a class="navbar-item " href="/about">关于</a>
+            
+            <a class="navbar-item " href="http://119.3.219.188/">Threeday</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Suche" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            文章标题
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2020-02-25T15:00:00.000Z" itemprop="datePublished">Feb 25 2020</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            10 minutes lesen (Über 1432 Wörter)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p>&#x5B66;&#x957F;&#x5728;&#x4E4B;&#x524D;&#x5206;&#x4EAB;&#x8FC7;&#x4E00;&#x4E2A;&#x96C6;&#x8DE8;&#x7A97;&#x53E3;&#x901A;&#x4FE1;&#x4E0E;localstorage&#x4E00;&#x8EAB;&#x7684;XSS&#x6F0F;&#x6D1E;&#xFF0C;&#x4E00;&#x76F4;&#x62D6;&#x7740;&#x6CA1;&#x6709;&#x6574;&#x7406;&#x3002;&#x60F3;&#x6765;&#x60F3;&#x53BB;&#x8FD8;&#x662F;&#x8EB2;&#x4E0D;&#x6389;&#x7684;&#xFF0C;&#x4ECA;&#x665A;&#x5C31;&#x6B64;&#x6574;&#x7406;&#x4E00;&#x4E0B;&#x5427;&#x3002;&#x5148;&#x603B;&#x7ED3;&#x4E00;&#x4E0B;&#x8DE8;&#x7A97;&#x53E3;&#x901A;&#x4FE1;&#x4E0E;localstorage&#x7684;&#x7B14;&#x8BB0;&#xFF0C;&#x6700;&#x540E;&#x518D;&#x628A;&#x8FD9;&#x4E2A;XSS&#x6F0F;&#x6D1E;&#x7684;&#x8FC7;&#x7A0B;&#x68B3;&#x7406;&#x4E00;&#x904D;&#x3002;</p>
+<a id="more"></a>
+<h2 id="iframe&#x5B9E;&#x73B0;&#x5D4C;&#x5957;&#x7A97;&#x53E3;"><a href="#iframe&#x5B9E;&#x73B0;&#x5D4C;&#x5957;&#x7A97;&#x53E3;" class="headerlink" title="iframe&#x5B9E;&#x73B0;&#x5D4C;&#x5957;&#x7A97;&#x53E3;"></a>iframe&#x5B9E;&#x73B0;&#x5D4C;&#x5957;&#x7A97;&#x53E3;</h2><p>iframe&#x6807;&#x7B7E;&#x53EF;&#x4EE5;&#x5728;&#x7A97;&#x53E3;&#x5185;&#x5D4C;&#x5957;&#x4E00;&#x4E2A;&#x7A97;&#x53E3;&#xFF0C;&#x5D4C;&#x5165;&#x7684;&#x7A97;&#x53E3;&#x6709;&#x5B83;&#x5355;&#x72EC;&#x7684; <code>document</code> &#x548C; <code>window</code> &#x5BF9;&#x8C61;&#x3002;&#x5F53;html&#x4E2D;&#x5B58;&#x5728;&#x4E00;&#x4E2A;<code>&lt;iframe&gt;</code>&#x6807;&#x7B7E;&#x65F6;&#xFF0C;&#x6709;&#x4E24;&#x79CD;&#x65B9;&#x5F0F;&#x53EF;&#x4EE5;&#x83B7;&#x53D6;&#x5230;&#x5B83;&#x4EEC;&#xFF1A;</p>
+<ul>
+<li><code>iframe.contentWindow</code> &#x662F;&#x5BF9; <code>&lt;iframe&gt;</code> &#x91CC; window &#x7684;&#x5F15;&#x7528;&#x3002;</li>
+<li><code>iframe.contentDocument</code> &#x662F;&#x5BF9; <code>&lt;iframe&gt;</code> &#x91CC;&#x7684; document &#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;&#x3002;</li>
+</ul>
+<p>&#x9664;&#x4E86;&#x76F4;&#x63A5;&#x4E0A;&#x65B9;&#x7684;&#x4E24;&#x79CD;&#x65B9;&#x5F0F;&#xFF0C;&#x8FD8;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;<code>window.frames</code>&#x6765;&#x83B7;&#x53D6;<code>&lt;iframe&gt;</code>&#x7684;&#x7A97;&#x53E3;&#x5BF9;&#x8C61;&#x3002;</p>
+<ul>
+<li>&#x901A;&#x8FC7;&#x7D22;&#x5F15;&#x83B7;&#x53D6;&#xFF1A;<code>window.frames[0]</code> &#x2014;&#x2014; &#x5F53;&#x524D;&#x6587;&#x6863;&#x91CC;&#x7B2C;&#x4E00;&#x4E2A; iframe &#x7684;&#x7A97;&#x53E3;&#x3002;</li>
+<li>&#x901A;&#x8FC7;&#x540D;&#x79F0;&#x83B7;&#x53D6;&#xFF1A;<code>window.frames.iframeName</code> &#x2014;&#x2014; &#x83B7;&#x53D6; <code>name=&quot;iframeName&quot;</code> &#x7684; iframe &#x7A97;&#x53E3;&#x3002;</li>
+</ul>
+<p><strong>&#x5BF9;iframe&#x7A97;&#x53E3;&#x7684;&#x64CD;&#x4F5C;</strong></p>
+<p>&#x5982;&#x679C;&#x662F;&#x4E00;&#x4E2A;&#x975E;&#x540C;&#x6E90;&#x7A97;&#x53E3;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5BF9;&#x83B7;&#x53D6;&#x5F97;&#x5230;&#x7684;&#x5BF9;&#x8C61;&#x8FDB;&#x884C;&#x4EE5;&#x4E0B;&#x7684;&#x64CD;&#x4F5C;&#xFF1A;</p>
+<ul>
+<li>&#x901A;&#x8FC7; <code>iframe.contentWindow</code> &#x83B7;&#x53D6;&#x5185;&#x90E8;&#x7A97;&#x53E3;&#x7684; window</li>
+<li>&#x4FEE;&#x6539;&#x5B83;&#x7684; <code>location</code></li>
+</ul>
+<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://example.com&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;iframe&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="hljs-undefined"></span></span><br><span class="line"><span class="hljs-javascript">    iframe.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{</span></span><br><span class="line"><span class="hljs-javascript">        <span class="hljs-comment">// &#x83B7;&#x53D6;&#x5185;&#x90E8;&#x7A97;&#x53E3;&#x7684;&#x5F15;&#x7528;</span></span></span><br><span class="line"><span class="hljs-javascript">        <span class="hljs-keyword">let</span> iframeWindow = iframe.contentWindow;</span></span><br><span class="line"><span class="hljs-javascript">        <span class="hljs-comment">// &#x4FEE;&#x6539;&#x5730;&#x5740;</span></span></span><br><span class="line"><span class="hljs-javascript">		iframe.contentWindow.location = <span class="hljs-string">&apos;/&apos;</span>;    </span></span><br><span class="line"><span class="hljs-undefined">    }</span></span><br><span class="line"><span class="hljs-undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x5982;&#x679C;&#x662F;&#x4E00;&#x4E2A;&#x540C;&#x6E90;&#x7684;&#x7A97;&#x53E3;&#xFF0C;&#x53EF;&#x4EE5;&#x5BF9;&#x5B83;&#x7684;document&#x5BF9;&#x8C61;&#x8FDB;&#x884C;&#x4EFB;&#x4F55;&#x7684;&#x64CD;&#x4F5C;&#x3002;</p>
+<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/index.html&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;iframe&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="hljs-undefined"></span></span><br><span class="line"><span class="hljs-javascript">  iframe.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{</span></span><br><span class="line"><span class="hljs-javascript">    <span class="hljs-comment">// &#x968F;&#x4FBF;&#x505A;&#x4EFB;&#x4F55;&#x4E8B;</span></span></span><br><span class="line"><span class="hljs-javascript">    iframe.contentDocument.body.prepend(<span class="hljs-string">&quot;Hello, world!&quot;</span>);</span></span><br><span class="line"><span class="hljs-undefined">  };</span></span><br><span class="line"><span class="hljs-undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>iframe&#x6807;&#x7B7E;&#x7684;sandbox&#x5C5E;&#x6027;</strong></p>
+<p><code>sandbox</code> &#x5C5E;&#x6027;&#x5141;&#x8BB8;&#x5728; <code>&lt;iframe&gt;</code> &#x4E2D;&#x7981;&#x6B62;&#x67D0;&#x4E9B;&#x7279;&#x5B9A;&#x64CD;&#x4F5C;&#xFF0C;&#x4EE5;&#x907F;&#x514D;&#x6267;&#x884C;&#x4E00;&#x4E9B;&#x4E0D;&#x88AB;&#x4FE1;&#x4EFB;&#x7684;&#x4EE3;&#x7801;&#x3002;&#x5B83;&#x901A;&#x8FC7;&#x5C06;&#x5B83;&#x5F53;&#x505A;&#x975E;&#x540C;&#x6E90;&#x7684;&#x7F51;&#x9875;&#x5BF9;&#x5F85;&#x4EE5;&#x53CA;&#x6DFB;&#x52A0;&#x4E00;&#x4E9B;&#x9650;&#x5236;&#x4EE5;&#x5B9E;&#x73B0; iframe &#x7684;&#x6C99;&#x76D2;&#x5316;&#x3002;</p>
+<p>sanbox&#x6709;&#x4EE5;&#x4E0B;&#x4E00;&#x5199;&#x9650;&#x5236;&#x5C5E;&#x6027;&#xFF1A;</p>
+<ul>
+<li>allow-top-navigation &#x5141;&#x8BB8; <code>iframe</code> &#x4FEE;&#x6539;&#x7236;&#x7A97;&#x53E3;&#x7684;&#x5730;&#x5740;&#x3002;</li>
+<li>allow-forms &#x5141;&#x8BB8;&#x5728; <code>iframe</code> &#x5185;&#x63D0;&#x4EA4;&#x8868;&#x5355;&#x3002;</li>
+<li>allow-scripts &#x5141;&#x8BB8;&#x5728; <code>iframe</code> &#x5185;&#x8FD0;&#x884C;&#x811A;&#x672C;&#x3002;</li>
+<li>allow-popups &#x5141;&#x8BB8;&#x6765;&#x81EA; iframe &#x7684; window.open &#x5F39;&#x51FA;&#x7A97;&#x53E3;&#x3002;</li>
+</ul>
+<p>&#x4E4B;&#x524D;&#x8BB0;&#x5F55;&#x7684;CORS&#x7684;null&#x503C;&#x7ED5;&#x8FC7;&#x65F6;&#xFF0C;&#x5C31;&#x4F7F;&#x7528;&#x4E86;iframe&#x7684;box&#x5C5E;&#x6027;&#xFF1A;</p>
+<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">sandbox</span>=<span class="hljs-string">&quot;allow-scripts allow-top-navigation allow-forms&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&apos;data:text/html,&lt;script&gt;var req=new XMLHttpRequest();req.onload=reqListener;req.open(&quot;get&quot;,&quot;http://127.0.0.1/test.html&quot;,true);req.withCredentials=true;req.send();function reqListener(){alert(this.responseText)};&lt;/script&gt;&apos;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="postMessage&#x5B9E;&#x73B0;&#x8DE8;&#x7A97;&#x53E3;&#x901A;&#x4FE1;"><a href="#postMessage&#x5B9E;&#x73B0;&#x8DE8;&#x7A97;&#x53E3;&#x901A;&#x4FE1;" class="headerlink" title="postMessage&#x5B9E;&#x73B0;&#x8DE8;&#x7A97;&#x53E3;&#x901A;&#x4FE1;"></a>postMessage&#x5B9E;&#x73B0;&#x8DE8;&#x7A97;&#x53E3;&#x901A;&#x4FE1;</h2><p>&#x76F4;&#x63A5;&#x6765;&#x770B;&#x4E00;&#x4E2A;&#x4F8B;&#x5B50;&#xFF1A;</p>
+<p>iframe.html</p>
+<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="hljs-undefined"></span></span><br><span class="line"><span class="hljs-javascript">	<span class="hljs-built_in">window</span>.addEventListener(<span class="hljs-string">&apos;message&apos;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{</span></span><br><span class="line"><span class="hljs-javascript">		alert(<span class="hljs-string">`Received <span class="hljs-subst">${event.data}</span> from <span class="hljs-subst">${event.origin}</span>`</span>);</span></span><br><span class="line"><span class="hljs-undefined">	});</span></span><br><span class="line"><span class="hljs-undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>index.html</p>
+<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;iframe.html&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;iframe&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;display:block;height:60px&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="hljs-undefined"></span></span><br><span class="line"><span class="hljs-javascript">    iframe.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{</span></span><br><span class="line"><span class="hljs-javascript">      iframe.contentWindow.postMessage(<span class="hljs-string">&quot;Hello I&apos;m Threezh1&quot;</span>, <span class="hljs-string">&apos;*&apos;</span>);</span></span><br><span class="line"><span class="hljs-javascript">      <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;</span></span><br><span class="line"><span class="hljs-undefined">    };</span></span><br><span class="line"><span class="hljs-undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x5F53;&#x6253;&#x5F00;<code>index.html</code>&#xFF0C;&#x5C31;&#x4F1A;&#x5F39;&#x51FA;<code>Received Hello I&apos;m Threezh1 from http://localhost</code>&#x7684;&#x7A97;&#x53E3;&#x3002;&#x8FD9;&#x4E2A;&#x8FC7;&#x7A0B;&#x5C31;&#x662F;<code>index.html</code>&#x7ED9;<code>iframe.html</code>&#x53D1;&#x9001;&#x4FE1;&#x606F;&#x7684;&#x8FC7;&#x7A0B;&#x3002;</p>
+<p>postMessage&#x6709;&#x4E24;&#x4E2A;&#x53C2;&#x6570;&#xFF1A;</p>
+<ul>
+<li>data &#x8981;&#x53D1;&#x9001;&#x7684;&#x6570;&#x636E;</li>
+<li>targetOrigin &#x6307;&#x5B9A;&#x76EE;&#x6807;&#x7A97;&#x53E3;&#x7684;&#x6E90;&#xFF0C;&#x5982;<code>http://example.com</code>&#x5C31;&#x662F;&#x6307;&#x5B9A;&#x7A97;&#x53E3;&#x4E2D;&#x7684;&#x6E90;&#x5FC5;&#x987B;&#x662F;example.com&#x3002;&#x5982;&#x679C;&#x4E0D;&#x9650;&#x5236;&#x6E90;&#xFF0C;&#x5219;&#x586B;&#x5199;&#x4E3A;<code>*</code></li>
+</ul>
+<p>&#x63A5;&#x53D7;&#x4FE1;&#x606F;&#x4F7F;&#x7528;<code>addEventListener</code>&#x6DFB;&#x52A0;&#x4E00;&#x4E2A;<code>message</code>&#x4E8B;&#x4EF6;&#x3002;&#x4E8B;&#x4EF6;&#x4E2D;&#x7684;<code>event</code>&#x5BF9;&#x8C61;&#x6709;&#x4EE5;&#x4E0B;&#x5C5E;&#x6027;&#xFF1A;</p>
+<ul>
+<li><code>event.data</code> &#x4ECE;postMessage&#x4F20;&#x9012;&#x6765;&#x7684;&#x6570;&#x636E;</li>
+<li><code>event.origin</code> &#x53D1;&#x9001;&#x65B9;&#x7684;&#x6E90;</li>
+<li><code>event.source</code> &#x5BF9;&#x53D1;&#x9001;&#x65B9;&#x7A97;&#x53E3;&#x7684;&#x5F15;&#x7528;&#x3002;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x7684;&#x8BDD;&#x53EF;&#x4EE5;&#x7ACB;&#x5373;&#x56DE;&#x590D; <code>postMessage</code></li>
+</ul>
+<p><strong>&#x5BFB;&#x627E;postMessage&#x5BFC;&#x81F4;&#x7684;xss&#x6F0F;&#x6D1E;&#xFF1A;</strong>&#x4ECE;js&#x4E2D;&#x5BFB;&#x627E;&#x7C7B;&#x4F3C;&#x4E8E;<code>message</code>&#x63A5;&#x6536;&#x5668;&#xFF0C;&#x5F80;&#x6B64;&#x9875;&#x9762;&#x53D1;&#x9001;&#xFF1A;<code>window.postMessage(&quot;hello&quot;, &quot;*&quot;)</code>&#x5224;&#x65AD;&#x5176;&#x80FD;&#x5426;&#x5F62;&#x6210;XSS&#x3002;</p>
+<p>&#x8FD9;&#x7C7B;XSS&#x7684;&#x9632;&#x5FA1;&#xFF1A;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">receiveMessage</span>(<span class="hljs-params">event</span>) </span>{</span><br><span class="line"> <span class="hljs-comment">// &#x6765;&#x6E90;&#x4FE1;&#x4EFB;</span></span><br><span class="line"> <span class="hljs-keyword">if</span> (event.origin !== <span class="hljs-string">&quot;http://example.com:8080&quot;</span>)</span><br><span class="line"> <span class="hljs-keyword">return</span>;</span><br><span class="line"> <span class="hljs-comment">// event.source&#x4F5C;&#x4E3A;&#x56DE;&#x4FE1;&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x5E76;&#x4E14;&#x628A;event.origin&#x4F5C;&#x4E3A;targetOrigin&#xFF0C;&#x907F;&#x514D;&#x6CC4;&#x9732;&#x654F;&#x611F;&#x4FE1;&#x606F;&#x3002;</span></span><br><span class="line"> event.source.postMessage(<span class="hljs-string">&quot;secret message&quot;</span>, event.origin); }</span><br><span class="line"><span class="hljs-built_in">window</span>.addEventListener(<span class="hljs-string">&quot;message&quot;</span>, receiveMessage, <span class="hljs-literal">false</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="localstorage&#x5B9E;&#x73B0;&#x672C;&#x5730;&#x50A8;&#x5B58;"><a href="#localstorage&#x5B9E;&#x73B0;&#x672C;&#x5730;&#x50A8;&#x5B58;" class="headerlink" title="localstorage&#x5B9E;&#x73B0;&#x672C;&#x5730;&#x50A8;&#x5B58;"></a>localstorage&#x5B9E;&#x73B0;&#x672C;&#x5730;&#x50A8;&#x5B58;</h2><p>HTML5 &#x63D0;&#x4F9B;&#x4E86;&#x4E24;&#x79CD;&#x65B0;&#x7684;&#x672C;&#x5730;&#x5B58;&#x50A8;&#x65B9;&#x6848;&#xFF0C;sessionStorage&#x548C;localStorage&#xFF0C;&#x7EDF;&#x79F0;WebStorage&#x3002;</p>
+<p>sessionStorage &#x662F;&#x9488;&#x5BF9;session&#x7684;&#x6570;&#x636E;&#x5B58;&#x50A8;&#xFF0C;&#x9875;&#x9762;&#x88AB;&#x5173;&#x95ED;&#x65F6;&#xFF0C;&#x5B58;&#x50A8;&#x7684;&#x6570;&#x636E;&#x4F1A;&#x88AB;&#x6E05;&#x9664;&#x3002;<br>localStorage &#x5B58;&#x50A8;&#x7684;&#x6570;&#x636E;&#x53EF;&#x4EE5;&#x957F;&#x671F;&#x4FDD;&#x7559;</p>
+<p>localstorage&#x7684;&#x51E0;&#x79CD;&#x64CD;&#x4F5C;&#xFF1A;</p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// &#x589E;&#x52A0;&#x6570;&#x636E;</span></span><br><span class="line">localStorage.setItem(<span class="hljs-string">&apos;myCat&apos;</span>, <span class="hljs-string">&apos;Tom&apos;</span>);</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x8BFB;&#x53D6;&#x6570;&#x636E;</span></span><br><span class="line"><span class="hljs-keyword">let</span> cat = localStorage.getItem(<span class="hljs-string">&apos;myCat&apos;</span>);</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x79FB;&#x9664;&#x6570;&#x636E;</span></span><br><span class="line">localStorage.removeItem(<span class="hljs-string">&apos;myCat&apos;</span>);</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x79FB;&#x9664;&#x6240;&#x6709;&#x6570;&#x636E;</span></span><br><span class="line">localStorage.clear();</span><br></pre></td></tr></table></figure>
+
+<h2 id="iframe-postMessage-localstorage-XSS"><a href="#iframe-postMessage-localstorage-XSS" class="headerlink" title="iframe + postMessage + localstorage = XSS"></a>iframe + postMessage + localstorage = XSS</h2><p>&#x6848;&#x4F8B;&#x73AF;&#x5883;&#xFF1A;</p>
+<p>A&#x9875;&#x9762;&#xFF1A;<a href="http://a.victim.com/myhonor.html" target="_blank" rel="noopener">http://a.victim.com/myhonor.html</a> &#x8FD9;&#x4E2A;&#x9875;&#x9762;&#x5B58;&#x5728;&#x4E24;&#x4E2A;&#x95EE;&#x9898;&#xFF1A;</p>
+<ul>
+<li>&#x964D;&#x57DF;&#xFF1A;&#x9875;&#x9762;&#x5C06;&#x5F53;&#x524D;&#x6E90;&#x901A;&#x8FC7;JS&#x8BBE;&#x7F6E;&#x6210;&#x4E86;&#x7236;&#x57DF;<code>document.domain=&quot;victim.com&quot;</code></li>
+<li>&#x5B58;&#x5728;&#x4ECE;localstorage&#x4E2D;&#x53D6;&#x6570;&#x636E;&#x7684;&#x64CD;&#x4F5C;&#xFF0C;&#x5E76;&#x4E14;&#x4F1A;&#x5C06;&#x53D6;&#x51FA;&#x7684;&#x503C;&#x56DE;&#x663E;&#x5230;&#x9875;&#x9762;&#x4E0A;&#x5F62;&#x6210;XSS</li>
+</ul>
+<p>B&#x9875;&#x9762;&#xFF1A;<a href="http://b.victim.com/ueditor.html" target="_blank" rel="noopener">http://b.victim.com/ueditor.html</a> &#x8FD9;&#x4E2A;&#x9875;&#x9762;&#x5B58;&#x5728;&#x4E00;&#x4E2A;message&#x76D1;&#x542C;&#x4E8B;&#x4EF6;&#xFF0C;&#x5E76;&#x5C06;postMessage&#x4F20;&#x9012;&#x6765;&#x7684;&#x6570;&#x636E;&#x56DE;&#x663E;&#x5230;&#x9875;&#x9762;&#x4E0A;&#xFF0C;&#x5F62;&#x6210;XSS&#x6F0F;&#x6D1E;</p>
+<p>&#x76EE;&#x7684;&#xFF1A; &#x4ECE;B&#x9875;&#x9762;&#x5230;A&#x9875;&#x9762;&#x7684;XSS&#x6F0F;&#x6D1E;</p>
+<p>&#x4ECE;A&#x9875;&#x9762;&#x7684;&#x7B2C;&#x4E8C;&#x4E2A;&#x95EE;&#x9898;&#x4E2D;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x60F3;&#x5230;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x6C61;&#x67D3;localhost&#x7684;&#x503C;&#x6765;&#x8FBE;&#x5230;A&#x9875;&#x9762;&#x4E2D;XSS&#x7684;&#x76EE;&#x7684;&#x3002;&#x6700;&#x540E;&#x6784;&#x9020;&#x51FA;&#x6765;&#x7684;payload&#x5982;&#x4E0B;&#xFF1A;</p>
+<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://a.victim.com/index.html&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;proxy&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="hljs-undefined"></span></span><br><span class="line"><span class="hljs-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadxss</span>(<span class="hljs-params"></span>) </span>{</span></span><br><span class="line"><span class="hljs-javascript">	<span class="hljs-keyword">var</span> frame = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&quot;iframe&quot;</span>);</span></span><br><span class="line"><span class="hljs-javascript">	frame.src = <span class="hljs-string">&quot;https://b.victim.com/ueditor.html&quot;</span>;</span></span><br><span class="line"><span class="hljs-javascript">	frame.name = <span class="hljs-string">&quot;document.domain=&apos;victim.com&apos;;ccc=function(){top.proxy.localStorage.setItem(&apos;app_friends_{test}&apos;,&apos;alert(999)&apos;)};setInterval(&apos;ccc ()&apos;);&quot;</span>;</span></span><br><span class="line"><span class="hljs-javascript">	frame.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{</span></span><br><span class="line"><span class="hljs-javascript">		<span class="hljs-built_in">window</span>[<span class="hljs-number">1</span>].postMessage(<span class="hljs-string">&apos;{&quot;sendEditorValue&quot;:&quot;&lt;img src=x onerror=eval(parent.name)&gt;&quot;}&apos;</span>, <span class="hljs-string">&quot;*&quot;</span>);</span></span><br><span class="line"><span class="hljs-undefined">	}</span></span><br><span class="line"><span class="hljs-javascript">	<span class="hljs-built_in">document</span>.body.appendChile(frame);</span></span><br><span class="line"><span class="hljs-undefined">}</span></span><br><span class="line"><span class="hljs-undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x90A3;&#x6267;&#x884C;&#x7684;&#x6B65;&#x9AA4;&#x53C8;&#x662F;&#x600E;&#x4E48;&#x6837;&#x7684;&#x5462;&#xFF1F;</p>
+<ol>
+<li>&#x901A;&#x8FC7;iframe&#x52A0;&#x8F7D;A&#x9875;&#x9762;</li>
+<li>&#x901A;&#x8FC7;js&#xFF0C;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;iframe&#x52A0;&#x8F7D;B&#x9875;&#x9762;</li>
+<li>&#x5C06;&#x52A0;&#x8F7D;B&#x9875;&#x9762;&#x7684;iframe&#x547D;&#x540D;&#x4E3A;&#x4E00;&#x4E2A;&#x8BBE;&#x7F6E;A&#x9875;&#x9762;localstorage&#x7684;js</li>
+<li>&#x7ED9;B&#x9875;&#x9762;&#x53D1;&#x9001;postMessage&#x8BF7;&#x6C42;</li>
+<li>B&#x9875;&#x9762;&#x63A5;&#x53D7;&#x8BF7;&#x6C42;&#x5BFC;&#x81F4;xss&#x5E76;&#x6267;&#x884C;B&#x9875;&#x9762;&#x7684;iframe&#x540D;&#x79F0;&#x4E2D;&#x7684;payload</li>
+<li>&#x5BFC;&#x81F4;A&#x9875;&#x9762;&#x7684;xss</li>
+</ol>
+<p><em>PS&#xFF1A;&#x8FD9;&#x91CC;&#x7684;&#x73AF;&#x5883;&#x4E0D;&#x662F;&#x771F;&#x5B9E;&#x7684;&#x73AF;&#x5883;&#xFF0C;&#x5F88;&#x591A;&#x7EC6;&#x8282;&#x90FD;&#x5DF2;&#x62B9;&#x53BB;&#x3002;&#x4EC5;&#x662F;&#x4E3A;&#x4E86;&#x5B66;&#x4E60;&#x5176;&#x4E2D;&#x7684;&#x601D;&#x8DEF;&#x3002;&#x6B64;&#x5916;&#xFF0C;&#x8FD9;&#x91CC;&#x4E0D;&#x76F4;&#x63A5;&#x901A;&#x8FC7;B&#x9875;&#x9762;&#x7684;XSS&#x6C61;&#x67D3;localstorage&#x662F;&#x4E3A;&#x4E86;&#x7ED5;&#x8FC7;waf&#x3002;</em></p>
+<p>&#x901A;&#x8FC7;&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x7ED9;&#x4E86;&#x4E00;&#x70B9;&#x65B0;&#x7684;&#x601D;&#x8003;&#x2026;&#x2026;</p>
+<h2 id="&#x53C2;&#x8003;"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</h2><ul>
+<li><a href="https://zh.javascript.info/cross-window-communication" target="_blank" rel="noopener">&#x8DE8;&#x7A97;&#x53E3;&#x901A;&#x4FE1;</a></li>
+<li><a href="https://blog.csdn.net/yanghuan313/article/details/55260232" target="_blank" rel="noopener">&#x57FA;&#x4E8E;localStorage&#x7684;&#x672C;&#x5730;&#x5B58;&#x50A8;XSS</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/localStorage" target="_blank" rel="noopener">Window.localStorage</a></li>
+</ul>
+
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/XSS/">#XSS</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2020/02/25/CSRF绕过整理/">CSRF的绕过与利用</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2020 Threezh1&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Threezh1">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("chinese");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        // ...options...
+    });
+});
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Suche etwas...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Seiten',
+                CATEGORIES: 'Kategorien',
+                TAGS: 'Tags',
+                UNTITLED: '(제목없음)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+</body>
+</html>
