@@ -18,18 +18,18 @@
 
 
 
-    <meta name="description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x672C;&amp;#x6765;&amp;#x53EA;&amp;#x60F3;&amp;#x590D;&amp;#x73B0;&amp;#x4E00;&amp;#x4E0B;sql&amp;#x6CE8;&amp;#x5165;&amp;#x7684;&amp;#x51E0;&amp;#x7BC7;&amp;#x6587;&amp;#x7AE0;&amp;#xFF0C;&amp;#x4F46;&amp;#x5728;&amp;#x5148;&amp;#x77E5;&amp;#x4E">
+    <meta name="description" content="&amp;#x672C;&amp;#x6765;&amp;#x53EA;&amp;#x60F3;&amp;#x590D;&amp;#x73B0;&amp;#x4E00;&amp;#x4E0B;sql&amp;#x6CE8;&amp;#x5165;&amp;#x7684;&amp;#x51E0;&amp;#x7BC7;&amp;#x6587;&amp;#x7AE0;&amp;#xFF0C;&amp;#x4F46;&amp;#x5728;&amp;#x5148;&amp;#x77E5;&amp;#x4E0A;&amp;#x627E;&amp;#x5230;&amp;#x4E86;&amp;#x51">
 <meta name="keywords" content="PHP,代码审计,SQL注入">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PHP代码审计之学习SQL注入与审计流程">
 <meta property="og:url" content="http://yoursite.com/2019/05/29/PHP代码审计之SQL注入与审计流程/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
-<meta property="og:description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x672C;&amp;#x6765;&amp;#x53EA;&amp;#x60F3;&amp;#x590D;&amp;#x73B0;&amp;#x4E00;&amp;#x4E0B;sql&amp;#x6CE8;&amp;#x5165;&amp;#x7684;&amp;#x51E0;&amp;#x7BC7;&amp;#x6587;&amp;#x7AE0;&amp;#xFF0C;&amp;#x4F46;&amp;#x5728;&amp;#x5148;&amp;#x77E5;&amp;#x4E">
+<meta property="og:description" content="&amp;#x672C;&amp;#x6765;&amp;#x53EA;&amp;#x60F3;&amp;#x590D;&amp;#x73B0;&amp;#x4E00;&amp;#x4E0B;sql&amp;#x6CE8;&amp;#x5165;&amp;#x7684;&amp;#x51E0;&amp;#x7BC7;&amp;#x6587;&amp;#x7AE0;&amp;#xFF0C;&amp;#x4F46;&amp;#x5728;&amp;#x5148;&amp;#x77E5;&amp;#x4E0A;&amp;#x627E;&amp;#x5230;&amp;#x4E86;&amp;#x51">
 <meta property="og:locale" content="Chinese">
-<meta property="og:updated_time" content="2020-02-12T14:05:27.982Z">
+<meta property="og:updated_time" content="2020-02-25T15:36:35.799Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PHP代码审计之学习SQL注入与审计流程">
-<meta name="twitter:description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x672C;&amp;#x6765;&amp;#x53EA;&amp;#x60F3;&amp;#x590D;&amp;#x73B0;&amp;#x4E00;&amp;#x4E0B;sql&amp;#x6CE8;&amp;#x5165;&amp;#x7684;&amp;#x51E0;&amp;#x7BC7;&amp;#x6587;&amp;#x7AE0;&amp;#xFF0C;&amp;#x4F46;&amp;#x5728;&amp;#x5148;&amp;#x77E5;&amp;#x4E">
+<meta name="twitter:description" content="&amp;#x672C;&amp;#x6765;&amp;#x53EA;&amp;#x60F3;&amp;#x590D;&amp;#x73B0;&amp;#x4E00;&amp;#x4E0B;sql&amp;#x6CE8;&amp;#x5165;&amp;#x7684;&amp;#x51E0;&amp;#x7BC7;&amp;#x6587;&amp;#x7AE0;&amp;#xFF0C;&amp;#x4F46;&amp;#x5728;&amp;#x5148;&amp;#x77E5;&amp;#x4E0A;&amp;#x627E;&amp;#x5230;&amp;#x4E86;&amp;#x51">
 
 
 
@@ -100,7 +100,7 @@
         
         <div class="navbar-menu navbar-end">
             
-            <a class="navbar-item search" title="Search" href="javascript:;">
+            <a class="navbar-item search" title="Buscar" href="javascript:;">
                 <i class="fas fa-search"></i>
             </a>
             
@@ -139,13 +139,13 @@
         <span class="column is-narrow">
             
             
-            19 minutes read (About 2846 words)
+            19 minutes de lectura (Alrededor de 2842 palabras)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <h2 id="&#x8BF4;&#x5728;&#x524D;&#x9762;"><a href="#&#x8BF4;&#x5728;&#x524D;&#x9762;" class="headerlink" title="&#x8BF4;&#x5728;&#x524D;&#x9762;"></a>&#x8BF4;&#x5728;&#x524D;&#x9762;</h2><p>&#x672C;&#x6765;&#x53EA;&#x60F3;&#x590D;&#x73B0;&#x4E00;&#x4E0B;sql&#x6CE8;&#x5165;&#x7684;&#x51E0;&#x7BC7;&#x6587;&#x7AE0;&#xFF0C;&#x4F46;&#x5728;&#x5148;&#x77E5;&#x4E0A;&#x627E;&#x5230;&#x4E86;&#x51E0;&#x7BC7;&#x975E;&#x5E38;&#x597D;&#x7684;&#x5165;&#x95E8;&#x5BA1;&#x8BA1;&#x7684;&#x6587;&#x7AE0;&#x3002;&#x4E8E;&#x662F;&#x6253;&#x7B97;&#x6309;&#x7167;&#x4ED6;&#x7684;&#x5BA1;&#x8BA1;&#x601D;&#x8DEF;&#xFF0C;&#x719F;&#x6089;&#x4E00;&#x4E0B;PHP&#x4EE3;&#x7801;&#x5BA1;&#x8BA1;&#x6D41;&#x7A0B;&#xFF0C;&#x540C;&#x65F6;&#x6574;&#x7406;&#x4E00;&#x4E0B;SQL&#x6CE8;&#x5165;&#x7684;&#x5BA1;&#x8BA1;&#x65B9;&#x6CD5;&#x3002;</p>
+        <p>&#x672C;&#x6765;&#x53EA;&#x60F3;&#x590D;&#x73B0;&#x4E00;&#x4E0B;sql&#x6CE8;&#x5165;&#x7684;&#x51E0;&#x7BC7;&#x6587;&#x7AE0;&#xFF0C;&#x4F46;&#x5728;&#x5148;&#x77E5;&#x4E0A;&#x627E;&#x5230;&#x4E86;&#x51E0;&#x7BC7;&#x975E;&#x5E38;&#x597D;&#x7684;&#x5165;&#x95E8;&#x5BA1;&#x8BA1;&#x7684;&#x6587;&#x7AE0;&#x3002;&#x4E8E;&#x662F;&#x6253;&#x7B97;&#x6309;&#x7167;&#x4ED6;&#x7684;&#x5BA1;&#x8BA1;&#x601D;&#x8DEF;&#xFF0C;&#x719F;&#x6089;&#x4E00;&#x4E0B;PHP&#x4EE3;&#x7801;&#x5BA1;&#x8BA1;&#x6D41;&#x7A0B;&#xFF0C;&#x540C;&#x65F6;&#x6574;&#x7406;&#x4E00;&#x4E0B;SQL&#x6CE8;&#x5165;&#x7684;&#x5BA1;&#x8BA1;&#x65B9;&#x6CD5;&#x3002;</p>
 <p>&#x6587;&#x7AE0;&#x5730;&#x5740;&#xFF1A;<a href="https://xz.aliyun.com/t/3532" target="_blank" rel="noopener">https://xz.aliyun.com/t/3532</a><br><a id="more"></a></p>
 <h2 id="&#x8FC7;&#x7A0B;&#x4E00;-&#x4E86;&#x89E3;&#x7F51;&#x7AD9;&#x7684;&#x57FA;&#x672C;&#x67B6;&#x6784;"><a href="#&#x8FC7;&#x7A0B;&#x4E00;-&#x4E86;&#x89E3;&#x7F51;&#x7AD9;&#x7684;&#x57FA;&#x672C;&#x67B6;&#x6784;" class="headerlink" title="&#x8FC7;&#x7A0B;&#x4E00; &#x4E86;&#x89E3;&#x7F51;&#x7AD9;&#x7684;&#x57FA;&#x672C;&#x67B6;&#x6784;"></a>&#x8FC7;&#x7A0B;&#x4E00; &#x4E86;&#x89E3;&#x7F51;&#x7AD9;&#x7684;&#x57FA;&#x672C;&#x67B6;&#x6784;</h2><p>&#x6587;&#x7AE0;&#x662F;&#x62FF;PbootCMS1.2.1&#x6765;&#x505A;&#x6F14;&#x793A;&#x3002; &#x5B89;&#x88C5;&#x597D;&#x7CFB;&#x7EDF;&#xFF0C;&#x914D;&#x7F6E;&#x597D;&#x6570;&#x636E;&#x5E93;&#x4FE1;&#x606F;&#xFF0C;&#x9605;&#x8BFB;&#x4E00;&#x4E0B;&#x7F51;&#x7AD9;&#x5F00;&#x53D1;&#x624B;&#x518C;&#x3002;</p>
 <p>&#x5728;&#x5BA1;&#x8BA1;&#x4E4B;&#x524D;&#xFF0C;&#x53EF;&#x4EE5;&#x5148;&#x505A;&#x4EE5;&#x4E0B;&#x4E8B;&#x60C5;&#xFF1A;</p>
@@ -481,7 +481,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something...">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Escribe algo...">
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -494,10 +494,10 @@ document.addEventListener("DOMContentLoaded", function() {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
                 POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
+                PAGES: 'Páginas',
+                CATEGORIES: 'Categorías',
                 TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
+                UNTITLED: '(Sin título)',
             },
             CONTENT_URL: '/content.json',
         };

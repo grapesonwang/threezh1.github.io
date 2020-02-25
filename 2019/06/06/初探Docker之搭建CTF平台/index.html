@@ -18,13 +18,13 @@
 
 
 
-    <meta name="description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x817E;&amp;#x8BAF;10&amp;#x5143;&amp;#x5B66;&amp;#x751F;&amp;#x673A; &amp;#x8D2D;&amp;#x4E70;&amp;#x4E5F;&amp;#x53EF;&amp;#x4EE5;&amp;#x4F7F;&amp;#x7528;&amp;#x963F;&amp;#x91CC;&amp;#x4E91;&amp;#x7684;&amp;#x5B66;&amp;#x751F;&amp;#x673A;&amp;#xFF">
+    <meta name="description" content="&amp;#x817E;&amp;#x8BAF;10&amp;#x5143;&amp;#x5B66;&amp;#x751F;&amp;#x673A; &amp;#x8D2D;&amp;#x4E70;&amp;#x4E5F;&amp;#x53EF;&amp;#x4EE5;&amp;#x4F7F;&amp;#x7528;&amp;#x963F;&amp;#x91CC;&amp;#x4E91;&amp;#x7684;&amp;#x5B66;&amp;#x751F;&amp;#x673A;&amp;#xFF0C;&amp;#x90FD;&amp;#x5F88;&amp;#x4FBF;&amp;#x5B">
 <meta name="keywords" content="Docker">
 <meta property="og:type" content="article">
 <meta property="og:title" content="初探Docker之搭建CTF平台">
 <meta property="og:url" content="http://yoursite.com/2019/06/06/初探Docker之搭建CTF平台/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
-<meta property="og:description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x817E;&amp;#x8BAF;10&amp;#x5143;&amp;#x5B66;&amp;#x751F;&amp;#x673A; &amp;#x8D2D;&amp;#x4E70;&amp;#x4E5F;&amp;#x53EF;&amp;#x4EE5;&amp;#x4F7F;&amp;#x7528;&amp;#x963F;&amp;#x91CC;&amp;#x4E91;&amp;#x7684;&amp;#x5B66;&amp;#x751F;&amp;#x673A;&amp;#xFF">
+<meta property="og:description" content="&amp;#x817E;&amp;#x8BAF;10&amp;#x5143;&amp;#x5B66;&amp;#x751F;&amp;#x673A; &amp;#x8D2D;&amp;#x4E70;&amp;#x4E5F;&amp;#x53EF;&amp;#x4EE5;&amp;#x4F7F;&amp;#x7528;&amp;#x963F;&amp;#x91CC;&amp;#x4E91;&amp;#x7684;&amp;#x5B66;&amp;#x751F;&amp;#x673A;&amp;#xFF0C;&amp;#x90FD;&amp;#x5F88;&amp;#x4FBF;&amp;#x5B">
 <meta property="og:locale" content="Chinese">
 <meta property="og:image" content="https://i.loli.net/2019/06/06/5cf8b92a35cbe47448.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/06/06/5cf8b92a4434a94613.jpg">
@@ -36,10 +36,10 @@
 <meta property="og:image" content="https://i.loli.net/2019/06/06/5cf8b92cdd26d78991.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/06/06/5cf8b92a63a6d51587.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/06/06/5cf8b92cb015617422.jpg">
-<meta property="og:updated_time" content="2020-02-12T14:07:09.747Z">
+<meta property="og:updated_time" content="2020-02-25T15:37:16.403Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初探Docker之搭建CTF平台">
-<meta name="twitter:description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x817E;&amp;#x8BAF;10&amp;#x5143;&amp;#x5B66;&amp;#x751F;&amp;#x673A; &amp;#x8D2D;&amp;#x4E70;&amp;#x4E5F;&amp;#x53EF;&amp;#x4EE5;&amp;#x4F7F;&amp;#x7528;&amp;#x963F;&amp;#x91CC;&amp;#x4E91;&amp;#x7684;&amp;#x5B66;&amp;#x751F;&amp;#x673A;&amp;#xFF">
+<meta name="twitter:description" content="&amp;#x817E;&amp;#x8BAF;10&amp;#x5143;&amp;#x5B66;&amp;#x751F;&amp;#x673A; &amp;#x8D2D;&amp;#x4E70;&amp;#x4E5F;&amp;#x53EF;&amp;#x4EE5;&amp;#x4F7F;&amp;#x7528;&amp;#x963F;&amp;#x91CC;&amp;#x4E91;&amp;#x7684;&amp;#x5B66;&amp;#x751F;&amp;#x673A;&amp;#xFF0C;&amp;#x90FD;&amp;#x5F88;&amp;#x4FBF;&amp;#x5B">
 <meta name="twitter:image" content="https://i.loli.net/2019/06/06/5cf8b92a35cbe47448.jpg">
 
 
@@ -111,7 +111,7 @@
         
         <div class="navbar-menu navbar-end">
             
-            <a class="navbar-item search" title="Search" href="javascript:;">
+            <a class="navbar-item search" title="Buscar" href="javascript:;">
                 <i class="fas fa-search"></i>
             </a>
             
@@ -150,13 +150,13 @@
         <span class="column is-narrow">
             
             
-            6 minutes read (About 916 words)
+            6 minutes de lectura (Alrededor de 912 palabras)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <h2 id="&#x8BF4;&#x5728;&#x524D;&#x9762;"><a href="#&#x8BF4;&#x5728;&#x524D;&#x9762;" class="headerlink" title="&#x8BF4;&#x5728;&#x524D;&#x9762;"></a>&#x8BF4;&#x5728;&#x524D;&#x9762;</h2><p>&#x817E;&#x8BAF;10&#x5143;&#x5B66;&#x751F;&#x673A; <a href="https://cloud.tencent.com/act/campus?fromSource=gwzcw.1110156.1110156.1110156&amp;gclid=CjwKCAjw0N3nBRBvEiwAHMwvNlylCbGdNZtjAnOQXkyllVSfCVgTS8gvywBaaFainLdyhJDNkvadPhoCgjQQAvD_BwE" target="_blank" rel="noopener">&#x8D2D;&#x4E70;</a><br>&#x4E5F;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x963F;&#x91CC;&#x4E91;&#x7684;&#x5B66;&#x751F;&#x673A;&#xFF0C;&#x90FD;&#x5F88;&#x4FBF;&#x5B9C;&#x3002;</p>
+        <p>&#x817E;&#x8BAF;10&#x5143;&#x5B66;&#x751F;&#x673A; <a href="https://cloud.tencent.com/act/campus?fromSource=gwzcw.1110156.1110156.1110156&amp;gclid=CjwKCAjw0N3nBRBvEiwAHMwvNlylCbGdNZtjAnOQXkyllVSfCVgTS8gvywBaaFainLdyhJDNkvadPhoCgjQQAvD_BwE" target="_blank" rel="noopener">&#x8D2D;&#x4E70;</a><br>&#x4E5F;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x963F;&#x91CC;&#x4E91;&#x7684;&#x5B66;&#x751F;&#x673A;&#xFF0C;&#x90FD;&#x5F88;&#x4FBF;&#x5B9C;&#x3002;</p>
 <p>&#x8FD9;&#x91CC;&#x6211;&#x9009;&#x62E9;&#x4E86;Ubuntu&#x7CFB;&#x7EDF;&#x3002;<br><a id="more"></a></p>
 <h2 id="&#x5B89;&#x88C5;Docker-Docker-compose"><a href="#&#x5B89;&#x88C5;Docker-Docker-compose" class="headerlink" title="&#x5B89;&#x88C5;Docker + Docker-compose"></a>&#x5B89;&#x88C5;Docker + Docker-compose</h2><ul>
 <li>&#x5B89;&#x88C5;Docker&#xFF1A;</li>
@@ -444,7 +444,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something...">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Escribe algo...">
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -457,10 +457,10 @@ document.addEventListener("DOMContentLoaded", function() {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
                 POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
+                PAGES: 'Páginas',
+                CATEGORIES: 'Categorías',
                 TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
+                UNTITLED: '(Sin título)',
             },
             CONTENT_URL: '/content.json',
         };

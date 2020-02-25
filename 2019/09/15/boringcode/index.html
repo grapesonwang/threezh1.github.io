@@ -18,13 +18,13 @@
 
 
 
-    <meta name="description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x8FD9;&amp;#x6B21;&amp;#x53C2;&amp;#x4E0E;&amp;#x4E86;ByteCTF&amp;#xFF0C;&amp;#x5C1D;&amp;#x8BD5;&amp;#x505A;&amp;#x4E86;boringcode&amp;#x548C;EZCMS&amp;#x3002;&amp;#x867D;&amp;#x7136;&amp;#x90FD;&amp;#x6CA1;&amp;#x505A;&amp;#x51FA;&amp;#">
+    <meta name="description" content="&amp;#x8FD9;&amp;#x6B21;&amp;#x53C2;&amp;#x4E0E;&amp;#x4E86;ByteCTF&amp;#xFF0C;&amp;#x5C1D;&amp;#x8BD5;&amp;#x505A;&amp;#x4E86;boringcode&amp;#x548C;EZCMS&amp;#x3002;&amp;#x867D;&amp;#x7136;&amp;#x90FD;&amp;#x6CA1;&amp;#x505A;&amp;#x51FA;&amp;#x6765;&amp;#xFF0C;&amp;#x4F46;&amp;#x662F;&amp;#">
 <meta name="keywords" content="PHP,PHP无参数函数">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ByteCTF一道题的分析与学习PHP无参数函数的利用">
 <meta property="og:url" content="http://yoursite.com/2019/09/15/boringcode/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
-<meta property="og:description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x8FD9;&amp;#x6B21;&amp;#x53C2;&amp;#x4E0E;&amp;#x4E86;ByteCTF&amp;#xFF0C;&amp;#x5C1D;&amp;#x8BD5;&amp;#x505A;&amp;#x4E86;boringcode&amp;#x548C;EZCMS&amp;#x3002;&amp;#x867D;&amp;#x7136;&amp;#x90FD;&amp;#x6CA1;&amp;#x505A;&amp;#x51FA;&amp;#">
+<meta property="og:description" content="&amp;#x8FD9;&amp;#x6B21;&amp;#x53C2;&amp;#x4E0E;&amp;#x4E86;ByteCTF&amp;#xFF0C;&amp;#x5C1D;&amp;#x8BD5;&amp;#x505A;&amp;#x4E86;boringcode&amp;#x548C;EZCMS&amp;#x3002;&amp;#x867D;&amp;#x7136;&amp;#x90FD;&amp;#x6CA1;&amp;#x505A;&amp;#x51FA;&amp;#x6765;&amp;#xFF0C;&amp;#x4F46;&amp;#x662F;&amp;#">
 <meta property="og:locale" content="Chinese">
 <meta property="og:image" content="https://i.loli.net/2019/09/15/jOkhe2V7z8w4U6G.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/09/15/JhI3Ny8GPdl9Z7L.jpg">
@@ -40,10 +40,10 @@
 <meta property="og:image" content="https://i.loli.net/2019/09/15/QZLUjoBDmVIGw6a.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/09/15/gUfjpJoySZiwHMh.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/09/15/tARoWnCeYXZDVKb.jpg">
-<meta property="og:updated_time" content="2020-02-12T13:52:30.481Z">
+<meta property="og:updated_time" content="2020-02-25T15:35:53.933Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ByteCTF一道题的分析与学习PHP无参数函数的利用">
-<meta name="twitter:description" content="&amp;#x8BF4;&amp;#x5728;&amp;#x524D;&amp;#x9762;&amp;#x8FD9;&amp;#x6B21;&amp;#x53C2;&amp;#x4E0E;&amp;#x4E86;ByteCTF&amp;#xFF0C;&amp;#x5C1D;&amp;#x8BD5;&amp;#x505A;&amp;#x4E86;boringcode&amp;#x548C;EZCMS&amp;#x3002;&amp;#x867D;&amp;#x7136;&amp;#x90FD;&amp;#x6CA1;&amp;#x505A;&amp;#x51FA;&amp;#">
+<meta name="twitter:description" content="&amp;#x8FD9;&amp;#x6B21;&amp;#x53C2;&amp;#x4E0E;&amp;#x4E86;ByteCTF&amp;#xFF0C;&amp;#x5C1D;&amp;#x8BD5;&amp;#x505A;&amp;#x4E86;boringcode&amp;#x548C;EZCMS&amp;#x3002;&amp;#x867D;&amp;#x7136;&amp;#x90FD;&amp;#x6CA1;&amp;#x505A;&amp;#x51FA;&amp;#x6765;&amp;#xFF0C;&amp;#x4F46;&amp;#x662F;&amp;#">
 <meta name="twitter:image" content="https://i.loli.net/2019/09/15/jOkhe2V7z8w4U6G.jpg">
 
 
@@ -115,7 +115,7 @@
         
         <div class="navbar-menu navbar-end">
             
-            <a class="navbar-item search" title="Search" href="javascript:;">
+            <a class="navbar-item search" title="Buscar" href="javascript:;">
                 <i class="fas fa-search"></i>
             </a>
             
@@ -154,13 +154,13 @@
         <span class="column is-narrow">
             
             
-            18 minutes read (About 2666 words)
+            18 minutes de lectura (Alrededor de 2662 palabras)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <h2 id="&#x8BF4;&#x5728;&#x524D;&#x9762;"><a href="#&#x8BF4;&#x5728;&#x524D;&#x9762;" class="headerlink" title="&#x8BF4;&#x5728;&#x524D;&#x9762;"></a>&#x8BF4;&#x5728;&#x524D;&#x9762;</h2><p>&#x8FD9;&#x6B21;&#x53C2;&#x4E0E;&#x4E86;ByteCTF&#xFF0C;&#x5C1D;&#x8BD5;&#x505A;&#x4E86;boringcode&#x548C;EZCMS&#x3002;&#x867D;&#x7136;&#x90FD;&#x6CA1;&#x505A;&#x51FA;&#x6765;&#xFF0C;&#x4F46;&#x662F;&#x5B66;&#x5230;&#x4E86;&#x5F88;&#x591A;&#x4E1C;&#x897F;&#x3002;</p>
+        <p>&#x8FD9;&#x6B21;&#x53C2;&#x4E0E;&#x4E86;ByteCTF&#xFF0C;&#x5C1D;&#x8BD5;&#x505A;&#x4E86;boringcode&#x548C;EZCMS&#x3002;&#x867D;&#x7136;&#x90FD;&#x6CA1;&#x505A;&#x51FA;&#x6765;&#xFF0C;&#x4F46;&#x662F;&#x5B66;&#x5230;&#x4E86;&#x5F88;&#x591A;&#x4E1C;&#x897F;&#x3002;</p>
 <p>&#x8FD9;&#x6B21;&#x901A;&#x8FC7;ALTM4NZ&#x5E08;&#x5085;&#x7684;wp&#x6765;&#x5206;&#x6790;&#x4E00;&#x4E0B;boringcode&#x8FD9;&#x9053;&#x9898;&#x5E76;&#x5B66;&#x4E60;&#x4E00;&#x4E0B;&#x65E0;&#x53C2;&#x6570;&#x51FD;&#x6570;&#x7684;&#x5229;&#x7528;&#x3002;</p>
 <h2 id="boringcode"><a href="#boringcode" class="headerlink" title="boringcode"></a>boringcode</h2><p>&#x770B;&#x4E00;&#x4E0B;&#x4EE3;&#x7801;&#xFF1A;</p>
 <figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">is_valid_url</span><span class="hljs-params">($url)</span> </span>{</span><br><span class="line">    <span class="hljs-keyword">if</span> (filter_var($url, FILTER_VALIDATE_URL)) {</span><br><span class="line">        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">&apos;/data:\/\//i&apos;</span>, $url)) {</span><br><span class="line">            <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">&apos;url&apos;</span>])){</span><br><span class="line">    $url = $_POST[<span class="hljs-string">&apos;url&apos;</span>];</span><br><span class="line">    <span class="hljs-keyword">if</span> (is_valid_url($url)) {</span><br><span class="line">        $r = parse_url($url);</span><br><span class="line">        <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">&apos;/baidu\.com$/&apos;</span>, $r[<span class="hljs-string">&apos;host&apos;</span>])) {</span><br><span class="line">            $code = file_get_contents($url);</span><br><span class="line">            <span class="hljs-keyword">if</span> (<span class="hljs-string">&apos;;&apos;</span> === preg_replace(<span class="hljs-string">&apos;/[a-z]+\((?R)?\)/&apos;</span>, <span class="hljs-keyword">NULL</span>, $code)) {</span><br><span class="line">                <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">&apos;/et|na|nt|strlen|info|path|rand|dec|bin|hex|oct|pi|exp|log/i&apos;</span>, $code)) {</span><br><span class="line">                    <span class="hljs-keyword">echo</span> <span class="hljs-string">&apos;bye~&apos;</span>;</span><br><span class="line">                } <span class="hljs-keyword">else</span> {</span><br><span class="line">                    <span class="hljs-keyword">eval</span>($code);</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        } <span class="hljs-keyword">else</span> {</span><br><span class="line">            <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;error: host not allowed&quot;</span>;</span><br><span class="line">        }</span><br><span class="line">    } <span class="hljs-keyword">else</span> {</span><br><span class="line">        <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;error: invalid url&quot;</span>;</span><br><span class="line">    }</span><br><span class="line">}<span class="hljs-keyword">else</span>{</span><br><span class="line">    highlight_file(<span class="hljs-keyword">__FILE__</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
@@ -557,7 +557,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something...">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Escribe algo...">
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -570,10 +570,10 @@ document.addEventListener("DOMContentLoaded", function() {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
                 POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
+                PAGES: 'Páginas',
+                CATEGORIES: 'Categorías',
                 TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
+                UNTITLED: '(Sin título)',
             },
             CONTENT_URL: '/content.json',
         };
