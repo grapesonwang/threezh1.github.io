@@ -100,13 +100,13 @@
         
         <div class="navbar-menu navbar-end">
             
-            <a class="navbar-item search" title="Search" href="javascript:;">
+            <a class="navbar-item search" title="Suche" href="javascript:;">
                 <i class="fas fa-search"></i>
             </a>
             
             
             <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
-                <a class="navbar-item" title="Table of Contents">
+                <a class="navbar-item" title="Inhaltsverzeichnis">
                     <i class="fa fa-list"></i>
                 </a>
                 <div class="navbar-dropdown is-right">
@@ -114,19 +114,19 @@
                     
                     
                     
-                    <a class="navbar-item" href="#iframe&amp;#x5B9E;&amp;#x73B0;&amp;#x5D4C;&amp;#x5957;&amp;#x7A97;&amp;#x53E3;">1&nbsp;&nbsp;<b>iframe&amp;amp;#x5B9E;&amp;amp;#x73B0;&amp;amp;#x5D4C;&amp;amp;#x5957;&amp;amp;#x7A97;&amp;amp;#x53E3;</b></a>
+                    <a class="navbar-item" href="#iframe实现嵌套窗口">1&nbsp;&nbsp;<b>iframe实现嵌套窗口</b></a>
                     
                     
                     <hr class="navbar-divider">
                     
                     
-                    <a class="navbar-item" href="#postMessage&amp;#x5B9E;&amp;#x73B0;&amp;#x8DE8;&amp;#x7A97;&amp;#x53E3;&amp;#x901A;&amp;#x4FE1;">2&nbsp;&nbsp;<b>postMessage&amp;amp;#x5B9E;&amp;amp;#x73B0;&amp;amp;#x8DE8;&amp;amp;#x7A97;&amp;amp;#x53E3;&amp;amp;#x901A;&amp;amp;#x4FE1;</b></a>
+                    <a class="navbar-item" href="#postMessage实现跨窗口通信">2&nbsp;&nbsp;<b>postMessage实现跨窗口通信</b></a>
                     
                     
                     <hr class="navbar-divider">
                     
                     
-                    <a class="navbar-item" href="#localstorage&amp;#x5B9E;&amp;#x73B0;&amp;#x672C;&amp;#x5730;&amp;#x50A8;&amp;#x5B58;">3&nbsp;&nbsp;<b>localstorage&amp;amp;#x5B9E;&amp;amp;#x73B0;&amp;amp;#x672C;&amp;amp;#x5730;&amp;amp;#x50A8;&amp;amp;#x5B58;</b></a>
+                    <a class="navbar-item" href="#localstorage实现本地储存">3&nbsp;&nbsp;<b>localstorage实现本地储存</b></a>
                     
                     
                     <hr class="navbar-divider">
@@ -138,7 +138,7 @@
                     <hr class="navbar-divider">
                     
                     
-                    <a class="navbar-item" href="#&amp;#x53C2;&amp;#x8003;">5&nbsp;&nbsp;<b>&amp;amp;#x53C2;&amp;amp;#x8003;</b></a>
+                    <a class="navbar-item" href="#参考">5&nbsp;&nbsp;<b>参考</b></a>
                     
                 </div>
             </div>
@@ -177,7 +177,7 @@
         <span class="column is-narrow">
             
             
-            10 minutes read (About 1432 words)
+            10 minutes lesen (Über 1432 Wörter)
         </span>
         
     </div>
@@ -487,7 +487,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something...">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Suche etwas...">
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -500,8 +500,8 @@ document.addEventListener("DOMContentLoaded", function() {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
                 POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
+                PAGES: 'Seiten',
+                CATEGORIES: 'Kategorien',
                 TAGS: 'Tags',
                 UNTITLED: '(Untitled)',
             },
