@@ -100,10 +100,40 @@
         
         <div class="navbar-menu navbar-end">
             
-            <a class="navbar-item search" title="Search" href="javascript:;">
+            <a class="navbar-item search" title="Suche" href="javascript:;">
                 <i class="fas fa-search"></i>
             </a>
             
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="Inhaltsverzeichnis">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Open-redirect">1&nbsp;&nbsp;<b>Open redirect</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Simple-note">1.1&nbsp;&nbsp;Simple note:</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Bypass">1.2&nbsp;&nbsp;Bypass:</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Tips">1.3&nbsp;&nbsp;Tips:</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Reference">1.4&nbsp;&nbsp;Reference:</a>
+                    
+                </div>
+            </div>
             
             
             <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
@@ -139,7 +169,7 @@
         <span class="column is-narrow">
             
             
-            37 minutes read (About 5596 words)
+            37 minutes lesen (Über 5596 Wörter)
         </span>
         
     </div>
@@ -238,12 +268,12 @@
     <div class="columns is-mobile is-multiline article-nav">
         <span class="column is-12-mobile is-half-desktop  article-nav-prev">
             
-            <a href="/2019/01/01/XSS_01_从浏览器编码开始说起/">XSS_01_从浏览器编码开始说起</a>
+            <a href="/2019/01/01/CRLF/">了解CRLF</a>
             
         </span>
         <span class="column is-12-mobile is-half-desktop  article-nav-next">
             
-            <a href="/2019/01/01/XSS_02_XSS备忘录/">XSS O2 XSS备忘录</a>
+            <a href="/2019/01/01/XSS_01_从浏览器编码开始说起/">XSS_01_从浏览器编码开始说起</a>
             
         </span>
     </div>
@@ -440,7 +470,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something...">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Suche etwas...">
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -453,10 +483,10 @@ document.addEventListener("DOMContentLoaded", function() {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
                 POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
+                PAGES: 'Seiten',
+                CATEGORIES: 'Kategorien',
                 TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
+                UNTITLED: '(Sin título)',
             },
             CONTENT_URL: '/content.json',
         };

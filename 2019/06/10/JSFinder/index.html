@@ -105,10 +105,30 @@
         
         <div class="navbar-menu navbar-end">
             
-            <a class="navbar-item search" title="Search" href="javascript:;">
+            <a class="navbar-item search" title="Suche" href="javascript:;">
                 <i class="fas fa-search"></i>
             </a>
             
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="Inhaltsverzeichnis">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#&amp;#x5173;&amp;#x4E8E;-JSFinder">1&nbsp;&nbsp;<b>&amp;amp;#x5173;&amp;amp;#x4E8E; JSFinder</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#&amp;#x7528;&amp;#x6CD5;">2&nbsp;&nbsp;<b>&amp;amp;#x7528;&amp;amp;#x6CD5;</b></a>
+                    
+                </div>
+            </div>
             
             
             <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
@@ -144,7 +164,7 @@
         <span class="column is-narrow">
             
             
-            4 minutes read (About 563 words)
+            4 minutes lesen (Über 563 Wörter)
         </span>
         
     </div>
@@ -434,7 +454,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something...">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Suche etwas...">
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -447,10 +467,10 @@ document.addEventListener("DOMContentLoaded", function() {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
                 POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
+                PAGES: 'Seiten',
+                CATEGORIES: 'Kategorien',
                 TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
+                UNTITLED: '(Sin título)',
             },
             CONTENT_URL: '/content.json',
         };
