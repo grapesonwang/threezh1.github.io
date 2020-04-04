@@ -99,7 +99,7 @@
         
         <div class="navbar-menu navbar-end">
             
-            <a class="navbar-item search" title="Buscar" href="javascript:;">
+            <a class="navbar-item search" title="Suche" href="javascript:;">
                 <i class="fas fa-search"></i>
             </a>
             
@@ -129,6 +129,59 @@
         <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
+            <a href="/2020/04/04/XSS_XHR_LFI/" itemprop="url">XSS + XHR 两个案例的记录</a>
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2020-04-04T04:03:33.000Z" itemprop="datePublished">Apr 4 2020</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            2 minutes lesen (Über 340 Wörter)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p><img src="https://bbs.d0g3.cn/assets/files/2020-04-03/1585900956-669534-tim20200403160212.png" alt="images"></p>
+<p>&#x8BB0;&#x5F55;&#x4E00;&#x4E0B;&#x6700;&#x8FD1;&#x770B;&#x5230;&#x7684;&#x4E24;&#x4E2A;&#x6BD4;&#x8F83;&#x6709;&#x8DA3;&#x7684;&#x6848;&#x4F8B;&#x3002;</p>
+<h2 id="&#x6848;&#x4F8B;"><a href="#&#x6848;&#x4F8B;" class="headerlink" title="&#x6848;&#x4F8B;"></a>&#x6848;&#x4F8B;</h2><h3 id="&#x6848;&#x4F8B;&#x4E00;&#x3001;&#x540E;&#x7AEF;-PhantomJS-&#x5BFC;&#x81F4;&#x7684;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;"><a href="#&#x6848;&#x4F8B;&#x4E00;&#x3001;&#x540E;&#x7AEF;-PhantomJS-&#x5BFC;&#x81F4;&#x7684;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;" class="headerlink" title="&#x6848;&#x4F8B;&#x4E00;&#x3001;&#x540E;&#x7AEF; PhantomJS &#x5BFC;&#x81F4;&#x7684;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;"></a>&#x6848;&#x4F8B;&#x4E00;&#x3001;&#x540E;&#x7AEF; PhantomJS &#x5BFC;&#x81F4;&#x7684;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;</h3><p>&#x53C2;&#x8003;&#xFF1A; <a href="https://xz.aliyun.com/t/127" target="_blank" rel="noopener">https://xz.aliyun.com/t/127</a></p>
+<p>&#x5229;&#x7528;&#x8FC7;&#x7A0B;&#xFF1A;</p>
+<ol>
+<li>&#x540E;&#x7AEF;&#x4F7F;&#x7528;PhantomJS&#x6765;&#x751F;&#x6210;&#x9875;&#x9762;&#xFF0C;&#x751F;&#x6210;&#x597D;&#x4E86;&#x4F1A;&#x622A;&#x56FE;&#x3002;(&#x4E0A;&#x4E0B;&#x6587;&#x4E3A;file://)</li>
+<li>&#x4E1A;&#x52A1;&#x5B58;&#x5728;&#x4E00;&#x4E2A;xss</li>
+<li>&#x901A;&#x8FC7;XHR&#x8BFB;&#x53D6;&#x672C;&#x5730;&#x6587;&#x4EF6;</li>
+</ol>
+<h3 id="&#x6848;&#x4F8B;&#x4E8C;&#x3001;CVE-2019-11730-&#x5BFC;&#x81F4;&#x7684;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;"><a href="#&#x6848;&#x4F8B;&#x4E8C;&#x3001;CVE-2019-11730-&#x5BFC;&#x81F4;&#x7684;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;" class="headerlink" title="&#x6848;&#x4F8B;&#x4E8C;&#x3001;CVE-2019-11730 &#x5BFC;&#x81F4;&#x7684;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;"></a>&#x6848;&#x4F8B;&#x4E8C;&#x3001;CVE-2019-11730 &#x5BFC;&#x81F4;&#x7684;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;</h3><p>&#x53C2;&#x8003;&#xFF1A;<a href="https://hpdoger.cn/2020/03/17/title:%20CVE-2019-11730%20%E5%88%86%E6%9E%90&amp;%E5%B0%8F%E8%B0%88/" target="_blank" rel="noopener">CVE-2019-11730 &#x5206;&#x6790;&amp;&#x5C0F;&#x8C08;</a></p>
+<p>&#x5F53;&#x7528;&#x6237;&#x628A;&#x5E26;&#x6709;payload&#x7684;&#x9875;&#x9762;&#x4FDD;&#x5B58;&#x5230;&#x672C;&#x5730;&#x5E76;&#x7528;&#x6F0F;&#x6D1E;&#x5BF9;&#x4E8E;&#x7684;firefox&#x6253;&#x5F00;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x8BFB;&#x53D6;&#x672C;&#x5730;&#x7684;&#x4EFB;&#x610F;&#x6587;&#x4EF6;&#x3002;</p>
+<ul>
+<li>&#x6F0F;&#x6D1E;&#x5BF9;&#x5E94;&#x7684;firefox&#x7248;&#x672C;&#xFF1A;<a href="https://vulmon.com/vulnerabilitydetails?qid=CVE-2019-11730" target="_blank" rel="noopener">https://vulmon.com/vulnerabilitydetails?qid=CVE-2019-11730</a></li>
+<li>&#x4E0B;&#x8F7D;&#x6307;&#x5B9A;&#x7248;&#x672C;&#x7684;firefox&#xFF1A;<a href="http://ftp.mozilla.org/pub/firefox/releases/" target="_blank" rel="noopener">http://ftp.mozilla.org/pub/firefox/releases/</a></li></ul>
+        <p class="article-more-link">
+            <a href="/2020/04/04/XSS_XHR_LFI/#more">mehr</a>
+        </p>
+    
+    </div>
+    
+    
+</article>
+
+
+
+
+    
+        <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
             <a href="/2020/02/25/XSS_postMessage_localstorage_xss/" itemprop="url">跨窗口通信 &amp; localstorage =&gt; XSS</a>
         
     </h1>
@@ -146,7 +199,7 @@
         <span class="column is-narrow">
             
             
-            10 minutes de lectura (Alrededor de 1432 palabras)
+            10 minutes lesen (Über 1432 Wörter)
         </span>
         
     </div>
@@ -154,7 +207,7 @@
     
         <p>&#x5B66;&#x957F;&#x5728;&#x4E4B;&#x524D;&#x5206;&#x4EAB;&#x8FC7;&#x4E00;&#x4E2A;&#x96C6;&#x8DE8;&#x7A97;&#x53E3;&#x901A;&#x4FE1;&#x4E0E;localstorage&#x4E00;&#x8EAB;&#x7684;XSS&#x6F0F;&#x6D1E;&#xFF0C;&#x4E00;&#x76F4;&#x62D6;&#x7740;&#x6CA1;&#x6709;&#x6574;&#x7406;&#x3002;&#x60F3;&#x6765;&#x60F3;&#x53BB;&#x8FD8;&#x662F;&#x8EB2;&#x4E0D;&#x6389;&#x7684;&#xFF0C;&#x4ECA;&#x665A;&#x5C31;&#x6B64;&#x6574;&#x7406;&#x4E00;&#x4E0B;&#x5427;&#x3002;&#x5148;&#x603B;&#x7ED3;&#x4E00;&#x4E0B;&#x8DE8;&#x7A97;&#x53E3;&#x901A;&#x4FE1;&#x4E0E;localstorage&#x7684;&#x7B14;&#x8BB0;&#xFF0C;&#x6700;&#x540E;&#x518D;&#x628A;&#x8FD9;&#x4E2A;XSS&#x6F0F;&#x6D1E;&#x7684;&#x8FC7;&#x7A0B;&#x68B3;&#x7406;&#x4E00;&#x904D;&#x3002;</p>
         <p class="article-more-link">
-            <a href="/2020/02/25/XSS_postMessage_localstorage_xss/#more">Leer más</a>
+            <a href="/2020/02/25/XSS_postMessage_localstorage_xss/#more">mehr</a>
         </p>
     
     </div>
@@ -186,7 +239,7 @@
         <span class="column is-narrow">
             
             
-            21 minutes de lectura (Alrededor de 3173 palabras)
+            21 minutes lesen (Über 3173 Wörter)
         </span>
         
     </div>
@@ -200,7 +253,7 @@
 </ul>
 <p>&#x66F4;&#x591A;&#x4FE1;&#x606F;&#x53EF;&#x4EE5;&#x5230;&#x6587;&#x7AE0;&#x5185;&#x7EC6;&#x770B;&#xFF0C;&#x8FD9;&#x91CC;&#x53EA;&#x505A;&#x7B80;&#x8981;&#x8BB0;&#x5F55;&#x3002;</p>
         <p class="article-more-link">
-            <a href="/2019/01/01/XSS_01_从浏览器编码开始说起/#more">Leer más</a>
+            <a href="/2019/01/01/XSS_01_从浏览器编码开始说起/#more">mehr</a>
         </p>
     
     </div>
@@ -232,7 +285,7 @@
         <span class="column is-narrow">
             
             
-            30 minutes de lectura (Alrededor de 4441 palabras)
+            30 minutes lesen (Über 4441 Wörter)
         </span>
         
     </div>
@@ -242,7 +295,7 @@
 <p>&#x5F53;&#x6807;&#x7B7E;&#x662F;<a href="#HTML&#x65E0;&#x6CD5;&#x6267;&#x884C;&#x811A;&#x672C;&#x7684;&#x6807;&#x7B7E;">&#x4E0D;&#x80FD;&#x6267;&#x884C;&#x811A;&#x672C;&#x7684;&#x6807;&#x7B7E;</a>&#x65F6;&#xFF0C;&#x5C31;&#x5F97;&#x5148;&#x628A;&#x90A3;&#x4E2A;&#x6807;&#x7B7E;&#x95ED;&#x5408;&#xFF0C;&#x7136;&#x540E;&#x518D;&#x6CE8;&#x5165;XSS&#x8BED;&#x53E5;&#x3002;</p>
 <p>&#x4F8B;&#x5982;&#xFF1A;<code>&lt;/textarea&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code><br></p>
         <p class="article-more-link">
-            <a href="/2019/01/01/XSS_02_XSS备忘录/#more">Leer más</a>
+            <a href="/2019/01/01/XSS_02_XSS备忘录/#more">mehr</a>
         </p>
     
     </div>
@@ -442,7 +495,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Escribe algo...">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Suche etwas...">
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -455,10 +508,10 @@ document.addEventListener("DOMContentLoaded", function() {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
                 POSTS: 'Posts',
-                PAGES: 'Páginas',
-                CATEGORIES: 'Categorías',
+                PAGES: 'Seiten',
+                CATEGORIES: 'Kategorien',
                 TAGS: 'Tags',
-                UNTITLED: '(Sin título)',
+                UNTITLED: '(Untitled)',
             },
             CONTENT_URL: '/content.json',
         };

